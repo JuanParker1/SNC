@@ -44,7 +44,7 @@ namespace ShopNow.Controllers
                 Address = i.c.DeliveryAddress,
                 DateEncoded = i.c.DateEncoded,
                 Amount = i.p.Amount,
-                OrderNumber = i.p.OrderNumber
+                OrderNumber = i.p.OrderNumber.ToString()
             }).OrderByDescending(i => i.DateEncoded).ToList();
 
             return View(model.List);
@@ -417,7 +417,7 @@ namespace ShopNow.Controllers
                      No = index + 1,
                      OrderDate = i.p.p.p.DateEncoded,
                      OrderFirstAmount = i.p.p.p.Amount,
-                     OrderNumber = i.p.p.p.OrderNumber,
+                     OrderNumber = i.p.p.p.OrderNumber.ToString(),
                      PaidAmount = i.p.o.FirstOrDefault()?.OwnerType == 1 ? ((i.p.p.c.TotalShopPrice != 0 ? (i.p.p.c.TotalPrice - Math.Abs(i.p.p.c.TotalShopPrice - i.p.p.c.TotalPrice)) - (i.p.p.p.RefundAmount ?? 0) : i.p.p.p.Amount + i.p.p.c.OfferAmount) - (i.p.p.p.RefundAmount ?? 0)) : i.p.p.c.TotalShopPrice != 0 ? i.p.p.p.Amount - Math.Abs(i.p.p.c.TotalPrice - i.p.p.c.TotalShopPrice) : i.p.p.p.Amount - (i.p.p.p.RefundAmount ?? 0),
                    //PaidAmount = i.p.o.OwnerType == 1 ? ((i.p.p.p.Amount + i.p.p.c.OfferAmount) - (i.p.p.p.RefundAmount ?? 0)) : i.p.p.p.Amount - (i.p.p.p.RefundAmount ?? 0),
                    PaymentAmount = i.p.o.FirstOrDefault()?.OwnerType == 1 ? ((i.p.p.c.TotalShopPrice != 0 ? (i.p.p.p.Amount - Math.Abs(i.p.p.c.TotalPrice - i.p.p.c.TotalShopPrice)) : i.p.p.p.Amount + i.p.p.c.OfferAmount) - (i.p.p.p.RefundAmount ?? 0)) : (i.p.p.c.TotalShopPrice != 0 ? i.p.p.p.Amount - (Math.Abs(i.p.p.c.TotalPrice - i.p.p.c.TotalShopPrice)) : i.p.p.p.Amount) - (i.p.p.p.RefundAmount ?? 0) - Convert.ToDouble((i.pd.Any() ? i.pd.FirstOrDefault().Fee : 0)) - Convert.ToDouble((i.pd.Any() ? i.pd.FirstOrDefault().Tax : 0)),
@@ -461,11 +461,29 @@ namespace ShopNow.Controllers
                     OrderId = i.o.FirstOrDefault().Id,
                     BillAmount = i.p.s.BillAmount,
                     BillNo = i.p.s.BillNo,
-                    OrderNumber = i.p.s.OrderNumber,
+                    OrderNumber = i.p.s.OrderNumber.ToString(),
                     ShopName = i.o.FirstOrDefault().ShopName,
                     TotalPrice = Math.Round(i.o.FirstOrDefault().TotalPrice,2),
                     DifferenceAmount = Math.Round(i.p.s.BillAmount -  (i.o.FirstOrDefault().TotalPrice - (i.p.p.FirstOrDefault().RefundAmount ?? 0)),2),
                     DifferencePercentage = Math.Round(((i.p.s.BillAmount - (i.o.FirstOrDefault().TotalPrice - (i.p.p.FirstOrDefault().RefundAmount ?? 0))) /i.p.s.BillAmount)*100,2),
+                }).ToList();
+            return View(model);
+        }
+
+        public ActionResult ShopBillDifferencePendingReport(ShopBillDifferenceReportViewModel model)
+        {
+            var user = ((Helpers.Sessions.User)Session["USER"]);
+            ViewBag.Name = user.Name;
+            model.ListItems = db.Orders
+                .GroupJoin(db.Payments, o => o.OrderNumber, p => p.OrderNumber, (o,p) => new { o,p })
+                .Where(i=> !db.ShopBillDetails.Any(s=>s.OrderNumber == i.o.OrderNumber) && ((model.StartDate != null && model.EndDate != null) ? DbFunctions.TruncateTime(i.o.DateEncoded) >= DbFunctions.TruncateTime(model.StartDate) && DbFunctions.TruncateTime(i.o.DateEncoded) <= DbFunctions.TruncateTime(model.EndDate) : true) && (model.ShopId != 0 ? i.o.ShopId == model.ShopId : true))
+                .Select(i => new ShopBillDifferenceReportViewModel.ListItem
+                {
+                    OrderId = i.o.Id,
+                    OrderNumber = i.o.OrderNumber.ToString(),
+                    ShopName = i.o.ShopName,
+                    TotalPrice = Math.Round(i.o.TotalPrice, 2),
+                    BillAmount = 0,
                 }).ToList();
             return View(model);
         }
@@ -623,7 +641,7 @@ namespace ShopNow.Controllers
                 .Join(db.Offers, o => o.OfferId, of => of.Id, (o, of) => new { o, of })
                 .Select(i => new OrderOfferReportViewModel.ListItem
                 {
-                    OrderNumber = i.o.OrderNumber,
+                    OrderNumber = i.o.OrderNumber.ToString(),
                     OfferName = i.of.Name,
                     OfferCode = i.of.OfferCode,
                     PurchasedAmount = i.o.NetTotal,

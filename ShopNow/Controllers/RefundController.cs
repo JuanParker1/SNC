@@ -31,7 +31,7 @@ namespace ShopNow.Controllers
                     ShopName = i.p.p.ShopName,
                     Amount = i.p.p.RefundAmount,
                     CustomerName = i.p.p.CustomerName,
-                    OrderNo = i.p.p.OrderNumber,
+                    OrderNumber = i.p.p.OrderNumber.ToString(),
                     PaymentId = i.p.pd.PaymentId,
                     Remark = i.p.p.RefundRemark,
                     CustomerPhoneNo = i.c.PhoneNumber
@@ -56,7 +56,7 @@ namespace ShopNow.Controllers
                    CustomerName = i.p.p.CustomerName,
                    CustomerPhoneNo = i.c.PhoneNumber,
                    OrderDate = i.p.p.DateEncoded,
-                   OrderNumber = i.p.p.OrderNumber,
+                   OrderNumber = i.p.p.OrderNumber.ToString(),
                    PaymentId = i.p.r.Any() ? i.p.r.FirstOrDefault().Payment_Id : "",
                    RefundDate = i.p.r.Any() ? i.p.r.FirstOrDefault().DateEncoded : i.p.p.DateEncoded,
                    RefundId = i.p.r.Any() ? i.p.r.FirstOrDefault().RefundId : "N/A",

@@ -3329,6 +3329,7 @@
     <Content Include="Views\Cart\DeliveryLocationMap.cshtml" />
     <Content Include="Views\Payment\ShopBillDifferenceReport.cshtml" />
     <Content Include="Views\Service\List.cshtml" />
+    <Content Include="Views\Payment\ShopBillDifferencePendingReport.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

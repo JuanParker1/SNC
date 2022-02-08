@@ -52,7 +52,7 @@ namespace ShopNow.Controllers
             {
                 Id = i.c.c.Id,
                 ShopName = i.c.c.ShopName,
-                OrderNumber = i.c.c.OrderNumber,
+                OrderNumber = i.c.c.OrderNumber.ToString(),
                 DeliveryAddress = i.c.c.DeliveryAddress,
                 ShopPhoneNumber = i.c.c.ShopPhoneNumber,
                 Status = i.c.c.Status,
@@ -83,13 +83,13 @@ namespace ShopNow.Controllers
                            {
                                Id = i.c.Id,
                                ShopName = i.c.ShopName,
-                               OrderNumber = i.c.OrderNumber,
+                               OrderNumber = i.c.OrderNumber.ToString(),
                                DeliveryAddress = i.c.DeliveryAddress,
                                ShopOwnerPhoneNumber = i.c.ShopOwnerPhoneNumber,
                                Status = i.c.Status,
                                DeliveryBoyName = i.c.DeliveryBoyName,
                                DateEncoded = i.c.DateEncoded,
-                               Price = i.c.NetTotal,
+                               Price = i.c.IsPickupDrop == true ? i.c.TotalPrice : i.c.NetTotal,
                                RefundAmount = i.p.RefundAmount ?? 0,
                                RefundRemark = i.p.RefundRemark ?? "",
                                PaymentMode = i.p.PaymentMode,
@@ -112,13 +112,13 @@ namespace ShopNow.Controllers
                            {
                                Id = i.c.Id,
                                ShopName = i.c.ShopName,
-                               OrderNumber = i.c.OrderNumber,
+                               OrderNumber = i.c.OrderNumber.ToString(),
                                DeliveryAddress = i.c.DeliveryAddress,
                                ShopOwnerPhoneNumber = i.c.ShopOwnerPhoneNumber,
                                Status = i.c.Status,
                                DeliveryBoyName = i.c.DeliveryBoyName,
                                DateEncoded = i.c.DateEncoded,
-                               Price = i.c.NetTotal,
+                               Price = i.c.IsPickupDrop == true ? i.c.TotalPrice : i.c.NetTotal,
                                RefundAmount = i.p.RefundAmount ?? 0,
                                RefundRemark = i.p.RefundRemark ?? "",
                                PaymentMode = i.p.PaymentMode,
@@ -141,7 +141,7 @@ namespace ShopNow.Controllers
                 {
                     Id = i.c.Id,
                     ShopName = i.c.ShopName,
-                    OrderNumber = i.c.OrderNumber,
+                    OrderNumber = i.c.OrderNumber.ToString(),
                     DeliveryAddress = i.c.DeliveryAddress,
                     ShopPhoneNumber = i.c.ShopPhoneNumber,
                     Status = i.c.Status,
@@ -151,7 +151,7 @@ namespace ShopNow.Controllers
                     RefundRemark = i.p.RefundRemark ?? "",
                     PaymentMode = i.p.PaymentMode,
                     DeliveryBoyPhoneNumber = i.c.DeliveryBoyPhoneNumber ?? "Not Assigned",
-                    Price = i.p.Amount - (i.p.RefundAmount ?? 0),
+                    Price = i.c.IsPickupDrop == true ? i.c.TotalPrice : i.p.Amount - (i.p.RefundAmount ?? 0),
                     IsPickupDrop = i.c.IsPickupDrop
                 }).OrderByDescending(i => i.DateEncoded).ToList();
             int counter = 1;
@@ -166,7 +166,6 @@ namespace ShopNow.Controllers
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
             var model = new CartListViewModel();
-
             model.DeliveryAgentAssignedLists = db.Orders.Where(i => (shopId != 0 ? i.ShopId == shopId : true) && i.Status == 4)
                 .Join(db.DeliveryBoys.Where(i => i.isAssign == 1 && i.OnWork == 0), c => c.DeliveryBoyId, d => d.Id, (c, d) => new { c, d })
                 .Join(db.Payments, c => c.c.OrderNumber, p => p.OrderNumber, (c, p) => new { c, p })
@@ -174,7 +173,7 @@ namespace ShopNow.Controllers
                 {
                     Id = i.c.c.Id,
                     ShopName = i.c.c.ShopName,
-                    OrderNumber = i.c.c.OrderNumber,
+                    OrderNumber = i.c.c.OrderNumber.ToString(),
                     Status = i.c.c.Status,
                     DeliveryBoyName = i.c.c.DeliveryBoyName,
                     DateEncoded = i.c.c.DateEncoded,
@@ -203,7 +202,7 @@ namespace ShopNow.Controllers
                 {
                     Id = i.c.c.Id,
                     ShopName = i.c.c.ShopName,
-                    OrderNumber = i.c.c.OrderNumber,
+                    OrderNumber = i.c.c.OrderNumber.ToString(),
                     Status = i.c.c.Status,
                     DeliveryBoyName = i.c.c.DeliveryBoyName,
                     DateEncoded = i.c.c.DateEncoded,
@@ -211,7 +210,7 @@ namespace ShopNow.Controllers
                     RefundRemark = i.p.RefundRemark ?? "",
                     PaymentMode = i.p.PaymentMode,
                     DeliveryBoyPhoneNumber = i.c.c.DeliveryBoyPhoneNumber,
-                    Price = i.p.Amount - (i.p.RefundAmount ?? 0),
+                    Price = i.c.c.IsPickupDrop == true ? i.c.c.TotalPrice : i.p.Amount - (i.p.RefundAmount ?? 0),
                     IsPickupDrop = i.c.c.IsPickupDrop
                 }).OrderByDescending(i => i.DateEncoded).ToList();
             int counter = 1;
@@ -225,7 +224,6 @@ namespace ShopNow.Controllers
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
             var model = new CartListViewModel();
-
             model.PickupLists = db.Orders.Where(i => i.Status == 4 && (shopId != 0 ? i.ShopId == shopId : true))
                 .Join(db.DeliveryBoys.Where(i => i.isAssign == 1 && i.OnWork == 1), c => c.DeliveryBoyId, d => d.Id, (c, d) => new { c, d })
                 .Join(db.Payments, c => c.c.OrderNumber, p => p.OrderNumber, (c, p) => new { c, p })
@@ -233,7 +231,7 @@ namespace ShopNow.Controllers
                  {
                      Id = i.c.c.Id,
                      ShopName = i.c.c.ShopName,
-                     OrderNumber = i.c.c.OrderNumber,
+                     OrderNumber = i.c.c.OrderNumber.ToString(),
                      DeliveryBoyPhoneNumber = i.c.c.DeliveryBoyPhoneNumber,
                      Status = i.c.c.Status,
                      DeliveryBoyName = i.c.c.DeliveryBoyName,
@@ -241,7 +239,7 @@ namespace ShopNow.Controllers
                      RefundAmount = i.p.RefundAmount ?? 0,
                      RefundRemark = i.p.RefundRemark ?? "",
                      PaymentMode = i.p.PaymentMode,
-                     Amount = i.p.Amount - (i.p.RefundAmount ?? 0),
+                     Amount = i.c.c.IsPickupDrop == true ? i.c.c.TotalPrice : i.p.Amount - (i.p.RefundAmount ?? 0),
                      IsPickupDrop = i.c.c.IsPickupDrop
                  }).OrderByDescending(i => i.DateEncoded).ToList();
             int counter = 1;
@@ -263,7 +261,7 @@ namespace ShopNow.Controllers
                 {
                     Id = i.c.c.Id,
                     ShopName = i.c.c.ShopName,
-                    OrderNumber = i.c.c.OrderNumber,
+                    OrderNumber = i.c.c.OrderNumber.ToString(),
                     DeliveryBoyPhoneNumber = i.c.c.DeliveryBoyPhoneNumber,
                     Status = i.c.c.Status,
                     DeliveryBoyName = i.c.c.DeliveryBoyName,
@@ -271,7 +269,7 @@ namespace ShopNow.Controllers
                     RefundAmount = i.p.RefundAmount ?? 0,
                     RefundRemark = i.p.RefundRemark ?? "",
                     PaymentMode = i.p.PaymentMode,
-                    Amount = i.p.Amount - (i.p.RefundAmount ?? 0),
+                    Amount = i.c.c.IsPickupDrop == true ? i.c.c.TotalPrice : i.p.Amount - (i.p.RefundAmount ?? 0),
                     IsPickupDrop = i.c.c.IsPickupDrop
                 }).OrderByDescending(i => i.DateEncoded).ToList();
             int counter = 1;
@@ -291,11 +289,11 @@ namespace ShopNow.Controllers
                 {
                     Id = i.c.Id,
                     ShopName = i.c.ShopName,
-                    OrderNumber = i.c.OrderNumber,
+                    OrderNumber = i.c.OrderNumber.ToString(),
                     DeliveryBoyPhoneNumber = i.c.DeliveryBoyPhoneNumber,
                     Status = i.c.Status,
                     DateEncoded = i.c.DateEncoded,
-                    Amount = i.p.Amount - (i.p.RefundAmount ?? 0),
+                    Amount = i.c.IsPickupDrop == true ? i.c.TotalPrice : i.p.Amount - (i.p.RefundAmount ?? 0),
                     RefundAmount = i.p.RefundAmount ?? 0,
                     RefundRemark = i.p.RefundRemark ?? "",
                     PaymentMode = i.p.PaymentMode,
@@ -318,14 +316,14 @@ namespace ShopNow.Controllers
                 {
                     Id = i.c.Id,
                     ShopName = i.c.ShopName,
-                    OrderNumber = i.c.OrderNumber,
+                    OrderNumber = i.c.OrderNumber.ToString(),
                     DeliveryBoyPhoneNumber = i.c.DeliveryBoyPhoneNumber,
                     Status = i.c.Status,
                     DateEncoded = i.c.DateEncoded,
                     RefundAmount = i.p.RefundAmount ?? 0,
                     RefundRemark = i.p.RefundRemark ?? "",
                     PaymentMode = i.p.PaymentMode,
-                    Amount = i.p.Amount - (i.p.RefundAmount ?? 0),
+                    Amount = i.c.IsPickupDrop == true ? i.c.TotalPrice : i.p.Amount - (i.p.RefundAmount ?? 0),
                     IsPickupDrop = i.c.IsPickupDrop
                 }).OrderByDescending(i => i.DateEncoded).ToList();
             int counter = 1;
@@ -346,12 +344,12 @@ namespace ShopNow.Controllers
                 {
                     Id = i.c.Id,
                     ShopName = i.c.ShopName,
-                    OrderNumber = i.c.OrderNumber,
+                    OrderNumber = i.c.OrderNumber.ToString(),
                     CustomerPhoneNumber = i.c.CustomerPhoneNumber,
                     Status = i.c.Status,
                     DateEncoded = i.c.DateEncoded,
                     DeliveredTime = i.c.DeliveredTime == null ? i.c.DateUpdated : i.c.DeliveredTime,
-                    Amount = i.p.Amount - (i.p.RefundAmount ?? 0),
+                    Amount = i.c.IsPickupDrop == true ? i.c.TotalPrice : i.p.Amount - (i.p.RefundAmount ?? 0),
                     RefundAmount = i.p.RefundAmount ?? 0,
                     RefundRemark = i.p.RefundRemark ?? "",
                     PaymentMode = i.p.PaymentMode,
@@ -371,7 +369,6 @@ namespace ShopNow.Controllers
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
             model.StartDate = model.StartDate == null ? DateTime.Now : model.StartDate;
-
             model.DeliveredReportLists = db.Orders.Where(i => DbFunctions.TruncateTime(i.DateEncoded) == DbFunctions.TruncateTime(model.StartDate) && i.Status == 6)
                 .Join(db.Payments, c => c.OrderNumber, p => p.OrderNumber, (c, p) => new { c, p })
                 .AsEnumerable()
@@ -379,12 +376,12 @@ namespace ShopNow.Controllers
             {
                 Id = i.c.Id,
                 ShopName = i.c.ShopName,
-                OrderNumber = i.c.OrderNumber,
+                OrderNumber = i.c.OrderNumber.ToString(),
                 DeliveryAddress = i.c.DeliveryAddress,
                 PhoneNumber = i.c.CustomerPhoneNumber,
                 DateEncoded = i.c.DateEncoded,
                 PaymentMode = i.c.PaymentMode,
-                Amount = i.p.Amount - (i.p.RefundAmount == null ? 0 : i.p.RefundAmount) ?? 0
+                Amount = i.c.IsPickupDrop == true ? i.c.TotalPrice : i.p.Amount - (i.p.RefundAmount ?? 0)
             }).OrderByDescending(i => i.DateEncoded).ToList();
             int counter = 1;
             model.DeliveredReportLists.ForEach(x => x.No = counter++);
@@ -404,12 +401,12 @@ namespace ShopNow.Controllers
                         {
                             Id = i.c.Id,
                             ShopName = i.c.ShopName,
-                            OrderNumber = i.c.OrderNumber,
+                            OrderNumber = i.c.OrderNumber.ToString(),
                             CustomerPhoneNumber = i.c.CustomerPhoneNumber,
                             Status = i.c.Status,
                             PaymentMode = i.p.PaymentMode,
-                            //Amount = i.p.Amount - (i.p.RefundAmount ?? 0),
-                            Amount = i.p.Amount,
+                            //Amount = i.p.Amount,
+                            Amount = i.c.IsPickupDrop == true ? i.c.TotalPrice : i.p.Amount,
                             DateEncoded = i.c.DateEncoded,
                             ShopCancelledTime = i.c.ShopAcceptedTime,
                             ShopCancelPeriod = i.c.ShopAcceptedTime != null ? Math.Round((i.c.ShopAcceptedTime.Value - i.c.DateEncoded).TotalMinutes) : 0
@@ -431,7 +428,7 @@ namespace ShopNow.Controllers
             {
                 Id = i.Id,
                 ShopName = i.ShopName,
-                OrderNumber = i.OrderNumber,
+                OrderNumber = i.OrderNumber.ToString(),
                 DeliveryAddress = i.DeliveryAddress,
                 PhoneNumber = i.CustomerPhoneNumber,
                 DateEncoded = i.DateEncoded
@@ -451,11 +448,11 @@ namespace ShopNow.Controllers
                 .Select(i => new CartListViewModel.CustomerCancelledList
                 {
                     Id = i.c.Id,
-                    OrderNumber = i.c.OrderNumber,
+                    OrderNumber = i.c.OrderNumber.ToString(),
                     ShopName = i.c.ShopName,
                     CustomerPhoneNumber = i.c.CustomerPhoneNumber,
                     Status = i.c.Status,
-                    Amount = i.p.Amount - (i.p.RefundAmount ?? 0),
+                    Amount = i.c.IsPickupDrop == true ? i.c.TotalPrice : i.p.Amount - (i.p.RefundAmount ?? 0),
                     PaymentMode = i.p.PaymentMode,
                     DateEncoded = i.c.DateEncoded,
                     CustomerCancelledTime = i.c.DateUpdated
@@ -478,12 +475,12 @@ namespace ShopNow.Controllers
                 {
                     Id = i.c.Id,
                     ShopName = i.c.ShopName,
-                    OrderNumber = i.c.OrderNumber,
+                    OrderNumber = i.c.OrderNumber.ToString(),
                     CustomerPhoneNumber = i.c.CustomerPhoneNumber,
                     Status = i.c.Status,
                     DateEncoded = i.c.DateEncoded,
                     DateUpdated = i.c.DateUpdated,
-                    Amount = i.p.Amount - (i.p.RefundAmount ?? 0),
+                    Amount = i.c.IsPickupDrop == true ? i.c.TotalPrice : i.p.Amount - (i.p.RefundAmount ?? 0),
                     RefundAmount = i.p.RefundAmount ?? 0,
                     RefundRemark = i.p.RefundRemark ?? "",
                     PaymentMode = i.p.PaymentMode,
@@ -656,7 +653,8 @@ namespace ShopNow.Controllers
                 model.DateEncoded = cart.DateEncoded;
                 model.PenaltyAmount = cart.PenaltyAmount;
                 model.WaitingCharge = cart.WaitingCharge;
-                model.TotalPrice = cart.NetTotal;
+                model.TotalPrice = cart.TotalPrice;
+                model.NetTotal = cart.NetTotal;
                 model.PaymentMode = cart.PaymentMode;
                 model.PrescriptionImagePath = cart.PrescriptionImagePath;
                 model.IsPickupDrop = cart.IsPickupDrop;
@@ -680,7 +678,7 @@ namespace ShopNow.Controllers
                 //    model.RefundRemark = refundamount.RefundRemark ?? "";
                 //}
             }
-            model.List = db.OrderItems.Where(i => i.OrdeNumber == OrderNumber && i.Status == 0).Select(i => new CartListViewModel.CartList
+            model.List = db.OrderItems.Where(i => i.OrderId == cart.Id && i.Status == 0).Select(i => new CartListViewModel.CartList
             {
                 Id = i.Id,
                 BrandName = i.BrandName,
@@ -1215,7 +1213,7 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SNCCMD086")]
-        public ActionResult MarkAsDelivered(int OrderNumber, int id)
+        public ActionResult MarkAsDelivered(int OrderNumber, int id,string address="")
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
@@ -1241,6 +1239,10 @@ namespace ShopNow.Controllers
                 db.Entry(otpVerify).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
             }
+            if (!string.IsNullOrEmpty(address))
+            {
+                order.DeliveryAddress = address;
+            }
             order.Status = 6;
             order.UpdatedBy = user.Name;
             order.DateUpdated = DateTime.Now;
@@ -1255,10 +1257,13 @@ namespace ShopNow.Controllers
             //Reducing Platformcredits
             var payment = db.Payments.FirstOrDefault(i => i.OrderNumber == OrderNumber);
             var shop = db.Shops.FirstOrDefault(i => i.Id == order.ShopId);
-            var shopCredits = db.ShopCredits.FirstOrDefault(i => i.CustomerId == shop.CustomerId);
-            shopCredits.DeliveryCredit -= payment.DeliveryCharge;
-            db.Entry(shopCredits).State = System.Data.Entity.EntityState.Modified;
-            db.SaveChanges();
+            if (shop.IsTrail == false || order.IsPickupDrop == true) //Only Reduce DeliveryCredits When Shop is not trail and for all Pickupdrop order
+            {
+                var shopCredits = db.ShopCredits.FirstOrDefault(i => i.CustomerId == shop.CustomerId);
+                shopCredits.DeliveryCredit -= payment.DeliveryCharge;
+                db.Entry(shopCredits).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+            }
 
             var customerDetails = (from c in db.Customers
                                    where c.Id == order.CustomerId
@@ -1943,6 +1948,18 @@ namespace ShopNow.Controllers
                 db.SaveChanges();
             }
             return RedirectToAction("PickupSlip", new { OrderNumber=OrderNumber, id=OrderId});
+        }
+
+        public ActionResult UpdateDeliveryAddress(long orderId, string address, double latitude=0, double longitude=0)
+        {
+            var order = db.Orders.FirstOrDefault(i => i.Id == orderId);
+            order.DeliveryAddress = address;
+            order.Latitude = latitude;
+            order.Longitude = longitude;
+            order.DateUpdated = DateTime.Now;
+            db.Entry(order).State = EntityState.Modified;
+            db.SaveChanges();
+            return RedirectToAction("Details", "Cart", new { id = AdminHelpers.ECodeLong(orderId) });
         }
 
         protected override void Dispose(bool disposing)

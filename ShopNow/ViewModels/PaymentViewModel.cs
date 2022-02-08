@@ -69,7 +69,7 @@ namespace ShopNow.ViewModels
             public string CountryName { get; set; }
             public string Credits { get; set; }
             public DateTime DateEncoded { get; set; }
-            public int OrderNumber { get; set; }
+            public string OrderNumber { get; set; }
         }
     }
 
@@ -334,7 +334,7 @@ namespace ShopNow.ViewModels
             public int No { get; set; }
             public DateTime? OrderDate { get; set; }
             public string ShopName { get; set; }
-            public int OrderNumber { get; set; }
+            public string OrderNumber { get; set; }
             public string PaymentType { get; set; }
             public string PaymentId { get; set; }
             public double? OrderFirstAmount { get; set; }
@@ -385,7 +385,7 @@ namespace ShopNow.ViewModels
         public List<ListItem> ListItems { get; set; }
         public class ListItem
         {
-            public int OrderNumber { get; set; }
+            public string OrderNumber { get; set; }
             public string OfferName { get; set; }
             public string OfferCode { get; set; }
             public double PurchasedAmount { get; set; }
@@ -407,7 +407,7 @@ namespace ShopNow.ViewModels
         public class ListItem
         {
             public long OrderId { get; set; }
-            public int OrderNumber { get; set; }
+            public string OrderNumber { get; set; }
             public string ShopName { get; set; }
             public string BillNo { get; set; }
             public double BillAmount { get; set; }

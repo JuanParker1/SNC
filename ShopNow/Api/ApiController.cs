@@ -1595,8 +1595,8 @@ namespace ShopNow.Controllers
                     NetTotal = i.o.o.o.o.IsPickupDrop == true ? i.o.o.o.o.TotalPrice : i.o.o.o.o.NetTotal, //for pickupdrop don't show delivery charge in total
                     WalletAmount = i.o.o.o.o.WalletAmount,
                     TipAmount = i.o.o.o.o.TipsAmount,
+                    IsPickupDrop = i.o.o.o.o.IsPickupDrop,
                     OrderItemList = i.oi.ToList(),
-
                 }).ToList();
 
             model.OtherList = db.Orders.Where(i => (i.Status == 4 || i.Status == 5) && i.DeliveryBoyPhoneNumber == phoneNumber  /*&& DbFunctions.TruncateTime(i.DateEncoded) == DbFunctions.TruncateTime(DateTime.Now)*/)
@@ -1635,6 +1635,7 @@ namespace ShopNow.Controllers
                    NetTotal = i.o.o.o.o.IsPickupDrop == true ? i.o.o.o.o.TotalPrice : i.o.o.o.o.NetTotal,
                    WalletAmount = i.o.o.o.o.WalletAmount,
                    TipAmount = i.o.o.o.o.TipsAmount,
+                   IsPickupDrop = i.o.o.o.o.IsPickupDrop,
                    OrderItemList = i.oi.ToList()
                }).ToList();
 
@@ -1898,10 +1899,13 @@ namespace ShopNow.Controllers
             //Reducing Platformcredits
             var payment = db.Payments.FirstOrDefault(i => i.OrderNumber == orderNo);
             var shop = db.Shops.FirstOrDefault(i => i.Id == order.ShopId);
-            var shopCredits = db.ShopCredits.FirstOrDefault(i => i.CustomerId == shop.CustomerId);
-            shopCredits.DeliveryCredit -= payment.DeliveryCharge;
-            db.Entry(shopCredits).State = System.Data.Entity.EntityState.Modified;
-            db.SaveChanges();
+            if (shop.IsTrail == false || order.IsPickupDrop == true) //Only Reduce DeliveryCredits When Shop is not trail and for all Pickupdrop order
+            {
+                var shopCredits = db.ShopCredits.FirstOrDefault(i => i.CustomerId == shop.CustomerId);
+                shopCredits.DeliveryCredit -= payment.DeliveryCharge;
+                db.Entry(shopCredits).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+            }
 
             if (order.CustomerId != 0) // not for pickup drop
             {
@@ -5227,8 +5231,8 @@ namespace ShopNow.Controllers
                 response.ShopId = shop.Id;
                 response.ShopIsOnline = shop.IsOnline;
                 response.ShopNextOnTime = shop.NextOnTime;
-                response.ProductListItems = db.Products.AsEnumerable().Where(i => model.ProductListItems.Select(a => a.Id).ToArray().Contains(i.Id))
-
+                var productIdArray = model.ProductListItems.Select(a => a.Id).ToArray();
+                response.ProductListItems = db.Products.Where(i=>i.ShopId == model.ShopId && productIdArray.Contains(i.Id))
                     .Select(i => new OldCartResponseViewModel.ProductListItem
                     {
                         Id = i.Id,
@@ -5399,10 +5403,23 @@ namespace ShopNow.Controllers
 
         public JsonResult GetCustomerPaymentMode(int customerId)//If Customer Cancel the order(not pick up the phone on delivery) next 5 orders should be Online Mode
         {
-            var lastCancelledOrder = db.Orders.AsEnumerable().LastOrDefault(i => i.CustomerId == customerId && (i.Status == 9 || i.Status == 10));
-            if (lastCancelledOrder != null)
+            //var lastCancelledOrder = db.Orders.AsEnumerable().LastOrDefault(i => i.CustomerId == customerId && (i.Status == 9 || i.Status == 10));
+            //if (lastCancelledOrder != null)
+            //{
+            //    int orderCountAfterLC = db.Orders.Where(i => i.CustomerId == customerId && i.Status == 6 && (i.DateEncoded > lastCancelledOrder.DateEncoded)).Count();
+            //    if (orderCountAfterLC < 5)
+            //        return Json(new { isOnlinePayment = false }, JsonRequestBehavior.AllowGet);
+            //    else
+            //        return Json(new { isOnlinePayment = true }, JsonRequestBehavior.AllowGet);
+            //}
+            //return Json(new { isOnlinePayment = true }, JsonRequestBehavior.AllowGet);
+
+
+            var customerOrders = db.Orders.Where(i => i.CustomerId == customerId && (i.Status == 9 || i.Status == 10 || i.Status==6)).ToList();
+            if (customerOrders.Where(i=>i.Status == 9 || i.Status == 10).Count() > 0)
             {
-                int orderCountAfterLC = db.Orders.Where(i => i.CustomerId == customerId && i.Status == 6 && (i.DateEncoded > lastCancelledOrder.DateEncoded)).Count();
+                DateTime lastOrderCancelledDate = customerOrders.Where(i => i.Status == 9 || i.Status == 10).OrderByDescending(i => i.Id).FirstOrDefault().DateEncoded;
+                int orderCountAfterLC = customerOrders.Where(i => i.CustomerId == customerId && i.Status == 6 && (i.DateEncoded > lastOrderCancelledDate)).Count();
                 if (orderCountAfterLC < 5)
                     return Json(new { isOnlinePayment = false }, JsonRequestBehavior.AllowGet);
                 else

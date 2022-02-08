@@ -28,7 +28,7 @@ namespace ShopNow.Controllers
                 .Select(i => new AccountsBillWiseReportViewModel.ListItem
                 {
                     Date = i.o.o.DateEncoded,
-                    OrderNumber = i.o.o.OrderNumber,
+                    OrderNumber = i.o.o.OrderNumber.ToString(),
                     ShopName = i.o.o.ShopName,
                     GSTNumber = i.s.GSTINNumber,
                     MenuPrice = i.o.o.TotalShopPrice == 0? i.o.o.TotalPrice:i.o.o.TotalShopPrice,

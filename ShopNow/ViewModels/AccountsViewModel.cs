@@ -14,7 +14,7 @@ namespace ShopNow.ViewModels
         {
             public int SNo { get; set; }
             public DateTime Date { get; set; }
-            public int OrderNumber { get; set; }
+            public string OrderNumber { get; set; }
             public string ShopName { get; set; }
             public string GSTNumber { get; set; }
             public double MenuPrice { get; set; }

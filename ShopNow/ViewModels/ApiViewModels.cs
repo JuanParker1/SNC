@@ -128,7 +128,7 @@ namespace ShopNow.ViewModels
             public string RefundRemark { get; set; }
             public List<OrderItem> OrderItemList { get; set; }
             public double TipAmount { get; set; }
-           
+           public bool IsPickupDrop { get; set; }
         }
     }
 
