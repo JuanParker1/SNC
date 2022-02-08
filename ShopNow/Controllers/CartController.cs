@@ -653,7 +653,8 @@ namespace ShopNow.Controllers
                 model.DateEncoded = cart.DateEncoded;
                 model.PenaltyAmount = cart.PenaltyAmount;
                 model.WaitingCharge = cart.WaitingCharge;
-                model.TotalPrice = cart.NetTotal;
+                model.TotalPrice = cart.TotalPrice;
+                model.NetTotal = cart.NetTotal;
                 model.PaymentMode = cart.PaymentMode;
                 model.PrescriptionImagePath = cart.PrescriptionImagePath;
                 model.IsPickupDrop = cart.IsPickupDrop;
@@ -677,7 +678,7 @@ namespace ShopNow.Controllers
                 //    model.RefundRemark = refundamount.RefundRemark ?? "";
                 //}
             }
-            model.List = db.OrderItems.Where(i => i.OrdeNumber == OrderNumber && i.Status == 0).Select(i => new CartListViewModel.CartList
+            model.List = db.OrderItems.Where(i => i.OrderId == cart.Id && i.Status == 0).Select(i => new CartListViewModel.CartList
             {
                 Id = i.Id,
                 BrandName = i.BrandName,
@@ -1947,6 +1948,19 @@ namespace ShopNow.Controllers
                 db.SaveChanges();
             }
             return RedirectToAction("PickupSlip", new { OrderNumber=OrderNumber, id=OrderId});
+        }
+
+        public ActionResult UpdateDeliveryAddress(long orderId, string address,double distance=0, double latitude=0, double longitude=0)
+        {
+            var order = db.Orders.FirstOrDefault(i => i.Id == orderId);
+            order.DeliveryAddress = address;
+            order.Latitude = latitude;
+            order.Longitude = longitude;
+            order.Distance = distance;
+            order.DateUpdated = DateTime.Now;
+            db.Entry(order).State = EntityState.Modified;
+            db.SaveChanges();
+            return RedirectToAction("Details", "Cart", new { id = AdminHelpers.ECodeLong(orderId) });
         }
 
         protected override void Dispose(bool disposing)

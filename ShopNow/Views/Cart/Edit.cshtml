@@ -43,7 +43,7 @@
                                 <div class="col-md-4">
                                     <span class="font-weight-bold">Order No &nbsp;: &nbsp; @Model.OrderNumber</span><br />
                                     <span class="font-weight-bold"><i class="fa fa-calendar" aria-hidden="true"></i> @Model.DateEncoded.ToString("dd-MM-yyyy hh:mm tt")</span><br />
-                                    <span class="font-weight-bold">Amount :&ensp; <i class="fa fa-inr" aria-hidden="true"></i>@Model.TotalPrice (@Model.PaymentMode)</span><br />
+                                    <span class="font-weight-bold">Amount :&ensp; <i class="fa fa-inr" aria-hidden="true"></i>@if (Model.IsPickupDrop == true) { @Model.TotalPrice }else { @Model.NetTotal}  (@Model.PaymentMode)</span><br />
                                 </div>
                                 @if (Model.PrescriptionImagePath != null)
                                 {
