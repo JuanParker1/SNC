@@ -77,6 +77,8 @@ namespace ShopNow.Models
         public string PickupAddress { get; set; }
         public double PickupLatitude { get; set; }
         public double PickupLongitude { get; set; }
+        public double DBDeliveredLatitude { get; set; }
+        public double DBDeliveredLongitude { get; set; }
         public int Status { get; set; }
         public System.DateTime DateEncoded { get; set; }
         public System.DateTime DateUpdated { get; set; }

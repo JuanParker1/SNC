@@ -1852,7 +1852,7 @@ namespace ShopNow.Controllers
             }
         }
 
-        public JsonResult GetDelivaryBoyDelivered(int orderNo, int customerId, string otp)
+        public JsonResult GetDelivaryBoyDelivered(int orderNo, int customerId, string otp,double latitude=0,double longitude=0)
         {
             var otpVerify = db.OtpVerifications.FirstOrDefault(i => i.OrderNo == orderNo);
 
@@ -1893,6 +1893,8 @@ namespace ShopNow.Controllers
             order.UpdatedBy = delivaryBoy.CustomerName;
             order.DateUpdated = DateTime.Now;
             order.DeliveredTime = DateTime.Now;
+            order.DBDeliveredLatitude = latitude;
+            order.DBDeliveredLongitude = longitude;
             db.Entry(order).State = System.Data.Entity.EntityState.Modified;
             db.SaveChanges();
 
