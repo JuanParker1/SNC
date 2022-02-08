@@ -376,7 +376,11 @@
                     <div class="d-flex">
                         <label class="mr-3">Address:</label>
                         <a onclick="gotomap(@Model.Latitude,@Model.Longitude)" href="" target="_blank"> <span class="font-weight-bold"> @Model.DeliveryAddress</span></a>
-                    </div>
+                        @if (Model.IsPickupDrop == true)
+                        {
+                            <a href="#modal-update-deliveryaddress" data-target="#modal-update-deliveryaddress" data-toggle="modal" class="ml-3"><i class="fa fa-edit"></i></a>
+                        }
+                        </div>
                 </div>
             </div>
         </div>
@@ -413,7 +417,7 @@
                             {
                                 <tr>
                                     <td></td>
-                                    <td><img src="@item.ImagePath" alt="Image" class="img-fluid productImages" data-toggle="modal" data-target="#myModal" style="width:50px;height:50px;" onerror="this.src='/Images/No Photo.png'" /></td>
+                                    <td><img src="@item.ImagePath" alt="Image" class="img-fluid productImages" data-toggle="modal" data-target="#myModal" style="width:50px;height:50px;" onerror="this.src='~/Images/No Photo.png'" /></td>
                                     <td>
                                         <b>@item.ProductName </b><br />
                                         @if (item.HasAddon == true)
@@ -866,6 +870,35 @@
                     <input type="hidden" name="Id" value="@Model.Id" />
                     <input type="hidden" name="OrderNumber" value="@Model.OrderNumber" />
                     <h5>Update Address</h5>
+                    <div class="form-group">
+                        <label>Address</label>
+                        <textarea class="form-control" name="Address" required>@Model.DeliveryAddress</textarea>
+                    </div>
+                    <div class="text-right">
+                        <button class="btn btn-sm btn-success mr-3">Submit</button>
+                        <button class="btn btn-sm btn-danger" data-dismiss="modal">Close</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modal-update-deliveryaddress" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-body">
+                <form method="get" action="/Cart/UpdateDeliveryAddress">
+                    <input type="hidden" name="OrderId" value="@Model.Id" />
+                    <h5>Update Delivery Address</h5>
+                    <div class="form-group">
+                        <label>Latitude</label>
+                        <input type="text" class="form-control" name="Latitude" value="@Model.Latitude" />
+                    </div>
+                    <div class="form-group">
+                        <label>Longitude</label>
+                        <input type="text" class="form-control" name="Longitude" value="@Model.Longitude" />
+                    </div>
                     <div class="form-group">
                         <label>Address</label>
                         <textarea class="form-control" name="Address" required>@Model.DeliveryAddress</textarea>
