@@ -33,12 +33,12 @@
                {
                    columns.Add(c => c.No).Titled("Sl.No").Filterable(false).SetWidth(1);
                    columns.Add(c => c.OrderNumber).Titled("OrderNo").Filterable(true).SetWidth(10);
-                   columns.Add(c => c.ShopName).Titled("Shop Name").Filterable(true).SetWidth(15);
-                   columns.Add(c => c.PaymentMode).Titled("Payment Mode").Filterable(true).SetWidth(10);
+                   columns.Add(c => c.ShopName).Titled("Shop Name").Filterable(true).SetWidth(30);
+                   columns.Add(c => c.PaymentMode).Titled("Payment Mode").Filterable(true).SetWidth(30);
                    columns.Add(c => c.Amount).Titled("Amount").Filterable(true).SetWidth(1);
-                   columns.Add(c => c.CustomerPhoneNumber).Titled("Cust.Phone No.").Filterable(true).SetWidth(15);
-                   columns.Add(c => c.DateEncoded).Titled("Order Time").Filterable(true).SetWidth(10);
-                   columns.Add(c => c.CustomerCancelledTime).Titled("Cancelled Time").Filterable(true).SetWidth(10);
+                   columns.Add(c => c.CustomerPhoneNumber).Titled("Cust.Phone No.").Filterable(true).SetWidth(30);
+                   columns.Add(c => c.DateEncoded).Titled("Order Time").Filterable(true).SetWidth(30);
+                   columns.Add(c => c.CustomerCancelledTime).Titled("Cancelled Time").Filterable(true).SetWidth(30);
                    columns.Add().Encoded(false).Sanitized(false)
                   .RenderValueAs(o => Html.ActionLink("View", "Edit", new { OrderNumber = o.OrderNumber, id = @ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id) }, new { @class = "btn btn-sm btn-info btn-block mt-3", }).ToHtmlString()).Titled("Action").SetWidth(10);
                }).WithPaging(20).Sortable(true)

@@ -76,7 +76,7 @@ namespace ShopNow.ViewModels
             public int ShopId { get; set; }
             public string ShopName { get; set; }
             public DateTime OrderDate { get; set; }
-            public int OrderNumber { get; set; }
+            public string OrderNumber { get; set; }
             public string CustomerName { get; set; }
             public double RefundAmount { get; set; }
             public string RefundRemark { get; set; }

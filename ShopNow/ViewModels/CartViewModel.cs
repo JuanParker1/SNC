@@ -238,7 +238,7 @@ namespace ShopNow.ViewModels
         {
             public int No { get; set; }
             public long Id { get; set; }
-            public int OrderNumber { get; set; }
+            public string OrderNumber { get; set; }
             public string ShopName { get; set; }
             public string DeliveryAddress { get; set; }
             public string ShopOwnerPhoneNumber { get; set; }
@@ -257,7 +257,7 @@ namespace ShopNow.ViewModels
         {
             public int No { get; set; }
             public long Id { get; set; }
-            public int OrderNumber { get; set; }
+            public string OrderNumber { get; set; }
             public string ShopName { get; set; }
             public string DeliveryAddress { get; set; }
             public string ShopPhoneNumber { get; set; }
@@ -277,7 +277,7 @@ namespace ShopNow.ViewModels
         {
             public int No { get; set; }
             public long Id { get; set; }
-            public int OrderNumber { get; set; }
+            public string OrderNumber { get; set; }
             public string ShopName { get; set; }
             public string DeliveryBoyPhoneNumber { get; set; }
             public string DeliveryBoyName { get; set; }
@@ -295,7 +295,7 @@ namespace ShopNow.ViewModels
         {
             public int No { get; set; }
             public long Id { get; set; }
-            public int OrderNumber { get; set; }
+            public string OrderNumber { get; set; }
             public string ShopName { get; set; }
             public string DeliveryBoyPhoneNumber { get; set; }
             public string DeliveryBoyName { get; set; }
@@ -314,7 +314,7 @@ namespace ShopNow.ViewModels
         {
             public int No { get; set; }
             public long Id { get; set; }
-            public int OrderNumber { get; set; }
+            public string OrderNumber { get; set; }
             public string ShopName { get; set; }
             public string DeliveryBoyPhoneNumber { get; set; }
             public int Status { get; set; }
@@ -332,7 +332,7 @@ namespace ShopNow.ViewModels
         {
             public int No { get; set; }
             public long Id { get; set; }
-            public int OrderNumber { get; set; }
+            public string OrderNumber { get; set; }
             public string ShopName { get; set; }
             public string CustomerPhoneNumber { get; set; }
             public int Status { get; set; }
@@ -354,7 +354,7 @@ namespace ShopNow.ViewModels
         {
             public int No { get; set; }
             public long Id { get; set; }
-            public int OrderNumber { get; set; }
+            public string OrderNumber { get; set; }
             public string ShopName { get; set; }
             public string CustomerPhoneNumber { get; set; }
             public int Status { get; set; }
@@ -374,7 +374,7 @@ namespace ShopNow.ViewModels
         {
             public int No { get; set; }
             public long Id { get; set; }
-            public int OrderNumber { get; set; }
+            public string OrderNumber { get; set; }
             public string ShopName { get; set; }
             public string CustomerPhoneNumber { get; set; }
             public int Status { get; set; }
@@ -394,7 +394,7 @@ namespace ShopNow.ViewModels
         {
             public int No { get; set; }
             public long Id { get; set; }
-            public int OrderNumber { get; set; }
+            public string OrderNumber { get; set; }
             public string ShopName { get; set; }
             public string CustomerPhoneNumber { get; set; }
             public int Status { get; set; }
@@ -560,7 +560,7 @@ namespace ShopNow.ViewModels
         public class DeliveredReportList {
             public int No { get; set; }
             public long Id { get; set; }
-            public int OrderNumber { get; set; }
+            public string OrderNumber { get; set; }
             public string ShopName { get; set; }
             public string PhoneNumber { get; set; }
             public string DeliveryAddress { get; set; }
@@ -572,7 +572,7 @@ namespace ShopNow.ViewModels
         public class CancelledReportList
         {
             public long Id { get; set; }
-            public int OrderNumber { get; set; }
+            public string OrderNumber { get; set; }
             public string ShopName { get; set; }
             public string PhoneNumber { get; set; }
             public string DeliveryAddress { get; set; }
