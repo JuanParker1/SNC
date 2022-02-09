@@ -455,7 +455,7 @@ namespace ShopNow.Controllers
             model.ListItems = db.ShopBillDetails
                 .GroupJoin(db.Payments, s => s.OrderNumber, p => p.OrderNumber, (s,p) => new { s,p })
                 .GroupJoin(db.Orders, p => p.p.FirstOrDefault().OrderNumber, o => o.OrderNumber, (p, o) => new { p, o })
-                .Where(i => ((model.StartDate != null && model.EndDate != null) ? DbFunctions.TruncateTime(i.o.FirstOrDefault().DateEncoded) >= DbFunctions.TruncateTime(model.StartDate) && DbFunctions.TruncateTime(i.o.FirstOrDefault().DateEncoded) <= DbFunctions.TruncateTime(model.EndDate) : true) && (model.ShopId != 0 ? i.o.FirstOrDefault().ShopId == model.ShopId : true))
+                .Where(i => i.o.FirstOrDefault().Status == 6 && ((model.StartDate != null && model.EndDate != null) ? DbFunctions.TruncateTime(i.o.FirstOrDefault().DateEncoded) >= DbFunctions.TruncateTime(model.StartDate) && DbFunctions.TruncateTime(i.o.FirstOrDefault().DateEncoded) <= DbFunctions.TruncateTime(model.EndDate) : true) && (model.ShopId != 0 ? i.o.FirstOrDefault().ShopId == model.ShopId : true))
                 .Select(i => new ShopBillDifferenceReportViewModel.ListItem
                 {
                     OrderId = i.o.FirstOrDefault().Id,
@@ -474,7 +474,7 @@ namespace ShopNow.Controllers
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
-            model.ListItems = db.Orders
+            model.ListItems = db.Orders.Where(i=>i.Status == 6)
                 .GroupJoin(db.Payments, o => o.OrderNumber, p => p.OrderNumber, (o,p) => new { o,p })
                 .Where(i=> !db.ShopBillDetails.Any(s=>s.OrderNumber == i.o.OrderNumber) && ((model.StartDate != null && model.EndDate != null) ? DbFunctions.TruncateTime(i.o.DateEncoded) >= DbFunctions.TruncateTime(model.StartDate) && DbFunctions.TruncateTime(i.o.DateEncoded) <= DbFunctions.TruncateTime(model.EndDate) : true) && (model.ShopId != 0 ? i.o.ShopId == model.ShopId : true))
                 .Select(i => new ShopBillDifferenceReportViewModel.ListItem
