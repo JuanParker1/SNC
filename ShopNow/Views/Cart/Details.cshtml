@@ -312,12 +312,12 @@
                         </div>
                     }
                     @*@if (Model.PrescriptionImagePath != null)
-        {
-            <label>Prescription Image</label><br />
-            <div class="d-flex">
-                <img alt="Image" data-toggle="modal" data-target="#PrescriptionImageModal" class="img-thumbnail PrescriptionImage p-1" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/@Model.PrescriptionImagePath" onerror="this.src='/Images/No Photo.png'" style="width:45px;height:45px" />
-            </div>
-        }*@
+                        {
+                            <label>Prescription Image</label><br />
+                            <div class="d-flex">
+                                <img alt="Image" data-toggle="modal" data-target="#PrescriptionImageModal" class="img-thumbnail PrescriptionImage p-1" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/@Model.PrescriptionImagePath" onerror="this.src='/Images/No Photo.png'" style="width:45px;height:45px" />
+                            </div>
+                        }*@
                     @if (Model.ImagePathLists.Count() > 0)
                     {
                         <label>Prescription Image</label><br />
@@ -380,7 +380,7 @@
                         {
                             <a href="#modal-update-deliveryaddress" data-target="#modal-update-deliveryaddress" data-toggle="modal" class="ml-3"><i class="fa fa-edit"></i></a>
                         }
-                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -403,7 +403,10 @@
                         <thead>
                             <tr>
                                 <th>No.</th>
+                                @if (Model.IsPickupDrop == false)
+                                {
                                 <th></th>
+                                }
                                 <th>Product Name</th>
                                 <th>Category Name</th>
                                 <th>Qty</th>
@@ -415,9 +418,12 @@
                         <tbody>
                             @foreach (var item in Model.ListItems)
                             {
-                                <tr>
-                                    <td></td>
+                            <tr>
+                                <td></td>
+                                @if (Model.IsPickupDrop == false)
+                                {
                                     <td><img src="@item.ImagePath" alt="Image" class="img-fluid productImages" data-toggle="modal" data-target="#myModal" style="width:50px;height:50px;" onerror="this.src='~/Images/No Photo.png'" /></td>
+                                }
                                     <td>
                                         <b>@item.ProductName </b><br />
                                         @if (item.HasAddon == true)
@@ -468,9 +474,10 @@
                                     <td>@item.Quantity</td>
                                     <td>₹@item.UnitPrice</td>
                                     <td>₹@item.Price</td>
-                                    <td><a class="btn-item-update" href="#modal-item-update" data-target="#modal-item-update" data-toggle="modal" data-id="@item.Id" data-product="@item.ProductName" data-category="@item.CategoryName" data-quantity="@item.Quantity" data-unitprice="@item.UnitPrice" data-remark="@item.UpdateRemarks"><i class="fa fa-edit"></i></a>
-                                  @if (!string.IsNullOrEmpty(item.UpdateRemarks))
-                                  {   <i class="fa fa-info-circle ml-3 text-danger" data-html="true" data-toggle="tooltip" title="<p class='mb-0'>@item.UpdateRemarks</p><small>@item.UpdatedBy (@item.UpdatedTime.Value.ToString("dd-MMM-yyyy HH:mm tt"))</small>"></i>}
+                                    <td>
+                                        <a class="btn-item-update" href="#modal-item-update" data-target="#modal-item-update" data-toggle="modal" data-id="@item.Id" data-product="@item.ProductName" data-category="@item.CategoryName" data-quantity="@item.Quantity" data-unitprice="@item.UnitPrice" data-remark="@item.UpdateRemarks"><i class="fa fa-edit"></i></a>
+                                        @if (!string.IsNullOrEmpty(item.UpdateRemarks))
+                                        {<i class="fa fa-info-circle ml-3 text-danger" data-html="true" data-toggle="tooltip" title="<p class='mb-0'>@item.UpdateRemarks</p><small>@item.UpdatedBy (@item.UpdatedTime.Value.ToString("dd-MMM-yyyy HH:mm tt"))</small>"></i>}
                                     </td>
                                 </tr>
                             }
@@ -478,12 +485,15 @@
                         <tfoot>
                             <tr>
                                 <th colspan="3">Total</th>
-                                <th></th>
-                                <th>@Model.ListItems.Sum(i => i.Quantity)</th>
-                                <th>₹@Model.ListItems.Sum(i => i.UnitPrice)</th>
-                                <th>₹@Model.ListItems.Sum(i => i.Price)</th>
-                                <th></th>
-                            </tr>
+                                @if (Model.IsPickupDrop == false)
+                                {
+                                    <th></th>
+                                }
+                                    <th>@Model.ListItems.Sum(i => i.Quantity)</th>
+                                    <th>₹@Model.ListItems.Sum(i => i.UnitPrice)</th>
+                                    <th>₹@Model.ListItems.Sum(i => i.Price)</th>
+                                    <th></th>
+                                </tr>
                         </tfoot>
                     </table>
                 </div>
@@ -815,31 +825,31 @@
 </div>
 
 @*<div class="modal fade" id="modal-paymentmode-update" tabindex="-1" role="dialog">
-    <div class="modal-dialog modal-sm">
-        <div class="modal-content">
-            <div class="modal-body">
-                <form method="get" action="/Cart/UpdatePaymentMode">
-                    <input type="hidden" name="Id" value="@Model.Id" />
-                    <h5>Update PaymentType</h5>
-                    <div class="form-group row">
-                        <div class="col-md-12">
-                            <select name="PaymentType" id="PaymentType" class="form-control">
-                                <option value="0">Select Payment</option>
-                                <option value="1">Online Payment</option>
-                                <option value="2">Cash On Hand</option>
-                            </select>
-                            <input type="hidden" name="OrderNo" id="OrderNo" />
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <form method="get" action="/Cart/UpdatePaymentMode">
+                        <input type="hidden" name="Id" value="@Model.Id" />
+                        <h5>Update PaymentType</h5>
+                        <div class="form-group row">
+                            <div class="col-md-12">
+                                <select name="PaymentType" id="PaymentType" class="form-control">
+                                    <option value="0">Select Payment</option>
+                                    <option value="1">Online Payment</option>
+                                    <option value="2">Cash On Hand</option>
+                                </select>
+                                <input type="hidden" name="OrderNo" id="OrderNo" />
+                            </div>
                         </div>
-                    </div>
-                    <div class="text-right">
-                        <button class="btn btn-sm btn-success mr-3">Submit</button>
-                        <button class="btn btn-sm btn-danger" data-dismiss="modal">Close</button>
-                    </div>
-                </form>
+                        <div class="text-right">
+                            <button class="btn btn-sm btn-success mr-3">Submit</button>
+                            <button class="btn btn-sm btn-danger" data-dismiss="modal">Close</button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
-    </div>
-</div>*@
+    </div>*@
 
 <div class="modal fade" id="modal-actualShopPayment-update" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-sm">
@@ -892,6 +902,10 @@
                     <input type="hidden" name="OrderId" value="@Model.Id" />
                     <h5>Update Delivery Address</h5>
                     <div class="form-group">
+                        <label>Address</label>
+                        <textarea id="delivery-address" class="form-control" name="Address" onchange="GetLatLong();" required>@Model.DeliveryAddress</textarea>
+                    </div>
+                    <div class="form-group">
                         <label>Latitude</label>
                         <input type="text" class="form-control" name="Latitude" value="@Model.Latitude" />
                     </div>
@@ -900,12 +914,12 @@
                         <input type="text" class="form-control" name="Longitude" value="@Model.Longitude" />
                     </div>
                     <div class="form-group">
-                        <label>Address</label>
-                        <textarea class="form-control" name="Address" required>@Model.DeliveryAddress</textarea>
-                    </div>
-                    <div class="form-group">
                         <label>Distance(Km)</label>
                         <input type="text" class="form-control" name="Distance" value="@Model.Distance" />
+                    </div>
+                    <div class="form-group">
+                        <label>Delivery Charge</label>
+                        <input type="text" class="form-control" name="DeliveryCharge" value="@Model.NetDeliveryCharge" />
                     </div>
                     <div class="text-right">
                         <button class="btn btn-sm btn-success mr-3">Submit</button>
@@ -921,6 +935,8 @@
 {
     <script src="~/Scripts/sweetalert/sweetalert.min.js"></script>
     <link href="~/Content/sweetalert/sweetalert.css" rel="stylesheet" />
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCl_9yf43Z6hWLvVvwd68p7WXwq_oYcS_0&libraries=places"
+            async defer></script>
     <script>
         function printDiv(divName) {
             var printContents = document.getElementById(divName).innerHTML;
@@ -1058,5 +1074,28 @@
             //    $('#modal-paymentmode-update').modal('show');
             //});
         });
+
+        var geocoder;
+            function GetLatLong() {
+                geocoder = new google.maps.Geocoder();
+                var address = document.getElementById('delivery-address').value;
+                alert(address);
+                geocoder.geocode({ 'address': address }, function (results, status) {
+                    if (status == 'OK') {
+                        $('input[name="Latitude"]').val(results[0].geometry.location.lat());
+                        $('input[name="Longitude"]').val(results[0].geometry.location.lng());
+                        getDeliveryCharge();
+                    }
+                });
+            }
+
+            function getDeliveryCharge() {
+                var DeliveryLatitude = $('input[name="Latitude"]').val();
+                var DeliveryLongitude = $('input[name="Longitude"]').val();
+                $.getJSON("/Cart/GetDeliveryCharge", { PickupLatitude: @Model.PickupLatitude, PickupLongitude: @Model.PickupLongitude, DeliveryLatitude: DeliveryLatitude, DeliveryLongitude: DeliveryLongitude }, function (data) {
+                    $('input[name="DeliveryCharge"]').val(data.DeliveryCharge.toFixed(2));
+                    $('input[name="Distance"]').val(data.Distance.toFixed(2));
+                });
+            }
     </script>
 }

@@ -73,7 +73,7 @@
 
             $('.btn-update-active').on('click', function () {
                 var tr = $(this).closest('tr');
-                var code = tr.find('.btn-update-active').data('id');
+                var id = tr.find('.btn-update-active').data('id');
                 $.post('/Product/UpdateActive', { id: id }, function (data) {
                     if (data) {
                         swal('Success!', 'Updated Successfully', 'success');
