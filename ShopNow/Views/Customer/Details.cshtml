@@ -120,7 +120,7 @@
                                             <td>@item.ShopName</td>
                                             <td>@item.ProductCount</td>
                                             <td>@item.QuantityCount</td>
-                                            <td>₹@item.Amount</td>
+                                            <td>₹@item.Amount.ToString("#,##.00")</td>
                                         </tr>
                                     }
                                 }
@@ -132,7 +132,7 @@
                                         <th colspan="5">Total</th>
                                         <th>@Model.OrderListItems.Sum(i => i.ProductCount)</th>
                                         <th>@Model.OrderListItems.Sum(i => i.QuantityCount)</th>
-                                        <th>₹@Model.OrderListItems.Sum(i => i.Amount)</th>
+                                        <th>₹@Model.OrderListItems.Sum(i => i.Amount).ToString("#,##.00")</th>
                                     </tr>
                                 </tfoot>
                             }
