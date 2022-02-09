@@ -1764,9 +1764,12 @@ namespace ShopNow.Controllers
         public JsonResult UpdateActive(long id)
         {
             var product = db.Products.FirstOrDefault(i => i.Id == id);
-            product.Status = 0;
-            db.Entry(product).State = System.Data.Entity.EntityState.Modified;
-            db.SaveChanges();
+            if (product != null)
+            {
+                product.Status = 0;
+                db.Entry(product).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+            }
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
