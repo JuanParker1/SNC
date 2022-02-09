@@ -107,7 +107,7 @@ namespace ShopNow.Controllers
 
                 config.CreateMap<Product, ProductDetailsApiViewModel>();
                 config.CreateMap<Product, MedicalProductDetailsApiViewModel>();
-
+                config.CreateMap<CustomerBankDetailsCreateViewModel, CustomerBankDetail>();
             });
 
             _mapper = _mapperConfiguration.CreateMapper();
@@ -6533,6 +6533,24 @@ namespace ShopNow.Controllers
             if (customerAppdetails != null)
                 customerVersion = customerAppdetails.Version;
             return Json(new { appVersion = appVersion, customerVersion = customerVersion }, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public JsonResult SaveCustomerBankDetails(CustomerBankDetailsCreateViewModel model)
+        {
+            var customerBankDetail = _mapper.Map<CustomerBankDetailsCreateViewModel, CustomerBankDetail>(model);
+            customerBankDetail.Status = 0;
+            customerBankDetail.DateEncoded = DateTime.Now;
+            customerBankDetail.DateUpdated = DateTime.Now;
+            db.CustomerBankDetails.Add(customerBankDetail);
+            db.SaveChanges();
+            return Json(new { message = "Saved Successfully" }, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult GetBankList()
+        {
+            var list = db.Banks.Where(i => i.Status == 0).OrderBy(i=>i.Name).Select(i=>i.Name).ToList();
+            return Json(list, JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult SendTestNotification(string deviceId = "", string title = "", string body = "")
