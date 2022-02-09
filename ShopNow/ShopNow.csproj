@@ -485,6 +485,9 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>ApplicationDbContext.edmx</DependentUpon>
     </Compile>
+    <Compile Include="Models\Bank.cs">
+      <DependentUpon>ApplicationDbContext.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Banner.cs">
       <DependentUpon>ApplicationDbContext.tt</DependentUpon>
     </Compile>
@@ -520,6 +523,9 @@
       <DependentUpon>ApplicationDbContext.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\CustomerAppInfo.cs">
+      <DependentUpon>ApplicationDbContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\CustomerBankDetail.cs">
       <DependentUpon>ApplicationDbContext.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\CustomerDeviceInfo.cs">
@@ -854,6 +860,7 @@
     <Content Include="Images\Location\orange-dot.png" />
     <Content Include="Images\Location\pink-dot.png" />
     <Content Include="Images\Location\purple-dot.png" />
+    <Content Include="Images\noimage.png" />
     <Content Include="Images\snoch-crop.png" />
     <Content Include="Images\snoch.jpg" />
     <Content Include="Images\503.png" />

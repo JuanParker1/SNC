@@ -866,5 +866,16 @@ namespace ShopNow.ViewModels
             public int OrderNo { get; set; }
         }
     }
+
+    public class CustomerBankDetailsCreateViewModel
+    {
+        public int CustomerId { get; set; }
+        public string CustomerPhoneNumber { get; set; }
+        public string BankName { get; set; }
+        public string AccountName { get; set; }
+        public string AccountType { get; set; }
+        public string AccountNumber { get; set; }
+        public string IFSCCode { get; set; }
+    }
     
 }
