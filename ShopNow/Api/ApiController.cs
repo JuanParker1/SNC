@@ -1852,7 +1852,7 @@ namespace ShopNow.Controllers
             }
         }
 
-        public JsonResult GetDelivaryBoyDelivered(int orderNo, int customerId, string otp)
+        public JsonResult GetDelivaryBoyDelivered(int orderNo, int customerId, string otp,double latitude=0,double longitude=0)
         {
             var otpVerify = db.OtpVerifications.FirstOrDefault(i => i.OrderNo == orderNo);
 
@@ -1893,6 +1893,8 @@ namespace ShopNow.Controllers
             order.UpdatedBy = delivaryBoy.CustomerName;
             order.DateUpdated = DateTime.Now;
             order.DeliveredTime = DateTime.Now;
+            order.DBDeliveredLatitude = latitude;
+            order.DBDeliveredLongitude = longitude;
             db.Entry(order).State = System.Data.Entity.EntityState.Modified;
             db.SaveChanges();
 
@@ -4127,14 +4129,14 @@ namespace ShopNow.Controllers
                    {
                        OrderNumber = i.scc.scc.OrderNumber,
                        CartStatus = i.scc.scc.Status,
-                       GrossDeliveryCharge = i.d.WorkType == 1 ? ((i.scc.scc.DeliveryCharge == 35 ? 20 : 20 + (i.scc.scc.DeliveryCharge - 35)) + i.scc.scc.TipsAmount) : i.scc.scc.DeliveryCharge + i.scc.scc.TipsAmount,
+                       GrossDeliveryCharge = i.d.WorkType == 1 ? (((i.scc.scc.DeliveryCharge == 35 || i.scc.scc.DeliveryCharge==50)? 20 : 20 + (i.scc.scc.IsPickupDrop==false? i.scc.scc.DeliveryCharge - 35: i.scc.scc.DeliveryCharge-50)) + i.scc.scc.TipsAmount) : i.scc.scc.DeliveryCharge + i.scc.scc.TipsAmount,
                        CustomerLatitude = i.scc.scc.Latitude,
                        CustomerLongitude = i.scc.scc.Longitude,
                        ShopLatitude = i.scc.s.Latitude,
                        ShopLongitude = i.scc.s.Longitude,
                        DateEncoded = i.scc.scc.DateEncoded,
                        TipAmount = i.scc.scc.TipsAmount,
-                       DeliveryCharge = i.d.WorkType == 1 ? (i.scc.scc.DeliveryCharge == 35 ? 20 : 20 + (i.scc.scc.DeliveryCharge - 35)) : i.scc.scc.DeliveryCharge,
+                       DeliveryCharge = i.d.WorkType == 1 ? ((i.scc.scc.DeliveryCharge == 35 || i.scc.scc.DeliveryCharge==50) ? 20 : 20 + (i.scc.scc.IsPickupDrop ==false ?i.scc.scc.DeliveryCharge - 35: i.scc.scc.DeliveryCharge-50)) : i.scc.scc.DeliveryCharge,
                        Distance = i.scc.scc.Distance == 0 ? Math.Round((double)(GetMeters(i.scc.s.Latitude, i.scc.s.Longitude, i.scc.scc.Latitude, i.scc.scc.Longitude) / 1000), 2):i.scc.scc.Distance
                    }).OrderByDescending(j => j.DateEncoded).ToList();
                 if (model.List.Count() != 0)
@@ -4155,14 +4157,16 @@ namespace ShopNow.Controllers
                    {
                        OrderNumber = i.scc.scc.OrderNumber,
                        CartStatus = i.scc.scc.Status,
-                       GrossDeliveryCharge = i.d.WorkType == 1 ? ((i.scc.scc.DeliveryCharge == 35 ? 20 : 20 + (i.scc.scc.DeliveryCharge - 35)) + i.scc.scc.TipsAmount) : i.scc.scc.DeliveryCharge + i.scc.scc.TipsAmount,
+                       //GrossDeliveryCharge = i.d.WorkType == 1 ? ((i.scc.scc.DeliveryCharge == 35 ? 20 : 20 + (i.scc.scc.DeliveryCharge - 35)) + i.scc.scc.TipsAmount) : i.scc.scc.DeliveryCharge + i.scc.scc.TipsAmount,
+                       GrossDeliveryCharge = i.d.WorkType == 1 ? (((i.scc.scc.DeliveryCharge == 35 || i.scc.scc.DeliveryCharge == 50) ? 20 : 20 + (i.scc.scc.IsPickupDrop == false ? i.scc.scc.DeliveryCharge - 35 : i.scc.scc.DeliveryCharge - 50)) + i.scc.scc.TipsAmount) : i.scc.scc.DeliveryCharge + i.scc.scc.TipsAmount,
                        CustomerLatitude = i.scc.scc.Latitude,
                        CustomerLongitude = i.scc.scc.Longitude,
                        ShopLatitude = i.scc.s.Latitude,
                        ShopLongitude = i.scc.s.Longitude,
                        DateEncoded = i.scc.scc.DateEncoded,
                        TipAmount = i.scc.scc.TipsAmount,
-                       DeliveryCharge = i.d.WorkType == 1 ? (i.scc.scc.DeliveryCharge == 35 ? 20 : 20 + (i.scc.scc.DeliveryCharge - 35)) : i.scc.scc.DeliveryCharge,
+                       //DeliveryCharge = i.d.WorkType == 1 ? (i.scc.scc.DeliveryCharge == 35 ? 20 : 20 + (i.scc.scc.DeliveryCharge - 35)) : i.scc.scc.DeliveryCharge,
+                       DeliveryCharge = i.d.WorkType == 1 ? ((i.scc.scc.DeliveryCharge == 35 || i.scc.scc.DeliveryCharge == 50) ? 20 : 20 + (i.scc.scc.IsPickupDrop == false ? i.scc.scc.DeliveryCharge - 35 : i.scc.scc.DeliveryCharge - 50)) : i.scc.scc.DeliveryCharge,
                        Distance = i.scc.scc.Distance == 0 ? Math.Round((double)(GetMeters(i.scc.s.Latitude, i.scc.s.Longitude, i.scc.scc.Latitude, i.scc.scc.Longitude) / 1000), 2) : i.scc.scc.Distance
                    }).OrderByDescending(j => j.DateEncoded).ToList();
                 if (model.List.Count() != 0)
@@ -4180,14 +4184,14 @@ namespace ShopNow.Controllers
                    {
                        OrderNumber = i.scc.scc.OrderNumber,
                        CartStatus = i.scc.scc.Status,
-                       GrossDeliveryCharge = i.d.WorkType == 1 ? ((i.scc.scc.DeliveryCharge == 35 ? 20 : 20 + (i.scc.scc.DeliveryCharge - 35)) + i.scc.scc.TipsAmount): i.scc.scc.DeliveryCharge+i.scc.scc.TipsAmount,
+                       GrossDeliveryCharge = i.d.WorkType == 1 ? (((i.scc.scc.DeliveryCharge == 35 || i.scc.scc.DeliveryCharge == 50) ? 20 : 20 + (i.scc.scc.IsPickupDrop == false ? i.scc.scc.DeliveryCharge - 35 : i.scc.scc.DeliveryCharge - 50)) + i.scc.scc.TipsAmount) : i.scc.scc.DeliveryCharge + i.scc.scc.TipsAmount,
                        CustomerLatitude = i.scc.scc.Latitude,
                        CustomerLongitude = i.scc.scc.Longitude,
                        ShopLatitude = i.scc.s.Latitude,
                        ShopLongitude = i.scc.s.Longitude,
                        DateEncoded = i.scc.scc.DateEncoded,
                        TipAmount = i.scc.scc.TipsAmount,
-                       DeliveryCharge = i.d.WorkType == 1 ? (i.scc.scc.DeliveryCharge == 35 ? 20 : 20 + (i.scc.scc.DeliveryCharge - 35)):i.scc.scc.DeliveryCharge,
+                       DeliveryCharge = i.d.WorkType == 1 ? ((i.scc.scc.DeliveryCharge == 35 || i.scc.scc.DeliveryCharge == 50) ? 20 : 20 + (i.scc.scc.IsPickupDrop == false ? i.scc.scc.DeliveryCharge - 35 : i.scc.scc.DeliveryCharge - 50)) : i.scc.scc.DeliveryCharge,
                        Distance = i.scc.scc.Distance == 0 ? Math.Round((double)(GetMeters(i.scc.s.Latitude, i.scc.s.Longitude, i.scc.scc.Latitude, i.scc.scc.Longitude) / 1000), 2) : i.scc.scc.Distance
                    }).OrderByDescending(j => j.DateEncoded).ToList();
                 if (model.List.Count() != 0)
@@ -4574,7 +4578,7 @@ namespace ShopNow.Controllers
                 Date = i.FirstOrDefault().c.DateEncoded,
                 //Amount = i.FirstOrDefault().d.WorkType == 1 ? i.Sum(a => (a.c.DeliveryCharge == 35 ? 20 : 20 + (a.c.DeliveryCharge - 35))) : i.Sum(a => a.c.DeliveryCharge),
                 TipAmount = i.Sum(a=>a.c.TipsAmount),
-                TotalAmount = i.FirstOrDefault().d.WorkType == 1 ? i.Sum(a => (a.c.DeliveryCharge == 35 ? 20 : 20 + (a.c.DeliveryCharge - 35))) + i.Sum(a=>a.c.TipsAmount) : i.Sum(a => a.c.DeliveryCharge) + i.Sum(a => a.c.TipsAmount),
+                TotalAmount = i.FirstOrDefault().d.WorkType == 1 ? i.Sum(a => ((a.c.DeliveryCharge == 35|| a.c.DeliveryCharge==50) ? 20 : 20 + (a.c.IsPickupDrop==false? a.c.DeliveryCharge - 35:a.c.DeliveryCharge -50))) + i.Sum(a=>a.c.TipsAmount) : i.Sum(a => a.c.DeliveryCharge) + i.Sum(a => a.c.TipsAmount),
                 PaidAmount = GetPaidAmount(i.Key.Value, phoneNo),
             }).OrderByDescending(j => j.Date).ToList();
             int count = model.List.Count();
@@ -4593,7 +4597,7 @@ namespace ShopNow.Controllers
            .GroupBy(i => DbFunctions.TruncateTime(dateEncoded))
            .Select(i => new
            {
-               amount = i.Any() ? i.Sum(a => (a.c.DeliveryCharge == 35 ? 20 : 20 + (a.c.DeliveryCharge - 35))) + i.Sum(a => a.c.TipsAmount) : 0
+               amount = i.Any() ? i.Sum(a => ((a.c.DeliveryCharge == 35 || a.c.DeliveryCharge==50)? 20 : 20 + (a.c.IsPickupDrop == false?a.c.DeliveryCharge - 35:a.c.DeliveryCharge-50))) + i.Sum(a => a.c.TipsAmount) : 0
            }).FirstOrDefault();
             if (list != null)
                 return Convert.ToDouble(list.amount);

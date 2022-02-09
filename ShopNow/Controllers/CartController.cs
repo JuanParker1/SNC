@@ -1950,17 +1950,45 @@ namespace ShopNow.Controllers
             return RedirectToAction("PickupSlip", new { OrderNumber=OrderNumber, id=OrderId});
         }
 
-        public ActionResult UpdateDeliveryAddress(long orderId, string address,double distance=0, double latitude=0, double longitude=0)
+        public ActionResult UpdateDeliveryAddress(long orderId, string address, double distance = 0, double latitude = 0, double longitude = 0, double deliverycharge = 0)
         {
             var order = db.Orders.FirstOrDefault(i => i.Id == orderId);
             order.DeliveryAddress = address;
             order.Latitude = latitude;
             order.Longitude = longitude;
             order.Distance = distance;
+            order.DeliveryCharge = deliverycharge;
+            order.NetDeliveryCharge = deliverycharge;
+            order.NetTotal = order.TotalPrice + deliverycharge;
             order.DateUpdated = DateTime.Now;
             db.Entry(order).State = EntityState.Modified;
             db.SaveChanges();
+
+            var payment = db.Payments.FirstOrDefault(i => i.OrderNumber == order.OrderNumber);
+            payment.GSTAmount = order.NetTotal;
+            payment.Amount = order.NetTotal;
+            db.Entry(payment).State = EntityState.Modified;
+            db.SaveChanges();
             return RedirectToAction("Details", "Cart", new { id = AdminHelpers.ECodeLong(orderId) });
+        }
+
+        public JsonResult GetDeliveryCharge(double PickupLatitude, double PickupLongitude, double DeliveryLatitude, double DeliveryLongitude)
+        {
+            double DeliveryCharge = 0;
+            var Distance = (((Math.Acos(Math.Sin((PickupLatitude * Math.PI / 180)) * Math.Sin(((DeliveryLatitude) * Math.PI / 180)) + Math.Cos((PickupLatitude * Math.PI / 180)) * Math.Cos((DeliveryLatitude * Math.PI / 180))
+                 * Math.Cos(((PickupLongitude - DeliveryLongitude) * Math.PI / 180)))) * 180 / Math.PI) * 60 * 1.1515 * 1609.344) / 1000;
+
+            if (Distance < 5)
+            {
+                DeliveryCharge = 50;
+            }
+            else
+            {
+                var dist = Distance - 5;
+                var amount = dist * 6;
+                DeliveryCharge = 50 + amount;
+            }
+            return Json(new { DeliveryCharge, Distance }, JsonRequestBehavior.AllowGet);
         }
 
         protected override void Dispose(bool disposing)

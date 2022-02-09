@@ -22,7 +22,7 @@
                         <div class="row form-group">
                             <div class="col-md-4">
                                 <label class="col-form-label"><strong class="text-secondary">Phone Number</strong></label>
-                                <input type="text" class="form-control" name="Phone" id="Phone" maxlength="10" placeholder="Customer PhoneNumber" oninput="this.value=this.value.replace(/[^0-9]/g,'');" />
+                                <input type="text" class="form-control" name="Phone" id="Phone" maxlength="10" placeholder="Customer PhoneNumber" oninput="this.value=this.value.replace(/[^0-9]/g,'');" autofocus />
                             </div>
                             <div class="col-md-1">
                                 <label class="col-form-label"></label>
@@ -121,7 +121,7 @@
                                                 </div>
                                                 <div class="row">
                                                     <div class="col-md-12 text-center">
-                                                        <input type="button" class="btn btn-danger btn-sm d-none ml-1 mt-1" id="btnRemove1" value="Remove" />
+                                                        <input type="button" class="btn btn-danger btn-sm d-none mr-3 mt-1" id="btnRemove1" value="Remove" />
                                                     </div>
                                                 </div>
                                             </div>
@@ -131,10 +131,10 @@
                                                 <label class="col-md-12 text-center"><strong class="text-secondary">Pan </strong></label>
                                                 <label class="col-md-12"><small class="text-secondary"><i>Pan Number</i></small></label>
                                                 <input id="PanNumber" type="text" class="form-control" name="PanNumber" />
-                                                <label class="col-md-12"><small class="text-secondary"><i>Pan Image</i></small></label>
+                                                <label class="col-md-12 text-center"><small class="text-secondary"><i>Pan Image</i></small></label>
                                                 <div class="row PanImg">
-                                                    <div class="col-md-12 text-center">
-                                                        <div class="img-upload-container">
+                                                    <div class="col-md-12 text-center ml-5">
+                                                        <div class="img-upload-container mx-auto">
                                                             <img class="img-container w-100 h-100 mb-2" id="img-pan" onerror="this.src='/Images/No Photo.png'" />
                                                             <input type="file" id="PanImage" name="PanImage" class="d-none" />
                                                             <label for="PanImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
@@ -142,8 +142,8 @@
                                                     </div>
                                                 </div>
                                                 <div class="row">
-                                                    <div class="col-md-12">
-                                                        <input type="button" class="btn btn-danger btn-sm d-none ml-4 mt-1" id="btnRemove2" value="Remove" />
+                                                    <div class="col-md-12 ml-4">
+                                                        <input type="button" class="btn btn-danger btn-sm d-none ml-5 mt-1" id="btnRemove2" value="Remove" />
                                                     </div>
                                                 </div>
                                             </div>
@@ -154,23 +154,18 @@
                                                     <div class="col-md-12">
                                                         <label class="col-md-12 text-center"><strong class="text-secondary">Bank Account</strong></label>
                                                         <label class="col-md-12"><small class="text-secondary"><i>Bank Passbook Image</i></small></label>
-                                                        @*<span class="col-md-12">
-                                                                     <input type="radio" class="text-center" name="AccountDocument" id="AccountImage" value="Image" checked> <label for="AccountImage"> Image</label>
-                                                                <input type="radio" class="text-center" name="AccountDocument" id="AccountPDF" value="PDF"> <label for="AccountPDF"> PDF</label>
-                                                            </span>
-                                                            <div class="row AccountDocumentPdf mx-auto d-none mt-2 mb-3">
-                                                                <input class="mx-auto" type="file" id="BankPassbookPdf" name="BankPassbookPdf" />
-                                                            </div>*@
-                                                        <div class="col-md-12">
-                                                            <div class="img-upload-container mx-auto mb-3 AccountDocumentImg">
-                                                                <img class="img-container w-100 h-100 mb-2" id="img-account" onerror="this.src='/Images/No Photo.png'" />
-                                                                <input type="file" id="BankPassbookImage" name="BankPassbookImage" class="d-none" />
-                                                                <label for="BankPassbookImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                                        <div class="row">
+                                                            <div class="col-md-12 ml-5 text-center">
+                                                                <div class="img-upload-container mx-auto mb-3 AccountDocumentImg">
+                                                                    <img class="img-container w-100 h-100 mb-2" id="img-account" onerror="this.src='/Images/No Photo.png'" />
+                                                                    <input type="file" id="BankPassbookImage" name="BankPassbookImage" class="d-none" />
+                                                                    <label for="BankPassbookImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
                                                     <div class="row">
-                                                        <div class="col-md-12">
+                                                        <div class="col-md-12 ml-4">
                                                             <input type="button" class="btn btn-danger btn-sm d-none ml-5 mt-1" id="btnRemove3" value="Remove" />
                                                         </div>
                                                     </div>

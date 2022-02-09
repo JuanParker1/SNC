@@ -937,6 +937,8 @@
           <Property Name="PickupAddress" Type="nvarchar(max)" />
           <Property Name="PickupLatitude" Type="float" Nullable="false" />
           <Property Name="PickupLongitude" Type="float" Nullable="false" />
+          <Property Name="DBDeliveredLatitude" Type="float" Nullable="false" />
+          <Property Name="DBDeliveredLongitude" Type="float" Nullable="false" />
           <Property Name="Status" Type="int" Nullable="false" />
           <Property Name="DateEncoded" Type="datetime" Nullable="false" />
           <Property Name="DateUpdated" Type="datetime" Nullable="false" />
@@ -3562,6 +3564,8 @@
           <Property Name="PickupAddress" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="PickupLatitude" Type="Double" Nullable="false" />
           <Property Name="PickupLongitude" Type="Double" Nullable="false" />
+          <Property Name="DBDeliveredLatitude" Type="Double" Nullable="false" />
+          <Property Name="DBDeliveredLongitude" Type="Double" Nullable="false" />
           <Property Name="Status" Type="Int32" Nullable="false" />
           <Property Name="DateEncoded" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="DateUpdated" Type="DateTime" Nullable="false" Precision="3" />
@@ -5275,6 +5279,8 @@
                 <ScalarProperty Name="DateUpdated" ColumnName="DateUpdated" />
                 <ScalarProperty Name="DateEncoded" ColumnName="DateEncoded" />
                 <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="DBDeliveredLongitude" ColumnName="DBDeliveredLongitude" />
+                <ScalarProperty Name="DBDeliveredLatitude" ColumnName="DBDeliveredLatitude" />
                 <ScalarProperty Name="PickupLongitude" ColumnName="PickupLongitude" />
                 <ScalarProperty Name="PickupLatitude" ColumnName="PickupLatitude" />
                 <ScalarProperty Name="PickupAddress" ColumnName="PickupAddress" />
