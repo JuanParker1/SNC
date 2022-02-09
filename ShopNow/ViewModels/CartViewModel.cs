@@ -75,7 +75,8 @@ namespace ShopNow.ViewModels
         public double TotalShopPrice { get; set; }
         public bool IsPickupDrop { get; set; }
         public string CustomerPrescriptionRemarks { get; set; }
-
+        public double PickupLatitude { get; set; }
+        public double PickupLongitude { get; set; }
 
         public List<ImagePathList> ImagePathLists { get; set; }
         public class ImagePathList
