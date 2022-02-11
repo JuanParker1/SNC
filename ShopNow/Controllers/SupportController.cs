@@ -322,6 +322,8 @@ namespace ShopNow.Controllers
                 order.ShopDeliveryDiscount = model.ShopDeliveryDiscount;
                 order.Packingcharge = model.PackingCharge;
                 order.NetTotal = model.Amount;
+                order.PaymentModeType = model.PaymentType;
+                order.PaymentMode = model.PaymentType == 1 ? "Online Payment" : "Cash On Hand";
                 db.Entry(order).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
             }
