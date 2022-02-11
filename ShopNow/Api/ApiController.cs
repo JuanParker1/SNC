@@ -2541,7 +2541,7 @@ namespace ShopNow.Controllers
                 reviewCount = 0;
             model.CustomerReview = reviewCount;
 
-            if (shop.ShopCategoryId == 4)
+            if (shop.ShopCategoryId == 4 || shop.ShopCategoryId == 3)
             {
                 model.CategoryLists = db.Database.SqlQuery<ShopDetails.CategoryList>($"select distinct CategoryId as Id, c.Name as Name,c.ImagePath,c.OrderNo from Products p join Categories c on c.Id = p.CategoryId where ShopId ={shopId}  and c.Status = 0 and CategoryId !=0 and c.Name is not null group by CategoryId,c.Name,c.ImagePath,c.OrderNo order by Name")
                     .Select(i => new ShopDetails.CategoryList

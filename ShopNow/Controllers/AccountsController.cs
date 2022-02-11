@@ -31,7 +31,7 @@ namespace ShopNow.Controllers
                     OrderNumber = i.o.o.OrderNumber.ToString(),
                     ShopName = i.o.o.ShopName,
                     GSTNumber = i.s.GSTINNumber,
-                    MenuPrice = i.o.o.TotalShopPrice == 0? i.o.o.TotalPrice:i.o.o.TotalShopPrice,
+                    MenuPrice = i.o.o.TotalShopPrice == 0 ? i.o.o.TotalPrice : i.o.o.TotalShopPrice,
                     ShopBillAmount = Math.Round(i.o.o.TotalPrice, MidpointRounding.AwayFromZero),
                     PriceDifference = i.o.o.TotalShopPrice != 0 ? Math.Round(i.o.o.TotalPrice - i.o.o.TotalShopPrice, MidpointRounding.AwayFromZero) : 0,
                     CustomerPaidAmount = i.o.p.Amount,
@@ -40,8 +40,8 @@ namespace ShopNow.Controllers
                     DeliveryAmountFromCustomer = i.o.o.NetDeliveryCharge,
                     DeliveryDiscount = i.o.o.ShopDeliveryDiscount,
                     TotalDeliveryCharge = i.o.o.DeliveryCharge,
-                    DeliveryChargePaidToDeliveryBoy = i.o.o.DeliveryCharge == 35 ? 20 : 20 + (i.o.o.DeliveryCharge - 35),
-                    DeliveryChargeProfit = 15,
+                    DeliveryChargePaidToDeliveryBoy = (i.o.o.DeliveryCharge == 35 || i.o.o.DeliveryCharge == 50) ? 20 : 20 + (i.o.o.IsPickupDrop == false ? i.o.o.DeliveryCharge - 35 : i.o.o.DeliveryCharge - 50),
+                    DeliveryChargeProfit = i.o.o.IsPickupDrop == false ? 15 : 30,
                     AmountProfit = i.o.o.TotalShopPrice != 0 ? Math.Round(i.o.o.TotalPrice - i.o.o.TotalShopPrice, MidpointRounding.AwayFromZero) + i.o.o.Convinenientcharge : i.o.o.Convinenientcharge
                 }).OrderBy(i => i.Date).ToList();
 
