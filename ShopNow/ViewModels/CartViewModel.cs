@@ -974,4 +974,14 @@ namespace ShopNow.ViewModels
             public double ShopLongitude { get; set; }
         }
     }
+
+    public class MultipleOrderAssignDeliveryBoyViewModel
+    {
+        public int DeliveryBoyId { get; set; }
+        public List<OrderList> OrderLists { get; set; }
+        public class OrderList
+        {
+            public long OrderId { get; set; }
+        }
+    }
 }

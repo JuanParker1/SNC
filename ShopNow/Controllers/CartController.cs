@@ -1991,6 +1991,56 @@ namespace ShopNow.Controllers
             return Json(new { DeliveryCharge, Distance }, JsonRequestBehavior.AllowGet);
         }
 
+        [HttpPost]
+        [AccessPolicy(PageCode = "")]
+        public JsonResult MultipleOrderAssignDeliveryBoy(MultipleOrderAssignDeliveryBoyViewModel model)
+        {
+            var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
+            ViewBag.Name = user.Name;
+            foreach (var item in model.OrderLists)
+            {
+                var cart = db.Orders.FirstOrDefault(i => i.Id == item.OrderId);
+                if (cart != null && model.DeliveryBoyId != 0)
+                {
+                    var delivery = db.DeliveryBoys.FirstOrDefault(i => i.Id == model.DeliveryBoyId);
+
+                    cart.DeliveryBoyId = delivery.Id;
+                    cart.DeliveryBoyName = delivery.Name;
+                    cart.DeliveryBoyPhoneNumber = delivery.PhoneNumber;
+                    cart.Status = 4;
+                    cart.DateUpdated = DateTime.Now;
+                    cart.UpdatedBy = user.Name;
+                    db.Entry(cart).State = System.Data.Entity.EntityState.Modified;
+                    db.SaveChanges();
+
+                    delivery.isAssign = 1;
+                    delivery.DateUpdated = DateTime.Now;
+                    delivery.UpdatedBy = user.Name;
+                    db.Entry(delivery).State = System.Data.Entity.EntityState.Modified;
+                    db.SaveChanges();
+
+                    if (delivery.CustomerId != 0)
+                    {
+                        var fcmToken = (from c in db.Customers
+                                        where c.Id == delivery.CustomerId
+                                        select c.FcmTocken ?? "").FirstOrDefault().ToString();
+                        Helpers.PushNotification.SendbydeviceId("You have received new order. Accept Soon", "ShopNowChat", "a.mp3", fcmToken.ToString());
+                    }
+                    //Customer
+                    if (cart.CustomerId != 0)
+                    {
+                        var fcmTokenCustomer = (from c in db.Customers
+                                                where c.Id == cart.CustomerId
+                                                select c.FcmTocken ?? "").FirstOrDefault().ToString();
+                        Helpers.PushNotification.SendbydeviceId($"Delivery Boy {cart.DeliveryBoyName} is Assigned for your Order.", "ShopNowChat", "../../assets/b.mp3", fcmTokenCustomer.ToString());
+                    }
+                }
+                else
+                    return Json(false, JsonRequestBehavior.AllowGet);
+            }
+            return Json(true, JsonRequestBehavior.AllowGet);
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)

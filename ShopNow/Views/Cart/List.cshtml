@@ -14,8 +14,12 @@
         .grid-mvc table td1 {
             width: 50%;
         }
-    table > thead > tr > th:first-child {
+    table > thead > tr > th:first-child,th:last-child {
         padding: 12px 4px;
+    }
+
+    .vertical-middle {
+    vertical-align:middle !important;
     }
 </style>
 <div class="container-fluid">
@@ -51,6 +55,8 @@
         <div class="col-md-12">
             <div class="card shadow mt-3">
                 <div class="card-body">
+                        <button id="btn-assign-deliveryboymodal" class="btn btn-primary float-right mb-3" data-toggle="modal" data-target="#modal-assign-deliveryboy" disabled>Assign Delivery Boy</button>
+                        <div class="clearfix"></div>
                     @Html.Grid(Model).Columns(columns =>
                {
                    columns.Add(c => c.No).Titled("Sl.No").SetWidth(0);
@@ -70,6 +76,8 @@
                    Html.ActionLink("Details", "Details", new { id = @ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id) }, new { @class = "btn btn-vsm btn-secondary mt-1", @style = "padding: 3px 20px" }).ToHtmlString()).Titled("Action").SetWidth(5);
                    columns.Add().Encoded(false).Sanitized(false)
                 .RenderValueAs(o => (o.RefundAmount == 0 || o.RefundAmount == null) ? "<a href='#modal-refund' data-id='" + o.Id + "' data-toggle='modal' data-target='#modal-refund' class='btn btn-sm btn-primary btn-modal-refund btn-block mt-3'>Refund</a>" : o.RefundAmount.Value > 0 ? "<span>" + o.RefundAmount + "(" + o.RefundRemark + ")" + "</span>" : "N/A").Titled("Refund").SetWidth(5);
+                   columns.Add().Encoded(false).Sanitized(false)
+               .RenderValueAs(o => (o.Status == 2 || o.Status == 3) ? "<input class='assign-checkbox' type='checkbox' data-id='" + o.Id + "' />" : "").Titled("").Css("vertical-middle").SetWidth(1);
                }).WithPaging(20).Sortable(true)
                 </div>
             </div>
@@ -103,6 +111,27 @@
     </div>
 </div>
 
+<div class="modal fade" id="modal-assign-deliveryboy" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-body">
+                <form method="get" action="/Cart/AddRefundFromShopOrderProcessing">
+                    <input type="hidden" name="Id" />
+                    <input type="hidden" name="Redirection" value="0" />
+                    <h5>Assign Delivery Boy</h5>
+                    <div class="form-group">
+                        <select class="form-control" name="DeliveryBoyId" id="select-deliveryboy"></select>
+                    </div>
+                    <div class="text-right">
+                        <button id="btn-assign-deliveryboy" class="btn btn-sm btn-success mr-3">Submit</button>
+                        <button class="btn btn-sm btn-danger" data-dismiss="modal">Close</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
 @section Scripts
 {
     <!--Select2-->
@@ -112,11 +141,13 @@
     <!--Select2 End-->
     <script>
         $(document).ready(function () {
+            var orderIdArray = [];
+
             $('#ShopId').select2({
                 placeholder: "Search Shop",
+                width: '100%',
                 ajax: {
                     url: "/Cart/GetShopSelect2",
-                    width: '100%',
                     delay: 250,
                     dataType: 'json'
                 }
@@ -138,14 +169,58 @@
 
             $('#select-district').select2({
                 placeholder: "Search District Name",
+                width: '100%',
                 ajax: {
                     url: "/Shop/GetDistrictSelect2",
-                    width: '100%',
                     delay: 250,
                     dataType: 'json'
                 }
             });
 
+            $('table').on('click', '.assign-checkbox', function () {
+                var $this = $(this);
+                
+                var numberOfChecked = $('.assign-checkbox:checked').length;
+                if (numberOfChecked > 0) {
+                    $('#btn-assign-deliveryboymodal').prop('disabled', false);
+                } else {
+                    $('#btn-assign-deliveryboymodal').prop('disabled', true);
+                }
+
+                if ($this.prop('checked') == true) {
+                    var item = {
+                        OrderId: $this.data('id')
+                    };
+                    orderIdArray.push(item);
+                } else {
+                    removeFromArray($this.data('id'));
+                }
+            });
+
+            $('#select-deliveryboy').select2({
+                placeholder: "Select Delivery Boy",
+                width: '100%',
+                ajax: {
+                    url: "/DeliveryBoy/GetDeliveryBoyWithinLimitSelect2",
+                    delay: 250,
+                    dataType: 'json'
+                }
+            });
+
+            $('#btn-assign-deliveryboy').on('click', function () {
+                var model = {
+                    DeliveryBoyId: $("#select-deliveryboy").val(),
+                    OrderLists: orderIdArray,
+                };
+                $.post('/Cart/MultipleOrderAssignDeliveryBoy', model, function (data) {
+                    location.reload();
+                });
+            });
+            function removeFromArray(id) {
+                const indx = orderIdArray.findIndex(v => v.OrderId === id);
+                orderIdArray.splice(indx, 1);
+            }
+           
         });
     </script>
 }
