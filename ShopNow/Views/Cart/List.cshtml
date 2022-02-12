@@ -14,12 +14,13 @@
         .grid-mvc table td1 {
             width: 50%;
         }
-    table > thead > tr > th:first-child,th:last-child {
+
+    table > thead > tr > th:first-child, th:last-child {
         padding: 12px 4px;
     }
 
     .vertical-middle {
-    vertical-align:middle !important;
+        vertical-align: middle !important;
     }
 </style>
 <div class="container-fluid">
@@ -55,8 +56,8 @@
         <div class="col-md-12">
             <div class="card shadow mt-3">
                 <div class="card-body">
-                        <button id="btn-assign-deliveryboymodal" class="btn btn-primary float-right mb-3" data-toggle="modal" data-target="#modal-assign-deliveryboy" disabled>Assign Delivery Boy</button>
-                        <div class="clearfix"></div>
+                    <button id="btn-assign-deliveryboymodal" class="btn btn-primary float-right mb-3" data-toggle="modal" data-target="#modal-assign-deliveryboy" disabled>Assign Delivery Boy</button>
+                    <div class="clearfix"></div>
                     @Html.Grid(Model).Columns(columns =>
                {
                    columns.Add(c => c.No).Titled("Sl.No").SetWidth(0);
@@ -77,7 +78,7 @@
                    columns.Add().Encoded(false).Sanitized(false)
                 .RenderValueAs(o => (o.RefundAmount == 0 || o.RefundAmount == null) ? "<a href='#modal-refund' data-id='" + o.Id + "' data-toggle='modal' data-target='#modal-refund' class='btn btn-sm btn-primary btn-modal-refund btn-block mt-3'>Refund</a>" : o.RefundAmount.Value > 0 ? "<span>" + o.RefundAmount + "(" + o.RefundRemark + ")" + "</span>" : "N/A").Titled("Refund").SetWidth(5);
                    columns.Add().Encoded(false).Sanitized(false)
-               .RenderValueAs(o => (o.Status == 2 || o.Status == 3) ? "<input class='assign-checkbox' type='checkbox' data-id='" + o.Id + "' />" : "").Titled("").Css("vertical-middle").SetWidth(1);
+               .RenderValueAs(o => (o.Status == 3) ? "<input class='assign-checkbox' type='checkbox' data-id='" + o.Id + "' />" : "").Titled("").Css("vertical-middle").SetWidth(1);
                }).WithPaging(20).Sortable(true)
                 </div>
             </div>
@@ -139,6 +140,8 @@
     <link href="~/Scripts/select2/css/select2.css" rel="stylesheet" />
     <link href="~/Content/select2/select2.custom.css" rel="stylesheet" />
     <!--Select2 End-->
+    <script src="~/Scripts/sweetalert/sweetalert.min.js"></script>
+    <link href="~/Content/sweetalert/sweetalert.css" rel="stylesheet" />
     <script>
         $(document).ready(function () {
             var orderIdArray = [];
@@ -179,7 +182,7 @@
 
             $('table').on('click', '.assign-checkbox', function () {
                 var $this = $(this);
-                
+
                 var numberOfChecked = $('.assign-checkbox:checked').length;
                 if (numberOfChecked > 0) {
                     $('#btn-assign-deliveryboymodal').prop('disabled', false);
@@ -213,14 +216,17 @@
                     OrderLists: orderIdArray,
                 };
                 $.post('/Cart/MultipleOrderAssignDeliveryBoy', model, function (data) {
-                    location.reload();
-                });
+                    if (data)
+                        location.reload();
+                    else
+                        swal("Notice!", "Something went wrong, please try again.", "error")
+                    });
             });
             function removeFromArray(id) {
                 const indx = orderIdArray.findIndex(v => v.OrderId === id);
                 orderIdArray.splice(indx, 1);
             }
-           
+
         });
     </script>
 }

@@ -182,6 +182,7 @@ namespace ShopNow.ViewModels
         public double DifferenceAmount { get; set; }
         public double DifferencePercentage { get; set; }
         public bool IsPickupDrop { get; set; }
+        public string Remarks { get; set; }
         public class ImagePathList
         {
             public string ImagePath { get; set; }
