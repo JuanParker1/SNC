@@ -414,7 +414,8 @@ namespace ShopNow.ViewModels
             public double TotalPrice { get; set; }
             public double DifferenceAmount { get; set; }
             public double DifferencePercentage { get; set; }
-           
+            public DateTime OrderDate { get; set; }
+
         }
     }
 }

@@ -11,44 +11,46 @@
         display: none;
     }
 </style>
-@using (Html.BeginForm("ShopBillDifferenceReport", "Payment", FormMethod.Post, new { id = "ReportForm", role = "form", enctype = "multipart/form-data" }))
-{
 <div class="container-fluid">
-    <div class="row mb-3">
-        <div class="col-md-3">
-            <h5 class="mt-1 text-uppercase text-success">@ViewBag.Title</h5>
-        </div>
-        <div class="col-md-4">
-            <div class="input-daterange input-group">
-                <input type="date" class="form-control well well-sm" placeholder="From Date" id="datepicker" name="StartDate" @if (Model.StartDate != null) { <text> value="@Model.StartDate.Value.ToString("yyyy-MM-dd")" </text> }>
-                <span class="input-group-addon mx-3">to</span>
-                <input type="date" class="form-control" placeholder="To Date" id="datepicker1" name="EndDate" @if (Model.EndDate != null) { <text> value="@Model.EndDate.Value.ToString("yyyy-MM-dd")" </text> }>
+    <form method="get" action="/Payment/ShopBillDifferenceReport">
+        <div class="row">
+            <div class="col-md-3">
+                <h5 class="mt-1 text-uppercase text-success">@ViewBag.Title</h5>
+            </div>
+            <div class="col-md-4">
+                <div class="input-daterange input-group">
+                    <input type="date" class="form-control well well-sm" placeholder="From Date" id="datepicker" name="StartDate" @if (Model.StartDate != null) { <text> value="@Model.StartDate.Value.ToString("yyyy-MM-dd")" </text> }>
+                    <span class="input-group-addon mx-3">to</span>
+                    <input type="date" class="form-control" placeholder="To Date" id="datepicker1" name="EndDate" @if (Model.EndDate != null) { <text> value="@Model.EndDate.Value.ToString("yyyy-MM-dd")" </text> }>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="form-group">
+                    <select class="form-control" id="select-shop" name="ShopId">
+                        @if (!string.IsNullOrEmpty(Model.ShopName))
+                        {
+                            <option value="@Model.ShopId">@Model.ShopName</option>
+                        }
+                    </select>
+                    <input type="hidden" name="ShopName" value="@Model.ShopName" />
+                </div>
+            </div>
+            <div class="col-md-3">
+                <input type="submit" class="btn btn-info" value="Filter" />
+                <a href="/Payment/ShopBillDifferenceReport" class="btn btn-secondary">Clear</a>
+                <a href="/Payment/ShopBillDifferencePendingReport" class="btn btn-primary">Pending List</a>
+                <a href="" id="btnExport" class="btn btn-secondary"><i class="fa fa-file-excel-o fa-lg" aria-hidden="true"></i></a>
             </div>
         </div>
-
-        <div class="col-md-2">
-            <div class="form-group">
-                <select class="form-control" id="select-shop" name="ShopId">
-                    @if (!string.IsNullOrEmpty(Model.ShopName))
-                    {
-                        <option value="@Model.ShopId">@Model.ShopName</option>
-                    }
-                </select>
-                <input type="hidden" name="ShopName" value="@Model.ShopName" />
-            </div>
-        </div>
-        <div class="col-md-3">
-            <input type="submit" class="btn btn-info" value="Filter" />
-            <a href="/Payment/ShopBillDifferenceReport" class="btn btn-secondary">Clear</a>
-            <a href="/Payment/ShopBillDifferencePendingReport" class="btn btn-primary">Pending List</a>
-            <a href="" id="btnExport" class="btn btn-secondary"><i class="fa fa-file-excel-o fa-lg" aria-hidden="true"></i></a>
-        </div>
+    </form>
+    <div class="row">
         <div class="col-md-12">
             <div class="card shadow mt-3">
                 <div class="card-body">
                     @Html.Grid(Model.ListItems).Columns(columns =>
                {
                    columns.Add(c => c.OrderNumber).Titled("Order Number").Filterable(true).SetWidth(10);
+                   columns.Add(c => c.OrderDate).Titled("Order Date").Filterable(true).SetWidth(10).Format("{0:dd-MMM-yyyy}");
                    columns.Add(c => c.ShopName).Titled("Shop Name").Filterable(true).SetWidth(10);
                    columns.Add(c => c.BillNo).Titled("Shop Bill Number").Filterable(true).SetWidth(10);
                    columns.Add(c => c.BillAmount).Titled("Shop Bill Amount").Filterable(true).SetWidth(10);
@@ -56,14 +58,14 @@
                    columns.Add(c => c.DifferenceAmount).Titled("Difference Amount").Filterable(true).SetWidth(10);
                    columns.Add(c => c.DifferencePercentage).Titled("Difference Percentage").Filterable(true).SetWidth(10);
                    columns.Add().Encoded(false).Sanitized(false)
-                   .RenderValueAs(o => Html.ActionLink("PickupSlip", "PickupSlip","Cart", new { OrderNumber = o.OrderNumber, id = @ShopNow.Helpers.AdminHelpers.ECodeLong(o.OrderId) }, new { @class = "btn btn-vsm btn-secondary", @style = "padding: 3px 26px" }).ToHtmlString()).Titled("Action").SetWidth(10);
-               }).WithPaging(20).Sortable(true).Filterable(true)
+                   .RenderValueAs(o => Html.ActionLink("PickupSlip", "PickupSlip", "Cart", new { OrderNumber = o.OrderNumber, id = @ShopNow.Helpers.AdminHelpers.ECodeLong(o.OrderId) }, new { @class = "btn btn-vsm btn-secondary", @style = "padding: 3px 26px" }).ToHtmlString()).Titled("Action").SetWidth(10);
+               }).WithPaging(20).Sortable(true)
                 </div>
             </div>
         </div>
     </div>
 </div>
-}
+
 <table id="table-excel" class="d-none">
     <thead>
         <tr>

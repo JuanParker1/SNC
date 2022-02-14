@@ -11,10 +11,9 @@
         display: none;
     }
 </style>
-@using (Html.BeginForm("ShopBillDifferencePendingReport", "Payment", FormMethod.Post, new { id = "ReportForm", role = "form", enctype = "multipart/form-data" }))
-{
-    <div class="container-fluid">
-        <div class="row mb-3">
+<div class="container-fluid">
+    <form method="get" action="/Payment/ShopBillDifferenceReport">
+        <div class="row">
             <div class="col-md-3">
                 <h5 class="mt-1 text-uppercase text-success">@ViewBag.Title</h5>
             </div>
@@ -25,7 +24,6 @@
                     <input type="date" class="form-control" placeholder="To Date" id="datepicker1" name="EndDate" @if (Model.EndDate != null) { <text> value="@Model.EndDate.Value.ToString("yyyy-MM-dd")" </text> }>
                 </div>
             </div>
-
             <div class="col-md-2">
                 <div class="form-group">
                     <select class="form-control" id="select-shop" name="ShopId">
@@ -44,24 +42,28 @@
             <div class="col-md-1 text-right">
                 <a href="" id="btnExport" class="btn btn-vsm btn-secondary"><i class="fa fa-file-excel-o fa-lg" aria-hidden="true"></i></a>
             </div>
-            <div class="col-md-12">
-                <div class="card shadow mt-3">
-                    <div class="card-body">
-                        @Html.Grid(Model.ListItems).Columns(columns =>
-                   {
-                       columns.Add(c => c.OrderNumber).Titled("Order Number").Filterable(true).SetWidth(10);
-                       columns.Add(c => c.ShopName).Titled("Shop Name").Filterable(true).SetWidth(10);
-                       columns.Add(c => c.BillAmount).Titled("Shop Bill Amount").Filterable(true).SetWidth(10);
-                       columns.Add(c => c.TotalPrice).Titled("SNOWCH Bill Amount").Filterable(true).SetWidth(10);
-                       columns.Add().Encoded(false).Sanitized(false)
-                  .RenderValueAs(o => Html.ActionLink("PickupSlip", "PickupSlip","Cart", new { OrderNumber = o.OrderNumber, id = @ShopNow.Helpers.AdminHelpers.ECodeLong(o.OrderId) }, new { @class = "btn btn-vsm btn-secondary", @style = "padding: 3px 26px" }).ToHtmlString()).Titled("Action").SetWidth(5);
-                   }).WithPaging(20).Sortable(true).Filterable(true)
-                    </div>
+        </div>
+    </form>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card shadow mt-3">
+                <div class="card-body">
+                    @Html.Grid(Model.ListItems).Columns(columns =>
+               {
+                   columns.Add(c => c.OrderNumber).Titled("Order Number").Filterable(true).SetWidth(10);
+                   columns.Add(c => c.OrderDate).Titled("Order Date").Filterable(true).SetWidth(10).Format("{0:dd-MMM-yyyy}");
+                   columns.Add(c => c.ShopName).Titled("Shop Name").Filterable(true).SetWidth(10);
+                   columns.Add(c => c.BillAmount).Titled("Shop Bill Amount").Filterable(true).SetWidth(10);
+                   columns.Add(c => c.TotalPrice).Titled("SNOWCH Bill Amount").Filterable(true).SetWidth(10);
+                   columns.Add().Encoded(false).Sanitized(false)
+              .RenderValueAs(o => Html.ActionLink("PickupSlip", "PickupSlip", "Cart", new { OrderNumber = o.OrderNumber, id = @ShopNow.Helpers.AdminHelpers.ECodeLong(o.OrderId) }, new { @class = "btn btn-vsm btn-secondary", @style = "padding: 3px 26px" }).ToHtmlString()).Titled("Action").SetWidth(5);
+               }).WithPaging(20).Sortable(true)
                 </div>
             </div>
         </div>
     </div>
-}
+</div>
+
 <table id="table-excel" class="d-none">
     <thead>
         <tr>
@@ -74,13 +76,13 @@
     <tbody>
         @foreach (var item in Model.ListItems)
         {
-        <tr>
+            <tr>
 
-            <td>@item.OrderNumber</td>
-            <td>@item.ShopName</td>
-            <td>0</td>
-            <td>@item.TotalPrice</td>
-        </tr>
+                <td>@item.OrderNumber</td>
+                <td>@item.ShopName</td>
+                <td>0</td>
+                <td>@item.TotalPrice</td>
+            </tr>
         }
     </tbody>
 </table>

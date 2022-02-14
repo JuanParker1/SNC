@@ -466,6 +466,7 @@ namespace ShopNow.Controllers
                     TotalPrice = Math.Round(i.o.FirstOrDefault().TotalPrice,2),
                     DifferenceAmount = Math.Round(i.p.s.BillAmount -  (i.o.FirstOrDefault().TotalPrice - (i.p.p.FirstOrDefault().RefundAmount ?? 0)),2),
                     DifferencePercentage = Math.Round(((i.p.s.BillAmount - (i.o.FirstOrDefault().TotalPrice - (i.p.p.FirstOrDefault().RefundAmount ?? 0))) /i.p.s.BillAmount)*100,2),
+                    OrderDate = i.o.FirstOrDefault().DateEncoded
                 }).ToList();
             return View(model);
         }
@@ -484,6 +485,7 @@ namespace ShopNow.Controllers
                     ShopName = i.o.ShopName,
                     TotalPrice = Math.Round(i.o.TotalPrice, 2),
                     BillAmount = 0,
+                    OrderDate = i.o.DateEncoded
                 }).ToList();
             return View(model);
         }
