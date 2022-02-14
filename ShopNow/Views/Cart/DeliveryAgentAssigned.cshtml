@@ -1,4 +1,4 @@
-﻿@model IEnumerable<ShopNow.ViewModels.CartListViewModel.DeliveryAgentAssignedList>
+﻿@model ShopNow.ViewModels.CartListViewModel
 @using GridMvc.Html
 @{
     ViewBag.Title = "Delivery Agent Assigned List";
@@ -12,24 +12,33 @@
     }
 </style>
 <div class="container-fluid">
+    <form method="get" action="~/Cart/DeliveryAgentAssigned">
+        <div class="row my-2">
+            <div class="col-md-4">
+                <h5 class="mt-1 text-success" style="letter-spacing:1px">DELIVERY AGENT ASSIGNED LIST</h5>
+            </div>
+            <div class="col-md-3">
+                <select name="ShopId" id="ShopId" class="form-control">
+                    @if (!string.IsNullOrEmpty(Model.ShopName))
+                    {
+                        <option value="@Model.ShopId">@Model.ShopName</option>
+                    }
+                </select>
+                <input type="hidden" name="ShopName" id="ShopName" value="@Model.ShopName" />
+            </div>
+            <div class="col-md-1">
+                <input type="submit" class="form-control btn btn-sm btn-success" value="Filter" />
+            </div>
+            <div class="col-md-4 text-right">
+                <a href="~/Cart/List" class="ml-auto" target="_self"><span class="fa fa-bars"></span> New Order List</a>
+            </div>
+        </div>
+    </form>
     <div class="row my-2">
-        <div class="col-md-4">
-            <h5 class="mt-1 text-success" style="letter-spacing:1px">DELIVERY AGENT ASSIGNED LIST</h5>
-        </div>
-        <div class="col-md-3">
-            <select name="ShopId" id="ShopId" class="form-control"></select>
-            <input type="hidden" name="ShopName" id="ShopName" />
-        </div>
-        <div class="col-md-1">
-            <input type="button" class="form-control btn btn-sm btn-success" name="Filter" id="Filter" value="Filter" />
-        </div>
-        <div class="col-md-4 text-right">
-            <a href="~/Cart/List" class="ml-auto" target="_self"><span class="fa fa-bars"></span> New Order List</a>
-        </div>
         <div class="col-md-12">
             <div class="card shadow mt-3">
                 <div class="card-body">
-                    @Html.Grid(Model).Columns(columns =>
+                    @Html.Grid(Model.DeliveryAgentAssignedLists).Columns(columns =>
                {
                    columns.Add(c => c.No).Titled("Sl.No").Filterable(false).SetWidth(1);
                    columns.Add(c => c.OrderNumber).Titled("OrderNo").Filterable(true).SetWidth(10);
@@ -42,14 +51,14 @@
                    columns.Add().Encoded(false).Sanitized(false)
                   .RenderValueAs(o => Html.ActionLink("View", "Edit", new { ordernumber = o.OrderNumber, id = @ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id) }, new { @class = "btn btn-sm btn-info" }).ToHtmlString()
                     + Html.ActionLink("Pickup Slip", "PickupSlip", new { ordernumber = o.OrderNumber, id = @ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id) }, new { @class = "btn btn-sm btn-secondary mt-1" }).ToHtmlString()
-                    + Html.ActionLink("UnAssigned", "UnAssignDeliveryBoy", new { ordernumber = o.OrderNumber}, new { @class = "btn btn-sm btn-danger mt-1"}).ToHtmlString()).Titled("Action").SetWidth(15);
+                    + Html.ActionLink("UnAssigned", "UnAssignDeliveryBoy", new { ordernumber = o.OrderNumber }, new { @class = "btn btn-sm btn-danger mt-1" }).ToHtmlString()).Titled("Action").SetWidth(15);
                    columns.Add().Encoded(false).Sanitized(false)
                   .RenderValueAs(o => (o.RefundAmount == 0 || o.RefundAmount == null) ? "<a href='#modal-refund' data-id='" + o.Id + "' data-toggle='modal' data-target='#modal-refund' class='btn btn-sm btn-primary btn-modal-refund mt-4 btn-block'>Refund</a>" : o.RefundAmount.Value > 0 ? "<span>" + o.RefundAmount + "(" + o.RefundRemark + ")" + "</span>" : "N/A").Titled("Refund").SetWidth(10);
                }).WithPaging(20).Sortable(true)
                 </div>
             </div>
         </div>
-    </div>   
+    </div>
 </div>
 
 <div class="modal fade" id="modal-refund" tabindex="-1" role="dialog">
@@ -97,11 +106,6 @@
                 }
             }).on('select2:select', function (e) {
                 $('input[name="ShopName"]').val(e.params.data.text);
-            });
-
-            $("#Filter").click(function () {
-                var shopId = $("#ShopId").val();
-                window.location.href = "/Cart/DeliveryAgentAssigned/?shopId=" + shopId;
             });
 
             $("#btnReject").click(function () {
