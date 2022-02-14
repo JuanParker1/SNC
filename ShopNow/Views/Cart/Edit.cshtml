@@ -105,13 +105,13 @@
                                 <button type="button" class="btn btn-sm btn-success mr-3" id="Assign">Assign Delivery Boy</button>
                                 <button type="button" class="btn btn-sm btn-danger mr-3" data-toggle="modal" data-target="#modal-add-cancel-remark">Cancel</button>
                             }
-                            else if (Model.Status == 4 && Model.isAssign == 1 && Model.OnWork == 0)
+                            else if (Model.Status == 4 && Model.DeliveryBoyId != 0 && Model.OnWork == 0)
                             {
                                 <span class="text-success">Assigned for Delivery</span>
                                 <a href="/Cart/DeliveryBoyAccept?OrderNumber=@Model.OrderNumber&id=@Model.Id" class="btn btn-info mt-2">Delivery Boy Accept</a>
                                 <button type="button" class="btn btn-danger mt-2" data-toggle="modal" data-target="#modal-add-cancel-remark">Cancel</button>
                             }
-                            else if (Model.Status == 4 && Model.isAssign == 1 && Model.OnWork == 1)
+                            else if (Model.Status == 4 && Model.DeliveryBoyId != 0 && Model.OnWork == 1)
                             {
                                 <span class="text-success">Waiting for Pickup</span>
                                 <a href="/Cart/DeliveryBoyPickup?OrderNumber=@Model.OrderNumber&id=@Model.Id" class="btn btn-info mt-2">Delivery Boy Pickup</a>

@@ -179,6 +179,7 @@ namespace ShopNow.Controllers
                         db.SaveChanges();
                         if (otpmodel != null)
                         {
+                            UpdateOrderCustomerIdOfPickupService(user.PhoneNumber, user.Id);
                             return Json(new { message = "Successfully Registered and OTP send!", id = user.Id, user.Position });
 
                         }
@@ -217,6 +218,7 @@ namespace ShopNow.Controllers
                     db.SaveChanges();
                     if (otpmodel != null)
                     {
+                        UpdateOrderCustomerIdOfPickupService(customer.PhoneNumber, customer.Id);
                         return Json(new { message = "Already Customer and OTP send!", id = customer.Id, Position = customer.Position });
                     }
                     else
@@ -257,6 +259,16 @@ namespace ShopNow.Controllers
                 }
                 else
                     return Json("Otp Failed to send!");
+            }
+        }
+
+        public void UpdateOrderCustomerIdOfPickupService(string customerPhoneNumber,int customerId)
+        {
+            var orders = db.Orders.Where(i => i.CustomerPhoneNumber == customerPhoneNumber && i.IsPickupDrop == true && i.CustomerId == 0).ToList();
+            if (orders.Count() > 0)
+            {
+                orders.ForEach(i => i.CustomerId = customerId);
+                db.SaveChanges();
             }
         }
 
@@ -1575,7 +1587,8 @@ namespace ShopNow.Controllers
                     CustomerPhoneNumber = i.o.o.o.o.CustomerPhoneNumber,
                     DateEncoded = i.o.o.o.o.DateEncoded,
                     DeliveryAddress = i.o.o.o.o.DeliveryAddress,
-                    OnWork = i.o.d.OnWork,
+                   // OnWork = i.o.d.OnWork, 
+                   OnWork = i.o.o.o.o.DeliveryBoyOnWork,
                     OrderNumber = i.o.o.o.o.OrderNumber,
                     PaymentMode = i.o.o.p.PaymentMode,
                     RefundAmount = i.o.o.p.RefundAmount,
@@ -1614,7 +1627,8 @@ namespace ShopNow.Controllers
                    CustomerPhoneNumber = i.o.o.o.o.CustomerPhoneNumber,
                    DateEncoded = i.o.o.o.o.DateEncoded,
                    DeliveryAddress = i.o.o.o.o.DeliveryAddress,
-                   OnWork = i.o.d.OnWork,
+                   OnWork = i.o.o.o.o.DeliveryBoyOnWork,
+                   //OnWork = i.o.d.OnWork,
                    OrderNumber = i.o.o.o.o.OrderNumber,
                    PaymentMode = i.o.o.p.PaymentMode,
                    RefundAmount = i.o.o.p.RefundAmount,
@@ -1638,6 +1652,46 @@ namespace ShopNow.Controllers
                    WalletAmount = i.o.o.o.o.WalletAmount,
                    TipAmount = i.o.o.o.o.TipsAmount,
                    IsPickupDrop = i.o.o.o.o.IsPickupDrop,
+                   OrderItemList = i.oi.ToList()
+               }).ToList();
+
+            model.List = db.Orders.Where(i => (i.Status == 4 || i.Status == 5) && i.DeliveryBoyPhoneNumber == phoneNumber  /*&& DbFunctions.TruncateTime(i.DateEncoded) == DbFunctions.TruncateTime(DateTime.Now)*/)
+               .Join(db.Shops, o => o.ShopId, s => s.Id, (o, s) => new { o, s })
+               .Join(db.Payments, o => o.o.OrderNumber, p => p.OrderNumber, (o, p) => new { o, p })
+               .GroupJoin(db.OrderItems, o => o.o.o.Id, oi => oi.OrderId, (o, oi) => new { o, oi })
+               .Select(i => new TodayDeliveryListViewModel.OrderList
+               {
+                   CustomerLatitude = i.o.o.o.Latitude,
+                   CustomerLongitude = i.o.o.o.Longitude,
+                   CustomerName = i.o.o.o.CustomerName,
+                   CustomerPhoneNumber = i.o.o.o.CustomerPhoneNumber,
+                   DateEncoded = i.o.o.o.DateEncoded,
+                   DeliveryAddress = i.o.o.o.DeliveryAddress,
+                   OnWork = i.o.o.o.DeliveryBoyOnWork,
+                   //OnWork = i.o.d.OnWork,
+                   OrderNumber = i.o.o.o.OrderNumber,
+                   PaymentMode = i.o.p.PaymentMode,
+                   RefundAmount = i.o.p.RefundAmount,
+                   RefundRemark = i.o.p.RefundRemark,
+                   ShopAddress = i.o.o.s.Address,
+                   ShopLatitude = i.o.o.s.Latitude,
+                   ShopLongitude = i.o.o.s.Longitude,
+                   ShopName = i.o.o.s.Name,
+                   ShopPhoneNumber = i.o.o.o.ShopPhoneNumber,
+                   Status = i.o.o.o.Status,
+                   Convinenientcharge = i.o.o.o.Convinenientcharge,
+                   DeliveryCharge = i.o.o.o.DeliveryCharge,
+                   NetDeliveryCharge = i.o.o.o.NetDeliveryCharge,
+                   Packingcharge = i.o.o.o.Packingcharge,
+                   ShopDeliveryDiscount = i.o.o.o.ShopDeliveryDiscount,
+                   TotalPrice = i.o.o.o.TotalPrice,
+                   TotalProduct = i.o.o.o.TotalProduct,
+                   TotalQuantity = i.o.o.o.TotalQuantity,
+                   //NetTotal = i.o.o.o.o.NetTotal,
+                   NetTotal = i.o.o.o.IsPickupDrop == true ? i.o.o.o.TotalPrice : i.o.o.o.NetTotal,
+                   WalletAmount = i.o.o.o.WalletAmount,
+                   TipAmount = i.o.o.o.TipsAmount,
+                   IsPickupDrop = i.o.o.o.IsPickupDrop,
                    OrderItemList = i.oi.ToList()
                }).ToList();
 
@@ -1845,6 +1899,17 @@ namespace ShopNow.Controllers
                 delivaryBoy.DateUpdated = DateTime.Now;
                 db.Entry(delivaryBoy).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
+
+                //Order
+                var order = db.Orders.FirstOrDefault(i => i.OrderNumber == orderNo);
+                if (order != null)
+                {
+                    order.DeliveryBoyOnWork = 1;
+                    order.UpdatedBy = delivaryBoy.Name;
+                    order.DateUpdated = DateTime.Now;
+                    db.Entry(order).State = System.Data.Entity.EntityState.Modified;
+                    db.SaveChanges();
+                }
                 
                 return Json(new { message = "Successfully DelivaryBoy Accepted!" }, JsonRequestBehavior.AllowGet);
             }
@@ -1897,6 +1962,7 @@ namespace ShopNow.Controllers
             order.DeliveredTime = DateTime.Now;
             order.DBDeliveredLatitude = latitude;
             order.DBDeliveredLongitude = longitude;
+            order.DeliveryBoyOnWork = 0;
             db.Entry(order).State = System.Data.Entity.EntityState.Modified;
             db.SaveChanges();
 
@@ -2341,7 +2407,8 @@ namespace ShopNow.Controllers
                      RefundAmount = i.o.p.RefundAmount,
                      RefundRemark = i.o.p.RefundRemark,
                      PaymentMode = i.o.p.PaymentMode,
-                     Onwork = db.DeliveryBoys.Any(a => a.Id == i.o.o.DeliveryBoyId) ? db.DeliveryBoys.FirstOrDefault(a => a.Id == i.o.o.DeliveryBoyId).OnWork : 0,
+                    // Onwork = db.DeliveryBoys.Any(a => a.Id == i.o.o.DeliveryBoyId) ? db.DeliveryBoys.FirstOrDefault(a => a.Id == i.o.o.DeliveryBoyId).OnWork : 0,
+                    Onwork = i.o.o.DeliveryBoyOnWork,
                      WalletAmount = i.o.o.WalletAmount,
                      OrderReadyTime = i.o.o.OrderReadyTime,
                      IsPreorder = i.o.o.IsPreorder,

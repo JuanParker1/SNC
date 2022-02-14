@@ -161,22 +161,22 @@ namespace ShopNow.Controllers
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
-            model.DeliveryAgentAssignedLists = db.Orders.Where(i => (model.ShopId != 0 ? i.ShopId == model.ShopId : true) && i.Status == 4)
-                .Join(db.DeliveryBoys.Where(i => i.isAssign == 1 && i.OnWork == 0), c => c.DeliveryBoyId, d => d.Id, (c, d) => new { c, d })
-                .Join(db.Payments, c => c.c.OrderNumber, p => p.OrderNumber, (c, p) => new { c, p })
+            model.DeliveryAgentAssignedLists = db.Orders.Where(i => (model.ShopId != 0 ? i.ShopId == model.ShopId : true) && i.Status == 4 && i.DeliveryBoyId !=0 && i.DeliveryBoyOnWork == 0)
+                //.Join(db.DeliveryBoys.Where(i => i.isAssign == 1 && i.OnWork == 0), c => c.DeliveryBoyId, d => d.Id, (c, d) => new { c, d })
+                .Join(db.Payments, c => c.OrderNumber, p => p.OrderNumber, (c, p) => new { c, p })
                 .Select(i => new CartListViewModel.DeliveryAgentAssignedList
                 {
-                    Id = i.c.c.Id,
-                    ShopName = i.c.c.ShopName,
-                    OrderNumber = i.c.c.OrderNumber.ToString(),
-                    Status = i.c.c.Status,
-                    DeliveryBoyName = i.c.c.DeliveryBoyName,
-                    DateEncoded = i.c.c.DateEncoded,
+                    Id = i.c.Id,
+                    ShopName = i.c.ShopName,
+                    OrderNumber = i.c.OrderNumber.ToString(),
+                    Status = i.c.Status,
+                    DeliveryBoyName = i.c.DeliveryBoyName,
+                    DateEncoded = i.c.DateEncoded,
                     RefundAmount = i.p.RefundAmount ?? 0,
                     RefundRemark = i.p.RefundRemark ?? "",
                     PaymentMode = i.p.PaymentMode,
-                    DeliveryBoyPhoneNumber = i.c.c.DeliveryBoyPhoneNumber,
-                    IsPickupDrop = i.c.c.IsPickupDrop
+                    DeliveryBoyPhoneNumber = i.c.DeliveryBoyPhoneNumber,
+                    IsPickupDrop = i.c.IsPickupDrop
                 }).OrderByDescending(i => i.DateEncoded).ToList();
             int counter = 1;
             model.DeliveryAgentAssignedLists.ForEach(x => x.No = counter++);
@@ -188,23 +188,23 @@ namespace ShopNow.Controllers
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
-            model.DeliveryAgentAssignedLists = db.Orders.Where(i => (model.ShopId != 0 ? i.ShopId == model.ShopId : true) && i.Status == 4 && SqlFunctions.DateDiff("minute", i.DateUpdated, DateTime.Now) >= 5)
-                .Join(db.DeliveryBoys.Where(i => i.isAssign == 1 && i.OnWork == 0), c => c.DeliveryBoyId, d => d.Id, (c, d) => new { c, d })
-                .Join(db.Payments, c => c.c.OrderNumber, p => p.OrderNumber, (c, p) => new { c, p })
+            model.DeliveryAgentAssignedLists = db.Orders.Where(i => (model.ShopId != 0 ? i.ShopId == model.ShopId : true) && i.Status == 4 &&i.DeliveryBoyId !=0 && i.DeliveryBoyOnWork==0 && SqlFunctions.DateDiff("minute", i.DateUpdated, DateTime.Now) >= 5)
+               // .Join(db.DeliveryBoys.Where(i => i.isAssign == 1 && i.OnWork == 0), c => c.DeliveryBoyId, d => d.Id, (c, d) => new { c, d })
+                .Join(db.Payments, c => c.OrderNumber, p => p.OrderNumber, (c, p) => new { c, p })
                 .Select(i => new CartListViewModel.DeliveryAgentAssignedList
                 {
-                    Id = i.c.c.Id,
-                    ShopName = i.c.c.ShopName,
-                    OrderNumber = i.c.c.OrderNumber.ToString(),
-                    Status = i.c.c.Status,
-                    DeliveryBoyName = i.c.c.DeliveryBoyName,
-                    DateEncoded = i.c.c.DateEncoded,
+                    Id = i.c.Id,
+                    ShopName = i.c.ShopName,
+                    OrderNumber = i.c.OrderNumber.ToString(),
+                    Status = i.c.Status,
+                    DeliveryBoyName = i.c.DeliveryBoyName,
+                    DateEncoded = i.c.DateEncoded,
                     RefundAmount = i.p.RefundAmount ?? 0,
                     RefundRemark = i.p.RefundRemark ?? "",
                     PaymentMode = i.p.PaymentMode,
-                    DeliveryBoyPhoneNumber = i.c.c.DeliveryBoyPhoneNumber,
-                    Price = i.c.c.IsPickupDrop == true ? i.c.c.TotalPrice : i.p.Amount - (i.p.RefundAmount ?? 0),
-                    IsPickupDrop = i.c.c.IsPickupDrop
+                    DeliveryBoyPhoneNumber = i.c.DeliveryBoyPhoneNumber,
+                    Price = i.c.IsPickupDrop == true ? i.c.TotalPrice : i.p.Amount - (i.p.RefundAmount ?? 0),
+                    IsPickupDrop = i.c.IsPickupDrop
                 }).OrderByDescending(i => i.DateEncoded).ToList();
             int counter = 1;
             model.DeliveryAgentAssignedLists.ForEach(x => x.No = counter++);
@@ -216,23 +216,23 @@ namespace ShopNow.Controllers
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
-            model.PickupLists = db.Orders.Where(i => i.Status == 4 && (model.ShopId != 0 ? i.ShopId == model.ShopId : true))
-                .Join(db.DeliveryBoys.Where(i => i.isAssign == 1 && i.OnWork == 1), c => c.DeliveryBoyId, d => d.Id, (c, d) => new { c, d })
-                .Join(db.Payments, c => c.c.OrderNumber, p => p.OrderNumber, (c, p) => new { c, p })
+            model.PickupLists = db.Orders.Where(i => i.Status == 4 && i.DeliveryBoyId !=0 &&i.DeliveryBoyOnWork == 1 && (model.ShopId != 0 ? i.ShopId == model.ShopId : true))
+                //.Join(db.DeliveryBoys.Where(i => i.isAssign == 1 && i.OnWork == 1), c => c.DeliveryBoyId, d => d.Id, (c, d) => new { c, d })
+                .Join(db.Payments, c => c.OrderNumber, p => p.OrderNumber, (c, p) => new { c, p })
                  .Select(i => new CartListViewModel.PickupList
                  {
-                     Id = i.c.c.Id,
-                     ShopName = i.c.c.ShopName,
-                     OrderNumber = i.c.c.OrderNumber.ToString(),
-                     DeliveryBoyPhoneNumber = i.c.c.DeliveryBoyPhoneNumber,
-                     Status = i.c.c.Status,
-                     DeliveryBoyName = i.c.c.DeliveryBoyName,
-                     DateEncoded = i.c.c.DateEncoded,
+                     Id = i.c.Id,
+                     ShopName = i.c.ShopName,
+                     OrderNumber = i.c.OrderNumber.ToString(),
+                     DeliveryBoyPhoneNumber = i.c.DeliveryBoyPhoneNumber,
+                     Status = i.c.Status,
+                     DeliveryBoyName = i.c.DeliveryBoyName,
+                     DateEncoded = i.c.DateEncoded,
                      RefundAmount = i.p.RefundAmount ?? 0,
                      RefundRemark = i.p.RefundRemark ?? "",
                      PaymentMode = i.p.PaymentMode,
-                     Amount = i.c.c.IsPickupDrop == true ? i.c.c.TotalPrice : i.p.Amount - (i.p.RefundAmount ?? 0),
-                     IsPickupDrop = i.c.c.IsPickupDrop
+                     Amount = i.c.IsPickupDrop == true ? i.c.TotalPrice : i.p.Amount - (i.p.RefundAmount ?? 0),
+                     IsPickupDrop = i.c.IsPickupDrop
                  }).OrderByDescending(i => i.DateEncoded).ToList();
             int counter = 1;
             model.PickupLists.ForEach(x => x.No = counter++);
@@ -244,23 +244,23 @@ namespace ShopNow.Controllers
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
-            model.PickupLists = db.Orders.Where(i => i.Status == 4 && (model.ShopId != 0 ? i.ShopId == model.ShopId : true) && SqlFunctions.DateDiff("minute", i.DateUpdated, DateTime.Now) >= 15)
-               .Join(db.DeliveryBoys.Where(i => i.isAssign == 1 && i.OnWork == 1), c => c.DeliveryBoyId, d => d.Id, (c, d) => new { c, d })
-               .Join(db.Payments, c => c.c.OrderNumber, p => p.OrderNumber, (c, p) => new { c, p })
+            model.PickupLists = db.Orders.Where(i => i.Status == 4 && i.DeliveryBoyId != 0 && i.DeliveryBoyOnWork == 1 && (model.ShopId != 0 ? i.ShopId == model.ShopId : true) && SqlFunctions.DateDiff("minute", i.DateUpdated, DateTime.Now) >= 15)
+               //.Join(db.DeliveryBoys.Where(i => i.isAssign == 1 && i.OnWork == 1), c => c.DeliveryBoyId, d => d.Id, (c, d) => new { c, d })
+               .Join(db.Payments, c => c.OrderNumber, p => p.OrderNumber, (c, p) => new { c, p })
                 .Select(i => new CartListViewModel.PickupList
                 {
-                    Id = i.c.c.Id,
-                    ShopName = i.c.c.ShopName,
-                    OrderNumber = i.c.c.OrderNumber.ToString(),
-                    DeliveryBoyPhoneNumber = i.c.c.DeliveryBoyPhoneNumber,
-                    Status = i.c.c.Status,
-                    DeliveryBoyName = i.c.c.DeliveryBoyName,
-                    DateEncoded = i.c.c.DateEncoded,
+                    Id = i.c.Id,
+                    ShopName = i.c.ShopName,
+                    OrderNumber = i.c.OrderNumber.ToString(),
+                    DeliveryBoyPhoneNumber = i.c.DeliveryBoyPhoneNumber,
+                    Status = i.c.Status,
+                    DeliveryBoyName = i.c.DeliveryBoyName,
+                    DateEncoded = i.c.DateEncoded,
                     RefundAmount = i.p.RefundAmount ?? 0,
                     RefundRemark = i.p.RefundRemark ?? "",
                     PaymentMode = i.p.PaymentMode,
-                    Amount = i.c.c.IsPickupDrop == true ? i.c.c.TotalPrice : i.p.Amount - (i.p.RefundAmount ?? 0),
-                    IsPickupDrop = i.c.c.IsPickupDrop
+                    Amount = i.c.IsPickupDrop == true ? i.c.TotalPrice : i.p.Amount - (i.p.RefundAmount ?? 0),
+                    IsPickupDrop = i.c.IsPickupDrop
                 }).OrderByDescending(i => i.DateEncoded).ToList();
             int counter = 1;
             model.PickupLists.ForEach(x => x.No = counter++);
@@ -498,12 +498,12 @@ namespace ShopNow.Controllers
                           ImagePath = "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.ImagePath
                       }).ToList();
                 model.ShopAddress = shop.Address;
-                var deliveryBoy = db.DeliveryBoys.FirstOrDefault(i => i.Id == order.DeliveryBoyId);
-                if (deliveryBoy != null)
-                {
-                    model.DeliveryBoyIsAssign = deliveryBoy.isAssign;
-                    model.DeliveryBoyOnWork = deliveryBoy.OnWork;
-                }
+                //var deliveryBoy = db.DeliveryBoys.FirstOrDefault(i => i.Id == order.DeliveryBoyId);
+                //if (deliveryBoy != null)
+                //{
+                //    model.DeliveryBoyIsAssign = deliveryBoy.isAssign;
+                //    model.DeliveryBoyOnWork = deliveryBoy.OnWork;
+                //}
                 model.ListItems = db.OrderItems.Where(i => i.OrderId == order.Id)
                     .Select(i => new CartDetailsViewModel.ListItem
                     {
@@ -573,12 +573,12 @@ namespace ShopNow.Controllers
                 model.CustomerPhoneNumber = cart.CustomerPhoneNumber;
                 model.DeliveryBoyName = cart.DeliveryBoyName;
                 model.DateEncoded = cart.DateEncoded;
-                var deliveryBoy = db.DeliveryBoys.FirstOrDefault(i => i.Id == cart.DeliveryBoyId);
-                if (deliveryBoy != null)
-                {
-                    model.isAssign = deliveryBoy.isAssign;
-                    model.OnWork = deliveryBoy.OnWork;
-                }
+                //var deliveryBoy = db.DeliveryBoys.FirstOrDefault(i => i.Id == cart.DeliveryBoyId);
+                //if (deliveryBoy != null)
+                //{
+                //    model.isAssign = deliveryBoy.isAssign;
+                //    model.OnWork = deliveryBoy.OnWork;
+                //}
             }
             if (shopBill != null)
             {
@@ -651,12 +651,13 @@ namespace ShopNow.Controllers
                        {
                            ImagePath = "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.ImagePath
                        }).ToList();
-                var deliveryBoy = db.DeliveryBoys.FirstOrDefault(i => i.Id == cart.DeliveryBoyId);
-                if (deliveryBoy != null)
-                {
-                    model.isAssign = deliveryBoy.isAssign;
-                    model.OnWork = deliveryBoy.OnWork;
-                }
+                //var deliveryBoy = db.DeliveryBoys.FirstOrDefault(i => i.Id == cart.DeliveryBoyId);
+                //if (deliveryBoy != null)
+                //{
+                //    model.isAssign = deliveryBoy.isAssign;
+                //    model.OnWork = deliveryBoy.OnWork;
+                //}
+                model.OnWork = cart.DeliveryBoyOnWork;
                 model.Latitude = cart.Latitude;
                 model.Longitude = cart.Longitude;
                 //var refundamount = db.Payments.FirstOrDefault(i => i.RefundAmount == model.RefundAmount);
@@ -1231,6 +1232,7 @@ namespace ShopNow.Controllers
             {
                 order.DeliveryAddress = address;
             }
+            order.DeliveryBoyOnWork = 0;
             order.Status = 6;
             order.UpdatedBy = user.Name;
             order.DateUpdated = DateTime.Now;
@@ -1357,7 +1359,7 @@ namespace ShopNow.Controllers
                 db.Entry(deliveryBoy).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
             }
-
+            order.DeliveryBoyOnWork = 0;
             order.Status = 10;
             order.UpdatedBy = user.Name;
             order.DateUpdated = DateTime.Now;
@@ -1686,6 +1688,7 @@ namespace ShopNow.Controllers
                 order.DeliveryBoyName = null;
                 order.DeliveryBoyPhoneNumber = null;
                 order.Status = 3;
+                order.DeliveryBoyOnWork = 0;
                 order.UpdatedBy = user.Name;
                 order.DateUpdated = DateTime.Now;
                 db.Entry(order).State = System.Data.Entity.EntityState.Modified;
