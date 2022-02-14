@@ -389,12 +389,11 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SNCCC071")]
-        public ActionResult Cancelled(int shopId = 0)
+        public ActionResult Cancelled(CartListViewModel model)
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
-            var model = new CartListViewModel();
-            model.CancelledLists = db.Orders.Where(i => i.Status == 7 && (shopId != 0 ? i.ShopId == shopId : true))
+            model.CancelledLists = db.Orders.Where(i => i.Status == 7 && (model.ShopId != 0 ? i.ShopId == model.ShopId : true))
                         .Join(db.Payments, c => c.OrderNumber, p => p.OrderNumber, (c, p) => new { c, p })
                         .AsEnumerable()
                         .Select(i => new CartListViewModel.CancelledList
@@ -413,7 +412,7 @@ namespace ShopNow.Controllers
                         }).OrderByDescending(i => i.DateEncoded).ToList();
             int counter = 1;
             model.CancelledLists.ForEach(x => x.No = counter++);
-            return View(model.CancelledLists);
+            return View(model);
         }
 
         [AccessPolicy(PageCode = "SNCCCR072")]
@@ -437,12 +436,11 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SNCCCC073")]
-        public ActionResult CustomerCancelled(int shopId = 0)
+        public ActionResult CustomerCancelled(CartListViewModel model)
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["User"]);
             ViewBag.Name = user.Name;
-            var model = new CartListViewModel();
-            model.CustomerCancelledLists = db.Orders.Where(i => i.Status == 9 && ((shopId != 0) ? i.ShopId == shopId : true))
+            model.CustomerCancelledLists = db.Orders.Where(i => i.Status == 9 && ((model.ShopId != 0) ? i.ShopId == model.ShopId : true))
                 .Join(db.Payments, c => c.OrderNumber, p => p.OrderNumber, (c, p) => new { c, p })
                 .AsEnumerable()
                 .Select(i => new CartListViewModel.CustomerCancelledList
@@ -459,7 +457,7 @@ namespace ShopNow.Controllers
                 }).OrderByDescending(i => i.DateEncoded).ToList();
             int counter = 1;
             model.CustomerCancelledLists.ForEach(x => x.No = counter++);
-            return View(model.CustomerCancelledLists);
+            return View(model);
         }
 
         [AccessPolicy(PageCode = "SNCCCNP074")]
@@ -658,6 +656,7 @@ namespace ShopNow.Controllers
                 model.PaymentMode = cart.PaymentMode;
                 model.PrescriptionImagePath = cart.PrescriptionImagePath;
                 model.IsPickupDrop = cart.IsPickupDrop;
+                model.Remarks = cart.Remarks;
                 model.ImagePathLists = db.CustomerPrescriptionImages.Where(i => i.CustomerPrescriptionId == cart.CustomerPrescriptionId)
                        .Select(i => new CartListViewModel.ImagePathList
                        {
@@ -1989,6 +1988,60 @@ namespace ShopNow.Controllers
                 DeliveryCharge = 50 + amount;
             }
             return Json(new { DeliveryCharge, Distance }, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        [AccessPolicy(PageCode = "")]
+        public JsonResult MultipleOrderAssignDeliveryBoy(MultipleOrderAssignDeliveryBoyViewModel model)
+        {
+            try
+            {
+                var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
+                ViewBag.Name = user.Name;
+                foreach (var item in model.OrderLists)
+                {
+                    var cart = db.Orders.FirstOrDefault(i => i.Id == item.OrderId);
+                    if (cart != null && model.DeliveryBoyId != 0)
+                    {
+                        var delivery = db.DeliveryBoys.FirstOrDefault(i => i.Id == model.DeliveryBoyId);
+
+                        cart.DeliveryBoyId = delivery.Id;
+                        cart.DeliveryBoyName = delivery.Name;
+                        cart.DeliveryBoyPhoneNumber = delivery.PhoneNumber;
+                        cart.Status = 4;
+                        cart.DateUpdated = DateTime.Now;
+                        cart.UpdatedBy = user.Name;
+                        db.Entry(cart).State = System.Data.Entity.EntityState.Modified;
+                        db.SaveChanges();
+
+                        delivery.isAssign = 1;
+                        delivery.DateUpdated = DateTime.Now;
+                        delivery.UpdatedBy = user.Name;
+                        db.Entry(delivery).State = System.Data.Entity.EntityState.Modified;
+                        db.SaveChanges();
+
+                        if (delivery.CustomerId != 0)
+                        {
+                            var fcmToken = (from c in db.Customers
+                                            where c.Id == delivery.CustomerId
+                                            select c.FcmTocken ?? "").FirstOrDefault().ToString();
+                            Helpers.PushNotification.SendbydeviceId("You have received new order. Accept Soon", "ShopNowChat", "a.mp3", fcmToken.ToString());
+                        }
+                        //Customer
+                        if (cart.CustomerId != 0)
+                        {
+                            var fcmTokenCustomer = (from c in db.Customers
+                                                    where c.Id == cart.CustomerId
+                                                    select c.FcmTocken ?? "").FirstOrDefault().ToString();
+                            Helpers.PushNotification.SendbydeviceId($"Delivery Boy {cart.DeliveryBoyName} is Assigned for your Order.", "ShopNowChat", "../../assets/b.mp3", fcmTokenCustomer.ToString());
+                        }
+                    }
+                }
+                return Json(true, JsonRequestBehavior.AllowGet);
+            }catch (Exception ex)
+            {
+                return Json(false, JsonRequestBehavior.AllowGet);
+            }
         }
 
         protected override void Dispose(bool disposing)

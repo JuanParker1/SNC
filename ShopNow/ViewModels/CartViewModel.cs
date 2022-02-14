@@ -145,6 +145,7 @@ namespace ShopNow.ViewModels
         public int CustomerId { get; set; }
         public string CustomerName { get; set; }
         public string CustomerPhoneNumber { get; set; }
+        public int ShopId { get; set; }
         public string ShopName { get; set; }
         public string DeliveryAddress { get; set; }
         public string ShopPhoneNumber { get; set; }
@@ -182,6 +183,7 @@ namespace ShopNow.ViewModels
         public double DifferenceAmount { get; set; }
         public double DifferencePercentage { get; set; }
         public bool IsPickupDrop { get; set; }
+        public string Remarks { get; set; }
         public class ImagePathList
         {
             public string ImagePath { get; set; }
@@ -972,6 +974,16 @@ namespace ShopNow.ViewModels
             public double CustomerLongitude { get; set; }
             public double ShopLatitude { get; set; }
             public double ShopLongitude { get; set; }
+        }
+    }
+
+    public class MultipleOrderAssignDeliveryBoyViewModel
+    {
+        public int DeliveryBoyId { get; set; }
+        public List<OrderList> OrderLists { get; set; }
+        public class OrderList
+        {
+            public long OrderId { get; set; }
         }
     }
 }

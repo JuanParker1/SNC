@@ -6,46 +6,44 @@
 <title>ShopNow | Cancelled Report </title>
 <link href="~/Content/Gridmvc.css" rel="stylesheet" />
 <script src="~/Scripts/gridmvc.js"></script>
-@using (Html.BeginForm("CancelledReport", "Cart", FormMethod.Post, new { id = "CancelledReportForm", role = "form", enctype = "multipart/form-data" }))
-{
-    <div class="container-fluid mb-3">
-        <div class="row my-3 d-print-none">
-            <div class="col-md-3">
-                <h5 class="text-success text-nowrap">Cancelled Report</h5>
-            </div>
-            <div class="col-md-7">
-                <form method="get" action="/Cart/CancelledReport">
-                    <div class="row">
-                        <div class="col-md-4"><input type="date" class="form-control" name="StartDate" value="@Model.StartDate.Value.ToString("yyyy-MM-dd")" /></div>
-                        <input type="submit" class="btn btn-info" value="Apply Filter" />
-                    </div>
-                </form>
-            </div>
-            <div class="col-md-2 text-right">
-                <button id="btnPrint" class="btn btn-sm btn-secondary mr-2" value="Print"><i class="fa fa-print fa-lg" aria-hidden="true"></i></button>
-                <button id="btnExport" class="btn btn-sm btn-secondary" value="Export To Excel"><i class="fa fa-file-excel-o fa-lg" aria-hidden="true"></i></button>
-            </div>
+
+<div class="container-fluid mb-3">
+    <div class="row my-3 d-print-none">
+        <div class="col-md-3">
+            <h5 class="text-success text-nowrap">Cancelled Report</h5>
         </div>
-        <div class="card shadow">
-            <div class="card-body">
+        <div class="col-md-7">
+            <form method="get" action="/Cart/CancelledReport">
                 <div class="row">
-                    <div class="col-md-12">
-                        <h4 class="text-center d-none d-print-block">Cancelled Report</h4>
-                        @Html.Grid(Model.CancelledReportLists).Columns(columns =>
-                       {
-                           columns.Add(c => c.OrderNumber).Titled("Order Number").Filterable(true).SetWidth(10);
-                           columns.Add(c => c.ShopName).Titled("Shop Name").Filterable(true).SetWidth(15);
-                           columns.Add(c => c.DeliveryAddress).Titled("Delivery Address").Filterable(true).SetWidth(15);
-                           columns.Add(c => c.PhoneNumber).Titled("Phone Number").Filterable(true).SetWidth(15);
-                           columns.Add().Encoded(false).Sanitized(false).RenderValueAs(o => "<span>Cancelled</span>").Titled("Order Status").SetWidth(15);
-                           columns.Add(c => c.DateEncoded).Titled("Date").Filterable(true).SetWidth(10);
-                       }).WithPaging(25).Sortable(true)
-                    </div>
+                    <div class="col-md-4"><input type="date" class="form-control" name="StartDate" value="@Model.StartDate.Value.ToString("yyyy-MM-dd")" /></div>
+                    <input type="submit" class="btn btn-info" value="Apply Filter" />
+                </div>
+            </form>
+        </div>
+        <div class="col-md-2 text-right">
+            <button id="btnPrint" class="btn btn-sm btn-secondary mr-2" value="Print"><i class="fa fa-print fa-lg" aria-hidden="true"></i></button>
+            <button id="btnExport" class="btn btn-sm btn-secondary" value="Export To Excel"><i class="fa fa-file-excel-o fa-lg" aria-hidden="true"></i></button>
+        </div>
+    </div>
+    <div class="card shadow">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-12">
+                    <h4 class="text-center d-none d-print-block">Cancelled Report</h4>
+                    @Html.Grid(Model.CancelledReportLists).Columns(columns =>
+                   {
+                       columns.Add(c => c.OrderNumber).Titled("Order Number").Filterable(true).SetWidth(10);
+                       columns.Add(c => c.ShopName).Titled("Shop Name").Filterable(true).SetWidth(15);
+                       columns.Add(c => c.DeliveryAddress).Titled("Delivery Address").Filterable(true).SetWidth(15);
+                       columns.Add(c => c.PhoneNumber).Titled("Phone Number").Filterable(true).SetWidth(15);
+                       columns.Add().Encoded(false).Sanitized(false).RenderValueAs(o => "<span>Cancelled</span>").Titled("Order Status").SetWidth(15);
+                       columns.Add(c => c.DateEncoded).Titled("Date").Filterable(true).SetWidth(10);
+                   }).WithPaging(25).Sortable(true)
                 </div>
             </div>
         </div>
     </div>
-}
+</div>
 
 @section Scripts
 {

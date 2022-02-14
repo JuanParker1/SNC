@@ -49,7 +49,7 @@
                                 {
                                     <div class="col-md-2">
                                         <label class="font-weight-bold">Prescription Image</label>
-                                        <img alt="Image" data-toggle="modal" data-target="#PrescriptionImageModal" class="img-thumbnail PrescriptionImage p-1" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/@Model.PrescriptionImagePath" onerror="this.src='/Images/No Photo.png'" style="width:45px;height:45px" />
+                                        <img alt="Image" data-toggle="modal" data-target="#PrescriptionImageModal" class="img-thumbnail PrescriptionImage p-1" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/@Model.PrescriptionImagePath" onerror="this.src='/Images/noimage.png'" style="width:45px;height:45px" />
                                     </div>
                                 }
                                 @if (Model.ImagePathLists != null)
@@ -58,8 +58,14 @@
                                         <label class="font-weight-bold">Prescription Image</label>
                                         @foreach (var im in Model.ImagePathLists)
                                         {
-                                            <img alt="Image" data-toggle="modal" data-target="#PrescriptionImageModal" class="img-thumbnail PrescriptionImage p-1" src="@im.ImagePath" onerror="this.src='/Images/No Photo.png'" style="width:45px;height:45px" />
+                                            <img alt="Image" data-toggle="modal" data-target="#PrescriptionImageModal" class="img-thumbnail PrescriptionImage p-1" src="@im.ImagePath" onerror="this.src='/Images/noimage.png'" style="width:45px;height:45px" />
                                         }
+                                    </div>
+                                }
+                                @if (!string.IsNullOrEmpty(Model.Remarks))
+                                {
+                                    <div class="col-md-12">
+                                        Remarks: @Model.Remarks
                                     </div>
                                 }
                             </div>
@@ -190,7 +196,7 @@
                                     </td>
                                     <td>@item.Price</td>
                                     <td>
-                                        <img src="@item.ImagePath" alt="Image" data-productname="@item.ProductName" class="img-thumbnail productImages" data-toggle="modal" data-target="#myModal" width="45" height="60" onerror="this.src='/Images/No Photo.png'" />
+                                        <img src="@item.ImagePath" alt="Image" data-productname="@item.ProductName" class="img-thumbnail productImages" data-toggle="modal" data-target="#myModal" width="45" height="60" onerror="this.src='/Images/noimage.png'" />
                                     </td>
                                 </tr>
                             }

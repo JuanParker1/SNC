@@ -3,10 +3,10 @@
     ViewBag.Title = "DeliveryBoy Payment Status";
 }
 <title>ShopNow | DeliveryBoy Payment Status</title>
-@using (Html.BeginForm("DeliveryBoyPaymentStatus", "Cart", FormMethod.Post, new { id = "ReportForm", role = "form", enctype = "multipart/form-data" }))
-{
-    <div class="container-fluid">
-        <div class="mb-1 d-print-none">
+
+<div class="container-fluid">
+    <div class="mb-1 d-print-none">
+        <form method="get" action="/Cart/DeliveryBoyPaymentStatus">
             <div class="row form-group">
                 <div class="col-md-3">
                     <h5 class="text-success text-nowrap">DeliveryBoy Payment Status</h5>
@@ -24,7 +24,7 @@
                     </select>
                     <input type="hidden" name="DeliveryBoyName" id="DeliveryBoyName" value="@Model.DeliveryBoyName" />
                 </div>
-            </div> 
+            </div>
             <div class="row form-group">
                 <div class="col-md-3"></div>
                 <div class="col-md-5">
@@ -38,53 +38,53 @@
                     <input type="submit" class="btn btn-info mx-4" value="Apply Filter" />
                 </div>
             </div>
-        </div>
-        <div class="card shadow" id="divDeliveryBoy">
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-md-12">
-                        <h4 class="text-center d-none d-print-block">DeliveryBoy Payment Status</h4>
-                        <table class="table table-striped table-hover table-borderless" id="DeliveryBoy-list">
-                            <thead>
+        </form>
+    </div>
+    <div class="card shadow" id="divDeliveryBoy">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-12">
+                    <h4 class="text-center d-none d-print-block">DeliveryBoy Payment Status</h4>
+                    <table class="table table-striped table-hover table-borderless" id="DeliveryBoy-list">
+                        <thead>
+                            <tr>
+                                <th class="font-weight-bold">No.</th>
+                                <th>Date</th>
+                                <th>OrderNumber</th>
+                                <th>Shop Name</th>
+                                <th class="font-weight-bold">DeliveryBoy Name</th>
+                                <th class="font-weight-bold">Amount</th>
+                                <th>Distance(Km)</th>
+                                <th class="font-weight-bold">Payment Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.DeliveryBoyPaymentStatusLists)
+                            {
                                 <tr>
-                                    <th class="font-weight-bold">No.</th>
-                                    <th>Date</th>
-                                    <th>OrderNumber</th>
-                                    <th>Shop Name</th>
-                                    <th class="font-weight-bold">DeliveryBoy Name</th>
-                                    <th class="font-weight-bold">Amount</th>
-                                    <th>Distance(Km)</th>
-                                    <th class="font-weight-bold">Payment Status</th>
+                                    <td></td>
+                                    <td class="text-nowrap">@item.DateEncoded.ToString("dd-MM-yyyy")</td>
+                                    <td><a href="~/Cart/Edit?OrderNumber=@item.OrderNumber&id=@ShopNow.Helpers.AdminHelpers.ECodeLong(item.Id)">@item.OrderNumber</a></td>
+                                    <td>@item.ShopName</td>
+                                    <td>@item.DeliveryBoyName</td>
+                                    <td>@Math.Round(item.DeliveryCharge, 2)</td>
+                                    <td>@Math.Round(item.Distance, 2)</td>
+                                    <td>
+                                        @if (item.DeliveryBoyPaymentStatus == 0)
+                                        {<span class="text-danger mr-3">Pending</span><input type="button" class="btn btn-sm btn-warning btnPayNow" value="PayNow" data-orderno="@item.OrderNumber" /> }
+                                        else if (item.DeliveryBoyPaymentStatus == 1)
+                                        {
+                                            <span class="text-success">Paid</span>}
+                                    </td>
                                 </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (var item in Model.DeliveryBoyPaymentStatusLists)
-                                {
-                                    <tr>
-                                        <td></td>
-                                        <td class="text-nowrap">@item.DateEncoded.ToString("dd-MM-yyyy")</td>
-                                        <td><a href="~/Cart/Edit?OrderNumber=@item.OrderNumber&id=@ShopNow.Helpers.AdminHelpers.ECodeLong(item.Id)">@item.OrderNumber</a></td>
-                                        <td>@item.ShopName</td>
-                                        <td>@item.DeliveryBoyName</td>
-                                        <td>@Math.Round(item.DeliveryCharge,2)</td>
-                                        <td>@Math.Round(item.Distance,2)</td>
-                                        <td>
-                                            @if (item.DeliveryBoyPaymentStatus == 0)
-                                            {<span class="text-danger mr-3">Pending</span><input type="button" class="btn btn-sm btn-warning btnPayNow" value="PayNow" data-orderno="@item.OrderNumber" /> }
-                                            else if (item.DeliveryBoyPaymentStatus == 1)
-                                            {
-                                                <span class="text-success">Paid</span>}
-                                        </td>
-                                    </tr>
-                                }
-                            </tbody>
-                        </table>
-                    </div>
+                            }
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
     </div>
-}
+</div>
 
 @section Scripts
 {

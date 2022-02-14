@@ -4,46 +4,45 @@
 }
 
 <title>ShopNow | DeliveryBoy Cash Handover Report</title>
-
-@using (Html.BeginForm("DeliveryBoyCashHandoverReport", "Cart", FormMethod.Post, new { id = "ReportForm", role = "form", enctype = "multipart/form-data" }))
-{
     <div class="container-fluid">
         <div class="mb-1 d-print-none">
-            <div class="row form-group">
-                <div class="col-md-3">
-                    <h5 class="text-success text-nowrap">DeliveryBoy Cash Handover Report</h5>
-                </div>
-                <div class="col-md-2">
-                    <div class="mb-1 data-search">
+            <form method="get" action="/Cart/DeliveryBoyCashHandoverReport">
+                <div class="row form-group">
+                    <div class="col-md-3">
+                        <h5 class="text-success text-nowrap">DeliveryBoy Cash Handover Report</h5>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="mb-1 data-search">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <select name="DeliveryBoyId" id="DeliveryBoyId" class="form-control">
+                            @if (Model.DeliveryBoyId != 0)
+                            {
+                                <option value="@Model.DeliveryBoyId">@Model.DeliveryBoyName</option>
+                            }
+                        </select>
+                        <input type="hidden" name="DeliveryBoyName" id="DeliveryBoyName" value="@Model.DeliveryBoyName" />
+                    </div>
+                    <div class="col-md-4 text-right">
+                        <button id="btnPrint" class="btn btn-sm btn-secondary mr-2" value="Print"><i class="fa fa-print fa-lg" aria-hidden="true"></i></button>
+                        <button id="btnExport" class="btn btn-sm btn-secondary" value="Export To Excel"><i class="fa fa-file-excel-o fa-lg" aria-hidden="true"></i></button>
                     </div>
                 </div>
-                <div class="col-md-3">
-                    <select name="DeliveryBoyId" id="DeliveryBoyId" class="form-control">
-                        @if (Model.DeliveryBoyId != 0)
-                        {
-                            <option value="@Model.DeliveryBoyId">@Model.DeliveryBoyName</option>
-                        }
-                    </select>
-                    <input type="hidden" name="DeliveryBoyName" id="DeliveryBoyName" value="@Model.DeliveryBoyName" />
-                </div>
-                <div class="col-md-4 text-right">
-                    <button id="btnPrint" class="btn btn-sm btn-secondary mr-2" value="Print"><i class="fa fa-print fa-lg" aria-hidden="true"></i></button>
-                    <button id="btnExport" class="btn btn-sm btn-secondary" value="Export To Excel"><i class="fa fa-file-excel-o fa-lg" aria-hidden="true"></i></button>
-                </div>
-            </div>
-            <div class="row form-group">
-                <div class="col-md-3"></div>
-                <div class="col-md-5">
-                    <div class="input-daterange input-group">
-                        <input type="date" class="form-control well well-sm" placeholder="From Date" id="datepicker" name="StartDate" @if (Model.StartDate != null) { <text>value="@Model.StartDate.Value.ToString("yyyy-MM-dd")"</text> } >
-                        <span class="input-group-addon mx-3">to</span>
-                        <input type="date" class="form-control" placeholder="To Date" id="datepicker1" name="EndDate" @if (Model.EndDate != null) { <text>value="@Model.EndDate.Value.ToString("yyyy-MM-dd")"</text> } >
+                <div class="row form-group">
+                    <div class="col-md-3"></div>
+                    <div class="col-md-5">
+                        <div class="input-daterange input-group">
+                            <input type="date" class="form-control well well-sm" placeholder="From Date" id="datepicker" name="StartDate" @if (Model.StartDate != null) { <text> value="@Model.StartDate.Value.ToString("yyyy-MM-dd")" </text> }>
+                            <span class="input-group-addon mx-3">to</span>
+                            <input type="date" class="form-control" placeholder="To Date" id="datepicker1" name="EndDate" @if (Model.EndDate != null) { <text> value="@Model.EndDate.Value.ToString("yyyy-MM-dd")" </text> }>
+                        </div>
+                    </div>
+                    <div class="col-md-1">
+                        <input type="submit" class="btn btn-info mx-4" value="Apply Filter" />
                     </div>
                 </div>
-                <div class="col-md-1">
-                    <input type="submit" class="btn btn-info mx-4" value="Apply Filter" />
-                </div>
-            </div>
+            </form>
         </div>
         <div class="card shadow" id="divDeliveryBoy">
             <div class="card-body">
@@ -90,7 +89,6 @@
             </div>
         </div>
     </div>
-}
 
 @section Scripts
 {

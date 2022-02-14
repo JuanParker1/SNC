@@ -1,4 +1,4 @@
-﻿@model IEnumerable<ShopNow.ViewModels.CartListViewModel.CancelledList>
+﻿@model ShopNow.ViewModels.CartListViewModel
 @using GridMvc.Html
 @{
     ViewBag.Title = "Cancelled Order List";
@@ -12,24 +12,34 @@
     }
 </style>
 <div class="container-fluid">
-    <div class="row my-2">
-        <div class="col-md-4">
-            <h5 class="text-success" style="letter-spacing:1px">Cancelled Order</h5>
+    <form method="get" action="/Cart/Cancelled">
+        <div class="row my-2">
+            <div class="col-md-4">
+                <h5 class="text-success" style="letter-spacing:1px">Cancelled Order</h5>
+            </div>
+
+            <div class="col-md-3">
+                <select name="ShopId" id="ShopId" class="form-control">
+                    @if (!string.IsNullOrEmpty(Model.ShopName))
+                    {
+                        <option value="@Model.ShopId">@Model.ShopName</option>
+                    }
+                </select>
+                <input type="hidden" name="ShopName" id="ShopName" value="@Model.ShopName" />
+            </div>
+            <div class="col-md-1">
+                <input type="submit" class="form-control btn btn-sm btn-success" value="Filter" />
+            </div>
+            <div class="col-md-4 text-right">
+                <a href="~/Cart/List" class="ml-auto" target="_self"><span class="fa fa-bars"></span> New Order List</a>
+            </div>
         </div>
-        <div class="col-md-3">
-            <select name="ShopId" id="ShopId" class="form-control"></select>
-            <input type="hidden" name="ShopName" id="ShopName" />
-        </div>
-        <div class="col-md-1">
-            <input type="button" class="form-control btn btn-sm btn-success" name="Filter" id="Filter" value="Filter" />
-        </div>
-        <div class="col-md-4 text-right">
-            <a href="~/Cart/List" class="ml-auto" target="_self"><span class="fa fa-bars"></span> New Order List</a>
-        </div>
+    </form>
+    <div class="row">
         <div class="col-md-12">
             <div class="card shadow mt-3">
                 <div class="card-body">
-                    @Html.Grid(Model).Columns(columns =>
+                    @Html.Grid(Model.CancelledLists).Columns(columns =>
                {
                    columns.Add(c => c.No).Titled("Sl.No").Filterable(false).SetWidth(1);
                    columns.Add(c => c.OrderNumber).Titled("OrderNo").Filterable(true).SetWidth(10);
@@ -70,10 +80,6 @@
                 $('input[name="ShopName"]').val(e.params.data.text);
             });
 
-            $("#Filter").click(function () {
-                var shopId = $("#ShopId").val();
-                window.location.href = "/Cart/Cancelled/?shopId=" + shopId;
-            });
         });
     </script>
 }
