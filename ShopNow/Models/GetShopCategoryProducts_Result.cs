@@ -42,5 +42,6 @@ namespace ShopNow.Models
         public int IsLiked { get; set; }
         public string LikeText { get; set; }
         public int OutletId { get; set; }
+        public bool PriscriptionCategory { get; set; }
     }
 }

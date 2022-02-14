@@ -108,6 +108,7 @@ namespace ShopNow.Controllers
                 config.CreateMap<Product, ProductDetailsApiViewModel>();
                 config.CreateMap<Product, MedicalProductDetailsApiViewModel>();
                 config.CreateMap<CustomerBankDetailsCreateViewModel, CustomerBankDetail>();
+                config.CreateMap<SavePrescriptionViewModel, CustomerGroceryUpload>();
             });
 
             _mapper = _mapperConfiguration.CreateMapper();
@@ -5465,23 +5466,47 @@ namespace ShopNow.Controllers
         [HttpPost]
         public JsonResult SavePrescription(SavePrescriptionViewModel model)
         {
-            var prescription = _mapper.Map<SavePrescriptionViewModel, CustomerPrescription>(model);
-            prescription.DateEncoded = DateTime.Now;
-            prescription.Status = 0;
-            db.CustomerPrescriptions.Add(prescription);
-            db.SaveChanges();
-
-            if (model.ImageListItems != null)
+            if (model.Type == 0)
             {
-                foreach (var image in model.ImageListItems)
+                var prescription = _mapper.Map<SavePrescriptionViewModel, CustomerPrescription>(model);
+                prescription.DateEncoded = DateTime.Now;
+                prescription.Status = 0;
+                db.CustomerPrescriptions.Add(prescription);
+                db.SaveChanges();
+
+                if (model.ImageListItems != null)
                 {
-                    var prescriptionImage = new CustomerPrescriptionImage
+                    foreach (var image in model.ImageListItems)
                     {
-                        CustomerPrescriptionId = prescription.Id,
-                        ImagePath = image.ImagePath
-                    };
-                    db.CustomerPrescriptionImages.Add(prescriptionImage);
-                    db.SaveChanges();
+                        var prescriptionImage = new CustomerPrescriptionImage
+                        {
+                            CustomerPrescriptionId = prescription.Id,
+                            ImagePath = image.ImagePath
+                        };
+                        db.CustomerPrescriptionImages.Add(prescriptionImage);
+                        db.SaveChanges();
+                    }
+                }
+            }
+            else {
+                var grocery = _mapper.Map<SavePrescriptionViewModel, CustomerGroceryUpload>(model);
+                grocery.DateEncoded = DateTime.Now;
+                grocery.Status = 0;
+                db.CustomerGroceryUploads.Add(grocery);
+                db.SaveChanges();
+
+                if (model.ImageListItems != null)
+                {
+                    foreach (var image in model.ImageListItems)
+                    {
+                        var groceryImage = new CustomerGroceryUploadImage
+                        {
+                            CustomerGroceryUploadId = grocery.Id,
+                            ImagePath = image.ImagePath
+                        };
+                        db.CustomerGroceryUploadImages.Add(groceryImage);
+                        db.SaveChanges();
+                    }
                 }
             }
             return Json(true, JsonRequestBehavior.AllowGet);

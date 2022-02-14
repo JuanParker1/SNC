@@ -480,6 +480,7 @@ namespace ShopNow.ViewModels
         public string DeliveryAddress { get; set; }
         public Nullable<double> Latitude { get; set; }
         public Nullable<double> Longitude { get; set; }
+        public int Type { get; set; } //0-Prescription,1-grocery
 
         public List<ImageListItem> ImageListItems { get; set; }
         public class ImageListItem
