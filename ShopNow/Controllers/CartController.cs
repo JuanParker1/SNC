@@ -389,12 +389,11 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SNCCC071")]
-        public ActionResult Cancelled(int shopId = 0)
+        public ActionResult Cancelled(CartListViewModel model)
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
-            var model = new CartListViewModel();
-            model.CancelledLists = db.Orders.Where(i => i.Status == 7 && (shopId != 0 ? i.ShopId == shopId : true))
+            model.CancelledLists = db.Orders.Where(i => i.Status == 7 && (model.ShopId != 0 ? i.ShopId == model.ShopId : true))
                         .Join(db.Payments, c => c.OrderNumber, p => p.OrderNumber, (c, p) => new { c, p })
                         .AsEnumerable()
                         .Select(i => new CartListViewModel.CancelledList
@@ -413,7 +412,7 @@ namespace ShopNow.Controllers
                         }).OrderByDescending(i => i.DateEncoded).ToList();
             int counter = 1;
             model.CancelledLists.ForEach(x => x.No = counter++);
-            return View(model.CancelledLists);
+            return View(model);
         }
 
         [AccessPolicy(PageCode = "SNCCCR072")]
@@ -437,12 +436,11 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SNCCCC073")]
-        public ActionResult CustomerCancelled(int shopId = 0)
+        public ActionResult CustomerCancelled(CartListViewModel model)
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["User"]);
             ViewBag.Name = user.Name;
-            var model = new CartListViewModel();
-            model.CustomerCancelledLists = db.Orders.Where(i => i.Status == 9 && ((shopId != 0) ? i.ShopId == shopId : true))
+            model.CustomerCancelledLists = db.Orders.Where(i => i.Status == 9 && ((model.ShopId != 0) ? i.ShopId == model.ShopId : true))
                 .Join(db.Payments, c => c.OrderNumber, p => p.OrderNumber, (c, p) => new { c, p })
                 .AsEnumerable()
                 .Select(i => new CartListViewModel.CustomerCancelledList
@@ -459,7 +457,7 @@ namespace ShopNow.Controllers
                 }).OrderByDescending(i => i.DateEncoded).ToList();
             int counter = 1;
             model.CustomerCancelledLists.ForEach(x => x.No = counter++);
-            return View(model.CustomerCancelledLists);
+            return View(model);
         }
 
         [AccessPolicy(PageCode = "SNCCCNP074")]

@@ -145,6 +145,7 @@ namespace ShopNow.ViewModels
         public int CustomerId { get; set; }
         public string CustomerName { get; set; }
         public string CustomerPhoneNumber { get; set; }
+        public int ShopId { get; set; }
         public string ShopName { get; set; }
         public string DeliveryAddress { get; set; }
         public string ShopPhoneNumber { get; set; }
