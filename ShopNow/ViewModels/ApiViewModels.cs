@@ -96,6 +96,7 @@ namespace ShopNow.ViewModels
     {
         public List<OrderList> ResturantList { get; set; }
         public List<OrderList> OtherList { get; set; }
+        public List<OrderList> List { get; set; }
         public class OrderList
         {
             public string ShopName { get; set; }
