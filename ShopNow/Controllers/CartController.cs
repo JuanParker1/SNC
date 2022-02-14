@@ -39,15 +39,15 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SNCCL059")]
-        public ActionResult List(int shopId = 0,string district="")
+        public ActionResult List(int shopId = 0, string district = "")
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
             var dt = DateTime.Now;
             var model = new CartListViewModel();
             model.TodayLists = db.Orders.Where(i => /*(DbFunctions.TruncateTime(i.DateEncoded) == DbFunctions.TruncateTime(dt))*/ i.Status != 6 && i.Status != 7 && i.Status != 9 && i.Status != 10 && i.Status != 0 && i.Status != -1 && (shopId != 0 ? i.ShopId == shopId : true))
-                .Join(db.Payments, c=> c.OrderNumber, p=> p.OrderNumber,(c,p)=> new { c, p })
-                .Join(db.Shops.Where(i=> (district != "" ? i.DistrictName == district : true)),c=>c.c.ShopId,s=>s.Id,(c,s)=>new { c,s})
+                .Join(db.Payments, c => c.OrderNumber, p => p.OrderNumber, (c, p) => new { c, p })
+                .Join(db.Shops.Where(i => (district != "" ? i.DistrictName == district : true)), c => c.c.ShopId, s => s.Id, (c, s) => new { c, s })
             .Select(i => new CartListViewModel.TodayList
             {
                 Id = i.c.c.Id,
@@ -58,7 +58,7 @@ namespace ShopNow.Controllers
                 Status = i.c.c.Status,
                 DeliveryBoyName = i.c.c.DeliveryBoyName ?? "N/A",
                 PaymentMode = i.c.c.PaymentMode,
-                Amount = i.c.c.IsPickupDrop == true? i.c.c.TotalPrice: i.c.p.Amount - (i.c.p.RefundAmount?? 0),
+                Amount = i.c.c.IsPickupDrop == true ? i.c.c.TotalPrice : i.c.p.Amount - (i.c.p.RefundAmount ?? 0),
                 CustomerPhoneNumber = i.c.c.CustomerPhoneNumber,
                 RefundAmount = i.c.p.RefundAmount ?? 0,
                 RefundRemark = i.c.p.RefundRemark ?? "",
@@ -72,12 +72,11 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SNCCP060")]
-        public ActionResult Pending(int shopId = 0)
+        public ActionResult Pending(CartListViewModel model)
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
-            var model = new CartListViewModel();
-            model.CartPendingLists = db.Orders.Where(i => (shopId != 0 ? i.ShopId == shopId : true) && i.Status == 2)
+            model.CartPendingLists = db.Orders.Where(i => (model.ShopId != 0 ? i.ShopId == model.ShopId : true) && i.Status == 2)
                            .Join(db.Payments, c => c.OrderNumber, p => p.OrderNumber, (c, p) => new { c, p })
                            .Select(i => new CartListViewModel.CartPendingList
                            {
@@ -97,16 +96,15 @@ namespace ShopNow.Controllers
                            }).OrderByDescending(i => i.DateEncoded).ToList();
             int counter = 1;
             model.CartPendingLists.ForEach(x => x.No = counter++);
-            return View(model.CartPendingLists);
+            return View(model);
         }
 
         [AccessPolicy(PageCode = "SNCCPL061")]
-        public ActionResult PendingList(int shopId = 0)
+        public ActionResult PendingList(CartListViewModel model)
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
-            var model = new CartListViewModel();
-            model.CartPendingLists = db.Orders.Where(i => (shopId != 0 ? i.ShopId == shopId : true) && i.Status == 2 && SqlFunctions.DateDiff("minute", i.DateUpdated, DateTime.Now) >= 5)
+            model.CartPendingLists = db.Orders.Where(i => (model.ShopId != 0 ? i.ShopId == model.ShopId : true) && i.Status == 2 && SqlFunctions.DateDiff("minute", i.DateUpdated, DateTime.Now) >= 5)
                            .Join(db.Payments, c => c.OrderNumber, p => p.OrderNumber, (c, p) => new { c, p })
                            .Select(i => new CartListViewModel.CartPendingList
                            {
@@ -126,16 +124,15 @@ namespace ShopNow.Controllers
                            }).OrderByDescending(i => i.DateEncoded).ToList();
             int counter = 1;
             model.CartPendingLists.ForEach(x => x.No = counter++);
-            return View(model.CartPendingLists);
+            return View(model);
         }
 
         [AccessPolicy(PageCode = "SNCCOP062")]
-        public ActionResult OrderPrepared(int shopId = 0) //Order Processing
+        public ActionResult OrderPrepared(CartListViewModel model) //Order Processing
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
-            var model = new CartListViewModel();
-            model.CartPreparedLists = db.Orders.Where(i => (shopId != 0 ? i.ShopId == shopId : true) && (i.Status == 3 || i.Status == 4 || i.Status == 8))
+            model.CartPreparedLists = db.Orders.Where(i => (model.ShopId != 0 ? i.ShopId == model.ShopId : true) && (i.Status == 3 || i.Status == 4 || i.Status == 8))
                 .Join(db.Payments, c => c.OrderNumber, p => p.OrderNumber, (c, p) => new { c, p })
                 .Select(i => new CartListViewModel.CartPreparedList
                 {
@@ -156,17 +153,15 @@ namespace ShopNow.Controllers
                 }).OrderByDescending(i => i.DateEncoded).ToList();
             int counter = 1;
             model.CartPreparedLists.ForEach(x => x.No = counter++);
-
-            return View(model.CartPreparedLists);
+            return View(model);
         }
 
         [AccessPolicy(PageCode = "SNCCDA063")]
-        public ActionResult DeliveryAgentAssigned(int shopId = 0)
+        public ActionResult DeliveryAgentAssigned(CartListViewModel model)
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
-            var model = new CartListViewModel();
-            model.DeliveryAgentAssignedLists = db.Orders.Where(i => (shopId != 0 ? i.ShopId == shopId : true) && i.Status == 4)
+            model.DeliveryAgentAssignedLists = db.Orders.Where(i => (model.ShopId != 0 ? i.ShopId == model.ShopId : true) && i.Status == 4)
                 .Join(db.DeliveryBoys.Where(i => i.isAssign == 1 && i.OnWork == 0), c => c.DeliveryBoyId, d => d.Id, (c, d) => new { c, d })
                 .Join(db.Payments, c => c.c.OrderNumber, p => p.OrderNumber, (c, p) => new { c, p })
                 .Select(i => new CartListViewModel.DeliveryAgentAssignedList
@@ -185,17 +180,15 @@ namespace ShopNow.Controllers
                 }).OrderByDescending(i => i.DateEncoded).ToList();
             int counter = 1;
             model.DeliveryAgentAssignedLists.ForEach(x => x.No = counter++);
-            return View(model.DeliveryAgentAssignedLists);
+            return View(model);
         }
 
         [AccessPolicy(PageCode = "SNCCDAL064")]
-        public ActionResult DeliveryAgentAssignedList(int shopId = 0)
+        public ActionResult DeliveryAgentAssignedList(CartListViewModel model)
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
-            var model = new CartListViewModel();
-
-            model.DeliveryAgentAssignedLists = db.Orders.Where(i => (shopId != 0 ? i.ShopId == shopId : true) && i.Status == 4 && SqlFunctions.DateDiff("minute", i.DateUpdated, DateTime.Now) >= 5)
+            model.DeliveryAgentAssignedLists = db.Orders.Where(i => (model.ShopId != 0 ? i.ShopId == model.ShopId : true) && i.Status == 4 && SqlFunctions.DateDiff("minute", i.DateUpdated, DateTime.Now) >= 5)
                 .Join(db.DeliveryBoys.Where(i => i.isAssign == 1 && i.OnWork == 0), c => c.DeliveryBoyId, d => d.Id, (c, d) => new { c, d })
                 .Join(db.Payments, c => c.c.OrderNumber, p => p.OrderNumber, (c, p) => new { c, p })
                 .Select(i => new CartListViewModel.DeliveryAgentAssignedList
@@ -215,16 +208,15 @@ namespace ShopNow.Controllers
                 }).OrderByDescending(i => i.DateEncoded).ToList();
             int counter = 1;
             model.DeliveryAgentAssignedLists.ForEach(x => x.No = counter++);
-            return View(model.DeliveryAgentAssignedLists);
+            return View(model);
         }
 
         [AccessPolicy(PageCode = "SNCCWP065")]
-        public ActionResult WaitingForPickup(int shopId = 0)
+        public ActionResult WaitingForPickup(CartListViewModel model)
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
-            var model = new CartListViewModel();
-            model.PickupLists = db.Orders.Where(i => i.Status == 4 && (shopId != 0 ? i.ShopId == shopId : true))
+            model.PickupLists = db.Orders.Where(i => i.Status == 4 && (model.ShopId != 0 ? i.ShopId == model.ShopId : true))
                 .Join(db.DeliveryBoys.Where(i => i.isAssign == 1 && i.OnWork == 1), c => c.DeliveryBoyId, d => d.Id, (c, d) => new { c, d })
                 .Join(db.Payments, c => c.c.OrderNumber, p => p.OrderNumber, (c, p) => new { c, p })
                  .Select(i => new CartListViewModel.PickupList
@@ -244,17 +236,15 @@ namespace ShopNow.Controllers
                  }).OrderByDescending(i => i.DateEncoded).ToList();
             int counter = 1;
             model.PickupLists.ForEach(x => x.No = counter++);
-            return View(model.PickupLists);
+            return View(model);
         }
 
         [AccessPolicy(PageCode = "SNCCWPL066")]
-        public ActionResult WaitingForPickupList(int shopId = 0)
+        public ActionResult WaitingForPickupList(CartListViewModel model)
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
-            var model = new CartListViewModel();
-
-            model.PickupLists = db.Orders.Where(i => i.Status == 4 && (shopId != 0 ? i.ShopId == shopId : true) && SqlFunctions.DateDiff("minute", i.DateUpdated, DateTime.Now) >= 15)
+            model.PickupLists = db.Orders.Where(i => i.Status == 4 && (model.ShopId != 0 ? i.ShopId == model.ShopId : true) && SqlFunctions.DateDiff("minute", i.DateUpdated, DateTime.Now) >= 15)
                .Join(db.DeliveryBoys.Where(i => i.isAssign == 1 && i.OnWork == 1), c => c.DeliveryBoyId, d => d.Id, (c, d) => new { c, d })
                .Join(db.Payments, c => c.c.OrderNumber, p => p.OrderNumber, (c, p) => new { c, p })
                 .Select(i => new CartListViewModel.PickupList
@@ -274,7 +264,7 @@ namespace ShopNow.Controllers
                 }).OrderByDescending(i => i.DateEncoded).ToList();
             int counter = 1;
             model.PickupLists.ForEach(x => x.No = counter++);
-            return View(model.PickupLists);
+            return View(model);
         }
 
         [AccessPolicy(PageCode = "SNCCOW067")]
@@ -353,8 +343,8 @@ namespace ShopNow.Controllers
                     RefundAmount = i.p.RefundAmount ?? 0,
                     RefundRemark = i.p.RefundRemark ?? "",
                     PaymentMode = i.p.PaymentMode,
-                   // OrderPeriod = Math.Round((i.c.DateUpdated - i.c.DateEncoded).TotalMinutes),
-                    OrderPeriod = i.c.DeliveredTime != null ? Math.Round((i.c.DeliveredTime.Value - i.c.DateEncoded).TotalMinutes): Math.Round((i.c.DateUpdated - i.c.DateEncoded).TotalMinutes),
+                    // OrderPeriod = Math.Round((i.c.DateUpdated - i.c.DateEncoded).TotalMinutes),
+                    OrderPeriod = i.c.DeliveredTime != null ? Math.Round((i.c.DeliveredTime.Value - i.c.DateEncoded).TotalMinutes) : Math.Round((i.c.DateUpdated - i.c.DateEncoded).TotalMinutes),
                     ShopAcceptedTime = i.c.ShopAcceptedTime != null ? Math.Round((i.c.ShopAcceptedTime.Value - i.c.DateEncoded).TotalMinutes) : 0,
                     IsPickupDrop = i.c.IsPickupDrop
                 }).OrderByDescending(i => i.DateEncoded).ToList();
@@ -461,12 +451,11 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SNCCCNP074")]
-        public ActionResult CustomerNotPickupList(int shopId = 0)
+        public ActionResult CustomerNotPickupList(CartListViewModel model)
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
-            ViewBag.user = user.Name;
-            var model = new CartListViewModel();
-            model.CustomerNotPickupLists = db.Orders.Where(i => i.Status == 10 && ((shopId != 0) ? i.ShopId == shopId : true))
+            ViewBag.Name = user.Name;
+            model.CustomerNotPickupLists = db.Orders.Where(i => i.Status == 10 && ((model.ShopId != 0) ? i.ShopId == model.ShopId : true))
                 .Join(db.Payments, c => c.OrderNumber, p => p.OrderNumber, (c, p) => new { c, p })
                 .AsEnumerable()
                 .Select(i => new CartListViewModel.CustomerNotPickupList
@@ -488,7 +477,7 @@ namespace ShopNow.Controllers
                 }).OrderByDescending(i => i.DateEncoded).ToList();
             int counter = 1;
             model.CustomerNotPickupLists.ForEach(x => x.No = counter++);
-            return View(model.CustomerNotPickupLists);
+            return View(model);
         }
 
         [AccessPolicy(PageCode = "SNCCD075")]
@@ -591,21 +580,21 @@ namespace ShopNow.Controllers
                     model.OnWork = deliveryBoy.OnWork;
                 }
             }
-            if(shopBill != null)
+            if (shopBill != null)
             {
                 model.BillNo = shopBill.BillNo;
                 model.BillAmount = shopBill.BillAmount;
-                
+
             }
-            if(payment != null)
+            if (payment != null)
             {
                 model.RefundAmount = payment.RefundAmount;
                 model.RefundRemark = payment.RefundRemark;
             }
-            if(cart != null && payment!= null && shopBill != null)
+            if (cart != null && payment != null && shopBill != null)
             {
-                model.DifferenceAmount = Math.Round(shopBill.BillAmount - (cart.TotalPrice - (payment.RefundAmount ?? 0)),2);
-                model.DifferencePercentage =Math.Round(((shopBill.BillAmount - (cart.TotalPrice - (payment.RefundAmount ?? 0))) / shopBill.BillAmount) * 100,2);
+                model.DifferenceAmount = Math.Round(shopBill.BillAmount - (cart.TotalPrice - (payment.RefundAmount ?? 0)), 2);
+                model.DifferencePercentage = Math.Round(((shopBill.BillAmount - (cart.TotalPrice - (payment.RefundAmount ?? 0))) / shopBill.BillAmount) * 100, 2);
             }
             model.List = db.OrderItems.Where(i => i.OrdeNumber == OrderNumber && i.Status == 0)
             .Select(i => new CartListViewModel.CartList
@@ -705,7 +694,7 @@ namespace ShopNow.Controllers
             var model = new CartAssignDeliveryBoyViewModel();
             model.OrderId = order.Id;
             DateTime date = DateTime.Now;
-            
+
             var amount = (from i in db.Orders
                           where i.OrderNumber == OrderNumber && i.Status == 6 && i.DateUpdated.Year == date.Year && i.DateUpdated.Month == date.Month && i.DateUpdated.Day == date.Day
                           select (Double?)i.DeliveryCharge).Sum() ?? 0;
@@ -776,12 +765,12 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SNCCDHR079")]
-       // public ActionResult DeliveryBoyCashHandoverReport(DateTime? StartDate, DateTime? EndDate, int deliveryboyId = 0)
+        // public ActionResult DeliveryBoyCashHandoverReport(DateTime? StartDate, DateTime? EndDate, int deliveryboyId = 0)
         public ActionResult DeliveryBoyCashHandoverReport(CartReportViewModel model)
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
-           // var model = new CartReportViewModel();
+            // var model = new CartReportViewModel();
 
             model.List = db.Payments.Where(i => i.Status == 0 && i.PaymentMode == "Cash On Hand" && ((model.StartDate != null && model.EndDate != null) ? DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(model.StartDate) && DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(model.EndDate) : true))
                 .Join(db.Orders.Where(i => i.Status == 6 && (model.DeliveryBoyId != 0 ? i.DeliveryBoyId == model.DeliveryBoyId : true)), p => p.OrderNumber, c => c.OrderNumber, (p, c) => new { p, c })
@@ -792,8 +781,8 @@ namespace ShopNow.Controllers
                        DeliveryBoyPhoneNumber = i.c.DeliveryBoyPhoneNumber,
                        DeliveryBoyId = i.c.DeliveryBoyId,
                        DeliveryBoyName = i.c.DeliveryBoyName,
-                      // Amount = i.p.Amount - (i.p.RefundAmount ?? 0),
-                       Amount = i.c.IsPickupDrop ==true ? i.c.TotalPrice: i.p.Amount - (i.p.RefundAmount ?? 0),
+                       // Amount = i.p.Amount - (i.p.RefundAmount ?? 0),
+                       Amount = i.c.IsPickupDrop == true ? i.c.TotalPrice : i.p.Amount - (i.p.RefundAmount ?? 0),
                        DateEncoded = i.p.DateEncoded,
                        DeliveryOrderPaymentStatus = i.c.DeliveryOrderPaymentStatus
                    }).OrderByDescending(i => i.DateEncoded).ToList();
@@ -890,11 +879,11 @@ namespace ShopNow.Controllers
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
-           // var model = new CartReportViewModel();
+            // var model = new CartReportViewModel();
 
             model.DeliveryBoyPaymentStatusLists = db.Orders
                    .Where(i => i.Status == 6 && ((model.StartDate != null && model.EndDate != null) ? DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(model.StartDate) && DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(model.EndDate) : true) && (model.DeliveryBoyId != 0 ? i.DeliveryBoyId == model.DeliveryBoyId : true))
-                   .Join(db.DeliveryBoys, o=> o.DeliveryBoyId, d=> d.Id,(o,d)=> new{ o,d})
+                   .Join(db.DeliveryBoys, o => o.DeliveryBoyId, d => d.Id, (o, d) => new { o, d })
                        .Select(i => new CartReportViewModel.DeliveryBoyPaymentStatusList
                        {
                            Id = i.o.Id,
@@ -1035,11 +1024,11 @@ namespace ShopNow.Controllers
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
-            if (OrderNumber != 0  && status != 0)
+            if (OrderNumber != 0 && status != 0)
             {
                 var customer = db.Customers.FirstOrDefault(i => i.Id == customerId);
                 var order = db.Orders.FirstOrDefault(i => i.OrderNumber == OrderNumber);
-                order.Status = status??0;
+                order.Status = status ?? 0;
                 order.CancelledRemark = remark;
                 order.UpdatedBy = user.Name;
                 order.DateUpdated = DateTime.Now;
@@ -1212,7 +1201,7 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SNCCMD086")]
-        public ActionResult MarkAsDelivered(int OrderNumber, int id,string address="")
+        public ActionResult MarkAsDelivered(int OrderNumber, int id, string address = "")
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
@@ -1463,7 +1452,7 @@ namespace ShopNow.Controllers
             //    }).ToList();
 
 
-            model.ListItems = db.Orders.Where(a => a.DateEncoded.Month == model.MonthFilter && a.DateEncoded.Year == model.YearFilter && 
+            model.ListItems = db.Orders.Where(a => a.DateEncoded.Month == model.MonthFilter && a.DateEncoded.Year == model.YearFilter &&
             (a.Status == 6 || a.Status == 7 || a.Status == 9 || a.Status == 10))
                 .Join(db.Shops, o => o.ShopId, s => s.Id, (o, s) => new { o, s })
                 .GroupBy(i => DbFunctions.TruncateTime(i.o.DateEncoded))
@@ -1473,7 +1462,7 @@ namespace ShopNow.Controllers
                    Date = i.Key.Value.ToString("dd-MMM-yyyy"),
                    TotalOrder = i.Count(), //status 6,7,9,10
                    DeliveredOrder = i.Where(a => a.o.Status == 6).Count(),
-                   CancelOrder = i.Where(a => a.o.Status !=6).Count(),
+                   CancelOrder = i.Where(a => a.o.Status != 6).Count(),
                    NewOrder = GetNewOrderCount(i.Key.Value, 0), //status 6
                    ResTotal = i.Where(a => a.s.ShopCategoryId == 1).Count(),
                    VegTotal = i.Where(a => a.s.ShopCategoryId == 2).Count(),
@@ -1543,8 +1532,8 @@ namespace ShopNow.Controllers
             var order = db.Orders.FirstOrDefault(i => i.Id == id);
 
             var payment = db.Payments.FirstOrDefault(i => i.OrderNumber == order.OrderNumber);
-            if(payment != null)
-            payment.RefundAmount = amount;
+            if (payment != null)
+                payment.RefundAmount = amount;
             payment.RefundRemark = remark;
             payment.UpdatedBy = user.Name;
             payment.DateUpdated = DateTime.Now;
@@ -1567,7 +1556,8 @@ namespace ShopNow.Controllers
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             var cart = db.Orders.FirstOrDefault(i => i.OrderNumber == OrderNo);
             var payment = db.Payments.FirstOrDefault(i => i.OrderNumber == OrderNo);
-            if (PaymentType == 1) {
+            if (PaymentType == 1)
+            {
                 if (cart != null)
                 {
                     cart.PaymentMode = "Online Payment";
@@ -1579,7 +1569,7 @@ namespace ShopNow.Controllers
                     payment.PaymentModeType = 1;
                 }
             }
-            else if(PaymentType == 2)
+            else if (PaymentType == 2)
             {
                 if (cart != null)
                 {
@@ -1756,7 +1746,7 @@ namespace ShopNow.Controllers
             return count;
         }
 
-        public ActionResult UpdateItem(long orderid, long id, int quantity, double unitprice,string remarks)
+        public ActionResult UpdateItem(long orderid, long id, int quantity, double unitprice, string remarks)
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             var order = db.Orders.FirstOrDefault(i => i.Id == orderid);
@@ -1830,7 +1820,7 @@ namespace ShopNow.Controllers
 
         public JsonResult GetDeliveryLocations()
         {
-            var ordersList = db.Orders.Where(i => i.Status == 2 || i.Status == 3 || i.Status==4 || i.Status==5)
+            var ordersList = db.Orders.Where(i => i.Status == 2 || i.Status == 3 || i.Status == 4 || i.Status == 5)
                 .Join(db.Shops, o => o.ShopId, s => s.Id, (o, s) => new { o, s })
                 .AsEnumerable()
                 .Select(i => new
@@ -1925,7 +1915,7 @@ namespace ShopNow.Controllers
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             var shopBill = db.ShopBillDetails.FirstOrDefault(i => i.OrderNumber == OrderNumber);
-            if(shopBill != null)
+            if (shopBill != null)
             {
                 shopBill.BillNo = BillNo;
                 shopBill.BillAmount = BillAmount;
@@ -1935,7 +1925,7 @@ namespace ShopNow.Controllers
                 db.Entry(shopBill).State = EntityState.Modified;
                 db.SaveChanges();
             }
-            else if(!string.IsNullOrEmpty(BillNo))
+            else if (!string.IsNullOrEmpty(BillNo))
             {
                 ShopBillDetail shopBillDetail = new ShopBillDetail();
                 shopBillDetail.BillNo = BillNo;
@@ -1946,7 +1936,7 @@ namespace ShopNow.Controllers
                 db.ShopBillDetails.Add(shopBillDetail);
                 db.SaveChanges();
             }
-            return RedirectToAction("PickupSlip", new { OrderNumber=OrderNumber, id=OrderId});
+            return RedirectToAction("PickupSlip", new { OrderNumber = OrderNumber, id = OrderId });
         }
 
         public ActionResult UpdateDeliveryAddress(long orderId, string address, double distance = 0, double latitude = 0, double longitude = 0, double deliverycharge = 0)
@@ -2038,7 +2028,8 @@ namespace ShopNow.Controllers
                     }
                 }
                 return Json(true, JsonRequestBehavior.AllowGet);
-            }catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 return Json(false, JsonRequestBehavior.AllowGet);
             }
