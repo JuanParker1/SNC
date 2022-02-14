@@ -48,18 +48,17 @@ namespace ShopNow.Controllers
             var List = (from s in db.Categories
                         select s).OrderBy(s => s.Name).Where(i => i.Status == 0).ToList();
             return View(List);
-
         }
 
         [AccessPolicy(PageCode = "SNCCAS092")]
-        public ActionResult Save(CategoryCreateViewModel model)
+        public JsonResult Save(CategoryCreateViewModel model)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
-            //bool IsAdded = false;
-            //string message = "";
-            //string message1 = "";
-            Category category = new Category();
+            bool IsAdded = false;
+            string message = "";
+            string message1 = "";
             var categoryname = db.Categories.FirstOrDefault(i => i.Name == model.Name && i.ProductTypeId == model.ProductTypeId && i.Status == 0);
+            Category category = new Category();
             if (categoryname == null)
             {
                 category.CreatedBy = user.Name;
@@ -71,39 +70,44 @@ namespace ShopNow.Controllers
                 category.OrderNo = model.OrderNo;
                 category.ProductTypeId = model.ProductTypeId;
                 category.ProductTypeName = model.ProductTypeName;
-                try
+                if (model.CategoryImage != null)
                 {
-                    if (model.CategoryImage != null)
-                    {
-                        uc.UploadFiles(model.CategoryImage.InputStream, model.CategoryImage.FileName, accesskey, secretkey, "image");
-                        category.ImagePath = model.CategoryImage.FileName.Replace(" ", "");
-                    }
+                    uc.UploadFiles(model.CategoryImage.InputStream, model.CategoryImage.FileName, accesskey, secretkey, "image");
+                    category.ImagePath = model.CategoryImage.FileName.Replace(" ", "");
                 }
-                catch (AmazonS3Exception amazonS3Exception)
-                {
-                    if (amazonS3Exception.ErrorCode != null &&
-                        (amazonS3Exception.ErrorCode.Equals("InvalidAccessKeyId")
-                        ||
-                        amazonS3Exception.ErrorCode.Equals("InvalidSecurity")))
-                    {
-                        ViewBag.Message = "Check the provided AWS Credentials.";
-                    }
-                    else
-                    {
-                        ViewBag.Message = "Error occurred: " + amazonS3Exception.Message;
-                    }
-                }
+                //try
+                //{
+                //    if (category.ImagePath != null)
+                //    {
+                //        uc.UploadFiles(category.ImagePath.InputStream, category.ImagePath.FileName, accesskey, secretkey, "image");
+                //        category.ImagePath = category.ImagePath.FileName.Replace(" ", "");
+                //    }
+                //}
+                //catch (AmazonS3Exception amazonS3Exception)
+                //{
+                //    if (amazonS3Exception.ErrorCode != null &&
+                //        (amazonS3Exception.ErrorCode.Equals("InvalidAccessKeyId")
+                //        ||
+                //        amazonS3Exception.ErrorCode.Equals("InvalidSecurity")))
+                //    {
+                //        ViewBag.Message = "Check the provided AWS Credentials.";
+                //    }
+                //    else
+                //    {
+                //        ViewBag.Message = "Error occurred: " + amazonS3Exception.Message;
+                //    }
+                //}
                 db.Categories.Add(category);
                 db.SaveChanges();
-                //IsAdded = category.Id != 0 ? true : false;
-                //message = category.Name + " Successfully Added";
+                IsAdded = category.Id != 0 ? true : false;
+                message = category.Name + " Successfully Added";
             }
-            //else
-            //{
-            //    message1 = category.Name + " Already Exist!";
-            //}
-            // return View(new { IsAdded = IsAdded, message = message, message1 = message1 }, JsonRequestBehavior.AllowGet);
-            return RedirectToAction("List");
+            else
+            {
+                message1 = category.Name + " Already Exist!";
+            }
+            return Json(new { IsAdded = IsAdded, message = message, message1 = message1 }, JsonRequestBehavior.AllowGet);
+            //return RedirectToAction("List");
         }
 
         [AccessPolicy(PageCode = "SNCCAE093")]

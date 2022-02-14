@@ -36,7 +36,7 @@ columns.Add(c => c.OrderNo).Titled("Order No.").Filterable(true).SetWidth(20);
 
 <div class="modal fade" id="createModal" role="dialog" aria-labelledby="createModalLabel">
     <div class="modal-dialog" role="document">
-        <form action="/Category/Save" method="post" enctype="multipart/form-data">
+        @*<form action="/Category/Save" method="post" enctype="multipart/form-data">*@
             <div class="modal-content">
                 <div class="modal-header alert alert-info">
                     <h5 class="modal-title" id="createModalLabel">New Category</h5>
@@ -72,10 +72,10 @@ columns.Add(c => c.OrderNo).Titled("Order No.").Filterable(true).SetWidth(20);
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <input type="submit" id="Create" name="Create" value="Save" class="btn btn-success float-right Save" />
+                    <input type="button" id="Create" name="Create" value="Save" class="btn btn-success float-right" />
                 </div>
             </div>
-        </form>
+        @*</form>*@
     </div>
 </div>
 
@@ -169,40 +169,56 @@ columns.Add(c => c.OrderNo).Titled("Order No.").Filterable(true).SetWidth(20);
                 $('#editProductTypeName').val(e.params.data.text);
             });
 
-            //$('#Create').on('click', function () {
-            //    var isValidate = false;
-            //    var requiredArr = [
-            //        'Name',
-            //        'ProductTypeId'
-            //    ];
-            //    isValidate = ValidateEmptyRequiredFiels(requiredArr);
-            //    if (isValidate) {
-            //        var category = {
-            //            Name: $('#Name').val(),
-            //            ProductTypeId: $('#ProductTypeId').val(),
-            //            ProductTypeName: $('#ProductTypeName').val(),
-            //            OrderNo: $('#OrderNo').val()
-            //        }
-            //        $.post("/Category/Save?", { category: category }, function (data) {
-            //            if (data.IsAdded == true) {
-            //                swal({
-            //                    title: data.message,
-            //                    text: "",
-            //                    type: "success"
-            //                }, function () {
-            //                    window.location.reload();
-            //                });
-            //            } else {
-            //                if (data.message1 != null || data.message1 != "") {
-            //                    swal(data.message1, "", "warning");
-            //                    $('#Name').val("");
-            //                    $('#ProductTypeId').val("");
-            //                    $('#OrderNo').val("");
-            //                }
-            //            }
-            //        });
-            //    }
-            //});
+            $('#Create').on('click', function () {
+                var isValidate = false;
+                var requiredArr = [
+                    'Name',
+                    'ProductTypeId'
+                ];
+                isValidate = ValidateEmptyRequiredFiels(requiredArr);
+                if (isValidate) {
+                    var Name = $('#Name').val();
+                    var ProductTypeId = $('#ProductTypeId').val();
+                    var ProductTypeName = $('#ProductTypeName').val();
+                    var OrderNo = $('#OrderNo').val();
+                    var fd = new FormData();
+                    fd.append('CategoryImage', $('input[type=file]')[0].files[0]);
+                    fd.append('Name', Name);
+                    fd.append('ProductTypeId', ProductTypeId);
+                    fd.append('ProductTypeName', ProductTypeName);
+                    fd.append('OrderNo', OrderNo);
+                       
+                    $.ajax({
+                        url: '/Category/Save',
+                        data: fd,
+                        type: 'post',
+                        dataType: 'json',
+                        contentType: false,
+                        enctype: 'multipart/form-data',
+                        processData: false,
+                        success: function (data) {
+                            if (data.IsAdded == true) {
+                                swal({
+                                    title: data.message,
+                                    text: "",
+                                    type: "success"
+                                }, function () {
+                                    window.location.reload();
+                                });
+                            } else {
+                                if (data.message1 != null || data.message1 != "") {
+                                    swal(data.message1, "", "warning");
+                                    $('#Name').val("");
+                                    $("#ProductTypeId").val('').trigger('change');
+                                    $('#OrderNo').val("");
+                                    $("#img-CategoryImage").attr('src', "");
+                                    $("#btnRemove").addClass("d-none");
+                                }
+                            }
+                        }
+                    })
+                }
+            });
 
             $(".edit-prompt").click(function () {
                 var typeid = $(this).attr('data-producttypeid');
