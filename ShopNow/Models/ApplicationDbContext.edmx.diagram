@@ -83,11 +83,11 @@
         <EntityTypeShape EntityType="sncModel.ProductSchedule" Width="1.5" PointX="15.375" PointY="19.75" />
         <EntityTypeShape EntityType="sncModel.Service" Width="1.5" PointX="29.375" PointY="25.75" />
         <EntityTypeShape EntityType="sncModel.Shop" Width="1.5" PointX="31.375" PointY="0.75" />
-        <EntityTypeShape EntityType="sncModel.Order" Width="1.5" PointX="19.375" PointY="30.75" />
         <EntityTypeShape EntityType="sncModel.CustomerBankDetail" Width="1.5" PointX="25.375" PointY="11.75" />
         <EntityTypeShape EntityType="sncModel.Bank" Width="1.5" PointX="21.375" PointY="30.75" />
         <EntityTypeShape EntityType="sncModel.CustomerGroceryUpload" Width="1.5" PointX="5.375" PointY="31.75" />
         <EntityTypeShape EntityType="sncModel.CustomerGroceryUploadImage" Width="1.5" PointX="7.375" PointY="31.75" />
+        <EntityTypeShape EntityType="sncModel.Order" Width="1.5" PointX="31.375" PointY="17.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
