@@ -418,6 +418,42 @@
           <Property Name="DateEncoded" Type="datetime" Nullable="false" />
           <Property Name="CreatedBy" Type="nvarchar" MaxLength="250" />
         </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'sncc.dbo.CustomerGroceryUpload' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="CustomerGroceryUpload">
+          <Key>
+            <PropertyRef Name="Id" />
+            <PropertyRef Name="ShopId" />
+            <PropertyRef Name="CustomerId" />
+            <PropertyRef Name="Status" />
+            <PropertyRef Name="DateEncoded" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="ShopId" Type="int" Nullable="false" />
+          <Property Name="CustomerId" Type="int" Nullable="false" />
+          <Property Name="CustomerName" Type="nvarchar" MaxLength="100" />
+          <Property Name="CustomerPhoneNumber" Type="nvarchar" MaxLength="50" />
+          <Property Name="ImagePath" Type="nvarchar(max)" />
+          <Property Name="AudioPath" Type="nvarchar(max)" />
+          <Property Name="Remarks" Type="nvarchar(max)" />
+          <Property Name="DeliveryAddress" Type="nvarchar(max)" />
+          <Property Name="Latitude" Type="float" />
+          <Property Name="Longitude" Type="float" />
+          <Property Name="CancelRemarks" Type="nvarchar(max)" />
+          <Property Name="Status" Type="int" Nullable="false" />
+          <Property Name="DateEncoded" Type="datetime" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'sncc.dbo.CustomerGroceryUploadImages' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="CustomerGroceryUploadImages">
+          <Key>
+            <PropertyRef Name="Id" />
+            <PropertyRef Name="CustomerGroceryUploadId" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="CustomerGroceryUploadId" Type="int" Nullable="false" />
+          <Property Name="ImagePath" Type="nvarchar(max)" />
+        </EntityType>
         <EntityType Name="CustomerPrescription">
           <Key>
             <PropertyRef Name="Id" />
@@ -1747,6 +1783,31 @@
           <EntitySet Name="SubCategories" EntityType="Self.SubCategories" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tbl" EntityType="Self.tbl" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UserEnquiries" EntityType="Self.UserEnquiries" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CustomerGroceryUpload" EntityType="Self.CustomerGroceryUpload" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [CustomerGroceryUpload].[Id] AS [Id], 
+    [CustomerGroceryUpload].[ShopId] AS [ShopId], 
+    [CustomerGroceryUpload].[CustomerId] AS [CustomerId], 
+    [CustomerGroceryUpload].[CustomerName] AS [CustomerName], 
+    [CustomerGroceryUpload].[CustomerPhoneNumber] AS [CustomerPhoneNumber], 
+    [CustomerGroceryUpload].[ImagePath] AS [ImagePath], 
+    [CustomerGroceryUpload].[AudioPath] AS [AudioPath], 
+    [CustomerGroceryUpload].[Remarks] AS [Remarks], 
+    [CustomerGroceryUpload].[DeliveryAddress] AS [DeliveryAddress], 
+    [CustomerGroceryUpload].[Latitude] AS [Latitude], 
+    [CustomerGroceryUpload].[Longitude] AS [Longitude], 
+    [CustomerGroceryUpload].[CancelRemarks] AS [CancelRemarks], 
+    [CustomerGroceryUpload].[Status] AS [Status], 
+    [CustomerGroceryUpload].[DateEncoded] AS [DateEncoded]
+    FROM [dbo].[CustomerGroceryUpload] AS [CustomerGroceryUpload]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="CustomerGroceryUploadImages" EntityType="Self.CustomerGroceryUploadImages" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [CustomerGroceryUploadImages].[Id] AS [Id], 
+    [CustomerGroceryUploadImages].[CustomerGroceryUploadId] AS [CustomerGroceryUploadId], 
+    [CustomerGroceryUploadImages].[ImagePath] AS [ImagePath]
+    FROM [dbo].[CustomerGroceryUploadImages] AS [CustomerGroceryUploadImages]</DefiningQuery>
+          </EntitySet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
@@ -3055,6 +3116,8 @@
             <Parameter Name="pageSize" Mode="In" Type="Int32" />
             <Parameter Name="customerid" Mode="In" Type="Int32" />
           </FunctionImport>
+          <EntitySet Name="CustomerGroceryUploads" EntityType="sncModel.CustomerGroceryUpload" />
+          <EntitySet Name="CustomerGroceryUploadImages" EntityType="sncModel.CustomerGroceryUploadImage" />
         </EntityContainer>
         <ComplexType Name="GetDEliveryBoyList_Result">
           <Property Type="Int32" Name="Id" Nullable="false" />
@@ -3625,6 +3688,38 @@
           <Property Type="Int32" Name="OutletId" Nullable="false" />
           <Property Type="Boolean" Name="PriscriptionCategory" Nullable="false" />
         </ComplexType>
+        <EntityType Name="CustomerGroceryUpload">
+          <Key>
+            <PropertyRef Name="Id" />
+            <PropertyRef Name="ShopId" />
+            <PropertyRef Name="CustomerId" />
+            <PropertyRef Name="Status" />
+            <PropertyRef Name="DateEncoded" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="ShopId" Type="Int32" Nullable="false" />
+          <Property Name="CustomerId" Type="Int32" Nullable="false" />
+          <Property Name="CustomerName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="CustomerPhoneNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ImagePath" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="AudioPath" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Remarks" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="DeliveryAddress" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Latitude" Type="Double" />
+          <Property Name="Longitude" Type="Double" />
+          <Property Name="CancelRemarks" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="Int32" Nullable="false" />
+          <Property Name="DateEncoded" Type="DateTime" Nullable="false" Precision="3" />
+        </EntityType>
+        <EntityType Name="CustomerGroceryUploadImage">
+          <Key>
+            <PropertyRef Name="Id" />
+            <PropertyRef Name="CustomerGroceryUploadId" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="CustomerGroceryUploadId" Type="Int32" Nullable="false" />
+          <Property Name="ImagePath" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -5427,6 +5522,35 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <EntitySetMapping Name="CustomerGroceryUploads">
+            <EntityTypeMapping TypeName="sncModel.CustomerGroceryUpload">
+              <MappingFragment StoreEntitySet="CustomerGroceryUpload">
+                <ScalarProperty Name="DateEncoded" ColumnName="DateEncoded" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="CancelRemarks" ColumnName="CancelRemarks" />
+                <ScalarProperty Name="Longitude" ColumnName="Longitude" />
+                <ScalarProperty Name="Latitude" ColumnName="Latitude" />
+                <ScalarProperty Name="DeliveryAddress" ColumnName="DeliveryAddress" />
+                <ScalarProperty Name="Remarks" ColumnName="Remarks" />
+                <ScalarProperty Name="AudioPath" ColumnName="AudioPath" />
+                <ScalarProperty Name="ImagePath" ColumnName="ImagePath" />
+                <ScalarProperty Name="CustomerPhoneNumber" ColumnName="CustomerPhoneNumber" />
+                <ScalarProperty Name="CustomerName" ColumnName="CustomerName" />
+                <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
+                <ScalarProperty Name="ShopId" ColumnName="ShopId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CustomerGroceryUploadImages">
+            <EntityTypeMapping TypeName="sncModel.CustomerGroceryUploadImage">
+              <MappingFragment StoreEntitySet="CustomerGroceryUploadImages">
+                <ScalarProperty Name="ImagePath" ColumnName="ImagePath" />
+                <ScalarProperty Name="CustomerGroceryUploadId" ColumnName="CustomerGroceryUploadId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

@@ -537,6 +537,12 @@
     <Compile Include="Models\CustomerGiftCard.cs">
       <DependentUpon>ApplicationDbContext.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\CustomerGroceryUpload.cs">
+      <DependentUpon>ApplicationDbContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\CustomerGroceryUploadImage.cs">
+      <DependentUpon>ApplicationDbContext.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\CustomerPrescription.cs">
       <DependentUpon>ApplicationDbContext.tt</DependentUpon>
     </Compile>
