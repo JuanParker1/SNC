@@ -1,4 +1,4 @@
-﻿@model IEnumerable<ShopNow.ViewModels.CartListViewModel.OntheWayList>
+﻿@model ShopNow.ViewModels.CartListViewModel
 @using GridMvc.Html
 @{
     ViewBag.Title = "On the Way List";
@@ -12,24 +12,33 @@
     }
 </style>
 <div class="container-fluid">
+    <form method="get" action="~/Cart/OntheWayList">
+        <div class="row">
+            <div class="col-md-4">
+                <h5 class="my-2 text-success" style="letter-spacing:1px">ON THE WAY</h5>
+            </div>
+            <div class="col-md-3">
+                <select name="ShopId" id="ShopId" class="form-control">
+                    @if (!string.IsNullOrEmpty(Model.ShopName))
+                    {
+                        <option value="@Model.ShopId">@Model.ShopName</option>
+                    }
+                </select>
+                <input type="hidden" name="ShopName" id="ShopName" value="@Model.ShopName" />
+            </div>
+            <div class="col-md-1">
+                <input type="submit" class="form-control btn btn-sm btn-success" value="Filter" />
+            </div>
+            <div class="col-md-4 text-right">
+                <a href="~/Cart/List" class="ml-auto" target="_self"><span class="fa fa-bars"></span> New Order List</a>
+            </div>
+        </div>
+    </form>
     <div class="row">
-        <div class="col-md-4">
-            <h5 class="my-2 text-success" style="letter-spacing:1px">ON THE WAY</h5>
-        </div>
-        <div class="col-md-3">
-            <select name="ShopId" id="ShopId" class="form-control"></select>
-            <input type="hidden" name="ShopName" id="ShopName" />
-        </div>
-        <div class="col-md-1">
-            <input type="button" class="form-control btn btn-sm btn-success" name="Filter" id="Filter" value="Filter" />
-        </div>
-        <div class="col-md-4 text-right">
-            <a href="~/Cart/List" class="ml-auto" target="_self"><span class="fa fa-bars"></span> New Order List</a>
-        </div>
         <div class="col-md-12">
             <div class="card shadow mt-3">
                 <div class="card-body">
-                    @Html.Grid(Model).Columns(columns =>
+                    @Html.Grid(Model.OntheWayLists).Columns(columns =>
                     {
                         columns.Add(c => c.No).Titled("Sl.No").Filterable(false).SetWidth(1);
                         columns.Add(c => c.OrderNumber).Titled("OrderNo").Filterable(true).SetWidth(10);
@@ -98,11 +107,6 @@
                 }
             }).on('select2:select', function (e) {
                 $('input[name="ShopName"]').val(e.params.data.text);
-            });
-
-            $("#Filter").click(function () {
-                var shopId = $("#ShopId").val();
-                window.location.href = "/Cart/OnTheWayList?shopId=" + shopId;
             });
 
             $(".btn-modal-refund").click(function () {
