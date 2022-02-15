@@ -169,7 +169,8 @@ namespace ShopNow.Controllers
                 PhoneNumber = i.PhoneNumber,
                 Address = i.Address,
                 DistrictName = i.DistrictName,
-                StateName = i.StateName
+                StateName = i.StateName,
+                CurrentPassword = i.Password
             }).OrderBy(i => i.Name).ToList();
 
             return View(model.List);
