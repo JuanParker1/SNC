@@ -12,7 +12,7 @@
     }
 </style>
 <div class="container-fluid">
-    <form method="get" action="/Payment/ShopBillDifferenceReport">
+    <form method="get" action="/Payment/ShopBillDifferencePendingReport">
         <div class="row">
             <div class="col-md-3">
                 <h5 class="mt-1 text-uppercase text-success">@ViewBag.Title</h5>
@@ -99,7 +99,7 @@
             $("#btnExport").on('click', function () {
                 $(function () {
                     var table2excel = new Table2Excel({
-                        defaultFileName: "ShopBillDifference",
+                        defaultFileName: "ShopBillDifferencePending",
                     });
                     table2excel.export($("#table-excel"));
                 });
