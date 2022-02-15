@@ -80,6 +80,7 @@ namespace ShopNow.Controllers
                 .Join(db.Shops.Where(i => i.IsTrail == false && i.Status == 0), sc => sc.CustomerId, s => s.CustomerId, (sc, s) => new { sc, s })
                 .Count();
             model.CustomerPrescriptionCount = db.CustomerPrescriptions.Where(i => i.Status == 0).Count();
+            model.CustomerGroceryUploadCount = db.CustomerGroceryUploads.Where(i => i.Status == 0).Count();
 
             model.ShopOnlineCount = db.Shops.Where(i => i.Status == 0 && i.IsOnline == true).Count();
             model.ShopOfflineCount = db.Shops.Where(i => i.Status == 0 && i.IsOnline == false).Count();
@@ -148,6 +149,7 @@ namespace ShopNow.Controllers
                 .Join(db.Shops.Where(i => i.IsTrail == false && i.Status == 0), sc => sc.CustomerId, s => s.CustomerId, (sc, s) => new { sc, s })
                 .Count();
             model.CustomerPrescriptionCount = db.CustomerPrescriptions.Where(i => i.Status == 0).Count();
+            model.CustomerGroceryUploadCount = db.CustomerGroceryUploads.Where(i => i.Status == 0).Count();
 
             model.ShopOnlineCount = db.Shops.Where(i => i.Status == 0 && i.IsOnline == true).Count();
             model.ShopOfflineCount = db.Shops.Where(i => i.Status == 0 && i.IsOnline == false).Count();

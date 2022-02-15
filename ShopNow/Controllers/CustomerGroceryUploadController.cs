@@ -13,46 +13,46 @@ using System.Web.Mvc;
 
 namespace ShopNow.Controllers
 {
-    public class CustomerPrescriptionController : Controller
+    public class CustomerGroceryUploadController : Controller
     {
         private sncEntities db = new sncEntities();
         private IMapper _mapper;
         private MapperConfiguration _mapperConfiguration;
-        public CustomerPrescriptionController()
+        public CustomerGroceryUploadController()
         {
             _mapperConfiguration = new MapperConfiguration(config =>
             {
-                config.CreateMap<CustomerPrescription, AddToCartViewModel>();
-                config.CreateMap<AddToCartViewModel, Order>();
-                config.CreateMap<AddToCartViewModel.ListItem, OrderItem>();
+                config.CreateMap<CustomerGroceryUpload, GroceryAddToCartViewModel>();
+                config.CreateMap<GroceryAddToCartViewModel, Order>();
+                config.CreateMap<GroceryAddToCartViewModel.ListItem, OrderItem>();
             });
             _mapper = _mapperConfiguration.CreateMapper();
         }
 
-        [AccessPolicy(PageCode = "SNCCPL111")]
+        [AccessPolicy(PageCode = "")]
         public ActionResult List()
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
-            var list = db.CustomerPrescriptions.OrderByDescending(i => i.Id).ToList();
-            var model = new CustomerPrescriptionWebListViewModel();
-            model.ListItems = db.CustomerPrescriptions.Where(i => i.Status == 0).OrderByDescending(i => i.Id)
-                .GroupJoin(db.CustomerPrescriptionImages, cp => cp.Id, cpi => cpi.CustomerPrescriptionId, (cp, cpi) => new { cp, cpi })
-                .Join(db.Shops, cp => cp.cp.ShopId, s => s.Id, (cp, s) => new { cp, s })
-                .Select(i => new CustomerPrescriptionWebListViewModel.ListItem
+            var list = db.CustomerGroceryUploads.OrderByDescending(i => i.Id).ToList();
+            var model = new CustomerGroceryUploadListViewModel();
+            model.ListItems = db.CustomerGroceryUploads.Where(i => i.Status == 0).OrderByDescending(i => i.Id)
+                .GroupJoin(db.CustomerGroceryUploadImages, cg => cg.Id, cgi => cgi.CustomerGroceryUploadId, (cg, cgi) => new { cg, cgi })
+                .Join(db.Shops, c => c.cg.ShopId, s => s.Id, (c, s) => new { c, s })
+                .Select(i => new CustomerGroceryUploadListViewModel.ListItem
                 {
-                    Id = i.cp.cp.Id,
-                    AudioPath = (!string.IsNullOrEmpty(i.cp.cp.AudioPath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Audio/" + i.cp.cp.AudioPath : "",
-                    CustomerId = i.cp.cp.CustomerId,
-                    CustomerName = i.cp.cp.CustomerName,
-                    CustomerPhoneNumber = i.cp.cp.CustomerPhoneNumber,
-                    ImagePath = i.cp.cp.ImagePath,
-                    Remarks = i.cp.cp.Remarks,
-                    ShopId = i.cp.cp.ShopId,
+                    Id = i.c.cg.Id,
+                    AudioPath = (!string.IsNullOrEmpty(i.c.cg.AudioPath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Audio/" + i.c.cg.AudioPath : "",
+                    CustomerId = i.c.cg.CustomerId,
+                    CustomerName = i.c.cg.CustomerName,
+                    CustomerPhoneNumber = i.c.cg.CustomerPhoneNumber,
+                    ImagePath = i.c.cg.ImagePath,
+                    Remarks = i.c.cg.Remarks,
+                    ShopId = i.c.cg.ShopId,
                     ShopName = i.s.Name,
-                    DateEncoded = i.cp.cp.DateEncoded,
-                    Status = i.cp.cp.Status,
-                    ImagePathLists = i.cp.cpi.Select(a => new CustomerPrescriptionWebListViewModel.ListItem.ImagePathList
+                    DateEncoded = i.c.cg.DateEncoded,
+                    Status = i.c.cg.Status,
+                    ImagePathLists = i.c.cgi.Select(a => new CustomerGroceryUploadListViewModel.ListItem.ImagePathList
                     {
                         ImagePath = "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + a.ImagePath
                     }).ToList()
@@ -64,23 +64,23 @@ namespace ShopNow.Controllers
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
-            var list = db.CustomerPrescriptions.OrderByDescending(i => i.Id).ToList();
-            var model = new CustomerPrescriptionWebListViewModel();
-            model.ListItems = db.CustomerPrescriptions.Where(i => i.Status == 2).OrderByDescending(i => i.Id)
-                .GroupJoin(db.CustomerPrescriptionImages, cp => cp.Id, cpi => cpi.CustomerPrescriptionId, (cp, cpi) => new { cp, cpi })
-                .Select(i => new CustomerPrescriptionWebListViewModel.ListItem
+            var list = db.CustomerGroceryUploads.OrderByDescending(i => i.Id).ToList();
+            var model = new CustomerGroceryUploadListViewModel();
+            model.ListItems = db.CustomerGroceryUploads.Where(i => i.Status == 2).OrderByDescending(i => i.Id)
+                .GroupJoin(db.CustomerGroceryUploadImages, cg => cg.Id, cgi => cgi.CustomerGroceryUploadId, (cg, cgi) => new { cg, cgi })
+                .Select(i => new CustomerGroceryUploadListViewModel.ListItem
                 {
-                    Id = i.cp.Id,
-                    AudioPath = (!string.IsNullOrEmpty(i.cp.AudioPath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Audio/" + i.cp.AudioPath : "",
-                    CustomerId = i.cp.CustomerId,
-                    CustomerName = i.cp.CustomerName,
-                    CustomerPhoneNumber = i.cp.CustomerPhoneNumber,
-                    ImagePath = i.cp.ImagePath,
-                    Remarks = i.cp.Remarks,
-                    ShopId = i.cp.ShopId,
-                    DateEncoded = i.cp.DateEncoded,
-                    Status = i.cp.Status,
-                    ImagePathLists = i.cpi.Select(a => new CustomerPrescriptionWebListViewModel.ListItem.ImagePathList
+                    Id = i.cg.Id,
+                    AudioPath = (!string.IsNullOrEmpty(i.cg.AudioPath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Audio/" + i.cg.AudioPath : "",
+                    CustomerId = i.cg.CustomerId,
+                    CustomerName = i.cg.CustomerName,
+                    CustomerPhoneNumber = i.cg.CustomerPhoneNumber,
+                    ImagePath = i.cg.ImagePath,
+                    Remarks = i.cg.Remarks,
+                    ShopId = i.cg.ShopId,
+                    DateEncoded = i.cg.DateEncoded,
+                    Status = i.cg.Status,
+                    ImagePathLists = i.cgi.Select(a => new CustomerGroceryUploadListViewModel.ListItem.ImagePathList
                     {
                         ImagePath = "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + a.ImagePath
                     }).ToList()
@@ -88,22 +88,22 @@ namespace ShopNow.Controllers
             return View(model);
         }
 
-        [AccessPolicy(PageCode = "SNCCPAC298")]
+        [AccessPolicy(PageCode = "")]
         public ActionResult AddToCart(int id)
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
-            var model = new AddToCartViewModel();
+            var model = new GroceryAddToCartViewModel();
             var cp = db.CustomerPrescriptions.FirstOrDefault(i => i.Id == id);
             if (cp != null)
             {
                 _mapper.Map(cp, model);
-                model.PrescriptionId = cp.Id;
+                model.GroceryId = cp.Id;
                 model.DeliveryAddress = cp.DeliveryAddress;
                 model.Latitude = cp.Latitude;
                 model.Longitude = cp.Longitude;
                 model.ImagePathLists = db.CustomerPrescriptionImages.Where(i => i.CustomerPrescriptionId == cp.Id)
-                        .Select(i => new AddToCartViewModel.ImagePathList
+                        .Select(i => new GroceryAddToCartViewModel.ImagePathList
                         {
                             ImagePath = "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.ImagePath
                         }).ToList();
@@ -123,22 +123,22 @@ namespace ShopNow.Controllers
                     model.CustomerName = customer.Name;
                     //model.DeliveryAddress = customer.Address;
                     model.CustomerPhoneNumber = customer.PhoneNumber;
-                   // model.Latitude = customer.Latitude;
-                   // model.Longitude = customer.Longitude;
+                    // model.Latitude = customer.Latitude;
+                    // model.Longitude = customer.Longitude;
                 }
             }
             return View(model);
         }
 
-        [AccessPolicy(PageCode = "SNCCPPO310")]
-        public ActionResult PrescriptionOrderList()
+        [AccessPolicy(PageCode = "")]
+        public ActionResult GroceryOrderList()
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
-            var model = new PrescriptionOrderListViewModel();
-            model.PrescriptionOrderLists = db.Orders.OrderByDescending(i => i.DateEncoded).Where(i => (i.IsPrescriptionOrder == true) && i.Status == 6)
+            var model = new GroceryUploadOrderListViewModel();
+            model.GroceryOrderLists = db.Orders.OrderByDescending(i => i.DateEncoded).Where(i => (i.IsPrescriptionOrder == true) && i.Status == 6)
                 .AsEnumerable()
-               .Select((i, index) => new PrescriptionOrderListViewModel.PrescriptionOrderList
+               .Select((i, index) => new GroceryUploadOrderListViewModel.GroceryOrderList
                {
                    No = index + 1,
                    Id = i.Id,
@@ -151,12 +151,12 @@ namespace ShopNow.Controllers
                    Amount = i.NetTotal,
                    PaymentMode = i.PaymentMode
                }).ToList();
-            return View(model.PrescriptionOrderLists);
+            return View(model.GroceryOrderLists);
         }
 
         [HttpPost]
         [AccessPolicy(PageCode = "SNCCPAC298")]
-        public ActionResult AddToCart(AddToCartViewModel model)
+        public ActionResult AddToCart(GroceryAddToCartViewModel model)
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
@@ -175,7 +175,7 @@ namespace ShopNow.Controllers
                 else
                 {
                     //Order 
-                    var order = _mapper.Map<AddToCartViewModel, Models.Order>(model);
+                    var order = _mapper.Map<GroceryAddToCartViewModel, Models.Order>(model);
                     if (model.CustomerId != 0)
                     {
                         order.CustomerId = customer.Id;
@@ -209,7 +209,7 @@ namespace ShopNow.Controllers
                     order.DateUpdated = DateTime.Now;
                     order.Status = 2;
                     order.IsPrescriptionOrder = true;
-                    order.CustomerPrescriptionId = model.PrescriptionId; 
+                    order.CustomerPrescriptionId = model.GroceryId;
                     db.Orders.Add(order);
                     db.SaveChanges();
                     //OrderItems
@@ -224,7 +224,7 @@ namespace ShopNow.Controllers
                             db.Entry(product).State = System.Data.Entity.EntityState.Modified;
                             db.SaveChanges();
                         }
-                        var orderItem = _mapper.Map<AddToCartViewModel.ListItem, OrderItem>(item);
+                        var orderItem = _mapper.Map<GroceryAddToCartViewModel.ListItem, OrderItem>(item);
                         orderItem.Status = 0;
                         orderItem.OrderId = order.Id;
                         orderItem.OrdeNumber = order.OrderNumber;
@@ -274,11 +274,11 @@ namespace ShopNow.Controllers
                     db.Payments.Add(payment);
                     db.SaveChanges();
                     // Prescription 
-                    var prescription = db.CustomerPrescriptions.FirstOrDefault(i => i.Id == model.PrescriptionId);
-                    if (prescription != null)
+                    var grocery = db.CustomerGroceryUploads.FirstOrDefault(i => i.Id == model.GroceryId);
+                    if (grocery != null)
                     {
-                        prescription.Status = 1;
-                        db.Entry(prescription).State = System.Data.Entity.EntityState.Modified;
+                        grocery.Status = 1;
+                        db.Entry(grocery).State = System.Data.Entity.EntityState.Modified;
                         db.SaveChanges();
                     }
 
@@ -313,7 +313,7 @@ namespace ShopNow.Controllers
             var model = await db.Products.Where(a => a.ShopId == shopid && a.Status == 0)
                 .Join(db.MasterProducts.Where(a => a.Name.Contains(q)), p => p.MasterProductId, m => m.Id, (p, m) => new { p, m })
                 .Join(db.Categories, p => p.p.CategoryId, c => c.Id, (p, c) => new { p, c })
-                .Join(db.DiscountCategories, p => p.p.p.DiscountCategoryId, dc => dc.Id, (p, dc) => new { p, dc })
+                .Join(db.DiscountCategories, p => p.p.p.DiscountCategoryName, dc => dc.Name, (p, dc) => new { p, dc })
                 .Take(500)
                 .Select(i => new
                 {
@@ -341,7 +341,7 @@ namespace ShopNow.Controllers
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             var model = new BillingDeliveryChargeViewModel();
             model = CommonHelpers.GetDeliveryCharge(shopid, totalSize, totalWeight);
-            var customerPrescription = db.CustomerPrescriptions.FirstOrDefault(i => i.CustomerId == customerid);
+            var customerGrocery = db.CustomerGroceryUploads.FirstOrDefault(i => i.CustomerId == customerid);
 
             var shop = db.Shops.Where(i => i.Id == shopid && i.Status == 0).FirstOrDefault();
             var ConvenientCharge = 0.0;
@@ -354,8 +354,8 @@ namespace ShopNow.Controllers
                 ConvenientCharge = model.ConvenientCharge;
             }
             // Gross Delivery Charge
-            var Distance = (((Math.Acos(Math.Sin((shop.Latitude * Math.PI / 180)) * Math.Sin(((customerPrescription.Latitude ??0)* Math.PI / 180)) + Math.Cos((shop.Latitude * Math.PI / 180)) * Math.Cos(((customerPrescription.Latitude??0) * Math.PI / 180))
-                 * Math.Cos(((shop.Longitude - (customerPrescription.Longitude??0)) * Math.PI / 180)))) * 180 / Math.PI) * 60 * 1.1515 * 1609.344) / 1000;
+            var Distance = (((Math.Acos(Math.Sin((shop.Latitude * Math.PI / 180)) * Math.Sin(((customerGrocery.Latitude ?? 0) * Math.PI / 180)) + Math.Cos((shop.Latitude * Math.PI / 180)) * Math.Cos(((customerGrocery.Latitude ?? 0) * Math.PI / 180))
+                 * Math.Cos(((shop.Longitude - (customerGrocery.Longitude ?? 0)) * Math.PI / 180)))) * 180 / Math.PI) * 60 * 1.1515 * 1609.344) / 1000;
             if (Distance < 5)
             {
                 GrossDeliveryCharge = model.DeliveryChargeKM;
@@ -424,25 +424,25 @@ namespace ShopNow.Controllers
         public JsonResult Reject(int Id)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
-            var cp = db.CustomerPrescriptions.Where(b => b.Id == Id).FirstOrDefault();
-            if (cp != null)
+            var cg = db.CustomerGroceryUploads.Where(b => b.Id == Id).FirstOrDefault();
+            if (cg != null)
             {
-                cp.Status = 2;
-                db.Entry(cp).State = System.Data.Entity.EntityState.Modified;
+                cg.Status = 2;
+                db.Entry(cg).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
             }
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult Cancel(CustomerPrescriptionCancelViewModel model)
+        public ActionResult Cancel(CustomerGroceryCancelViewModel model)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
-            var cp = db.CustomerPrescriptions.Where(b => b.Id == model.Id).FirstOrDefault();
-            if (cp != null)
+            var cg = db.CustomerGroceryUploads.Where(b => b.Id == model.Id).FirstOrDefault();
+            if (cg != null)
             {
-                cp.Status = 2;
-                cp.CancelRemarks = model.CancelRemarks;
-                db.Entry(cp).State = System.Data.Entity.EntityState.Modified;
+                cg.Status = 2;
+                cg.CancelRemarks = model.CancelRemarks;
+                db.Entry(cg).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
             }
             return RedirectToAction("List");

@@ -1,0 +1,38 @@
+﻿@model IEnumerable<ShopNow.ViewModels.GroceryUploadOrderListViewModel.GroceryOrderList>
+@using GridMvc.Html
+@{
+    ViewBag.Title = "Grocery Upload Order List";
+}
+<title>ShopNow | @ViewBag.Title </title>
+<link href="~/Content/Gridmvc.css" rel="stylesheet" />
+<script src="~/Scripts/gridmvc.js"></script>
+<div class="container-fluid">
+    <div class="row my-2">
+        <div class="col-md-4">
+            <h5 class="text-success" style="letter-spacing:1px">@ViewBag.Title</h5>
+        </div>
+        <div class="col-md-8 text-right">
+            <a href="~/CustomerGroceryUpload/List" class="ml-auto" target="_self"><span class="fa fa-bars"></span> Grocery Upload List</a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card shadow mt-3">
+                <div class="card-body">
+                    @Html.Grid(Model).Columns(columns =>
+               {
+                   //columns.Add(c => c.No).Titled("Sl.No").Filterable(false).SetWidth(5);
+                   columns.Add(c => c.OrderNumber).Titled("OrderNo").Filterable(true).SetWidth(10);
+                   columns.Add(c => c.ShopName).Titled("Shop Name").Filterable(true).SetWidth(30);
+                   columns.Add().Encoded(false).Sanitized(false)
+                     .RenderValueAs(o => Html.ActionLink(o.PaymentMode, "Edit", "Cart", new { ordernumber = o.OrderNumber, id = ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id) }, new { @class = "btn btn-vsm btn-info btn-block", }).ToHtmlString()).Titled("Payment Mode").SetWidth(10);
+                   columns.Add(c => c.Amount).Titled("Amount").Filterable(true).SetWidth(8);
+                   columns.Add(c => c.CustomerPhoneNumber).Titled("Cust.PhoneNo.").Filterable(true).SetWidth(30);
+                   columns.Add(c => c.DateEncoded).Titled("Order Time").Filterable(true).SetWidth(10);
+                 }).WithPaging(10).Sortable(true)
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
