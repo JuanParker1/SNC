@@ -418,17 +418,11 @@
           <Property Name="DateEncoded" Type="datetime" Nullable="false" />
           <Property Name="CreatedBy" Type="nvarchar" MaxLength="250" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'sncc.dbo.CustomerGroceryUpload' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="CustomerGroceryUpload">
           <Key>
             <PropertyRef Name="Id" />
-            <PropertyRef Name="ShopId" />
-            <PropertyRef Name="CustomerId" />
-            <PropertyRef Name="Status" />
-            <PropertyRef Name="DateEncoded" />
           </Key>
-          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="ShopId" Type="int" Nullable="false" />
           <Property Name="CustomerId" Type="int" Nullable="false" />
           <Property Name="CustomerName" Type="nvarchar" MaxLength="100" />
@@ -443,14 +437,11 @@ warning 6002: The table/view 'sncc.dbo.CustomerGroceryUpload' does not have a pr
           <Property Name="Status" Type="int" Nullable="false" />
           <Property Name="DateEncoded" Type="datetime" Nullable="false" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'sncc.dbo.CustomerGroceryUploadImages' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="CustomerGroceryUploadImages">
           <Key>
             <PropertyRef Name="Id" />
-            <PropertyRef Name="CustomerGroceryUploadId" />
           </Key>
-          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="CustomerGroceryUploadId" Type="int" Nullable="false" />
           <Property Name="ImagePath" Type="nvarchar(max)" />
         </EntityType>
@@ -1755,6 +1746,8 @@ warning 6002: The table/view 'sncc.dbo.FAQs' does not have a primary key defined
           <EntitySet Name="CustomerDeviceInfo" EntityType="Self.CustomerDeviceInfo" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CustomerFavorites" EntityType="Self.CustomerFavorites" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CustomerGiftCards" EntityType="Self.CustomerGiftCards" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CustomerGroceryUpload" EntityType="Self.CustomerGroceryUpload" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CustomerGroceryUploadImages" EntityType="Self.CustomerGroceryUploadImages" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CustomerPrescription" EntityType="Self.CustomerPrescription" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CustomerPrescriptionImages" EntityType="Self.CustomerPrescriptionImages" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CustomerPrescriptionItem" EntityType="Self.CustomerPrescriptionItem" Schema="dbo" store:Type="Tables" />
@@ -1813,31 +1806,6 @@ warning 6002: The table/view 'sncc.dbo.FAQs' does not have a primary key defined
           <EntitySet Name="SubCategories" EntityType="Self.SubCategories" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tbl" EntityType="Self.tbl" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UserEnquiries" EntityType="Self.UserEnquiries" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="CustomerGroceryUpload" EntityType="Self.CustomerGroceryUpload" store:Type="Tables" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-    [CustomerGroceryUpload].[Id] AS [Id], 
-    [CustomerGroceryUpload].[ShopId] AS [ShopId], 
-    [CustomerGroceryUpload].[CustomerId] AS [CustomerId], 
-    [CustomerGroceryUpload].[CustomerName] AS [CustomerName], 
-    [CustomerGroceryUpload].[CustomerPhoneNumber] AS [CustomerPhoneNumber], 
-    [CustomerGroceryUpload].[ImagePath] AS [ImagePath], 
-    [CustomerGroceryUpload].[AudioPath] AS [AudioPath], 
-    [CustomerGroceryUpload].[Remarks] AS [Remarks], 
-    [CustomerGroceryUpload].[DeliveryAddress] AS [DeliveryAddress], 
-    [CustomerGroceryUpload].[Latitude] AS [Latitude], 
-    [CustomerGroceryUpload].[Longitude] AS [Longitude], 
-    [CustomerGroceryUpload].[CancelRemarks] AS [CancelRemarks], 
-    [CustomerGroceryUpload].[Status] AS [Status], 
-    [CustomerGroceryUpload].[DateEncoded] AS [DateEncoded]
-    FROM [dbo].[CustomerGroceryUpload] AS [CustomerGroceryUpload]</DefiningQuery>
-          </EntitySet>
-          <EntitySet Name="CustomerGroceryUploadImages" EntityType="Self.CustomerGroceryUploadImages" store:Type="Tables" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-    [CustomerGroceryUploadImages].[Id] AS [Id], 
-    [CustomerGroceryUploadImages].[CustomerGroceryUploadId] AS [CustomerGroceryUploadId], 
-    [CustomerGroceryUploadImages].[ImagePath] AS [ImagePath]
-    FROM [dbo].[CustomerGroceryUploadImages] AS [CustomerGroceryUploadImages]</DefiningQuery>
-          </EntitySet>
           <EntitySet Name="FAQs" EntityType="Self.FAQs" store:Type="Tables" store:Schema="dbo">
             <DefiningQuery>SELECT 
     [FAQs].[Id] AS [Id], 
@@ -3155,11 +3123,11 @@ warning 6002: The table/view 'sncc.dbo.FAQs' does not have a primary key defined
             <Parameter Name="pageSize" Mode="In" Type="Int32" />
             <Parameter Name="customerid" Mode="In" Type="Int32" />
           </FunctionImport>
-          <EntitySet Name="CustomerGroceryUploads" EntityType="sncModel.CustomerGroceryUpload" />
-          <EntitySet Name="CustomerGroceryUploadImages" EntityType="sncModel.CustomerGroceryUploadImage" />
           <EntitySet Name="Orders" EntityType="sncModel.Order" />
           <EntitySet Name="FAQCategories" EntityType="sncModel.FAQCategory" />
           <EntitySet Name="FAQs" EntityType="sncModel.FAQ" />
+          <EntitySet Name="CustomerGroceryUploads" EntityType="sncModel.CustomerGroceryUpload" />
+          <EntitySet Name="CustomerGroceryUploadImages" EntityType="sncModel.CustomerGroceryUploadImage" />
         </EntityContainer>
         <ComplexType Name="GetDEliveryBoyList_Result">
           <Property Type="Int32" Name="Id" Nullable="false" />
@@ -3655,38 +3623,6 @@ warning 6002: The table/view 'sncc.dbo.FAQs' does not have a primary key defined
           <Property Type="Int32" Name="OutletId" Nullable="false" />
           <Property Type="Boolean" Name="PriscriptionCategory" Nullable="false" />
         </ComplexType>
-        <EntityType Name="CustomerGroceryUpload">
-          <Key>
-            <PropertyRef Name="Id" />
-            <PropertyRef Name="ShopId" />
-            <PropertyRef Name="CustomerId" />
-            <PropertyRef Name="Status" />
-            <PropertyRef Name="DateEncoded" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" />
-          <Property Name="ShopId" Type="Int32" Nullable="false" />
-          <Property Name="CustomerId" Type="Int32" Nullable="false" />
-          <Property Name="CustomerName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="CustomerPhoneNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="ImagePath" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="AudioPath" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="Remarks" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="DeliveryAddress" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="Latitude" Type="Double" />
-          <Property Name="Longitude" Type="Double" />
-          <Property Name="CancelRemarks" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="Status" Type="Int32" Nullable="false" />
-          <Property Name="DateEncoded" Type="DateTime" Nullable="false" Precision="3" />
-        </EntityType>
-        <EntityType Name="CustomerGroceryUploadImage">
-          <Key>
-            <PropertyRef Name="Id" />
-            <PropertyRef Name="CustomerGroceryUploadId" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" />
-          <Property Name="CustomerGroceryUploadId" Type="Int32" Nullable="false" />
-          <Property Name="ImagePath" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-        </EntityType>
         <EntityType Name="Order">
           <Key>
             <PropertyRef Name="Id" />
@@ -3788,6 +3724,33 @@ warning 6002: The table/view 'sncc.dbo.FAQs' does not have a primary key defined
           <Property Name="Status" Type="Int32" Nullable="false" />
           <Property Name="DateUpdated" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="UpdatedBy" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="CustomerGroceryUpload">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ShopId" Type="Int32" Nullable="false" />
+          <Property Name="CustomerId" Type="Int32" Nullable="false" />
+          <Property Name="CustomerName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="CustomerPhoneNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ImagePath" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="AudioPath" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Remarks" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="DeliveryAddress" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Latitude" Type="Double" />
+          <Property Name="Longitude" Type="Double" />
+          <Property Name="CancelRemarks" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="Int32" Nullable="false" />
+          <Property Name="DateEncoded" Type="DateTime" Nullable="false" Precision="3" />
+        </EntityType>
+        <EntityType Name="CustomerGroceryUploadImage">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CustomerGroceryUploadId" Type="Int32" Nullable="false" />
+          <Property Name="ImagePath" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -5515,35 +5478,6 @@ warning 6002: The table/view 'sncc.dbo.FAQs' does not have a primary key defined
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <EntitySetMapping Name="CustomerGroceryUploads">
-            <EntityTypeMapping TypeName="sncModel.CustomerGroceryUpload">
-              <MappingFragment StoreEntitySet="CustomerGroceryUpload">
-                <ScalarProperty Name="DateEncoded" ColumnName="DateEncoded" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="CancelRemarks" ColumnName="CancelRemarks" />
-                <ScalarProperty Name="Longitude" ColumnName="Longitude" />
-                <ScalarProperty Name="Latitude" ColumnName="Latitude" />
-                <ScalarProperty Name="DeliveryAddress" ColumnName="DeliveryAddress" />
-                <ScalarProperty Name="Remarks" ColumnName="Remarks" />
-                <ScalarProperty Name="AudioPath" ColumnName="AudioPath" />
-                <ScalarProperty Name="ImagePath" ColumnName="ImagePath" />
-                <ScalarProperty Name="CustomerPhoneNumber" ColumnName="CustomerPhoneNumber" />
-                <ScalarProperty Name="CustomerName" ColumnName="CustomerName" />
-                <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
-                <ScalarProperty Name="ShopId" ColumnName="ShopId" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="CustomerGroceryUploadImages">
-            <EntityTypeMapping TypeName="sncModel.CustomerGroceryUploadImage">
-              <MappingFragment StoreEntitySet="CustomerGroceryUploadImages">
-                <ScalarProperty Name="ImagePath" ColumnName="ImagePath" />
-                <ScalarProperty Name="CustomerGroceryUploadId" ColumnName="CustomerGroceryUploadId" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="Orders">
             <EntityTypeMapping TypeName="sncModel.Order">
               <MappingFragment StoreEntitySet="Orders">
@@ -5642,6 +5576,35 @@ warning 6002: The table/view 'sncc.dbo.FAQs' does not have a primary key defined
                 <ScalarProperty Name="Status" ColumnName="Status" />
                 <ScalarProperty Name="Description" ColumnName="Description" />
                 <ScalarProperty Name="FAQCategoryId" ColumnName="FAQCategoryId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CustomerGroceryUploads">
+            <EntityTypeMapping TypeName="sncModel.CustomerGroceryUpload">
+              <MappingFragment StoreEntitySet="CustomerGroceryUpload">
+                <ScalarProperty Name="DateEncoded" ColumnName="DateEncoded" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="CancelRemarks" ColumnName="CancelRemarks" />
+                <ScalarProperty Name="Longitude" ColumnName="Longitude" />
+                <ScalarProperty Name="Latitude" ColumnName="Latitude" />
+                <ScalarProperty Name="DeliveryAddress" ColumnName="DeliveryAddress" />
+                <ScalarProperty Name="Remarks" ColumnName="Remarks" />
+                <ScalarProperty Name="AudioPath" ColumnName="AudioPath" />
+                <ScalarProperty Name="ImagePath" ColumnName="ImagePath" />
+                <ScalarProperty Name="CustomerPhoneNumber" ColumnName="CustomerPhoneNumber" />
+                <ScalarProperty Name="CustomerName" ColumnName="CustomerName" />
+                <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
+                <ScalarProperty Name="ShopId" ColumnName="ShopId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CustomerGroceryUploadImages">
+            <EntityTypeMapping TypeName="sncModel.CustomerGroceryUploadImage">
+              <MappingFragment StoreEntitySet="CustomerGroceryUploadImages">
+                <ScalarProperty Name="ImagePath" ColumnName="ImagePath" />
+                <ScalarProperty Name="CustomerGroceryUploadId" ColumnName="CustomerGroceryUploadId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
