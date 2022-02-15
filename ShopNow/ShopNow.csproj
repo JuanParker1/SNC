@@ -3361,6 +3361,7 @@
     <Content Include="Views\FAQ\Create.cshtml" />
     <Content Include="Views\FAQ\List.cshtml" />
     <Content Include="Views\FAQ\Edit.cshtml" />
+    <Content Include="Views\FAQCategory\List.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -3389,7 +3390,6 @@
     <Folder Include="Scripts\ckeditor\samples\plugins\htmlwriter\assets\outputforflash\" />
     <Folder Include="Scripts\ckeditor\samples\plugins\magicline\" />
     <Folder Include="Uploads\" />
-    <Folder Include="Views\FAQCategory\" />
     <Folder Include="Views\ProductType\" />
   </ItemGroup>
   <ItemGroup>
