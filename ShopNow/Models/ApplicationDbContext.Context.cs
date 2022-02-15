@@ -110,6 +110,8 @@ namespace ShopNow.Models
         public virtual DbSet<CustomerGroceryUpload> CustomerGroceryUploads { get; set; }
         public virtual DbSet<CustomerGroceryUploadImage> CustomerGroceryUploadImages { get; set; }
         public virtual DbSet<Order> Orders { get; set; }
+        public virtual DbSet<FAQCategory> FAQCategories { get; set; }
+        public virtual DbSet<FAQ> FAQs { get; set; }
     
         [DbFunction("sncEntities", "GetTableVAlueString")]
         public virtual IQueryable<GetTableVAlueString_Result> GetTableVAlueString(string key)

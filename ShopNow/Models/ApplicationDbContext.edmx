@@ -709,6 +709,32 @@ warning 6002: The table/view 'sncc.dbo.CustomerGroceryUploadImages' does not hav
           <Property Name="DateEncoded" Type="datetime" Nullable="false" />
           <Property Name="DateUpdated" Type="datetime" Nullable="false" />
         </EntityType>
+        <EntityType Name="FAQCategory">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="500" />
+          <Property Name="Status" Type="int" Nullable="false" />
+          <Property Name="DateUpdated" Type="datetime" Nullable="false" />
+          <Property Name="UpdatedBy" Type="nvarchar" MaxLength="500" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'sncc.dbo.FAQs' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="FAQs">
+          <Key>
+            <PropertyRef Name="Id" />
+            <PropertyRef Name="FAQCategoryId" />
+            <PropertyRef Name="Status" />
+            <PropertyRef Name="DateUpdated" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FAQCategoryId" Type="int" Nullable="false" />
+          <Property Name="Description" Type="nvarchar(max)" />
+          <Property Name="Status" Type="int" Nullable="false" />
+          <Property Name="DateUpdated" Type="datetime" Nullable="false" />
+          <Property Name="UpdatedBy" Type="nvarchar" MaxLength="500" />
+        </EntityType>
         <EntityType Name="KeywordData">
           <Key>
             <PropertyRef Name="Id" />
@@ -1743,6 +1769,7 @@ warning 6002: The table/view 'sncc.dbo.CustomerGroceryUploadImages' does not hav
           <EntitySet Name="DeliveryCharge" EntityType="Self.DeliveryCharge" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DiscountCategories" EntityType="Self.DiscountCategories" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DrugCompoundDetails" EntityType="Self.DrugCompoundDetails" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="FAQCategory" EntityType="Self.FAQCategory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="KeywordData" EntityType="Self.KeywordData" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="LocationDetails" EntityType="Self.LocationDetails" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MarketingAgents" EntityType="Self.MarketingAgents" Schema="dbo" store:Type="Tables" />
@@ -1810,6 +1837,16 @@ warning 6002: The table/view 'sncc.dbo.CustomerGroceryUploadImages' does not hav
     [CustomerGroceryUploadImages].[CustomerGroceryUploadId] AS [CustomerGroceryUploadId], 
     [CustomerGroceryUploadImages].[ImagePath] AS [ImagePath]
     FROM [dbo].[CustomerGroceryUploadImages] AS [CustomerGroceryUploadImages]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="FAQs" EntityType="Self.FAQs" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [FAQs].[Id] AS [Id], 
+    [FAQs].[FAQCategoryId] AS [FAQCategoryId], 
+    [FAQs].[Description] AS [Description], 
+    [FAQs].[Status] AS [Status], 
+    [FAQs].[DateUpdated] AS [DateUpdated], 
+    [FAQs].[UpdatedBy] AS [UpdatedBy]
+    FROM [dbo].[FAQs] AS [FAQs]</DefiningQuery>
           </EntitySet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
@@ -3121,6 +3158,8 @@ warning 6002: The table/view 'sncc.dbo.CustomerGroceryUploadImages' does not hav
           <EntitySet Name="CustomerGroceryUploads" EntityType="sncModel.CustomerGroceryUpload" />
           <EntitySet Name="CustomerGroceryUploadImages" EntityType="sncModel.CustomerGroceryUploadImage" />
           <EntitySet Name="Orders" EntityType="sncModel.Order" />
+          <EntitySet Name="FAQCategories" EntityType="sncModel.FAQCategory" />
+          <EntitySet Name="FAQs" EntityType="sncModel.FAQ" />
         </EntityContainer>
         <ComplexType Name="GetDEliveryBoyList_Result">
           <Property Type="Int32" Name="Id" Nullable="false" />
@@ -3725,6 +3764,30 @@ warning 6002: The table/view 'sncc.dbo.CustomerGroceryUploadImages' does not hav
           <Property Name="DateUpdated" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="CreatedBy" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="UpdatedBy" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="FAQCategory">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="Int32" Nullable="false" />
+          <Property Name="DateUpdated" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdatedBy" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="FAQ">
+          <Key>
+            <PropertyRef Name="Id" />
+            <PropertyRef Name="FAQCategoryId" />
+            <PropertyRef Name="Status" />
+            <PropertyRef Name="DateUpdated" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FAQCategoryId" Type="Int32" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="Int32" Nullable="false" />
+          <Property Name="DateUpdated" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdatedBy" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -5556,6 +5619,29 @@ warning 6002: The table/view 'sncc.dbo.CustomerGroceryUploadImages' does not hav
                 <ScalarProperty Name="CustomerName" ColumnName="CustomerName" />
                 <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
                 <ScalarProperty Name="OrderNumber" ColumnName="OrderNumber" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="FAQCategories">
+            <EntityTypeMapping TypeName="sncModel.FAQCategory">
+              <MappingFragment StoreEntitySet="FAQCategory">
+                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
+                <ScalarProperty Name="DateUpdated" ColumnName="DateUpdated" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="FAQs">
+            <EntityTypeMapping TypeName="sncModel.FAQ">
+              <MappingFragment StoreEntitySet="FAQs">
+                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
+                <ScalarProperty Name="DateUpdated" ColumnName="DateUpdated" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="FAQCategoryId" ColumnName="FAQCategoryId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

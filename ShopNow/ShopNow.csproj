@@ -389,6 +389,7 @@
     <Compile Include="Controllers\DiscountCategoryController.cs" />
     <Compile Include="Controllers\DrugCompoundDetailController.cs" />
     <Compile Include="Controllers\ErrorPageController.cs" />
+    <Compile Include="Controllers\FAQCategoryController.cs" />
     <Compile Include="Controllers\MeasurementUnitController.cs" />
     <Compile Include="Controllers\MasterProductController.cs" />
     <Compile Include="Controllers\BrandOwnerController.cs" />
@@ -581,6 +582,12 @@
       <DependentUpon>ApplicationDbContext.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\DrugCompoundDetail.cs">
+      <DependentUpon>ApplicationDbContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\FAQ.cs">
+      <DependentUpon>ApplicationDbContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\FAQCategory.cs">
       <DependentUpon>ApplicationDbContext.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\GetDashBoardDetails_Result.cs">
@@ -3377,6 +3384,7 @@
     <Folder Include="Scripts\ckeditor\samples\plugins\htmlwriter\assets\outputforflash\" />
     <Folder Include="Scripts\ckeditor\samples\plugins\magicline\" />
     <Folder Include="Uploads\" />
+    <Folder Include="Views\FAQCategory\" />
     <Folder Include="Views\ProductType\" />
   </ItemGroup>
   <ItemGroup>
