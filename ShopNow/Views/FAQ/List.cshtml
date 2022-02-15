@@ -1,0 +1,72 @@
+﻿@model ShopNow.ViewModels.FAQListViewModel
+@using GridMvc.Html
+@{
+    ViewBag.Title = "FAQs List";
+}
+
+<title>ShopNow | @ViewBag.Title</title>
+<link href="~/Content/Gridmvc.css" rel="stylesheet" />
+<script src="~/Scripts/gridmvc.js"></script>
+
+
+<div class="container-fluid mb-3">
+    <div class="d-flex justify-content-between">
+        <h5 class="text-success" style="letter-spacing:1px">@ViewBag.Title</h5>
+        <a href="/FAQ/Create"><u>Add New FAQ</u></a>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card shadow mt-3">
+                <div class="card-body">
+                    @Html.Grid(Model.ListItems).Columns(columns =>
+               {
+               columns.Add(s => s.FAQCategoryId).Titled("FAQ Category Name").Filterable(true).SetWidth(30);
+               columns.Add(s => s.Description).Titled("Description").Filterable(true).SetWidth(30);
+               columns.Add().Encoded(false).Sanitized(false).Titled("Action").SetWidth(5)
+             .RenderValueAs(o => @<div>
+                    <a href="~/FAQ/Edit?id=@ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id)" class="text-info mr-5"><i class="fa fa-edit fa-lg"></i></a>
+                    <a href="javascript:void(0)" data-id="@ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id)" class="text-danger btnDelete"><i class="fa fa-trash fa-lg"></i></a>
+                </div>);
+}).WithPaging(20).Sortable(true)
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+    <script src="~/Scripts/sweetalert/sweetalert.min.js"></script>
+    <link href="~/Content/sweetalert/sweetalert.css" rel="stylesheet" />
+
+    <script>
+        $(document).ready(function () {
+
+            $(".btnDelete").click(function () {
+                var Id = $(this).attr('data-id');
+                swal({
+                    title: "Are you sure want to delete?",
+                    text: "You will not be able to recover this file!",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "Yes, Delete it!",
+                    cancelButtonText: "No, cancel",
+                    closeOnConfirm: false,
+                    closeOnCancel: true
+                },
+                    function (isConfirm) {
+                        if (isConfirm) {
+                            $.getJSON("/FAQ/Delete", { id: Id }, function (data) {
+                                if (data == true) {
+                                    window.location.reload();
+                                }
+                            });
+                        }
+                    }
+                );
+            });
+
+        });
+    </script>
+}
