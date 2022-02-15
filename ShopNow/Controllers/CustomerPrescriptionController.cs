@@ -121,10 +121,7 @@ namespace ShopNow.Controllers
                 {
                     model.CustomerId = customer.Id;
                     model.CustomerName = customer.Name;
-                    //model.DeliveryAddress = customer.Address;
                     model.CustomerPhoneNumber = customer.PhoneNumber;
-                   // model.Latitude = customer.Latitude;
-                   // model.Longitude = customer.Longitude;
                 }
             }
             return View(model);
@@ -136,7 +133,7 @@ namespace ShopNow.Controllers
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
             var model = new PrescriptionOrderListViewModel();
-            model.PrescriptionOrderLists = db.Orders.OrderByDescending(i => i.DateEncoded).Where(i => (i.IsPrescriptionOrder == true) && i.Status == 6)
+            model.PrescriptionOrderLists = db.Orders.OrderByDescending(i => i.DateEncoded).Where(i => (i.UploadType == 1) && i.Status == 6)
                 .AsEnumerable()
                .Select((i, index) => new PrescriptionOrderListViewModel.PrescriptionOrderList
                {
@@ -209,7 +206,9 @@ namespace ShopNow.Controllers
                     order.DateUpdated = DateTime.Now;
                     order.Status = 2;
                     order.IsPrescriptionOrder = true;
-                    order.CustomerPrescriptionId = model.PrescriptionId; 
+                    order.CustomerPrescriptionId = model.PrescriptionId;
+                    order.UploadType = 1;               // For Prescription Upload type is 1
+                    order.UploadId = model.PrescriptionId;
                     db.Orders.Add(order);
                     db.SaveChanges();
                     //OrderItems

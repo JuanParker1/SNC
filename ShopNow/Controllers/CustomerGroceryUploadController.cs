@@ -87,56 +87,13 @@ namespace ShopNow.Controllers
                 }).ToList();
             return View(model);
         }
-
-        [AccessPolicy(PageCode = "")]
-        public ActionResult AddToCart(int id)
-        {
-            var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
-            ViewBag.Name = user.Name;
-            var model = new GroceryAddToCartViewModel();
-            var cp = db.CustomerPrescriptions.FirstOrDefault(i => i.Id == id);
-            if (cp != null)
-            {
-                _mapper.Map(cp, model);
-                model.GroceryId = cp.Id;
-                model.DeliveryAddress = cp.DeliveryAddress;
-                model.Latitude = cp.Latitude;
-                model.Longitude = cp.Longitude;
-                model.ImagePathLists = db.CustomerPrescriptionImages.Where(i => i.CustomerPrescriptionId == cp.Id)
-                        .Select(i => new GroceryAddToCartViewModel.ImagePathList
-                        {
-                            ImagePath = "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.ImagePath
-                        }).ToList();
-                model.AudioPath = (!string.IsNullOrEmpty(cp.AudioPath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Audio/" + cp.AudioPath : "";
-                var shop = db.Shops.FirstOrDefault(i => i.Id == cp.ShopId);
-                if (shop != null)
-                {
-                    model.ShopName = shop.Name;
-                    model.ShopPhoneNumber = shop.PhoneNumber;
-                    model.ShopImagePath = shop.ImagePath;
-                    model.ShopAddress = shop.Address;
-                }
-                var customer = db.Customers.FirstOrDefault(i => i.Id == cp.CustomerId);
-                if (customer != null)
-                {
-                    model.CustomerId = customer.Id;
-                    model.CustomerName = customer.Name;
-                    //model.DeliveryAddress = customer.Address;
-                    model.CustomerPhoneNumber = customer.PhoneNumber;
-                    // model.Latitude = customer.Latitude;
-                    // model.Longitude = customer.Longitude;
-                }
-            }
-            return View(model);
-        }
-
         [AccessPolicy(PageCode = "")]
         public ActionResult GroceryOrderList()
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
             var model = new GroceryUploadOrderListViewModel();
-            model.GroceryOrderLists = db.Orders.OrderByDescending(i => i.DateEncoded).Where(i => (i.IsPrescriptionOrder == true) && i.Status == 6)
+            model.GroceryOrderLists = db.Orders.OrderByDescending(i => i.DateEncoded).Where(i => (i.UploadType == 2) && i.Status == 6)
                 .AsEnumerable()
                .Select((i, index) => new GroceryUploadOrderListViewModel.GroceryOrderList
                {
@@ -154,8 +111,47 @@ namespace ShopNow.Controllers
             return View(model.GroceryOrderLists);
         }
 
+        [AccessPolicy(PageCode = "")]
+        public ActionResult AddToCart(int id)
+        {
+            var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
+            ViewBag.Name = user.Name;
+            var model = new GroceryAddToCartViewModel();
+            var cg = db.CustomerGroceryUploads.FirstOrDefault(i => i.Id == id);
+            if (cg != null)
+            {
+                _mapper.Map(cg, model);
+                model.GroceryId = cg.Id;
+                model.DeliveryAddress = cg.DeliveryAddress;
+                model.Latitude = cg.Latitude;
+                model.Longitude = cg.Longitude;
+                model.ImagePathLists = db.CustomerGroceryUploadImages.Where(i => i.CustomerGroceryUploadId == cg.Id)
+                        .Select(i => new GroceryAddToCartViewModel.ImagePathList
+                        {
+                            ImagePath = "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.ImagePath
+                        }).ToList();
+                model.AudioPath = (!string.IsNullOrEmpty(cg.AudioPath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Audio/" + cg.AudioPath : "";
+                var shop = db.Shops.FirstOrDefault(i => i.Id == cg.ShopId);
+                if (shop != null)
+                {
+                    model.ShopName = shop.Name;
+                    model.ShopPhoneNumber = shop.PhoneNumber;
+                    model.ShopImagePath = shop.ImagePath;
+                    model.ShopAddress = shop.Address;
+                }
+                var customer = db.Customers.FirstOrDefault(i => i.Id == cg.CustomerId);
+                if (customer != null)
+                {
+                    model.CustomerId = customer.Id;
+                    model.CustomerName = customer.Name; 
+                    model.CustomerPhoneNumber = customer.PhoneNumber;
+                }
+            }
+            return View(model);
+        }
+
         [HttpPost]
-        [AccessPolicy(PageCode = "SNCCPAC298")]
+        [AccessPolicy(PageCode = "")]
         public ActionResult AddToCart(GroceryAddToCartViewModel model)
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
@@ -208,8 +204,8 @@ namespace ShopNow.Controllers
                     order.DateEncoded = DateTime.Now;
                     order.DateUpdated = DateTime.Now;
                     order.Status = 2;
-                    order.IsPrescriptionOrder = true;
-                    order.CustomerPrescriptionId = model.GroceryId;
+                    order.UploadType = 2;               // For Grocery Upload type is 2
+                    order.UploadId = model.GroceryId;
                     db.Orders.Add(order);
                     db.SaveChanges();
                     //OrderItems
@@ -313,24 +309,23 @@ namespace ShopNow.Controllers
             var model = await db.Products.Where(a => a.ShopId == shopid && a.Status == 0)
                 .Join(db.MasterProducts.Where(a => a.Name.Contains(q)), p => p.MasterProductId, m => m.Id, (p, m) => new { p, m })
                 .Join(db.Categories, p => p.p.CategoryId, c => c.Id, (p, c) => new { p, c })
-                .Join(db.DiscountCategories, p => p.p.p.DiscountCategoryName, dc => dc.Name, (p, dc) => new { p, dc })
                 .Take(500)
                 .Select(i => new
                 {
-                    id = i.p.p.p.Id,
-                    text = i.p.p.m.Name,
-                    price = i.p.p.p.Price,
-                    weight = i.p.p.m.Weight,
-                    size = i.p.p.m.SizeLWH,
-                    brandid = i.p.p.m.BrandId,
-                    brandname = i.p.p.m.BrandName,
-                    categoryid = i.p.p.p.CategoryId,
-                    categoryname = i.p.c.Name,
-                    imagepath = "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/" + i.p.p.m.ImagePath1,
-                    itemid = i.p.p.p.ItemId,
-                    quantity = i.p.p.p.Qty,
-                    mrpprice = i.p.p.p.MenuPrice,
-                    percentage = i.dc.Percentage
+                    id = i.p.p.Id,
+                    text = i.p.m.Name,
+                    price = i.p.p.Price,
+                    weight = i.p.m.Weight,
+                    size = i.p.m.SizeLWH,
+                    brandid = i.p.m.BrandId,
+                    brandname = i.p.m.BrandName,
+                    categoryid = i.p.p.CategoryId,
+                    categoryname = i.c.Name,
+                    imagepath = "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/" + i.p.m.ImagePath1,
+                    itemid = i.p.p.ItemId,
+                    quantity = i.p.p.Qty,
+                    mrpprice = i.p.p.MenuPrice,
+                    percentage = i.p.p.Percentage
                 }).OrderBy(i => i.text).ToListAsync();
 
             return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
