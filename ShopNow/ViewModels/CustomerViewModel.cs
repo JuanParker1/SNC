@@ -15,6 +15,7 @@ namespace ShopNow.ViewModels
             public int Id{ get; set; }
             public string Name { get; set; }
             public string PhoneNumber { get; set; }
+            public string CurrentPassword { get; set; }
             public string StateName { get; set; }
             public string DistrictName { get; set; }
             public string Address { get; set; }
