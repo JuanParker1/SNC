@@ -383,6 +383,7 @@
     <Compile Include="Controllers\CartController.cs" />
     <Compile Include="Controllers\CrustController.cs" />
     <Compile Include="Controllers\CustomerGiftCardController.cs" />
+    <Compile Include="Controllers\CustomerGroceryUploadController.cs" />
     <Compile Include="Controllers\CustomerPrescriptionController.cs" />
     <Compile Include="Controllers\DeliveryBoyController.cs" />
     <Compile Include="Controllers\DiscountCategoryController.cs" />
@@ -768,6 +769,7 @@
     <Compile Include="ViewModels\CartViewModel.cs" />
     <Compile Include="ViewModels\CrustViewModels.cs" />
     <Compile Include="ViewModels\CustomerGiftCardViewModels.cs" />
+    <Compile Include="ViewModels\CustomerGroceryUploadViewModel.cs" />
     <Compile Include="ViewModels\CustomerPrescriptionViewModels.cs" />
     <Compile Include="ViewModels\CustomerReviewViewModel .cs" />
     <Compile Include="ViewModels\DashboardViewModels.cs" />
@@ -3343,6 +3345,10 @@
     <Content Include="Views\Payment\ShopBillDifferenceReport.cshtml" />
     <Content Include="Views\Service\List.cshtml" />
     <Content Include="Views\Payment\ShopBillDifferencePendingReport.cshtml" />
+    <Content Include="Views\CustomerGroceryUpload\List.cshtml" />
+    <Content Include="Views\CustomerGroceryUpload\CancelList.cshtml" />
+    <Content Include="Views\CustomerGroceryUpload\AddToCart.cshtml" />
+    <Content Include="Views\CustomerGroceryUpload\GroceryOrderList.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

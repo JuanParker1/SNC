@@ -20,6 +20,7 @@ namespace ShopNow.ViewModels
         public int RefundCount { get; set; }
         public int ShopLowCreditCount { get; set; }
         public int CustomerPrescriptionCount { get; set; }
+        public int CustomerGroceryUploadCount { get; set; }
 
         public int ShopOnlineCount { get; set; }
         public int ShopOfflineCount { get; set; }
