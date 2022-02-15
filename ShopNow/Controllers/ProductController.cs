@@ -1060,7 +1060,7 @@ namespace ShopNow.Controllers
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
-            model.ListItems = db.Products.Where(i => i.MasterProductId != 0 && i.Status == 1 && (model.ShopId != 0 ? i.ShopId == model.ShopId : false))
+            model.ListItems = db.Products.Where(i => i.Status == 1 && (model.ShopId != 0 ? i.ShopId == model.ShopId : false))
                 .Join(db.MasterProducts, p => p.MasterProductId, m => m.Id, (p, m) => new { p, m })
                 .Select(i => new ProductInactiveList.ListItem
                 {

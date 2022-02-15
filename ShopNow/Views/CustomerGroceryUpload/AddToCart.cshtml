@@ -268,8 +268,8 @@
                     var categoryName = $('[name="CategoryName"]').val();
                     var imagePath = $('[name="ImagePath"]').val();
                     var percentage = $('[name="Percentage"]').val();
-                    var pamount = parseFloat(price * percentage / 100);
-                    price = parseFloat(price - pamount).toFixed(2);
+                    //var pamount = parseFloat(price * percentage / 100);
+                    //price = parseFloat(price - pamount).toFixed(2);
                     if (productId && qty) {
                         var total = parseFloat(price * qty).toFixed(2);
                         var item = {
@@ -380,7 +380,7 @@
                         Latitude: $('#Latitude').val(),
                         Longitude: $('#Longitude').val(),
                         Distance: $('#Distance').val(),
-                        PrescriptionId: $('#PrescriptionId').val(),
+                        GroceryId: $('#GroceryId').val(),
                         ListItems: itemArray,
                     };
                     $('#btn-save').attr("disabled",true);
