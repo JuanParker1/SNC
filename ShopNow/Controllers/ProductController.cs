@@ -1203,7 +1203,7 @@ namespace ShopNow.Controllers
 
         public async Task<JsonResult> GetDishShopSelect2(string q = "")
         {
-            var model = await db.Shops.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && (a.Status == 0 || a.Status == 1) && (a.ShopCategoryId == 1 || a.ShopCategoryId == 3)).Select(i => new
+            var model = await db.Shops.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && (a.Status == 0 || a.Status == 1) && (a.ShopCategoryId == 1 || a.ShopCategoryId == 3 || a.ShopCategoryId == 4)).Select(i => new
             {
                 id = i.Id,
                 text = i.Name + " -- " + i.DistrictName,
@@ -1348,7 +1348,7 @@ namespace ShopNow.Controllers
 
         public async Task<JsonResult> GetDishCategorySelect2(string q = "")
         {
-            var model = await db.Categories.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0 && a.ProductTypeId == 1).Select(i => new
+            var model = await db.Categories.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0 &&(a.ProductTypeId == 1 || a.ProductTypeId == 2)).Select(i => new
             {
                 id = i.Id,
                 text = i.Name
