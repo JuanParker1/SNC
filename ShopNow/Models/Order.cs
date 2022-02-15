@@ -79,11 +79,13 @@ namespace ShopNow.Models
         public double PickupLongitude { get; set; }
         public double DBDeliveredLatitude { get; set; }
         public double DBDeliveredLongitude { get; set; }
+        public int DeliveryBoyOnWork { get; set; }
+        public int UploadType { get; set; }
+        public int UploadId { get; set; }
         public int Status { get; set; }
         public System.DateTime DateEncoded { get; set; }
         public System.DateTime DateUpdated { get; set; }
         public string CreatedBy { get; set; }
         public string UpdatedBy { get; set; }
-        public int DeliveryBoyOnWork { get; set; }
     }
 }

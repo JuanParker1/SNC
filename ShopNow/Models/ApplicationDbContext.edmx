@@ -999,12 +999,14 @@ warning 6002: The table/view 'sncc.dbo.CustomerGroceryUploadImages' does not hav
           <Property Name="PickupLongitude" Type="float" Nullable="false" />
           <Property Name="DBDeliveredLatitude" Type="float" Nullable="false" />
           <Property Name="DBDeliveredLongitude" Type="float" Nullable="false" />
+          <Property Name="DeliveryBoyOnWork" Type="int" Nullable="false" />
+          <Property Name="UploadType" Type="int" Nullable="false" />
+          <Property Name="UploadId" Type="int" Nullable="false" />
           <Property Name="Status" Type="int" Nullable="false" />
           <Property Name="DateEncoded" Type="datetime" Nullable="false" />
           <Property Name="DateUpdated" Type="datetime" Nullable="false" />
           <Property Name="CreatedBy" Type="nvarchar" MaxLength="100" />
           <Property Name="UpdatedBy" Type="nvarchar" MaxLength="100" />
-          <Property Name="DeliveryBoyOnWork" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="OtpVerifications">
           <Key>
@@ -3715,12 +3717,14 @@ warning 6002: The table/view 'sncc.dbo.CustomerGroceryUploadImages' does not hav
           <Property Name="PickupLongitude" Type="Double" Nullable="false" />
           <Property Name="DBDeliveredLatitude" Type="Double" Nullable="false" />
           <Property Name="DBDeliveredLongitude" Type="Double" Nullable="false" />
+          <Property Name="DeliveryBoyOnWork" Type="Int32" Nullable="false" />
+          <Property Name="UploadType" Type="Int32" Nullable="false" />
+          <Property Name="UploadId" Type="Int32" Nullable="false" />
           <Property Name="Status" Type="Int32" Nullable="false" />
           <Property Name="DateEncoded" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="DateUpdated" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="CreatedBy" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="UpdatedBy" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="DeliveryBoyOnWork" Type="Int32" Nullable="false" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -5480,12 +5484,14 @@ warning 6002: The table/view 'sncc.dbo.CustomerGroceryUploadImages' does not hav
           <EntitySetMapping Name="Orders">
             <EntityTypeMapping TypeName="sncModel.Order">
               <MappingFragment StoreEntitySet="Orders">
-                <ScalarProperty Name="DeliveryBoyOnWork" ColumnName="DeliveryBoyOnWork" />
                 <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
                 <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
                 <ScalarProperty Name="DateUpdated" ColumnName="DateUpdated" />
                 <ScalarProperty Name="DateEncoded" ColumnName="DateEncoded" />
                 <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="UploadId" ColumnName="UploadId" />
+                <ScalarProperty Name="UploadType" ColumnName="UploadType" />
+                <ScalarProperty Name="DeliveryBoyOnWork" ColumnName="DeliveryBoyOnWork" />
                 <ScalarProperty Name="DBDeliveredLongitude" ColumnName="DBDeliveredLongitude" />
                 <ScalarProperty Name="DBDeliveredLatitude" ColumnName="DBDeliveredLatitude" />
                 <ScalarProperty Name="PickupLongitude" ColumnName="PickupLongitude" />
