@@ -313,7 +313,7 @@ namespace ShopNow.Controllers
             var model = await db.Products.Where(a => a.ShopId == shopid && a.Status == 0)
                 .Join(db.MasterProducts.Where(a => a.Name.Contains(q)), p => p.MasterProductId, m => m.Id, (p, m) => new { p, m })
                 .Join(db.Categories, p => p.p.CategoryId, c => c.Id, (p, c) => new { p, c })
-                .Join(db.DiscountCategories, p => p.p.p.DiscountCategoryName, dc => dc.Name, (p, dc) => new { p, dc })
+                .Join(db.DiscountCategories, p => p.p.p.DiscountCategoryId, dc => dc.Id, (p, dc) => new { p, dc })
                 .Take(500)
                 .Select(i => new
                 {

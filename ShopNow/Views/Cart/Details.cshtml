@@ -520,12 +520,12 @@
                             <button type="button" class="btn btn-sm btn-block btn-success" id="Assign">Assign Delivery Boy</button>
                             break;
                         case 4:
-                            if (Model.DeliveryBoyIsAssign == 1 && Model.DeliveryBoyOnWork == 0)
+                            if (Model.DeliveryBoyId != 0 && Model.DeliveryBoyOnWork == 0)
                             {
                                 <h5 class="font-weight-bold text-center text-warning mb-3">Assigned for Delivery</h5>
                                 <a href="/Cart/DeliveryBoyAccept?OrderNumber=@Model.OrderNumber&id=@Model.Id" class="btn btn-sm btn-info btn-block">Delivery Boy Accept</a>
                             }
-                            else if (Model.DeliveryBoyIsAssign == 1 && Model.DeliveryBoyOnWork == 1)
+                            else if (Model.DeliveryBoyId != 0 && Model.DeliveryBoyOnWork == 1)
                             {
                                 <h5 class="font-weight-bold text-warning text-center mb-3">Waiting For Pickup</h5>
                                 <a href="/Cart/DeliveryBoyPickup?OrderNumber=@Model.OrderNumber&id=@Model.Id" class="btn btn-sm btn-info btn-block">Delivery Boy Pickup</a>

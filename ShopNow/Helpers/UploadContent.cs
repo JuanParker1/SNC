@@ -1,5 +1,8 @@
-﻿using Amazon.S3;
+﻿using Amazon.Runtime;
+using Amazon.S3;
+using Amazon.S3.IO;
 using Amazon.S3.Model;
+using Amazon.S3.Transfer;
 using ShopNow.Models;
 using System;
 using System.Data;
@@ -101,20 +104,39 @@ namespace ShopNow.Helpers
 
         public void DeleteFiles(string filename, string key, string secretkey)
         {
+            var credentials = new BasicAWSCredentials(key, secretkey);
+            var config = new AmazonS3Config
+            {
+                RegionEndpoint = Amazon.RegionEndpoint.APSouth1
+            };
+             var client = new AmazonS3Client(credentials, config);
+            var fileTransferUtility = new TransferUtility(client);
+             fileTransferUtility.S3Client.DeleteObjectAsync(new DeleteObjectRequest()
+            {
+                BucketName = "shopnowchat.in",
+                Key = filename
+            });
+            S3FileInfo s3File = new S3FileInfo(client, "shopnowchat.in", "92011_CovidElectronics.png");
+            if (s3File.Exists)
+            {
+                s3File.Delete();
+            }
             var bucketRegion = Amazon.RegionEndpoint.APSouth1;   // Your bucket region
             var s3 = new AmazonS3Client(key, secretkey, bucketRegion);
-            for (int i = 0; i <= 2; i++)
-            {
-                string bucketName = "";
-                if (i == 0)
-                    bucketName = "shopnowchat.com/Small";
-                else if(i==1)
-                    bucketName = "shopnowchat.com/Medium";
-                else
-                    bucketName = "shopnowchat.com/Large";
-                var deleteObjectRequest = new DeleteObjectRequest { BucketName = bucketName, Key = filename };
-                s3.DeleteObject(deleteObjectRequest);
-            }
+            //for (int i = 0; i <= 2; i++)
+            //{
+            //    string bucketName = "";
+            //    if (i == 0)
+            //        bucketName = "shopnowchat.com/Small";
+            //    else if(i==1)
+            //        bucketName = "shopnowchat.com/Medium";
+            //    else
+            //        bucketName = "shopnowchat.com/Large";
+            //    var deleteObjectRequest = new DeleteObjectRequest { BucketName = bucketName, Key = filename };
+            //    s3.DeleteObject(deleteObjectRequest);
+            //}
+            var deleteObjectRequest = new DeleteObjectRequest { BucketName = "shopnowchat.in", Key = filename };
+            s3.DeleteObjectAsync(deleteObjectRequest);
         }
         public void UploadMediumFile(Stream imgstream, string name, string key, string secretkey, string type)
         {
