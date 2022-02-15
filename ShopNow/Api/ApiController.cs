@@ -6646,6 +6646,18 @@ namespace ShopNow.Controllers
             return Json(list, JsonRequestBehavior.AllowGet);
         }
 
+        public JsonResult GetFAQList()
+        {
+            var list = db.FAQs.Where(i => i.Status == 0)
+                .Join(db.FAQCategories, f => f.FAQCategoryId, fc => fc.Id, (f, fc) => new { f, fc })
+                .Select(i => new
+                {
+                    Title = i.fc.Name,
+                    Description = i.f.Description
+                }).ToList();
+            return Json(list, JsonRequestBehavior.AllowGet);
+        }
+
         public JsonResult SendTestNotification(string deviceId = "", string title = "", string body = "")
         {
             Helpers.PushNotification.SendbydeviceId(body, title, "", deviceId);
