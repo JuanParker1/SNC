@@ -37,9 +37,18 @@ namespace ShopNow.Controllers
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
-            var List = (from s in db.FAQs
-                        select s).OrderBy(s => s.DateUpdated).Where(i => i.Status == 0).ToList();
-            return View(List);
+            var model = new FAQListViewModel();
+            model.ListItems = db.FAQs.Where(i => i.Status == 0)
+                .Join(db.FAQCategories, f=> f.FAQCategoryId, fc=>fc.Id,(f,fc)=> new { f,fc})
+                .Select(i => new FAQListViewModel.ListItem
+            {
+                Id = i.f.Id,
+                Description = i.f.Description,
+                FAQCategoryId = i.f.FAQCategoryId,
+                FAQCategoryName = i.fc.Name
+            }).ToList();
+
+            return View(model);
         }
 
         public ActionResult Create()
@@ -55,7 +64,9 @@ namespace ShopNow.Controllers
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
 
-            var faq = _mapper.Map<FAQCreateViewModel, FAQ>(model);
+            FAQ faq = new FAQ();
+            faq.FAQCategoryId = model.FAQCategoryId;
+            faq.Description = model.Description;
             faq.DateUpdated = DateTime.Now;
             faq.UpdatedBy = user.Name;
             faq.Status = 0;
@@ -78,7 +89,7 @@ namespace ShopNow.Controllers
 
         [HttpPost]
         [ValidateInput(false)]
-        public ActionResult Edit(OfferEditViewModel model)
+        public ActionResult Edit(FAQEditViewModel model)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
             var faq = db.FAQs.FirstOrDefault(i => i.Id == model.Id);

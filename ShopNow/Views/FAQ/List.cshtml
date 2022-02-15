@@ -20,7 +20,7 @@
                 <div class="card-body">
                     @Html.Grid(Model.ListItems).Columns(columns =>
                {
-               columns.Add(s => s.FAQCategoryId).Titled("FAQ Category Name").Filterable(true).SetWidth(30);
+               columns.Add(s => s.FAQCategoryName).Titled("FAQ Category Name").Filterable(true).SetWidth(30);
                columns.Add(s => s.Description).Titled("Description").Filterable(true).SetWidth(30);
                columns.Add().Encoded(false).Sanitized(false).Titled("Action").SetWidth(5)
              .RenderValueAs(o => @<div>

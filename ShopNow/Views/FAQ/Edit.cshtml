@@ -7,14 +7,14 @@
 
 <div class="container-fluid mb-5">
     <div class="row">
-        <div class="col-md-10 mx-auto mt-3">
+        <div class="col-md-12 mx-auto">
             <div class="d-flex justify-content-between">
                 <h4 class="text-success" style="letter-spacing:1px">@ViewBag.Title</h4>
                 <a href="/FAQ/List"><u>Go To List</u></a>
             </div>
             <div class="card shadow">
                 <div class="card-body">
-                    <form action="/FAQ/Create" method="post">
+                    <form action="/FAQ/Edit" method="post">
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
@@ -35,7 +35,7 @@
                                 <textarea name="Description" class="form-control ckeditor">@Model.Description</textarea>
                             </div>
                         </div>
-                        <div class="mx-auto col-6 mt-3"> <input type="submit" value="Create" class="btn btn-success btn-block" /></div>
+                        <div class="mx-auto col-3 mt-3"> <input type="submit" value="Create" class="btn btn-success btn-block" /></div>
                     </form>
                 </div>
             </div>
