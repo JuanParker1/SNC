@@ -3,7 +3,6 @@
     ViewBag.Title = "Electronic Update";
 }
 <title>Shop Now | Electronic Update</title>
-
 <div class="container-fluid my-4">
     <div class="row">
         <div class="col-md-4">
@@ -13,7 +12,6 @@
             <a href="~/MasterProduct/ElectronicList" target="_self"><span class="fa fa-list-ul"></span> Electronic Product List</a>
         </div>
     </div>
-
     <div class="row">
         <div class="col-md-12 mx-auto">
             @using (Html.BeginForm("ElectronicEdit", "MasterProduct", FormMethod.Post, new { id = "MasterProductForm", enctype = "multipart/form-data", autocomplete = "off" }))
@@ -76,11 +74,11 @@
                                                 <div class="img-upload-container ml-2">
                                                     @if (Model.ImagePath1 != null)
                                                     {
-                                                        <img id='img-ElectronicImage1' class="img-container w-100 h-100" width="100" height="100" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePath1" onerror="this.src='/Images/No Photo.png'" />
+                                                        <img id='img-ElectronicImage1' class="img-container w-100 h-100" width="100" height="100" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePath1" onerror="this.src='/Images/noimage.png'" />
                                                     }
                                                     else
                                                     {
-                                                        <img id='img-ElectronicImage1' class="img-container w-100 h-100" width="100" height="100" />
+                                                        <img id='img-ElectronicImage1' class="img-container w-100 h-100" width="100" height="100" onerror="this.src='/Images/noimage.png'" />
                                                     }
                                                     <input type="file" id="ElectronicImage1" name="ElectronicImage1" class="d-none" />
                                                     <label for="ElectronicImage1" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
@@ -101,11 +99,11 @@
                                                 <div class="img-upload-container ml-2">
                                                     @if (Model.ImagePath2 != null)
                                                     {
-                                                        <img id='img-ElectronicImage2' class="img-container w-100 h-100" width="100" height="100" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePath2" onerror="this.src='/Images/No Photo.png'" />
+                                                        <img id='img-ElectronicImage2' class="img-container w-100 h-100" width="100" height="100" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePath2" onerror="this.src='/Images/noimage.png'" />
                                                     }
                                                     else
                                                     {
-                                                        <img id='img-ElectronicImage2' class="img-container w-100 h-100" width="100" height="100" onerror="this.src='/Images/No Photo.png'" />
+                                                        <img id='img-ElectronicImage2' class="img-container w-100 h-100" width="100" height="100" onerror="this.src='/Images/noimage.png'" />
                                                     }
                                                     <input type="file" id="ElectronicImage2" name="ElectronicImage2" class="d-none" />
                                                     <label for="ElectronicImage2" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
@@ -124,11 +122,11 @@
                                         <div class="img-upload-container ml-2">
                                             @if (Model.ImagePath3 != null)
                                             {
-                                                    <img id='img-ElectronicImage3' class="img-container w-100 h-100" width="100" height="100" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePath3" onerror="this.src='/Images/No Photo.png'" />
+                                                    <img id='img-ElectronicImage3' class="img-container w-100 h-100" width="100" height="100" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePath3" onerror="this.src='/Images/noimage.png'" />
                                             }
                                             else
                                             {
-                                                    <img id='img-ElectronicImage3' class="img-container w-100 h-100" width="100" height="100" />
+                                                    <img id='img-ElectronicImage3' class="img-container w-100 h-100" width="100" height="100" onerror="this.src='/Images/noimage.png'" />
                                             }
                                             <input type="file" id="ElectronicImage3" name="ElectronicImage3" class="d-none" />
                                             <label for="ElectronicImage3" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
@@ -140,11 +138,11 @@
                                         <div class="img-upload-container ml-2">
                                             @if (Model.ImagePath4 != null)
                                             {
-                                                    <img id='img-ElectronicImage4' class="img-container w-100 h-100" width="100" height="100" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePath4" onerror="this.src='/Images/No Photo.png'" />
+                                                    <img id='img-ElectronicImage4' class="img-container w-100 h-100" width="100" height="100" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePath4" onerror="this.src='/Images/noimage.png'" />
                                             }
                                             else
                                             {
-                                                    <img id='img-ElectronicImage4' class="img-container w-100 h-100" width="100" height="100" />
+                                                    <img id='img-ElectronicImage4' class="img-container w-100 h-100" width="100" height="100" onerror="this.src='/Images/noimage.png'" />
                                             }
                                             <input type="file" id="ElectronicImage4" name="ElectronicImage4" class="d-none" />
                                             <label for="ElectronicImage4" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
@@ -156,11 +154,11 @@
                                         <div class="img-upload-container ml-2">
                                             @if (Model.ImagePath5 != null)
                                             {
-                                                    <img id='img-ElectronicImage5' class="img-container w-100 h-100" width="100" height="100" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePath5" onerror="this.src='/Images/No Photo.png'" />
+                                                    <img id='img-ElectronicImage5' class="img-container w-100 h-100" width="100" height="100" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePath5" onerror="this.src='/Images/noimage.png'" />
                                             }
                                             else
                                             {
-                                                    <img id='img-ElectronicImage5' class="img-container w-100 h-100" width="100" height="100" />
+                                                    <img id='img-ElectronicImage5' class="img-container w-100 h-100" width="100" height="100" onerror="this.src='/Images/noimage.png'" />
                                             }
                                             <input type="file" id="ElectronicImage5" name="ElectronicImage5" class="d-none" />
                                             <label for="ElectronicImage5" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
