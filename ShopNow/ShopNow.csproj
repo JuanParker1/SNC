@@ -383,11 +383,14 @@
     <Compile Include="Controllers\CartController.cs" />
     <Compile Include="Controllers\CrustController.cs" />
     <Compile Include="Controllers\CustomerGiftCardController.cs" />
+    <Compile Include="Controllers\CustomerGroceryUploadController.cs" />
     <Compile Include="Controllers\CustomerPrescriptionController.cs" />
     <Compile Include="Controllers\DeliveryBoyController.cs" />
     <Compile Include="Controllers\DiscountCategoryController.cs" />
     <Compile Include="Controllers\DrugCompoundDetailController.cs" />
     <Compile Include="Controllers\ErrorPageController.cs" />
+    <Compile Include="Controllers\FAQCategoryController.cs" />
+    <Compile Include="Controllers\FAQController.cs" />
     <Compile Include="Controllers\MeasurementUnitController.cs" />
     <Compile Include="Controllers\MasterProductController.cs" />
     <Compile Include="Controllers\BrandOwnerController.cs" />
@@ -582,6 +585,12 @@
     <Compile Include="Models\DrugCompoundDetail.cs">
       <DependentUpon>ApplicationDbContext.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\FAQ.cs">
+      <DependentUpon>ApplicationDbContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\FAQCategory.cs">
+      <DependentUpon>ApplicationDbContext.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\GetDashBoardDetails_Result.cs">
       <DependentUpon>ApplicationDbContext.tt</DependentUpon>
     </Compile>
@@ -768,6 +777,7 @@
     <Compile Include="ViewModels\CartViewModel.cs" />
     <Compile Include="ViewModels\CrustViewModels.cs" />
     <Compile Include="ViewModels\CustomerGiftCardViewModels.cs" />
+    <Compile Include="ViewModels\CustomerGroceryUploadViewModel.cs" />
     <Compile Include="ViewModels\CustomerPrescriptionViewModels.cs" />
     <Compile Include="ViewModels\CustomerReviewViewModel .cs" />
     <Compile Include="ViewModels\DashboardViewModels.cs" />
@@ -776,6 +786,7 @@
     <Compile Include="ViewModels\DeliveryChargeViewModel.cs" />
     <Compile Include="ViewModels\DiscountCategoryViewModel.cs" />
     <Compile Include="ViewModels\DrugCompoundDetailViewModel.cs" />
+    <Compile Include="ViewModels\FAQViewModel.cs" />
     <Compile Include="ViewModels\LocationDetailsViewModels.cs" />
     <Compile Include="ViewModels\MeasurementUnitViewModel.cs" />
     <Compile Include="ViewModels\MasterProductViewModel.cs" />
@@ -3343,6 +3354,14 @@
     <Content Include="Views\Payment\ShopBillDifferenceReport.cshtml" />
     <Content Include="Views\Service\List.cshtml" />
     <Content Include="Views\Payment\ShopBillDifferencePendingReport.cshtml" />
+    <Content Include="Views\CustomerGroceryUpload\List.cshtml" />
+    <Content Include="Views\CustomerGroceryUpload\CancelList.cshtml" />
+    <Content Include="Views\CustomerGroceryUpload\AddToCart.cshtml" />
+    <Content Include="Views\CustomerGroceryUpload\GroceryOrderList.cshtml" />
+    <Content Include="Views\FAQ\Create.cshtml" />
+    <Content Include="Views\FAQ\List.cshtml" />
+    <Content Include="Views\FAQ\Edit.cshtml" />
+    <Content Include="Views\FAQCategory\List.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

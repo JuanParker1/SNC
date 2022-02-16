@@ -1,0 +1,276 @@
+﻿@model ShopNow.ViewModels.CustomerGroceryUploadListViewModel
+@using GridMvc.Html
+@{
+    ViewBag.Title = "Grocery Upload List";
+}
+<title>ShopNow | @ViewBag.Title</title>
+<link href="~/Content/Gridmvc.css" rel="stylesheet" />
+<script src="~/Scripts/gridmvc.js"></script>
+<style>
+    audio {
+        width: 150px;
+        display: block;
+        margin: 20px;
+    }
+</style>
+<div class="container-fluid mb-5">
+    <div class="row">
+        <div class="col-md-4">
+            <h5 class="text-success" style="letter-spacing:1px">@ViewBag.Title</h5>
+        </div>
+        <div class="col-md-8 text-right">
+            <a href="~/CustomerGroceryUpload/GroceryOrderList" class="ml-auto" target="_self"><span class="fa fa-bars"></span> Grocery Order List</a>
+            <a href="~/CustomerGroceryUpload/CancelList" class="ml-3" target="_self"><span class="fa fa-bars"></span> Grocery Cancel List</a>
+        </div>
+        <div class="col-md-12 mx-auto mt-3">
+            <div class="card shadow">
+                <div class="card-body">
+                    <table class="table table-borderless">
+                        <thead class="bg-light">
+                            <tr>
+                                <th class="w-16">Shop Name</th>
+                                <th class="w-12">Name</th>
+                                <th class="w-12">Phone No.</th>
+                                <th class="w-12">Image(s)</th>
+                                <th class="w-25">Audio</th>
+                                <th class="w-12">Remarks</th>
+                                <th class="w-16">Date</th>
+                                <th class="w-8">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.ListItems)
+                            {
+
+                                <tr>
+                                    <td>@item.ShopName</td>
+                                    <td>@item.CustomerName</td>
+                                    <td>@item.CustomerPhoneNumber</td>
+                                    <td>
+                                        @foreach (var im in item.ImagePathLists)
+                                        {
+                                            <img alt="Image" data-toggle="modal" data-target="#myModal" class="img-thumbnail PrescriptionImage p-1" src="@im.ImagePath" onerror="this.src='/Images/No Photo.png'" style="width:45px;height:45px" />
+                                        }
+                                    </td>
+                                    <td>
+                                        <audio controls="controls" src="@item.AudioPath" style="width: 250px;"></audio>
+                                    </td>
+                                    <td>@item.Remarks</td>
+                                    <td>@item.DateEncoded.ToString("dd-MM-yyyy hh:mm tt")</td>
+                                    <td>
+                                        @if (item.Status == 0)
+                                        {
+                                            <a href="/CustomerGroceryUpload/AddToCart?id=@item.Id" class="btn btn-sm btn-success btn-block">Add to Cart</a>
+                                            @*<a href="javascript:void(0)" data-id=@item.Id class="btn btn-sm btn-danger btnReject mt-2 btn-block">Cancel</a>*@
+                                            <a href="#modal-cancel" data-target="#modal-cancel" data-toggle="modal" data-id="@item.Id" class="btn btn-sm btn-danger btn-block btnCancel">Cancel</a>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-success">Order Placed.</span>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div id="myModal" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Grocery Image</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <button id="btn-rotate" class="btn btn-sm btn-secondary float-right mb-2"><i class="fa fa-repeat" aria-hidden="true"></i> Rotate Image</button>
+                <div class="clearfix"></div>
+                <div class="row w-100" id="print-Prescription" style="height:auto;">
+                    <img class="modal-content img-fluid w-100" id="GroceryImage" />
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary ml-2" id="btnPrint" onclick="printDiv('print-Prescription')">Print</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="modal fade" id="modal-cancel" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-body">
+                <form method="get" action="/CustomerGroceryUpload/Cancel">
+                    <input type="hidden" name="Id" id="Id" />
+                    <h5>Cancel Reason</h5>
+                    <div class="form-group">
+                        <label>Remarks</label>
+                        <textarea class="form-control" name="CancelRemarks" required></textarea>
+                    </div>
+                    <div class="text-right">
+                        <button type="submit" class="btn btn-sm btn-success mr-3">Submit</button>
+                        <button class="btn btn-sm btn-danger" data-dismiss="modal">Close</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+    <!--Select2-->
+    <script src="~/Scripts/select2/js/select2.js"></script>
+    <link href="~/Scripts/select2/css/select2.css" rel="stylesheet" />
+    <link href="~/Content/select2/select2.custom.css" rel="stylesheet" />
+    <script src="~/Scripts/sweetalert/sweetalert.min.js"></script>
+    <link href="~/Content/sweetalert/sweetalert.css" rel="stylesheet" />
+    <!--Select2 End-->
+    <script>
+        function printDiv(divName) {
+            var printContents = document.getElementById(divName).innerHTML;
+            $('#GroceryImage').css('width', '100%');
+            $('#GroceryImage').css('height', '800px');
+            w = window.open();
+            w.document.write(printContents);
+            w.print();
+            w.close();
+        }
+        $(document).ready(function () {
+            var modal = document.getElementById('myModal');
+            var img = document.getElementsByClassName('PrescriptionImage');
+            var modalImg = document.getElementById("GroceryImage");
+            $(img).click(function () {
+                modal.style.display = "block";
+                modalImg.src = this.src.replace("/Small/", "/Large/");
+                if (this.src == "") {
+                    $('#myModal').hide();
+                }
+                else {
+                    $('#myModal').modal('show');
+                }
+            });
+
+            var itemArray = [];
+            $(".btn-modal-add").click(function () {
+                $('[name="PrescriptionId"]').val($(this).data('id'));
+                $('[name="ShopId"]').val($(this).data('shopid'));
+                $('#modal-add').modal('show');
+
+                $('#select-product').select2({
+                    placeholder: "Select Product",
+                    width: '100%',
+                    ajax: {
+                        url: "/Banner/GetShopProductSelect2?shopid=" + $(this).data('shopid')+"",
+                        delay: 250,
+                        dataType: 'json'
+                    }
+                }).on('select2:select', function (e) {
+                    $('input[name="ProductName"]').val(e.params.data.text);
+                });
+            });
+
+            $('#btn-addtolist').on('click', function () {
+                var productId = $('[name="ProductId"]').val();
+                var productName = $('[name="ProductName"]').val();
+                var qty = $('[name="Quantity"]').val();
+                if (productId && qty) {
+                    var item = {
+                        productId: productId,
+                        quantity: qty
+                    };
+                    itemArray.push(item);
+                    var $tr = '<tr><td>' + productName + '</td><td>' + qty + '</td></tr>';
+                    $('#tbl-items tbody').append($tr);
+                    $('#div-items').removeClass('d-none');
+                    $('[name="ProductId"]').val('').trigger('change');
+                    $('[name="Quantity"]').val('');
+                } else
+                    swal('Warning', 'All fields are required!', 'warning');
+            });
+
+            $('#btn-save-prescription').on('click', function () {
+                    if (itemArray.length > 0) {
+                        var model = {
+                            prescriptionId: $('[name="PrescriptionId"]').val(),
+                            shopId: $('#select-shop').val(),
+                            customerId: $('#CustomerId').val(),
+                            ListItems: itemArray
+                        }
+                        $.post('/CustomerGroceryUpload/AddPrescriptionItem', model, function (data) {
+                            if (data) {
+                                swal('Success', 'Prescription Items saved successfully', 'success');
+                                window.location.reload();
+                            } else {
+                               // swal('Warning', 'Shop already has Schedules, Kindly update there.', 'warning');
+                                timeArray.length = 0;
+                                $('#tbl-items tbody').empty();
+                                $('#div-items').addClass('d-none');
+                                //$('#select-shop').val('').trigger('change');
+                                $('#modal-add').modal('hide');
+                            }
+                        });
+                    } else
+                        swal('Warning', 'Item List should not be empty!', 'warning');
+            });
+
+            $('.btn-modal-added-item-list').on('click', function () {
+                $.getJSON('/CustomerGroceryUpload/GetItemList', { id: $(this).data('id') }, function (data) {
+                    $.each(data, function (index, item) {
+                        var $tr = '<tr><td>' + item.ProductName + '</td><td class="text-center">' + item.Quantity + '</td></tr>';
+                        $('#tbl-added-items tbody').append($tr);
+                    });
+                });
+            });
+
+            //$(".btnReject").click(function () {
+            //    var Id = $(this).attr('data-id');
+            //    swal({
+            //        title: "Are you sure want to Reject?",
+            //       // text: "You will not be able to recover this file!",
+            //        type: "warning",
+            //        showCancelButton: true,
+            //        confirmButtonColor: "#DD6B55",
+            //        confirmButtonText: "Yes, Reject it!",
+            //        cancelButtonText: "No, cancel",
+            //        closeOnConfirm: false,
+            //        closeOnCancel: true
+            //    },
+            //        function (isConfirm) {
+            //            if (isConfirm) {
+            //                $.getJSON("/CustomerPrescription/Reject", { Id: Id }, function (data) {
+            //                    if (data == true) {
+            //                        window.location.reload();
+            //                    }
+            //                });
+            //            }
+            //        }
+            //    );
+            //});
+
+            $(".btnCancel").on('click', function () {
+                $('#Id').val($(this).data('id'));
+                $('#modal-cancel').modal('show');
+            });
+
+            var angle = 90;
+            $('#btn-rotate').on('click', function () {
+                $("#GroceryImage").css({ 'transform': 'rotate(' + angle + 'deg)' });
+                angle += 90;
+            });
+
+            $('#myModal').on('hidden.bs.modal', function () {
+                $("#GroceryImage").css({ 'transform': '' });
+            });
+        });
+    </script>
+}
+
+

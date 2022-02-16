@@ -1,0 +1,75 @@
+﻿@model ShopNow.ViewModels.FAQEditViewModel
+@{
+    ViewBag.Title = "FAQ Update";
+}
+
+<title>ShopNow | @ViewBag.Title</title>
+
+<div class="container-fluid mb-5">
+    <div class="row">
+        <div class="col-md-12 mx-auto">
+            <div class="d-flex justify-content-between">
+                <h4 class="text-success" style="letter-spacing:1px">@ViewBag.Title</h4>
+                <a href="/FAQ/List"><u>Go To List</u></a>
+            </div>
+            <div class="card shadow">
+                <div class="card-body">
+                    <form action="/FAQ/Edit" method="post">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="col-form-label">Select FAQ Category</label>
+                                    <select id="FAQCategoryId" name="FAQCategoryId" class="form-control">
+                                        @if (Model.FAQCategoryId != 0)
+                                        {
+                                            <option value="@Model.FAQCategoryId">@Model.FAQCategoryName</option>
+                                        }
+                                    </select>
+                                    <input type="hidden" name="Id" value="@Model.Id" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label class="col-form-label">Description</label>
+                                <textarea name="Description" class="form-control ckeditor">@Model.Description</textarea>
+                            </div>
+                        </div>
+                        <div class="mx-auto col-3 mt-3"> <input type="submit" value="Create" class="btn btn-success btn-block" /></div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+    <script src="~/Scripts/select2/js/select2.js"></script>
+    <link href="~/Scripts/select2/css/select2.css" rel="stylesheet" />
+    <link href="~/Content/select2/select2.custom.css" rel="stylesheet" />
+    <script src="~/Scripts/ckeditor/ckeditor.js"></script>
+    <script src="~/Scripts/sweetalert/sweetalert.min.js"></script>
+    <link href="~/Content/sweetalert/sweetalert.css" rel="stylesheet" />
+    <script>
+        $(document).ready(function () {
+            var errormsg = "@ViewBag.ErrorMessage";
+            if (errormsg != "") {
+                swal("Notice!", errormsg, "warning")
+            }
+
+            $('#FAQCategoryId').select2({
+                placeholder: "Search FAQ Category",
+                width: '100%',
+                ajax: {
+                    url: "/FAQ/GetFaqCategorySelect2",
+                    delay: 250,
+                    dataType: 'json'
+                }
+            });
+
+        });
+
+    </script>
+}
+

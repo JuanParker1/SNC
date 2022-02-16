@@ -6,7 +6,6 @@
 <title>ShopNow | Admin List</title>
 <link href="~/Content/Gridmvc.css" rel="stylesheet" />
 <script src="~/Scripts/gridmvc.js"></script>
-
 <div class="container-fluid">
     <div class="row my-2">
         <div class="col-md-6">
@@ -30,7 +29,7 @@
                columns.Add(c => c.StateName).Titled("State").Filterable(true).SetWidth(10);
                columns.Add().Encoded(false).Sanitized(false).Titled("Action").Filterable(false).SetWidth(10)
                .RenderValueAs(c => @<div>
-                    <a data-toggle="modal" data-target="#updateModal" href="updateModal" data-id=@c.Id class="text-info Update"><i class="fa fa-edit fa-lg"></i></a>
+                    <a data-toggle="modal" data-target="#updateModal" href="updateModal" data-password="@c.CurrentPassword" data-id=@c.Id class="text-info Update"><i class="fa fa-edit fa-lg"></i></a>
                     <a href="javascript:void(0)" data-id=@c.Id class="text-danger btnDelete ml-3"><i class="fa fa-trash fa-lg"></i></a>
                     </div>);
                   }).WithPaging(20).Sortable(true)
@@ -66,6 +65,7 @@
         </div>
     </div>
 </div>
+
 <div class="modal fade" id="updateModal">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -76,6 +76,14 @@
                 </button>
             </div>
             <div class="modal-body">
+                <div class="form-group row">
+                    <div class="col-md-4">
+                        <label class="control-label text-secondary font-weight-bold" for="CurrentPassword">Current Password</label>
+                    </div>
+                    <div class="col-md-8">
+                        <input type="text" class="form-control" name="CPId" id="CPId" readonly />
+                    </div>
+                </div>
                 <div class="form-group row">
                     <div class="col-md-4">
                         <label class="control-label text-secondary font-weight-bold" for="Password">New Password</label>
@@ -182,9 +190,11 @@
                 );
             });
 
-            $(".Update").on('click', function () {
-                var code = $(this).attr('data-id');
+            $(".Update").on('click', function () {               
+                var code = $(this).data('id');
+                var password = $(this).data('password');
                 $("#PId").val(code);
+                $("#CPId").val(password);
             });
 
             $("#btnUpdate").on('click', function () {

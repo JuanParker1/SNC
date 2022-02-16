@@ -268,12 +268,11 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SNCCOW067")]
-        public ActionResult OnTheWay(int shopId = 0)
+        public ActionResult OnTheWay(CartListViewModel model)
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
-            var model = new CartListViewModel();
-            model.OntheWayLists = db.Orders.Where(i => (shopId != 0 ? i.ShopId == shopId : true) && i.Status == 5)
+            model.OntheWayLists = db.Orders.Where(i => (model.ShopId != 0 ? i.ShopId == model.ShopId : true) && i.Status == 5)
                 .Join(db.Payments, c => c.OrderNumber, p => p.OrderNumber, (c, p) => new { c, p })
                 .Select(i => new CartListViewModel.OntheWayList
                 {
@@ -291,16 +290,15 @@ namespace ShopNow.Controllers
                 }).OrderByDescending(i => i.DateEncoded).ToList();
             int counter = 1;
             model.OntheWayLists.ForEach(x => x.No = counter++);
-            return View(model.OntheWayLists);
+            return View(model);
         }
 
         [AccessPolicy(PageCode = "SNCCOWL068")]
-        public ActionResult OnTheWayList(int shopId = 0)
+        public ActionResult OnTheWayList(CartListViewModel model)
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
-            var model = new CartListViewModel();
-            model.OntheWayLists = db.Orders.Where(i => (shopId != 0 ? i.ShopId == shopId : true) && i.Status == 5 && SqlFunctions.DateDiff("minute", i.DateUpdated, DateTime.Now) >= 15)
+            model.OntheWayLists = db.Orders.Where(i => (model.ShopId != 0 ? i.ShopId == model.ShopId : true) && i.Status == 5 && SqlFunctions.DateDiff("minute", i.DateUpdated, DateTime.Now) >= 15)
                 .Join(db.Payments, c => c.OrderNumber, p => p.OrderNumber, (c, p) => new { c, p })
                 .Select(i => new CartListViewModel.OntheWayList
                 {
@@ -318,16 +316,15 @@ namespace ShopNow.Controllers
                 }).OrderByDescending(i => i.DateEncoded).ToList();
             int counter = 1;
             model.OntheWayLists.ForEach(x => x.No = counter++);
-            return View(model.OntheWayLists);
+            return View(model);
         }
 
         [AccessPolicy(PageCode = "SNCCD069")]
-        public ActionResult Delivered(int shopId = 0)
+        public ActionResult Delivered(CartListViewModel model)
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
-            var model = new CartListViewModel();
-            model.DeliveredLists = db.Orders.Where(i => (shopId != 0 ? i.ShopId == shopId : true) && i.Status == 6)
+            model.DeliveredLists = db.Orders.Where(i => (model.ShopId != 0 ? i.ShopId == model.ShopId : true) && i.Status == 6)
                 .Join(db.Payments, c => c.OrderNumber, p => p.OrderNumber, (c, p) => new { c, p })
                 .AsEnumerable()
                 .Select(i => new CartListViewModel.DeliveredList
@@ -350,7 +347,7 @@ namespace ShopNow.Controllers
                 }).OrderByDescending(i => i.DateEncoded).ToList();
             int counter = 1;
             model.DeliveredLists.ForEach(x => x.No = counter++);
-            return View(model.DeliveredLists);
+            return View(model);
         }
 
         [AccessPolicy(PageCode = "SNCCDR070")]
@@ -635,6 +632,7 @@ namespace ShopNow.Controllers
                 model.ShopPhoneNumber = cart.ShopPhoneNumber;
                 model.DeliveryAddress = cart.DeliveryAddress;
                 model.CustomerPhoneNumber = cart.CustomerPhoneNumber;
+                model.DeliveryBoyId = cart.DeliveryBoyId;
                 model.DeliveryBoyName = cart.DeliveryBoyName;
                 model.DeliveryBoyPhoneNumber = cart.DeliveryBoyPhoneNumber;
                 model.DateEncoded = cart.DateEncoded;

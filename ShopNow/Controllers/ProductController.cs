@@ -1060,7 +1060,7 @@ namespace ShopNow.Controllers
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
-            model.ListItems = db.Products.Where(i => i.MasterProductId != 0 && i.Status == 1 && (model.ShopId != 0 ? i.ShopId == model.ShopId : false))
+            model.ListItems = db.Products.Where(i => i.Status == 1 && (model.ShopId != 0 ? i.ShopId == model.ShopId : false))
                 .Join(db.MasterProducts, p => p.MasterProductId, m => m.Id, (p, m) => new { p, m })
                 .Select(i => new ProductInactiveList.ListItem
                 {
@@ -1203,7 +1203,7 @@ namespace ShopNow.Controllers
 
         public async Task<JsonResult> GetDishShopSelect2(string q = "")
         {
-            var model = await db.Shops.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && (a.Status == 0 || a.Status == 1) && (a.ShopCategoryId == 1 || a.ShopCategoryId == 3)).Select(i => new
+            var model = await db.Shops.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && (a.Status == 0 || a.Status == 1) && (a.ShopCategoryId == 1 || a.ShopCategoryId == 3 || a.ShopCategoryId == 4)).Select(i => new
             {
                 id = i.Id,
                 text = i.Name + " -- " + i.DistrictName,
@@ -1348,7 +1348,7 @@ namespace ShopNow.Controllers
 
         public async Task<JsonResult> GetDishCategorySelect2(string q = "")
         {
-            var model = await db.Categories.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0 && a.ProductTypeId == 1).Select(i => new
+            var model = await db.Categories.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0 &&(a.ProductTypeId == 1 || a.ProductTypeId == 2)).Select(i => new
             {
                 id = i.Id,
                 text = i.Name
@@ -1370,7 +1370,7 @@ namespace ShopNow.Controllers
 
         public async Task<JsonResult> GetDishSelect2(string q = "")
         {
-            var model = await db.MasterProducts.Where(a => a.Name.Contains(q) && a.Status == 0 && a.ProductTypeId == 1)
+            var model = await db.MasterProducts.Where(a => a.Name.Contains(q) && a.Status == 0 && (a.ProductTypeId == 1 || a.ProductTypeId == 2) )
                 .Join(db.Categories, m => m.CategoryId, c => c.Id, (m, c) => new { m, c })
                 .Select(i => new
                 {

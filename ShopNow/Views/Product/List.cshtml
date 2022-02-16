@@ -1,5 +1,4 @@
 ﻿@model ShopNow.ViewModels.ProductItemListViewModel
-@*@model IEnumerable<ShopNow.Models.Product>*@
 @using GridMvc.Html
 @{
     ViewBag.Title = "Item List";
@@ -18,12 +17,12 @@
                 <div class="row">
                     <div class="col-md-8">
                         <select id="ShopId" class="form-control" name="ShopId">
-                            @if (Model.ShopId != 0)
+                            @if (!string.IsNullOrEmpty(Model.ShopName))
                             {
                                 <option value="@Model.ShopId">@Model.ShopName</option>
                             }
                         </select>
-                        <input type="hidden" name="ShopName" />
+                        <input type="hidden" name="ShopName" value="@Model.ShopName" />
                     </div>
                     <div class="col-md-4">
                         <input type="submit" class="btn btn-info mr-3" value="Go" />
@@ -38,7 +37,6 @@
             <a href="~/Product/MedicalCreate" target="_self" class="ml-2"><span class="fa fa-plus"></span> Medicine</a>
             <a href="~/Product/ElectronicCreate" target="_self" class="ml-2"><span class="fa fa-plus"></span> Electronics</a>
         </div>
-
         <div class="col-md-12">
             <div class="card shadow mt-3">
                 <div class="card-body">
@@ -54,29 +52,29 @@
                   .RenderValueAs(s => new HtmlString("<label class='switch'> <input type='checkbox' value='" + s.IsOnline + "' Id='Id_" + s.Id + "' class='CheckOnline' data-id='" + s.Id + "'><span class='slider round'></span></label>")).Titled("IsOnline").SetWidth(5);
                columns.Add().Encoded(false).Sanitized(false).Titled("Action").SetWidth(10)
                .RenderValueAs(o => @<div>
-                @if (o.ProductTypeId == 1)
-             {
-            <a href="~/Product/FoodEdit?Id=@ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id)" class="text-info mr-4"><i class="fa fa-edit fa-2x"></i></a>
-     }
-     else if (@o.ProductTypeId == 2)
-     {
-    <a href="~/Product/FMCGEdit?Id=@ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id)" class="text-info mr-4"><i class="fa fa-edit fa-2x"></i></a>
-}
-else if (@o.ProductTypeId == 3)
-{
-<a href="~/Product/MedicalEdit?Id=@ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id)" class="text-info mr-4"><i class="fa fa-edit fa-2x"></i></a>
-}
-else if (@o.ProductTypeId == 4)
-{
-<a href="~/Product/ElectronicEdit?Id=@ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id)" class="text-info mr-4"><i class="fa fa-edit fa-2x"></i></a>
-}
-else
-{
-<a href="~/Product/ServiceEdit?Id=@ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id)" class="text-info mr-4"><i class="fa fa-edit fa-2x"></i></a>
-}
-                <a href="javascript:void(0)" data-id="@ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id)" class="text-danger btnDelete"><i class="fa fa-trash fa-2x"></i></a>
-            </div>);
-}).WithPaging(20).Sortable(true)
+                       @if (o.ProductTypeId == 1)
+                        {
+                           <a href="~/Product/FoodEdit?Id=@ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id)" class="text-info mr-4"><i class="fa fa-edit fa-2x"></i></a>
+                        }
+                       else if (@o.ProductTypeId == 2)
+                       {
+                           <a href="~/Product/FMCGEdit?Id=@ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id)" class="text-info mr-4"><i class="fa fa-edit fa-2x"></i></a>
+                       }
+                       else if (@o.ProductTypeId == 3)
+                       {
+                           <a href="~/Product/MedicalEdit?Id=@ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id)" class="text-info mr-4"><i class="fa fa-edit fa-2x"></i></a>
+                       }
+                       else if (@o.ProductTypeId == 4)
+                       {
+                           <a href="~/Product/ElectronicEdit?Id=@ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id)" class="text-info mr-4"><i class="fa fa-edit fa-2x"></i></a>
+                       }
+                       else
+                       {
+                           <a href="~/Product/ServiceEdit?Id=@ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id)" class="text-info mr-4"><i class="fa fa-edit fa-2x"></i></a>
+                       }
+                           <a href="javascript:void(0)" data-id="@ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id)" class="text-danger btnDelete"><i class="fa fa-trash fa-2x"></i></a> 
+                   </div> );
+                }).WithPaging(20).Sortable(true)
                 </div>
             </div>
         </div>
