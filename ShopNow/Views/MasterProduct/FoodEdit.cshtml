@@ -3,7 +3,6 @@
     ViewBag.Title = "Dish Update";
 }
 <title>ShopNow | @ViewBag.Title</title>
-
 <style>
     .select2 {
         width: 100% !important;
@@ -90,7 +89,6 @@
                                 </div>
                             </div>
                         </div>
-
                     </div>
                     <div class="card d-none" id="radioAddons">
                         <div class="card-body">
@@ -146,7 +144,6 @@
                                     </div>
                                 </div>
                             </div>
-
                             <div class="card-body d-none" id="AddAddOns">
                                 <div class="row"><label class="font-weight-bold text-success">ADD ONLY ADDONS</label></div>
                                 <div class="row">
@@ -187,7 +184,6 @@
                                     </div>
                                 </div>
                             </div>
-
                             <div class="card-body d-none" id="AddPortionAddOns">
                                 <div class="row"><label class="font-weight-bold text-success">ADD PORTIONS/ADDONS</label></div>
                                 <div class="row">
@@ -241,7 +237,6 @@
                                     </div>
                                 </div>
                             </div>
-
                             <div class="card-body d-none" id="StepbyStep">
                                 <div class="row"><label class="font-weight-bold text-success">STEP BY STEP PROCESS</label></div>
                                 <div class="row">
@@ -384,7 +379,7 @@
                             <div class="row mt-2">
                                 <div class="col-md-2">
                                     <div class="img-upload-container ml-2">
-                                        <img class="img-container w-100 h-100" id="img-DishImage" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePath1" onerror="this.src='/Images/No Photo.png'" />
+                                        <img class="img-container w-100 h-100" id="img-DishImage" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePath1" onerror="this.src='/Images/noimage.png'" />
                                         <input type="file" id="DishImage" name="DishImage" class="d-none" />
                                         <input type="hidden" name="ImagePath1" value="@Model.ImagePath1" />
                                         <label for="DishImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>

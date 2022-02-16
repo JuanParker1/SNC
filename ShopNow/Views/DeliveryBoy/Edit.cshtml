@@ -3,7 +3,6 @@
     ViewBag.Title = "DeliveryBoy Update";
 }
 <title>ShopNow | @ViewBag.Title</title>
-
 <div class="container-fluid">
     <div class="row mb-2">
         <div class="col-md-3">
@@ -120,7 +119,7 @@
                                         <div class="row">
                                             <div class="img-upload-container mx-auto text-center">
                                                 @*<a href="~/Home/ImageDenied">*@
-                                                    <img class="img-container w-100 h-100" id="img-upload" src="@Model.ImagePath" onerror="this.src='/Images/No Photo.png'" />
+                                                    <img class="img-container w-100 h-100" id="img-upload" src="@Model.ImagePath" onerror="this.src='/Images/noimage.png'" />
                                                @* </a>*@
                                                 <input type="file" id="DeliveryBoyImage" name="DeliveryBoyImage" class="d-none" />
                                                 <label for="DeliveryBoyImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
@@ -160,7 +159,7 @@
                                         <div class="row DrivingImg">
                                             <div class="img-upload-container mx-auto">
                                                @* <a href="~/Home/ImageDenied">*@
-                                                    <img class="img-container w-100 h-100" id="img-license" src="@Model.DrivingLicenseImagePath" onerror="this.src='/Images/No Photo.png'" />
+                                                    <img class="img-container w-100 h-100" id="img-license" src="@Model.DrivingLicenseImagePath" onerror="this.src='/Images/noimage.png'" />
                                                @* </a>*@
                                                 <input type="file" id="DrivingLicenseImage" name="DrivingLicenseImage" class="d-none" />
                                                 <label for="DrivingLicenseImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
@@ -230,7 +229,7 @@
                                             <div class="row AccountDocumentImg">
                                                 <div class="img-upload-container mx-auto">
                                                     @*<a href="~/Home/ImageDenied">*@
-                                                        <img class="img-container w-100 h-100 mb-2" id="img-account" src="@Model.BankPassbookPath" onerror="this.src='/Images/No Photo.png'" />
+                                                        <img class="img-container w-100 h-100 mb-2" id="img-account" src="@Model.BankPassbookPath" onerror="this.src='/Images/noimage.png'" />
                                                     @*</a>*@
                                                     <input type="file" id="BankPassbookImage" name="BankPassbookImage" class="d-none" />
                                                     <label for="BankPassbookImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
@@ -289,7 +288,7 @@
                     <div class="col-md-6">
                         <a href="@Model.DrivingLicenseImagePath" target="_blank" class="ml-3 license-pdf d-none"> Click here for Pdf view</a>
                        @* <a href="~/Home/ImageDenied">*@
-                            <img class="img-container w-100 h-100 mb-2 license-img" src="@Model.DrivingLicenseImagePath" onerror="this.src='/Images/No Photo.png'" />
+                            <img class="img-container w-100 h-100 mb-2 license-img" src="@Model.DrivingLicenseImagePath" onerror="this.src='/Images/noimage.png'" />
                        @* </a>*@
                     </div>
                     <div class="col-md-6">
@@ -325,7 +324,7 @@
                     <div class="col-md-6">
                         <a href="@Model.BankPassbookPath" target="_blank" class="mb-2 account-pdf d-none"> Click here for Pdf view</a>
                        @* <a href="~/Home/ImageDenied">*@
-                            <img class="img-container w-100 h-100 mb-2 account-img" src="@Model.BankPassbookPath" onerror="this.src='/Images/No Photo.png'" />
+                            <img class="img-container w-100 h-100 mb-2 account-img" src="@Model.BankPassbookPath" onerror="this.src='/Images/noimage.png'" />
                        @* </a>*@
                     </div>
                     <div class="col-md-6">
