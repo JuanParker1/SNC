@@ -1101,8 +1101,8 @@
             });
 
             $("#btn-cancel").click(function () {
-                var ordernumber = $("#OrderNumber").val();
-                var customerId = $('#CustomerId').val();
+                var ordernumber = $("#hidden-ordernumber").val();
+                var customerId = $('#hidden-customerid').val();
                 var status = $('#CancelStatus').val();
                 var remark = $('#CancelledRemark').val();
                 $.getJSON("/Cart/Cancel?OrderNumber=" + ordernumber + "&customerId=" + customerId + "&status=" + status + "&remark=" + remark, function (data) {
