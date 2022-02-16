@@ -986,4 +986,60 @@ namespace ShopNow.ViewModels
             public long OrderId { get; set; }
         }
     }
+
+    public class OrderListViewModel
+    {
+        public int ShopId { get; set; }
+        public string ShopName { get; set; }
+        public string District { get; set; }
+        public int Status { get; set; }
+        public List<ListItem> ListItems { get; set; }
+        public class ListItem
+        {
+            public int No { get; set; }
+            public long Id { get; set; }
+            public string OrderNumber { get; set; }
+            public string ShopName { get; set; }
+            public string DeliveryAddress { get; set; }
+            public string ShopPhoneNumber { get; set; }
+            public string DeliveryBoyName { get; set; }
+            public string PaymentMode { get; set; }
+            public double Amount { get; set; }
+            public string CustomerPhoneNumber { get; set; }
+            public int Status { get; set; }
+            public DateTime DateEncoded { get; set; }
+            public double? RefundAmount { get; set; }
+            public string RefundRemark { get; set; }
+            public bool IsPickupDrop { get; set; }
+            public string OrderStatusText
+            {
+                get
+                {
+                    switch (this.Status)
+                    {
+                        case 2:
+                            return "Pending";
+                        case 3:
+                            return "Order is being Prepared";
+                        case 4:
+                            return "Assigned for Delivery. Waiting for Pickup";
+                        case 5:
+                            return "On the Way to Delivery";
+                        case 6:
+                            return "Delivered";
+                        case 7:
+                            return "Cancelled";
+                        case 8:
+                            return "Order Ready";
+                        case 9:
+                            return "Customer Cancelled";
+                        case 10:
+                            return "Customer Not Pickup";
+                        default:
+                            return "N/A";
+                    }
+                }
+            }
+        }
+    }
 }
