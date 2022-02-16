@@ -1671,7 +1671,7 @@ namespace ShopNow.Controllers
                    //OnWork = i.o.d.OnWork,
                    OrderNumber = i.o.o.o.OrderNumber,
                    PaymentMode = i.o.p.PaymentMode,
-                   RefundAmount = i.o.p.RefundAmount,
+                   RefundAmount = i.o.p.RefundAmount ?? 0,
                    RefundRemark = i.o.p.RefundRemark,
                    ShopAddress = i.o.o.s.Address,
                    ShopLatitude = i.o.o.s.Latitude,
