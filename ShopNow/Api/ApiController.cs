@@ -6658,6 +6658,34 @@ namespace ShopNow.Controllers
             return Json(list, JsonRequestBehavior.AllowGet);
         }
 
+        public JsonResult GetDeliveryBoyCashHandOver(string phoneNumber)
+        {
+            var list = db.Payments.Where(i => i.Status == 0 && i.PaymentMode == "Cash On Hand")
+                .Join(db.Orders.Where(i => i.Status == 6 && i.DeliveryBoyPhoneNumber == phoneNumber), p => p.OrderNumber, c => c.OrderNumber, (p, c) => new { p, c })
+                   .Select(i => new
+                   {
+                       Id = i.c.Id,
+                       OrderNumber = i.p.OrderNumber,
+                       Amount = i.c.IsPickupDrop == true ? i.c.TotalPrice : i.p.Amount - (i.p.RefundAmount ?? 0),
+                       DateEncoded = i.p.DateEncoded,
+                       DeliveryOrderPaymentStatus = i.c.DeliveryOrderPaymentStatus
+                   }).Where(i=>i.DeliveryOrderPaymentStatus ==0).OrderByDescending(i => i.DateEncoded).ToList();
+
+            return Json(list, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult UpdateDeliveryBoyCashHandOverPayment(int orderid)
+        {
+            var order = db.Orders.FirstOrDefault(i => i.Id == orderid);
+            if (order != null)
+            {
+                order.DeliveryOrderPaymentStatus = 1;
+                db.Entry(order).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+            }
+            return Json(true, JsonRequestBehavior.AllowGet);
+        }
+
         public JsonResult SendTestNotification(string deviceId = "", string title = "", string body = "")
         {
             Helpers.PushNotification.SendbydeviceId(body, title, "", deviceId);
