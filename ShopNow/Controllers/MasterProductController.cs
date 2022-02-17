@@ -195,6 +195,8 @@ namespace ShopNow.Controllers
                 }
             }
             Session["AddOns"] = null;
+
+            SaveKeywordData(master.Name);
             return View();
         }
 
@@ -312,6 +314,7 @@ namespace ShopNow.Controllers
                 }
             }
             Session["EditAddOns"] = null;
+            SaveKeywordData(master.Name);
             return RedirectToAction("FoodEdit", new { id = AdminHelpers.ECodeLong(model.Id) });
         }
 
@@ -601,6 +604,7 @@ namespace ShopNow.Controllers
                     ViewBag.Message = "Error occurred: " + amazonS3Exception.Message;
                 }
             }
+            SaveKeywordData(master.Name);
             return View();
         }
 
@@ -716,6 +720,8 @@ namespace ShopNow.Controllers
                 }
             }
             //return RedirectToAction("FMCGList");
+            SaveKeywordData(master.Name);
+
             return RedirectToAction("FMCGEdit", new { id = AdminHelpers.ECodeLong(model.Id) });
         }
 
@@ -855,6 +861,8 @@ namespace ShopNow.Controllers
                     ViewBag.Message = "Error occurred: " + amazonS3Exception.Message;
                 }
             }
+            SaveKeywordData(master.Name);
+
             return View();
         }
 
@@ -980,6 +988,7 @@ namespace ShopNow.Controllers
                 }
             }
             // return RedirectToAction("MedicalList");
+            SaveKeywordData(master.Name);
             return RedirectToAction("MedicalEdit", new { id = AdminHelpers.ECodeLong(model.Id) });
         }
 
@@ -1247,6 +1256,7 @@ namespace ShopNow.Controllers
                     ViewBag.Message = "Error occurred: " + amazonS3Exception.Message;
                 }
             }
+            SaveKeywordData(prod.Name);
             return View();
         }
 
@@ -1348,6 +1358,7 @@ namespace ShopNow.Controllers
                     ViewBag.Message = "Error occurred: " + amazonS3Exception.Message;
                 }
             }
+            SaveKeywordData(prod.Name);
             return RedirectToAction("ElectronicEdit", new { id = AdminHelpers.ECodeLong(model.Id) });
         }
 
@@ -2394,6 +2405,24 @@ namespace ShopNow.Controllers
                 _db.SaveChanges();
             }
             return Json(true, JsonRequestBehavior.AllowGet);
+        }
+
+        public void SaveKeywordData(string Name)
+        {
+            var nameArray = Name.Split(' ');
+            foreach (var name in nameArray)
+            {
+                var checkExist = _db.KeywordDatas.Any(i => i.Name.Trim().ToLower() == name.Trim().ToLower());
+                if (!checkExist)
+                {
+                    var keywordData = new KeywordData
+                    {
+                        Name = name
+                    };
+                    _db.KeywordDatas.Add(keywordData);
+                    _db.SaveChanges();
+                }
+            }
         }
     }
 }
