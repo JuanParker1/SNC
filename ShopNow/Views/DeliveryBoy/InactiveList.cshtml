@@ -119,23 +119,6 @@
                 });
             }).draw();
 
-            $('#ShopId').select2({
-                placeholder: "Search Shop",
-                ajax: {
-                    url: "/DeliveryBoy/GetShopSelect2",
-                    width: '100%',
-                    delay: 250,
-                    dataType: 'json'
-                }
-            }).on('select2:select', function (e) {
-                $('input[name="ShopName"]').val(e.params.data.text);
-            });
-
-            $("#Filter").click(function () {
-                var shopid = $("#ShopId").val();
-                window.location.href = "/DeliveryBoy/List/?shopid=" + shopid;
-            });
-
             var modal = document.getElementById('myModal');
             var img = document.getElementsByClassName('DeliveryBoyImage');
             var modalImg = document.getElementById("myImage");

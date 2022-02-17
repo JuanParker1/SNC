@@ -18,17 +18,16 @@
             <div class="card shadow mt-3">
                 <div class="card-body">
                     @Html.Grid(Model).Columns(columns =>
-{
-columns.Add(c => c.Name).Titled("Name").Encoded(false).Sanitized(false).Filterable(true).SetWidth(15).RenderValueAs(a => @<div><a href="/Staff/Details?Id=@HttpUtility.UrlEncode(ShopNow.Helpers.AdminHelpers.ECodeInt(a.Id))" class="mr-5">@a.Name</a></div>);
-columns.Add(c => c.PhoneNumber).Titled("Phone No.").Filterable(true).SetWidth(10);
-columns.Add(c => c.ShopName).Titled("Shop Name").Filterable(true).SetWidth(30);
-columns.Add().Encoded(false).Sanitized(false).Titled("Image").Filterable(false).SetWidth(10).RenderValueAs(c => @<div><img alt="Image" data-toggle="modal" data-target="#myModal" class="img-thumbnail StaffImage" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@c.ImagePath" width="45" height="45" onerror="this.src='/Images/noimage.png'" /></div>);
-columns.Add().Encoded(false).Sanitized(false).Titled("Action").SetWidth(5)
-.RenderValueAs(o => @<div>
-    <a href="/Staff/Edit?Id=@ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id)" class="text-info mr-5"><i class="fa fa-edit fa-lg"></i></a>
-    <a href="javascript:void(0)" data-id=@o.Id class="text-danger btnDelete"><i class="fa fa-trash fa-lg"></i></a>
-</div>);
-}).WithPaging(20).Sortable(true)
+                    {
+                         columns.Add(c => c.Name).Titled("Name").Encoded(false).Sanitized(false).Filterable(true).SetWidth(15).RenderValueAs(a => @<div><a href="/Staff/Details?Id=@HttpUtility.UrlEncode(ShopNow.Helpers.AdminHelpers.ECodeInt(a.Id))" class="mr-5">@a.Name</a></div>);
+                         columns.Add(c => c.PhoneNumber).Titled("Phone No.").Filterable(true).SetWidth(10);
+                         columns.Add(c => c.ShopName).Titled("Shop Name").Filterable(true).SetWidth(30);
+                         columns.Add().Encoded(false).Sanitized(false).Titled("Image").Filterable(false).SetWidth(10).RenderValueAs(c => @<div><img alt="Image" data-toggle="modal" data-target="#myModal" class="img-thumbnail StaffImage" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@c.ImagePath" width="50" height="50" onerror="this.src='/Images/noimage.png'" /></div>);
+                         columns.Add().Encoded(false).Sanitized(false).Titled("Action").SetWidth(5)
+                        .RenderValueAs(o => @<div>
+                          <a href="/Staff/Edit?Id=@ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id)" class="text-info mr-5"><i class="fa fa-edit fa-lg"></i></a>
+                          <a href="javascript:void(0)" data-id=@o.Id class="text-danger btnDelete"><i class="fa fa-trash fa-lg"></i></a> </div>);
+                    }).WithPaging(20).Sortable(true)
                 </div>
             </div>
         </div>

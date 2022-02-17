@@ -3,38 +3,6 @@
     ViewBag.Title = "Staff Update";
 }
 <title>ShopNow | @ViewBag.Title</title>
-
-@*<style>
-    .img-upload-container {
-        position: relative;
-        width: 120px;
-        height: 120px;
-        background: #fff;
-        border: 1px solid #ccc;
-        float: left;
-        margin: 5px;
-    }
-
-    .img-container {
-        width: 100%;
-    }
-
-    .img-browse {
-        position: absolute;
-        top: 35%;
-        left: 0;
-        text-align: center;
-        cursor: pointer;
-        width: 100%;
-        font-weight: normal;
-        opacity: 0.5;
-        transition: 0.5s;
-    }
-
-        .img-browse:hover {
-            opacity: 1.5;
-        }
-</style>*@
 @using (Html.BeginForm("Edit", "Staff", FormMethod.Post, new { id = "StaffForm", role = "form", enctype = "multipart/form-data" }))
 {
     <div class="container-fluid">
@@ -99,7 +67,6 @@
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
     </div>
