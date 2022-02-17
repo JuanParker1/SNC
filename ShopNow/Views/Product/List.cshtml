@@ -17,7 +17,7 @@
                 <div class="row">
                     <div class="col-md-8">
                         <select id="ShopId" class="form-control" name="ShopId">
-                            @if (!string.IsNullOrEmpty(Model.ShopName))
+                            @if (Model.ShopId != 0)
                             {
                                 <option value="@Model.ShopId">@Model.ShopName</option>
                             }

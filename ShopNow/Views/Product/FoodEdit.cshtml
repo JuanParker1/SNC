@@ -278,7 +278,7 @@
             $('#Price').on('change keyup', function () {
                 var menuprice = $("#MenuPrice").val();
                 var sellingprice = $(this).val();
-                var results = Math.ceil(((menuprice - sellingprice) / menuprice) * 100);
+                var results = parseFloat(((menuprice - sellingprice) / menuprice) * 100).toFixed(2);
                 $("#Percentage").val(results);
                 calculateShopPrice(menuprice, $("#ShopPricePercentage").val(), sellingprice, results); 
             });
@@ -286,7 +286,7 @@
             $('#MenuPrice').on('change keyup', function () {
                 var menuprice = $(this).val();
                 var sellingprice = $('#Price').val();
-                var results = Math.ceil(((menuprice - sellingprice) / menuprice) * 100);
+                var results = parseFloat(((menuprice - sellingprice) / menuprice) * 100).toFixed(2);
                 $("#Percentage").val(results);
                 calculateShopPrice(menuprice, $("#ShopPricePercentage").val(), sellingprice, results);  //Calculate ShopPricePercentage 
             });
@@ -294,7 +294,7 @@
             $('#Percentage').on('change keyup', function () {
                 var percentage = $(this).val();
                 var menuprice = $("#MenuPrice").val();
-                var results = Math.ceil(menuprice - (menuprice * (percentage / 100)));
+                var results = parseFloat(menuprice - (menuprice * (percentage / 100))).toFixed(2);
                 $("#Price").val(results);
                // calculateShopPrice(menuprice, $("#ShopPricePercentage").val(), sellingprice, results);
             });
