@@ -53,8 +53,8 @@ namespace ShopNow.Controllers
                             .Select(i => new AccessPolicyListViewModel.AccessPolicy
                             {
                                 PageCode = i.p.Code,
-                                PageName = i.p.Name.Split('_')[1],
-                                ModuleName = i.p.Name.Split('_')[0],
+                                PageName = i.p.Name,
+                                ModuleName = i.p.Name,
                                 IsAccess = i.a.Any() ? i.a.FirstOrDefault().isAccess : false,
                                 Id = i.a.Any() ? i.a.FirstOrDefault().Id : 0,
                                 CustomerId = i.a.Any() ? i.a.FirstOrDefault().CustomerId : 0,
@@ -93,8 +93,8 @@ namespace ShopNow.Controllers
                 {
                     Id = i.Id,
                     PageCode = i.Code,
-                    ModuleName = i.Name.Split('_')[0],
-                    PageName = i.Name.Split('_')[1],
+                    ModuleName = i.Name,
+                    PageName = i.Name,
                     Status = i.Status
                 }).ToList();
                 int counter = 1;

@@ -3,7 +3,6 @@
     ViewBag.Title = "DeliveryBoy Detail";
 }
 <title>ShopNow | @ViewBag.Title</title>
-
 <div class="container-fluid my-0">
     <div class="mb-1 d-flex justify-content-between">
         <h5 class="text-success mt-1" style="letter-spacing:1px">DELIVERYBOY DETAIL</h5>
@@ -15,9 +14,7 @@
                 <div class="col-md-3">
                     <div class="form-group row">
                         <div class="col-md-12 text-center mb-2">
-                          @*  <a href="~/Home/ImageDenied" data-toggle="modal" data-target="#myModalDeliveryBoy" title="Click Here To Preview!">*@
-                                <img src="@Model.ImagePath" class="img-thumbnail mb-2" width="100" height="100" onerror="this.src='/Images/No Photo.png'" />
-                           @* </a>*@
+                            <img src="@Model.ImagePath" class="img-thumbnail mb-2" width="100" height="100" onerror="this.src='/Images/noimage.png'" />
                             <input type="hidden" name="DrivingLicenseImagePath" id="DrivingLicenseImagePath" value="@Model.DrivingLicenseImagePath" />
                             <input type="hidden" name="BankPassbookPath" id="BankPassbookPath" value="@Model.BankPassbookPath" />
                             <input type="hidden" name="CVPath" id="CVPath" value="@Model.CVPath" />
@@ -73,24 +70,9 @@
                     </div>
                     <div class="col-md-6 mx-auto">
                         <div class="img-upload-container text-center mx-auto">
-                            <img src="@Model.DrivingLicenseImagePath" class="img-thumbnail mb-2" width="100" height="100" onerror="this.src='/Images/No Photo.png'" />
-                            @*<br />
-                                <a id="LicensePdf" class="" href="@Model.DrivingLicenseImagePath" target="_blank">View PDF</a>*@
-                        </div>
+                            <img src="@Model.DrivingLicenseImagePath" class="img-thumbnail mb-2" width="100" height="100" onerror="this.src='/Images/noimage.png'" />
+                          </div>
                     </div>
-                    @*<div class="col-md-12">
-                            <hr class="border-success" />
-                        </div>*@
-                    @*<div class="col-md-6" id="CVPdf">
-                            <div class="form-group row">
-                                <div class="col-md-5">
-                                    <label>Resume</label>
-                                </div>
-                                <div class="col-md-7 text-center">
-                                    <a href="@Model.CVPath" target="_blank">View PDF</a>
-                                </div>
-                            </div>
-                        </div>*@
                     <div class="col-md-12">
                         <hr class="border-success" />
                     </div>
@@ -103,9 +85,7 @@
                     </div>
                     <div class="col-md-6 mb-3 mx-auto">
                         <div class="img-upload-container text-center">
-                           @* <a href="~/Home/ImageDenied" data-toggle="modal" data-target="#myModalBankPassbook" title="Click Here To Preview!">*@
-                                <img src="@Model.BankPassbookPath" class="img-thumbnail mb-2" width="100" height="100" onerror="this.src='/Images/No Photo.png'" />
-                           @* </a>*@
+                            <img src="@Model.BankPassbookPath" class="img-thumbnail mb-2" width="100" height="100" onerror="this.src='/Images/noimage.png'" />
                             <br />
                             <a class="d-none" href="@Model.BankPassbookPath" target="_blank">View PassBook PDF</a>
                         </div>
