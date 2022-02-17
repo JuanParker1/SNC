@@ -6108,7 +6108,7 @@ namespace ShopNow.Controllers
 
         public JsonResult GetCustomerSearchHistory(int customerid)
         {
-            var searchList = db.CustomerSearchHistories.Where(i => i.Status == 0 && i.CustomerId == customerid).OrderByDescending(i => i.DateEncoded).Take(10).ToList();
+            var searchList = db.CustomerSearchHistories.Where(i => i.Status == 0 && i.CustomerId == customerid).OrderByDescending(i => i.DateEncoded).Take(5).ToList();
             var productList = searchList.Where(i => i.Type==1)
                 .Join(db.Shops.Where(i=>i.Status ==0),sh=>sh.ShopId,s=>s.Id,(sh,s)=>new { sh,s})
                 .Select(i=>new {
@@ -6126,7 +6126,8 @@ namespace ShopNow.Controllers
                     ShopLongitude = i.s.Longitude,
                     ShopName = i.s.Name,
                     Status = db.Products.FirstOrDefault(a=>a.Id == i.sh.SearchId).Status,
-                    StreetName = i.s.StreetName
+                    StreetName = i.s.StreetName,
+                    Type = i.sh.Type
                 }).ToList();
 
             var shopList = searchList.Where(i => i.Type == 2)
@@ -6146,14 +6147,15 @@ namespace ShopNow.Controllers
                     ShopLongitude = i.s.Longitude,
                     ShopName = i.s.Name,
                     Status = i.s.Status,
-                    StreetName = i.s.StreetName
+                    StreetName = i.s.StreetName,
+                    Type = i.sh.Type
                 }).ToList();
 
             var list = productList.Union(shopList).ToList();
             return Json(new { list = list }, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult AddCustomerSearchHistory(int customerid,int searchid,string serachtext,int type)
+        public JsonResult AddCustomerSearchHistory(int customerid,int searchid,string searchtext,int type)
         {
             var customerSearchHistory = db.CustomerSearchHistories.Any(i => i.CustomerId == customerid && i.SearchId == searchid && i.Status == 0);
             if (!customerSearchHistory)
@@ -6163,7 +6165,7 @@ namespace ShopNow.Controllers
                     CustomerId = customerid,
                     DateEncoded = DateTime.Now,
                     SearchId = searchid,
-                    SearchText = serachtext,
+                    SearchText = searchtext,
                     Status = 0,
                     Type = type, // 1- Product, 2-Shop
                     ShopId = type == 2 ? searchid : db.Products.FirstOrDefault(i => i.Id == searchid).ShopId,
