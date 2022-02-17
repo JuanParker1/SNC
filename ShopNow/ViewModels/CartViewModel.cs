@@ -1007,6 +1007,7 @@ namespace ShopNow.ViewModels
         public string ShopName { get; set; }
         public string District { get; set; }
         public int Status { get; set; }
+        public bool IsPickupDrop { get; set; }
         public List<ListItem> ListItems { get; set; }
         public class ListItem
         {
