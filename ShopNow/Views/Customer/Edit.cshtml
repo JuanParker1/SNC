@@ -1,6 +1,5 @@
 ﻿@model ShopNow.ViewModels.CustomerEditViewModel
 @{
-
     ViewBag.Title = "Customer Update";
 }
 <title>ShopNow | Customer Update</title>
@@ -70,7 +69,7 @@
                                         <label class="col-form-label"><strong class="text-secondary">Image</strong></label>
                                     </div>
                                     <div class="col-md-6">
-                                        <img class="img-upload-container" src="@Model.ImagePath" onerror="this.src='/Images/No Photo.png'" />
+                                        <img class="img-upload-container" src="@Model.ImagePath" onerror="this.src='/Images/noimage.png'" />
                                     </div>
                                 </div>
                             </div>
@@ -116,7 +115,7 @@
                                 <label class="col-form-label text-secondary font-weight-bold">Aadhar Image</label>
                             </div>
                             <div class="col-md-8">
-                                <img class="img-upload-container" src="@Model.ImageAadharPath" onerror="this.src='/Images/No Photo.png'" />
+                                <img class="img-upload-container" src="@Model.ImageAadharPath" onerror="this.src='/Images/noimage.png'" />
                             </div>
                         </div>
                         <div class="form-group row">
@@ -158,7 +157,7 @@
                     <div class="col-md-12">
                         <div class="row">
                             <div class="col-md-6">
-                                <img class="img-container w-100 h-100 mb-2" src="@Model.ImageAadharPath" onerror="this.src='/Images/No Photo.png'" />
+                                <img class="img-container w-100 h-100 mb-2" src="@Model.ImageAadharPath" onerror="this.src='/Images/noimage.png'" />
                             </div>
                             <div class="col-md-6">
                                 <div class="row">

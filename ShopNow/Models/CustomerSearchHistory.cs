@@ -21,5 +21,7 @@ namespace ShopNow.Models
         public System.DateTime DateEncoded { get; set; }
         public int Status { get; set; }
         public int Type { get; set; }
+        public int ShopId { get; set; }
+        public long MasterProductId { get; set; }
     }
 }

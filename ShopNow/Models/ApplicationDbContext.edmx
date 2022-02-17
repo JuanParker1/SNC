@@ -577,6 +577,8 @@
           <Property Name="DateEncoded" Type="datetime" Nullable="false" />
           <Property Name="Status" Type="int" Nullable="false" />
           <Property Name="Type" Type="int" Nullable="false" />
+          <Property Name="ShopId" Type="int" Nullable="false" />
+          <Property Name="MasterProductId" Type="bigint" Nullable="false" />
         </EntityType>
         <EntityType Name="CustomerWalletHistory">
           <Key>
@@ -2222,18 +2224,6 @@
           <Property Name="DateEncoded" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="Status" Type="Int32" Nullable="false" />
         </EntityType>
-        <EntityType Name="CustomerSearchHistory">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="CustomerId" Type="Int32" Nullable="false" />
-          <Property Name="SearchId" Type="Int32" Nullable="false" />
-          <Property Name="SearchText" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
-          <Property Name="DateEncoded" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="Status" Type="Int32" Nullable="false" />
-          <Property Name="Type" Type="Int32" Nullable="false" />
-        </EntityType>
         <EntityType Name="CustomerWalletHistory">
           <Key>
             <PropertyRef Name="Id" />
@@ -2935,7 +2925,6 @@
           <EntitySet Name="CustomerReviews" EntityType="Self.CustomerReview" />
           <EntitySet Name="CustomerReviewReplies" EntityType="Self.CustomerReviewReply" />
           <EntitySet Name="CustomerSearchDatas" EntityType="Self.CustomerSearchData" />
-          <EntitySet Name="CustomerSearchHistories" EntityType="Self.CustomerSearchHistory" />
           <EntitySet Name="CustomerWalletHistories" EntityType="Self.CustomerWalletHistory" />
           <EntitySet Name="DeliveryBoyShops" EntityType="Self.DeliveryBoyShop" />
           <EntitySet Name="DeliveryCharges" EntityType="Self.DeliveryCharge" />
@@ -3114,6 +3103,7 @@
           <EntitySet Name="CustomerGroceryUploads" EntityType="sncModel.CustomerGroceryUpload" />
           <EntitySet Name="CustomerGroceryUploadImages" EntityType="sncModel.CustomerGroceryUploadImage" />
           <EntitySet Name="FAQs" EntityType="sncModel.FAQ" />
+          <EntitySet Name="CustomerSearchHistories" EntityType="sncModel.CustomerSearchHistory" />
         </EntityContainer>
         <ComplexType Name="GetDEliveryBoyList_Result">
           <Property Type="Int32" Name="Id" Nullable="false" />
@@ -3735,6 +3725,20 @@
           <Property Name="DateUpdated" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="UpdatedBy" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
         </EntityType>
+        <EntityType Name="CustomerSearchHistory">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CustomerId" Type="Int32" Nullable="false" />
+          <Property Name="SearchId" Type="Int32" Nullable="false" />
+          <Property Name="SearchText" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="DateEncoded" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Status" Type="Int32" Nullable="false" />
+          <Property Name="Type" Type="Int32" Nullable="false" />
+          <Property Name="ShopId" Type="Int32" Nullable="false" />
+          <Property Name="MasterProductId" Type="Int64" Nullable="false" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -4168,19 +4172,6 @@
                 <ScalarProperty Name="LinkedMasterProductName" ColumnName="LinkedMasterProductName" />
                 <ScalarProperty Name="DateEncoded" ColumnName="DateEncoded" />
                 <ScalarProperty Name="Status" ColumnName="Status" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="CustomerSearchHistories">
-            <EntityTypeMapping TypeName="sncModel.CustomerSearchHistory">
-              <MappingFragment StoreEntitySet="CustomerSearchHistory">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
-                <ScalarProperty Name="SearchId" ColumnName="SearchId" />
-                <ScalarProperty Name="SearchText" ColumnName="SearchText" />
-                <ScalarProperty Name="DateEncoded" ColumnName="DateEncoded" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="Type" ColumnName="Type" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -5588,6 +5579,21 @@
                 <ScalarProperty Name="Status" ColumnName="Status" />
                 <ScalarProperty Name="Description" ColumnName="Description" />
                 <ScalarProperty Name="FAQCategoryId" ColumnName="FAQCategoryId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CustomerSearchHistories">
+            <EntityTypeMapping TypeName="sncModel.CustomerSearchHistory">
+              <MappingFragment StoreEntitySet="CustomerSearchHistory">
+                <ScalarProperty Name="MasterProductId" ColumnName="MasterProductId" />
+                <ScalarProperty Name="ShopId" ColumnName="ShopId" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="DateEncoded" ColumnName="DateEncoded" />
+                <ScalarProperty Name="SearchText" ColumnName="SearchText" />
+                <ScalarProperty Name="SearchId" ColumnName="SearchId" />
+                <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

@@ -39,16 +39,14 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SNCCL059")]
-        public ActionResult List(int shopId = 0, string district = "")
+        public ActionResult List(OrderListViewModel model)
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
-            var dt = DateTime.Now;
-            var model = new CartListViewModel();
-            model.TodayLists = db.Orders.Where(i => /*(DbFunctions.TruncateTime(i.DateEncoded) == DbFunctions.TruncateTime(dt))*/ i.Status != 6 && i.Status != 7 && i.Status != 9 && i.Status != 10 && i.Status != 0 && i.Status != -1 && (shopId != 0 ? i.ShopId == shopId : true))
+            model.ListItems = db.Orders.Where(i => (model.Status == 0 ? i.Status != 6 && i.Status != 7 && i.Status != 9 && i.Status != 10 && i.Status != 0 && i.Status != -1 : i.Status == model.Status) && (model.ShopId != 0 ? i.ShopId == model.ShopId : true))
                 .Join(db.Payments, c => c.OrderNumber, p => p.OrderNumber, (c, p) => new { c, p })
-                .Join(db.Shops.Where(i => (district != "" ? i.DistrictName == district : true)), c => c.c.ShopId, s => s.Id, (c, s) => new { c, s })
-            .Select(i => new CartListViewModel.TodayList
+                .Join(db.Shops.Where(i => (!string.IsNullOrEmpty(model.District) ? i.DistrictName == model.District : true)), c => c.c.ShopId, s => s.Id, (c, s) => new { c, s })
+            .Select(i => new OrderListViewModel.ListItem
             {
                 Id = i.c.c.Id,
                 ShopName = i.c.c.ShopName,
@@ -66,9 +64,8 @@ namespace ShopNow.Controllers
                 IsPickupDrop = i.c.c.IsPickupDrop
             }).OrderBy(i => i.Status).OrderByDescending(i => i.DateEncoded).ToList();
             int counter = 1;
-            model.TodayLists.ForEach(x => x.No = counter++);
-            ViewBag.District = district;
-            return View(model.TodayLists);
+            model.ListItems.ForEach(x => x.No = counter++);
+            return View(model);
         }
 
         [AccessPolicy(PageCode = "SNCCP060")]

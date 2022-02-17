@@ -1671,7 +1671,7 @@ namespace ShopNow.Controllers
                    //OnWork = i.o.d.OnWork,
                    OrderNumber = i.o.o.o.OrderNumber,
                    PaymentMode = i.o.p.PaymentMode,
-                   RefundAmount = i.o.p.RefundAmount,
+                   RefundAmount = i.o.p.RefundAmount ?? 0,
                    RefundRemark = i.o.p.RefundRemark,
                    ShopAddress = i.o.o.s.Address,
                    ShopLatitude = i.o.o.s.Latitude,
@@ -5292,7 +5292,8 @@ namespace ShopNow.Controllers
         public JsonResult GetLiveOrderCount(int customerid)
         {
             var liveOrdercount = db.Orders.Where(i => i.CustomerId == customerid && i.Status != 0 && i.Status != 6 && i.Status != 7 && i.Status != 9 && i.Status != 10 && i.Status != -1).Count();
-            return Json(new { count = liveOrdercount }, JsonRequestBehavior.AllowGet);
+            var oldOrdercount = db.Orders.Where(i => i.CustomerId == customerid && i.Status == 6).Count();
+            return Json(new { count = liveOrdercount,oldOrderCount = oldOrdercount }, JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult GetCheckOldCart(OldCartCheckViewModel model)
@@ -6103,23 +6104,70 @@ namespace ShopNow.Controllers
 
         public JsonResult GetCustomerSearchHistory(int customerid)
         {
-            var list = db.CustomerSearchHistories.Where(i => i.Status == 0 && i.CustomerId == customerid).OrderByDescending(i => i.DateEncoded).Take(10).ToList();
+            var searchList = db.CustomerSearchHistories.Where(i => i.Status == 0 && i.CustomerId == customerid).OrderByDescending(i => i.DateEncoded).Take(10).ToList();
+            var productList = searchList.Where(i => i.Type==1)
+                .Join(db.Shops.Where(i=>i.Status ==0),sh=>sh.ShopId,s=>s.Id,(sh,s)=>new { sh,s})
+                .Select(i=>new {
+                    ProductId = i.sh.SearchId,
+                    ProductName = i.sh.SearchText,
+                    ImagePath = db.MasterProducts.FirstOrDefault(a => a.Id == i.sh.MasterProductId).ImagePath1,
+                    ShopCategoryId = i.s.ShopCategoryId,
+                    ShopId = i.s.Id,
+                    ShopOnlineStatus = i.s.IsOnline,
+                    Rating = RatingCalculation(i.s.Id),
+                    ReviewCount = db.CustomerReviews.Where(c => c.ShopId == i.s.Id).Count(),
+                    ShopAddress = i.s.Address,
+                    ShopImagePath = i.s.ImagePath,
+                    ShopLatitude = i.s.Latitude,
+                    ShopLongitude = i.s.Longitude,
+                    ShopName = i.s.Name,
+                    Status = db.Products.FirstOrDefault(a=>a.Id == i.sh.SearchId).Status,
+                    StreetName = i.s.StreetName
+                }).ToList();
+
+            var shopList = searchList.Where(i => i.Type == 2)
+                .Join(db.Shops.Where(i => i.Status == 0), sh => sh.SearchId, s => s.Id, (sh, s) => new { sh, s })
+                .Select(i => new {
+                    ProductId = 0,
+                    ProductName = "",
+                    ImagePath = "",
+                    ShopCategoryId = i.s.ShopCategoryId,
+                    ShopId = i.s.Id,
+                    ShopOnlineStatus = i.s.IsOnline,
+                    Rating = RatingCalculation(i.s.Id),
+                    ReviewCount = db.CustomerReviews.Where(c => c.ShopId == i.s.Id).Count(),
+                    ShopAddress = i.s.Address,
+                    ShopImagePath = i.s.ImagePath,
+                    ShopLatitude = i.s.Latitude,
+                    ShopLongitude = i.s.Longitude,
+                    ShopName = i.s.Name,
+                    Status = i.s.Status,
+                    StreetName = i.s.StreetName
+                }).ToList();
+
+            var list = productList.Union(shopList).ToList();
             return Json(new { list = list }, JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult AddCustomerSearchHistory(int customerid,int searchid,string serachtext,int type)
         {
-            var customerSH = new CustomerSearchHistory
+            var customerSearchHistory = db.CustomerSearchHistories.Any(i => i.CustomerId == customerid && i.SearchId == searchid && i.Status == 0);
+            if (!customerSearchHistory)
             {
-                CustomerId = customerid,
-                DateEncoded = DateTime.Now,
-                SearchId = searchid,
-                SearchText = serachtext,
-                Status = 0,
-                Type = type // 1- Product, 2-Shop
-            };
-            db.CustomerSearchHistories.Add(customerSH);
-            db.SaveChanges();
+                var customerSH = new CustomerSearchHistory
+                {
+                    CustomerId = customerid,
+                    DateEncoded = DateTime.Now,
+                    SearchId = searchid,
+                    SearchText = serachtext,
+                    Status = 0,
+                    Type = type, // 1- Product, 2-Shop
+                    ShopId = type == 2 ? searchid : db.Products.FirstOrDefault(i => i.Id == searchid).ShopId,
+                    MasterProductId = type == 1 ? db.Products.FirstOrDefault(i => i.Id == searchid).MasterProductId : 0
+                };
+                db.CustomerSearchHistories.Add(customerSH);
+                db.SaveChanges();
+            }
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
@@ -6656,6 +6704,34 @@ namespace ShopNow.Controllers
                     Description = i.f.Description
                 }).ToList();
             return Json(list, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult GetDeliveryBoyCashHandOver(string phoneNumber)
+        {
+            var list = db.Payments.Where(i => i.Status == 0 && i.PaymentMode == "Cash On Hand")
+                .Join(db.Orders.Where(i => i.Status == 6 && i.DeliveryBoyPhoneNumber == phoneNumber), p => p.OrderNumber, c => c.OrderNumber, (p, c) => new { p, c })
+                   .Select(i => new
+                   {
+                       Id = i.c.Id,
+                       OrderNumber = i.p.OrderNumber,
+                       Amount = i.c.IsPickupDrop == true ? i.c.TotalPrice : i.p.Amount - (i.p.RefundAmount ?? 0),
+                       DateEncoded = i.p.DateEncoded,
+                       DeliveryOrderPaymentStatus = i.c.DeliveryOrderPaymentStatus
+                   }).Where(i=>i.DeliveryOrderPaymentStatus ==0).OrderByDescending(i => i.DateEncoded).ToList();
+
+            return Json(list, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult UpdateDeliveryBoyCashHandOverPayment(int orderid)
+        {
+            var order = db.Orders.FirstOrDefault(i => i.Id == orderid);
+            if (order != null)
+            {
+                order.DeliveryOrderPaymentStatus = 1;
+                db.Entry(order).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+            }
+            return Json(true, JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult SendTestNotification(string deviceId = "", string title = "", string body = "")
