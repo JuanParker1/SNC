@@ -53,17 +53,20 @@ namespace ShopNow.Controllers
                             .Select(i => new AccessPolicyListViewModel.AccessPolicy
                             {
                                 PageCode = i.p.Code,
-                                PageName = i.p.Name,
+                                PageName = i.p.Name.Split('_')[1],
+                                ModuleName = i.p.Name.Split('_')[0],
                                 IsAccess = i.a.Any() ? i.a.FirstOrDefault().isAccess : false,
-                                Id = i.a.Any() ? i.a.FirstOrDefault().Id:0,
-                                CustomerId = i.a.Any() ? i.a.FirstOrDefault().CustomerId:0,
-                                CustomerName = i.a.Any() ? i.a.FirstOrDefault().CustomerName:"",
+                                Id = i.a.Any() ? i.a.FirstOrDefault().Id : 0,
+                                CustomerId = i.a.Any() ? i.a.FirstOrDefault().CustomerId : 0,
+                                CustomerName = i.a.Any() ? i.a.FirstOrDefault().CustomerName : "",
                                 Status = i.p.Status,
                             }).OrderBy(i => i.PageName).ToList();
                 
                     model.CustomerId = customerid;
                     model.CustomerName = db.Customers.FirstOrDefault(m => m.Id == customerid).Name;
-               
+                    int counter = 1;
+                    model.List.ForEach(x => x.No = counter++);
+
                 List<AccessPolicyViewModel> itemList = Session["AccessList"] as List<AccessPolicyViewModel>;
                 foreach (var ap in model.List)
                 {
@@ -90,9 +93,12 @@ namespace ShopNow.Controllers
                 {
                     Id = i.Id,
                     PageCode = i.Code,
-                    PageName = i.Name,
+                    ModuleName = i.Name.Split('_')[0],
+                    PageName = i.Name.Split('_')[1],
                     Status = i.Status
                 }).ToList();
+                int counter = 1;
+                model.List.ForEach(x => x.No = counter++);
             }
 
             return View(model);

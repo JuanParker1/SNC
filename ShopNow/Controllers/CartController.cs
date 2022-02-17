@@ -1137,6 +1137,10 @@ namespace ShopNow.Controllers
                 delivaryBoy.DateUpdated = DateTime.Now;
                 db.Entry(delivaryBoy).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
+
+                order.DeliveryBoyOnWork = 1;
+                db.Entry(order).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
             }
             return RedirectToAction("Edit", "Cart", new { OrderNumber = OrderNumber, id = AdminHelpers.ECodeLong(id) });
         }
