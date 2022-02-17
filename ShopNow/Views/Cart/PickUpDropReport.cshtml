@@ -14,10 +14,10 @@
 <div class="container-fluid">
     <form method="get" action="~/Cart/PickUpDropReport">
         <div class="row">
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <h5 class="text-success">@ViewBag.Title</h5>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-4">
                 <select name="ShopId" id="ShopId" class="form-control">
                     @if (!string.IsNullOrEmpty(Model.ShopName))
                     {
@@ -26,15 +26,18 @@
                 </select>
                 <input type="hidden" id="ShopName" name="ShopName" value="@Model.ShopName" />
             </div>
-            <div class="col-md-1">
-                <input type="submit" class="form-control btn btn-sm btn-success" name="filter" value="Apply Filter" />
+            <div class="col-md-2">
+                <input type="submit" class="form-control btn btn-success" name="filter" value="Apply Filter" />
             </div>
-            <div class="col-md-4 text-right">
+            <div class="col-md-1">
+                <a href="~/Cart/PickUpDropReport" class="form-control btn btn-warning">Clear</a>
+            </div>
+            <div class="col-md-2 text-right">
                 <button id="btnExport" class="btn btn-secondary"><i class="fa fa-file-excel-o fa-lg" aria-hidden="true"></i></button>
             </div>
         </div>
     </form>
-    <div class="row my-2">
+    <div class="row my-3">
         <div class="col-md-12">
             <div class="card shadow">
                 <div class="card-body">
@@ -44,7 +47,7 @@
                    columns.Add(p => p.OrderNumber).Filterable(true).SetWidth(10);
                    columns.Add(p => p.ShopName).Filterable(true).SetWidth(10);
                    columns.Add(p => p.PaymentMode).Filterable(true).SetWidth(10);
-                   columns.Add(c => c.Amount).Titled("Amount").Filterable(true).SetWidth(10);
+                   columns.Add(c => c.Amount).Titled("Amount").Filterable(true).SetWidth(5);
                    columns.Add(c => c.DeliveryAddress).Titled("Delivery Address").Filterable(true).SetWidth(15);
                    columns.Add(c => c.PhoneNumber).Titled("Phone Number").Filterable(true).SetWidth(15);
                    columns.Add(c => c.DateEncoded).Titled("Date").Filterable(true).SetWidth(10).Format("{0:dd-MM-yyyy hh:mm tt}");
@@ -54,6 +57,35 @@
         </div>
     </div>
 </div>
+<table id="table-excel" class="d-none">
+    <thead>
+        <tr>
+            <td>No</td>
+            <td>Order Number</td>
+            <td>Shop Name</td>
+            <td>Payment Mode</td>
+            <td>Amount</td>
+            <td>Delivery Address</td>
+            <td>Phone Number</td>
+            <td>Date</td>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.PickUpDropReportLists)
+        {
+            <tr>
+                <td>@item.No</td>
+                <td>@item.OrderNumber</td>
+                <td>@item.ShopName</td>
+                <td>@item.PaymentMode</td>
+                <td>@item.Amount</td>
+                <td>@item.DeliveryAddress</td>
+                <td>@item.PhoneNumber</td>
+                <td>@item.DateEncoded</td>
+            </tr>
+        }
+    </tbody>
+</table>
 
 @section Scripts
 {
@@ -78,7 +110,7 @@
             });
 
             $("#btnExport").click(function () {
-                $("table").table2excel({
+                $("#table-excel").table2excel({
                     name: "Worksheet Name",
                     filename: "PickUpDropReport",
                     fileext: ".xls",
