@@ -184,6 +184,7 @@ namespace ShopNow.ViewModels
         public string Price { get; set; }
         public string Email { get; set; }
         public string Mobile { get; set; }
+        public int OrderNumber { get; set; }
     }
 
     public class PaymentCreateApiViewModel

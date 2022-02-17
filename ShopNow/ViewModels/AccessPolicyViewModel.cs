@@ -22,9 +22,11 @@ namespace ShopNow.ViewModels
         public List<AccessPolicy> List { get; set; }
         public class AccessPolicy
         {
+            public int No { get; set; }
             public int Id { get; set; }
             public string PageCode { get; set; }
             public string PageName { get; set; }
+            public string ModuleName { get; set; }
             public int CustomerId { get; set; }
             public string CustomerName { get; set; }
             public bool IsAccess { get; set; }

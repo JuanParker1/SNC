@@ -1233,7 +1233,8 @@ namespace ShopNow.Controllers
             Dictionary<string, object> input = new Dictionary<string, object>();
             input.Add("amount", model.Price);
             input.Add("currency", "INR");
-            input.Add("receipt", "order_rcptid_11");
+            //input.Add("receipt", "order_rcptid_11");
+            input.Add("receipt", model.OrderNumber);
             RazorpayClient client = new RazorpayClient(key, secret);
             Razorpay.Api.Order order = client.Order.Create(input);
             Orderid = order["id"].ToString();
