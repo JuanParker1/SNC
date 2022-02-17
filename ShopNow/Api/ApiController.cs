@@ -1234,7 +1234,7 @@ namespace ShopNow.Controllers
             input.Add("amount", model.Price);
             input.Add("currency", "INR");
             //input.Add("receipt", "order_rcptid_11");
-            input.Add("receipt", model.OrderNumber);
+            input.Add("receipt", model.OrderNumber.ToString());
             RazorpayClient client = new RazorpayClient(key, secret);
             Razorpay.Api.Order order = client.Order.Create(input);
             Orderid = order["id"].ToString();
