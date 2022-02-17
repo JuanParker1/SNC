@@ -4175,7 +4175,7 @@ namespace ShopNow.Controllers
                  .Join(db.Payments.Where(i => i.PaymentMode != "Online Payment"), c => c.OrderNumber, p => p.OrderNumber, (c, p) => new { c, p })
                 .Select(i => new DelivaryCreditAmountApiViewModel.CartList
                 {
-                    Amount = (i.p.Amount - (i.p.RefundAmount ?? 0))
+                    Amount = i.c.IsPickupDrop == false? (i.p.Amount - (i.p.RefundAmount ?? 0)) : (i.c.TotalPrice - (i.p.RefundAmount ?? 0))
 
                 }).ToList();
             if (model.List.Count() != 0)
@@ -4846,9 +4846,12 @@ namespace ShopNow.Controllers
         [HttpPost]
         public JsonResult SaveLocationDetails(LocationDetailsCreateViewModel model)
         {
-            var locationDetails = _mapper.Map<LocationDetailsCreateViewModel, LocationDetail>(model);
-            db.LocationDetails.Add(locationDetails);
-            db.SaveChanges();
+            if (model.Distance > 0)
+            {
+                var locationDetails = _mapper.Map<LocationDetailsCreateViewModel, LocationDetail>(model);
+                db.LocationDetails.Add(locationDetails);
+                db.SaveChanges();
+            }
             return Json(new { message = "Saved Successfully" }, JsonRequestBehavior.AllowGet);
         }
 
