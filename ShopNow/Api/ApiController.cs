@@ -6153,7 +6153,7 @@ namespace ShopNow.Controllers
             return Json(new { list = list }, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult AddCustomerSearchHistory(int customerid,int searchid,string serachtext,int type)
+        public JsonResult AddCustomerSearchHistory(int customerid,int searchid,string searchtext,int type)
         {
             var customerSearchHistory = db.CustomerSearchHistories.Any(i => i.CustomerId == customerid && i.SearchId == searchid && i.Status == 0);
             if (!customerSearchHistory)
@@ -6163,7 +6163,7 @@ namespace ShopNow.Controllers
                     CustomerId = customerid,
                     DateEncoded = DateTime.Now,
                     SearchId = searchid,
-                    SearchText = serachtext,
+                    SearchText = searchtext,
                     Status = 0,
                     Type = type, // 1- Product, 2-Shop
                     ShopId = type == 2 ? searchid : db.Products.FirstOrDefault(i => i.Id == searchid).ShopId,
