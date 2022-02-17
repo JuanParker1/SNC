@@ -18,16 +18,15 @@
             <div class="card shadow mt-3">
                 <div class="card-body">
                     @Html.Grid(Model).Columns(columns =>
-{
-columns.Add(c => c.Name).Titled("Name").Filterable(true).SetWidth(20);
-columns.Add(c => c.ProductTypeName).Titled("Product Type").Filterable(true).SetWidth(20);
-columns.Add(c => c.OrderNo).Titled("Order No.").Filterable(true).SetWidth(20);
-   columns.Add().Encoded(false).Sanitized(false).Titled("Action").SetWidth(5)
-             .RenderValueAs(o => @<div>
-                    <a href="editModal" class="text-info edit-prompt mr-5" data-id=@o.Id data-name="@o.Name" data-producttypeid="@o.ProductTypeId" data-producttypename="@o.ProductTypeName" data-orderno=@o.OrderNo data-imagepath="@o.ImagePath" data-target="#editModal" data-toggle="modal"><i class="fa fa-edit fa-lg"></i></a>
-                    <a href="javascript:void(0)" data-id=@o.Id class="text-danger btnDelete"><i class="fa fa-trash fa-lg"></i></a>
-                </div>);
-}).WithPaging(20).Sortable(true)
+                     {
+                         columns.Add(c => c.Name).Titled("Name").Filterable(true).SetWidth(20);
+                         columns.Add(c => c.ProductTypeName).Titled("Product Type").Filterable(true).SetWidth(20);
+                         columns.Add(c => c.OrderNo).Titled("Order No.").Filterable(true).SetWidth(20);
+                         columns.Add().Encoded(false).Sanitized(false).Titled("Action").SetWidth(5)
+                        .RenderValueAs(o => @<div>
+                            <a href="editModal" class="text-info edit-prompt mr-5" data-id=@o.Id data-name="@o.Name" data-producttypeid="@o.ProductTypeId" data-producttypename="@o.ProductTypeName" data-orderno=@o.OrderNo data-imagepath="@o.ImagePath" data-target="#editModal" data-toggle="modal"><i class="fa fa-edit fa-lg"></i></a>
+                            <a href="javascript:void(0)" data-id=@o.Id class="text-danger btnDelete"><i class="fa fa-trash fa-lg"></i></a> </div>);
+                    }).WithPaging(20).Sortable(true)
                 </div>
             </div>
         </div>

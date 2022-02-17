@@ -53,7 +53,7 @@
                                     <td>
                                         @foreach (var im in item.ImagePathLists)
                                         {
-                                            <img alt="Image" data-toggle="modal" data-target="#myModal" class="img-thumbnail PrescriptionImage p-1" src="@im.ImagePath" onerror="this.src='/Images/No Photo.png'" style="width:45px;height:45px" />
+                                            <img alt="Image" data-toggle="modal" data-target="#myModal" class="img-thumbnail PrescriptionImage p-1" onerror="this.src='/Images/noimage.png'" style="width:45px;height:45px" />
                                         }
                                     </td>
                                     <td>
@@ -99,7 +99,6 @@
                 <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
             </div>
         </div>
-
     </div>
 </div>
 
