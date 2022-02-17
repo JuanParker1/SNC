@@ -1479,6 +1479,29 @@ namespace ShopNow.Controllers
             return View(model);
         }
 
+        public ActionResult PickUpDropReport(CartReportViewModel model)
+        {
+            var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
+            ViewBag.Name = user.Name;
+            model.PickUpDropReportLists = db.Orders.Where(i => (i.IsPickupDrop == true) && (model.ShopId != 0 ? i.ShopId == model.ShopId : true) && i.Status == 6)
+                .Join(db.Payments, c => c.OrderNumber, p => p.OrderNumber, (c, p) => new { c, p })
+                .AsEnumerable()
+            .Select(i => new CartReportViewModel.PickUpDropReportList
+            {
+                Id = i.c.Id,
+                ShopName = i.c.ShopName,
+                OrderNumber = i.c.OrderNumber.ToString(),
+                DeliveryAddress = i.c.DeliveryAddress,
+                PhoneNumber = i.c.CustomerPhoneNumber,
+                DateEncoded = i.c.DateEncoded,
+                PaymentMode = i.c.PaymentMode,
+                Amount = i.c.IsPickupDrop == true ? i.c.TotalPrice : i.p.Amount - (i.p.RefundAmount ?? 0)
+            }).OrderByDescending(i => i.DateEncoded).ToList();
+            int counter = 1;
+            model.PickUpDropReportLists.ForEach(x => x.No = counter++);
+            return View(model);
+        }
+
         public ActionResult AddRefundFromShopOrderProcessing(long id, double amount, string remark, int redirection = 0)
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
