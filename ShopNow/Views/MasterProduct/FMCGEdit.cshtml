@@ -24,7 +24,7 @@
             <a href="~/MasterProduct/FMCGList" target="_self"><span class="fa fa-list-ul"></span> FMCG List</a>
         </div>
     </div>
-    <div class="row">
+    <div class="row mb-3">
         <div class="col-md-12 mx-auto">
             @using (Html.BeginForm("FMCGEdit", "MasterProduct", FormMethod.Post, new { id = "FMCGUpdateForm", enctype = "multipart/form-data", autocomplete = "off" }))
             {
@@ -160,6 +160,7 @@
                                                     @if (Model.ImagePath1 != null)
                                                     {
                                                         <img class="img-container w-100 h-100" id="img-FMCGImage1" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePath1" onerror="this.src='/Images/noimage.png'" />
+                                                        <input type="button" class="btn btn-danger btn-sm ml-4 text-center mt-1" id="btnRemove1" value="Remove" />
                                                     }
                                                     else
                                                     {
@@ -171,9 +172,13 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        <div class="row mb-3 ml-3">
+                                            <div class="col-md-12">
+                                                <input type="button" class="btn btn-danger btn-sm d-none mt-1" id="btnRemove1" value="Remove" />
+                                            </div>
+                                        </div>
                                     </div>
                                     <div class="col-md-4 form-group">
-
                                         <label class="control-label text-secondary font-weight-bold ml-2">FMCG Image-2</label>
                                         <div class="row">
                                             <div class="col-md-12">
@@ -181,6 +186,7 @@
                                                     @if (Model.ImagePath2 != null)
                                                     {
                                                         <img class="img-container w-100 h-100" id="img-FMCGImage2" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePath2" onerror="this.src='/Images/noimage.png'" />
+                                                        <input type="button" class="btn btn-danger btn-sm ml-4 mt-1" id="btnRemove2" value="Remove" />
                                                     }
                                                     else
                                                     {
@@ -192,6 +198,11 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        <div class="row mb-3 ml-3">
+                                            <div class="col-md-12">
+                                                <input type="button" class="btn btn-danger btn-sm d-none mt-1" id="btnRemove2" value="Remove" />
+                                            </div>
+                                        </div>
                                     </div>
                                     <div class="col-md-4 form-group">
                                         <label class="control-label text-secondary font-weight-bold ml-2">FMCG Image-3</label>
@@ -201,6 +212,7 @@
                                                     @if (Model.ImagePath3 != null)
                                                     {
                                                         <img class="img-container w-100 h-100" id="img-FMCGImage3" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePath3" onerror="this.src='/Images/noimage.png'" />
+                                                        <input type="button" class="btn btn-danger btn-sm ml-4 mt-1" id="btnRemove3" value="Remove" />
                                                     }
                                                     else
                                                     {
@@ -212,6 +224,11 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        <div class="row mb-3 ml-3">
+                                            <div class="col-md-12">
+                                                <input type="button" class="btn btn-danger btn-sm d-none mt-1" id="btnRemove3" value="Remove" />
+                                            </div>
+                                        </div>
                                     </div>
                                     <div class="col-md-4 form-group">
                                         <label class="control-label text-secondary font-weight-bold ml-2">FMCG Image-4</label>
@@ -221,6 +238,7 @@
                                                     @if (Model.ImagePath4 != null)
                                                     {
                                                         <img class="img-container w-100 h-100" id="img-FMCGImage4" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePath4" onerror="this.src='/Images/noimage.png'" />
+                                                        <input type="button" class="btn btn-danger btn-sm ml-4 mt-1" id="btnRemove4" value="Remove" />
                                                     }
                                                     else
                                                     {
@@ -232,6 +250,11 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        <div class="row mb-3 ml-3">
+                                            <div class="col-md-12">
+                                                <input type="button" class="btn btn-danger btn-sm d-none mt-1" id="btnRemove4" value="Remove" />
+                                            </div>
+                                        </div>
                                     </div>
                                     <div class="col-md-4 form-group">
                                         <label class="control-label text-secondary font-weight-bold ml-2">FMCG Image-5</label>
@@ -241,6 +264,7 @@
                                                     @if (Model.ImagePath5 != null)
                                                     {
                                                         <img class="img-container w-100 h-100" id="img-FMCGImage5" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePath5" onerror="this.src='/Images/noimage.png'" />
+                                                        <input type="button" class="btn btn-danger btn-sm ml-4 mt-1" id="btnRemove5" value="Remove" />
                                                     }
                                                     else
                                                     {
@@ -252,11 +276,16 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        <div class="row mb-3 ml-3">
+                                            <div class="col-md-12">
+                                                <input type="button" class="btn btn-danger btn-sm d-none mt-1" id="btnRemove5" value="Remove" />
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="form-group row">
+                        <div class="form-group row mt-3">
                             <div class="col-md-2 mx-auto">
                                 <button type="button" class="btn btn-block btn-success Save" id="Update"><span class="glyphicon glyphicon-file"></span> Save</button>
                             </div>
@@ -374,6 +403,16 @@
                     reader.readAsDataURL(input.files[0]);
                 }
             }
+            $("#FMCGImage1").change(function () {
+                readURLFMCGImage1(this);
+                $("#btnRemove1").removeClass("d-none");
+            });
+            $("#btnRemove1").on('click', function () {
+                $('#img-FMCGImage1').attr('src', '');
+                $("#FMCGImage1").val('');
+                $("#ImagePath1").val('');
+                $(this).addClass("d-none");
+            });
 
             function readURLFMCGImage2(input) {
                 if (input.files && input.files[0]) {
@@ -384,6 +423,16 @@
                     reader.readAsDataURL(input.files[0]);
                 }
             }
+            $("#FMCGImage2").change(function () {
+                readURLFMCGImage2(this);
+                $("#btnRemove2").removeClass("d-none");
+            });
+            $("#btnRemove2").on('click', function () {
+                $('#img-FMCGImage2').attr('src', '');
+                $("#FMCGImage2").val('');
+                $("#ImagePath2").val('');
+                $(this).addClass("d-none");
+            });
 
             function readURLFMCGImage3(input) {
                 if (input.files && input.files[0]) {
@@ -394,6 +443,16 @@
                     reader.readAsDataURL(input.files[0]);
                 }
             }
+            $("#FMCGImage3").change(function () {
+                readURLFMCGImage3(this);
+                $("#btnRemove3").removeClass("d-none");
+            });
+            $("#btnRemove3").on('click', function () {
+                $('#img-FMCGImage3').attr('src', '');
+                $("#FMCGImage3").val('');
+                $("#ImagePath3").val('');
+                $(this).addClass("d-none");
+            });
 
             function readURLFMCGImage4(input) {
                 if (input.files && input.files[0]) {
@@ -404,6 +463,16 @@
                     reader.readAsDataURL(input.files[0]);
                 }
             }
+            $("#FMCGImage4").change(function () {
+                readURLFMCGImage4(this);
+                $("#btnRemove4").removeClass("d-none");
+            });
+            $("#btnRemove4").on('click', function () {
+                $('#img-FMCGImage4').attr('src', '');
+                $("#FMCGImage4").val('');
+                $("#ImagePath4").val('');
+                $(this).addClass("d-none");
+            });
 
             function readURLFMCGImage5(input) {
                 if (input.files && input.files[0]) {
@@ -414,25 +483,17 @@
                     reader.readAsDataURL(input.files[0]);
                 }
             }
-
-            $("#FMCGImage1").change(function () {
-                readURLFMCGImage1(this);
-            });
-            $("#FMCGImage2").change(function () {
-                readURLFMCGImage2(this);
-            });
-            $("#FMCGImage3").change(function () {
-                readURLFMCGImage3(this);
-            });
-
-            $("#FMCGImage4").change(function () {
-                readURLFMCGImage4(this);
-            });
-
             $("#FMCGImage5").change(function () {
                 readURLFMCGImage5(this);
+                $("#btnRemove5").removeClass("d-none");
             });
-
+            $("#btnRemove5").on('click', function () {
+                $('#img-FMCGImage5').attr('src', '');
+                $("#FMCGImage5").val('');
+                $("#ImagePath5").val('');
+                $(this).addClass("d-none");
+            });
+          
             $('#Length,#Width,#Height').on('change', function () {
                 calculateSizeLWH();
             });
