@@ -3628,7 +3628,8 @@ namespace ShopNow.Controllers
                              ShopName = i.ShopName,
                              CustomerName = i.CustomerName,
                              CustomerRemark = i.CustomerRemark,
-                             Rating = i.Rating
+                             Rating = i.Rating,
+                             Date = i.DateUpdated
                          }).ToList();
             model.ReviewlLists = db.CustomerReviews
                              .Where(i => i.Status == 0 && i.ShopId == shopId && i.CustomerId != customerId)
@@ -3638,7 +3639,8 @@ namespace ShopNow.Controllers
                              ShopName = i.ShopName,
                              CustomerName = i.CustomerName,
                              CustomerRemark = i.CustomerRemark,
-                             Rating = i.Rating
+                             Rating = i.Rating,
+                             Date = i.DateUpdated
                          }).OrderByDescending(i => i.Id).ToList();
             int count = model.ReviewlLists.Count();
             int CurrentPage = page;
