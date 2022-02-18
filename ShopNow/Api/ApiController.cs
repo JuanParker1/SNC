@@ -4363,7 +4363,7 @@ namespace ShopNow.Controllers
                  .Join(db.Payments.Where(i => i.PaymentMode != "Online Payment"), c => c.OrderNumber, p => p.OrderNumber, (c, p) => new { c, p })
                 .Select(i => new DelivaryCreditAmountApiViewModel.CartList
                 {
-                    Amount = (i.p.Amount - (i.p.RefundAmount ?? 0))
+                    Amount = i.c.IsPickupDrop == false? (i.p.Amount - (i.p.RefundAmount ?? 0)) : (i.c.TotalPrice - (i.p.RefundAmount ?? 0))
 
                 }).ToList();
             if (model.List.Count() != 0)
@@ -5034,9 +5034,12 @@ namespace ShopNow.Controllers
         [HttpPost]
         public JsonResult SaveLocationDetails(LocationDetailsCreateViewModel model)
         {
-            var locationDetails = _mapper.Map<LocationDetailsCreateViewModel, LocationDetail>(model);
-            db.LocationDetails.Add(locationDetails);
-            db.SaveChanges();
+            if (model.Distance > 0)
+            {
+                var locationDetails = _mapper.Map<LocationDetailsCreateViewModel, LocationDetail>(model);
+                db.LocationDetails.Add(locationDetails);
+                db.SaveChanges();
+            }
             return Json(new { message = "Saved Successfully" }, JsonRequestBehavior.AllowGet);
         }
 
@@ -6293,52 +6296,56 @@ namespace ShopNow.Controllers
 
         public JsonResult GetCustomerSearchHistory(int customerid)
         {
-            var searchList = db.CustomerSearchHistories.Where(i => i.Status == 0 && i.CustomerId == customerid).OrderByDescending(i => i.DateEncoded).Take(10).ToList();
+            var searchList = db.CustomerSearchHistories.Where(i => i.Status == 0 && i.CustomerId == customerid).OrderByDescending(i => i.DateEncoded).Take(5).ToList();
             var productList = searchList.Where(i => i.Type==1)
                 .Join(db.Shops.Where(i=>i.Status ==0),sh=>sh.ShopId,s=>s.Id,(sh,s)=>new { sh,s})
                 .Select(i=>new {
+                    Id = i.sh.Id,
                     ProductId = i.sh.SearchId,
                     ProductName = i.sh.SearchText,
-                    ImagePath = db.MasterProducts.FirstOrDefault(a => a.Id == i.sh.MasterProductId).ImagePath1,
+                    ImagePath = ((!string.IsNullOrEmpty(db.MasterProducts.FirstOrDefault(a => a.Id == i.sh.MasterProductId).ImagePath1)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + db.MasterProducts.FirstOrDefault(a => a.Id == i.sh.MasterProductId).ImagePath1.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/notavailable.png"),
                     ShopCategoryId = i.s.ShopCategoryId,
                     ShopId = i.s.Id,
                     ShopOnlineStatus = i.s.IsOnline,
                     Rating = RatingCalculation(i.s.Id),
                     ReviewCount = db.CustomerReviews.Where(c => c.ShopId == i.s.Id).Count(),
                     ShopAddress = i.s.Address,
-                    ShopImagePath = i.s.ImagePath,
+                    ShopImagePath = ((!string.IsNullOrEmpty(i.s.ImagePath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.s.ImagePath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/noimageres.svg"),
                     ShopLatitude = i.s.Latitude,
                     ShopLongitude = i.s.Longitude,
                     ShopName = i.s.Name,
                     Status = db.Products.FirstOrDefault(a=>a.Id == i.sh.SearchId).Status,
-                    StreetName = i.s.StreetName
+                    StreetName = i.s.StreetName,
+                    Type = i.sh.Type
                 }).ToList();
 
             var shopList = searchList.Where(i => i.Type == 2)
                 .Join(db.Shops.Where(i => i.Status == 0), sh => sh.SearchId, s => s.Id, (sh, s) => new { sh, s })
                 .Select(i => new {
+                    Id = i.sh.Id,
                     ProductId = 0,
                     ProductName = "",
-                    ImagePath = "",
+                    ImagePath = "../../assets/images/notavailable.png",
                     ShopCategoryId = i.s.ShopCategoryId,
                     ShopId = i.s.Id,
                     ShopOnlineStatus = i.s.IsOnline,
                     Rating = RatingCalculation(i.s.Id),
                     ReviewCount = db.CustomerReviews.Where(c => c.ShopId == i.s.Id).Count(),
                     ShopAddress = i.s.Address,
-                    ShopImagePath = i.s.ImagePath,
+                    ShopImagePath = ((!string.IsNullOrEmpty(i.s.ImagePath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.s.ImagePath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/noimageres.svg"),
                     ShopLatitude = i.s.Latitude,
                     ShopLongitude = i.s.Longitude,
                     ShopName = i.s.Name,
                     Status = i.s.Status,
-                    StreetName = i.s.StreetName
+                    StreetName = i.s.StreetName,
+                    Type = i.sh.Type
                 }).ToList();
 
             var list = productList.Union(shopList).ToList();
             return Json(new { list = list }, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult AddCustomerSearchHistory(int customerid,int searchid,string serachtext,int type)
+        public JsonResult AddCustomerSearchHistory(int customerid,int searchid,string searchtext,int type)
         {
             var customerSearchHistory = db.CustomerSearchHistories.Any(i => i.CustomerId == customerid && i.SearchId == searchid && i.Status == 0);
             if (!customerSearchHistory)
@@ -6348,7 +6355,7 @@ namespace ShopNow.Controllers
                     CustomerId = customerid,
                     DateEncoded = DateTime.Now,
                     SearchId = searchid,
-                    SearchText = serachtext,
+                    SearchText = searchtext,
                     Status = 0,
                     Type = type, // 1- Product, 2-Shop
                     ShopId = type == 2 ? searchid : db.Products.FirstOrDefault(i => i.Id == searchid).ShopId,
@@ -7209,6 +7216,29 @@ namespace ShopNow.Controllers
         {
             Helpers.LogFile.WriteToFile("Logged Successfully");
             return Json(true);
+        }
+
+        public JsonResult UpdateKeywordDataFromMaster()
+        {
+            var masterProductList = db.MasterProducts.Where(i => i.Status == 0 && i.Id > 13009).Select(i=>i.Name).ToList();
+            foreach (var item in masterProductList)
+            {
+                var nameArray = item.Split(' ');
+                foreach (var name in nameArray)
+                {
+                    var checkExist = db.KeywordDatas.Any(i => i.Name.Trim().ToLower() == name.Trim().ToLower());
+                    if (!checkExist)
+                    {
+                        var keywordData = new KeywordData
+                        {
+                            Name = name
+                        };
+                        db.KeywordDatas.Add(keywordData);
+                        db.SaveChanges();
+                    }
+                }
+            }
+            return Json(true, JsonRequestBehavior.AllowGet);
         }
       
     }

@@ -596,6 +596,20 @@ namespace ShopNow.ViewModels
             public double Distance { get; set; }
             public string ShopName { get; set; }
         }
+
+        public List<PickUpDropReportList> PickUpDropReportLists { get; set; }
+        public class PickUpDropReportList
+        {
+            public int No { get; set; }
+            public long Id { get; set; }
+            public string OrderNumber { get; set; }
+            public string ShopName { get; set; }
+            public string PhoneNumber { get; set; }
+            public string DeliveryAddress { get; set; }
+            public System.DateTime DateEncoded { get; set; }
+            public string PaymentMode { get; set; }
+            public double Amount { get; set; }
+        }
     }
 
     public class ShopDeliveredAmountReportViewModel
@@ -993,6 +1007,7 @@ namespace ShopNow.ViewModels
         public string ShopName { get; set; }
         public string District { get; set; }
         public int Status { get; set; }
+        public bool IsPickupDrop { get; set; }
         public List<ListItem> ListItems { get; set; }
         public class ListItem
         {

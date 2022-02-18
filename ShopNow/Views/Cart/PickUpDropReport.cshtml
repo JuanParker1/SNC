@@ -1,0 +1,122 @@
+﻿@model ShopNow.ViewModels.CartReportViewModel
+@using GridMvc.Html
+@{
+    ViewBag.Title = "PickUp Drop Report";
+}
+<title>ShopNow | @ViewBag.Title</title>
+<link href="~/Content/Gridmvc.css" rel="stylesheet" />
+<script src="~/Scripts/gridmvc.js"></script>
+<style>
+    table > thead > tr > th:first-child {
+        padding: 12px 5px;
+    }
+</style>
+<div class="container-fluid">
+    <form method="get" action="~/Cart/PickUpDropReport">
+        <div class="row">
+            <div class="col-md-3">
+                <h5 class="text-success">@ViewBag.Title</h5>
+            </div>
+            <div class="col-md-4">
+                <select name="ShopId" id="ShopId" class="form-control">
+                    @if (!string.IsNullOrEmpty(Model.ShopName))
+                    {
+                        <option value="@Model.ShopId">@Model.ShopName</option>
+                    }
+                </select>
+                <input type="hidden" id="ShopName" name="ShopName" value="@Model.ShopName" />
+            </div>
+            <div class="col-md-2">
+                <input type="submit" class="form-control btn btn-success" name="filter" value="Apply Filter" />
+            </div>
+            <div class="col-md-1">
+                <a href="~/Cart/PickUpDropReport" class="form-control btn btn-warning">Clear</a>
+            </div>
+            <div class="col-md-2 text-right">
+                <button id="btnExport" class="btn btn-secondary"><i class="fa fa-file-excel-o fa-lg" aria-hidden="true"></i></button>
+            </div>
+        </div>
+    </form>
+    <div class="row my-3">
+        <div class="col-md-12">
+            <div class="card shadow">
+                <div class="card-body">
+                    @Html.Grid(Model.PickUpDropReportLists).Columns(columns =>
+               {
+                   columns.Add(p => p.No).Filterable(false).SetWidth(1);
+                   columns.Add(p => p.OrderNumber).Filterable(true).SetWidth(10);
+                   columns.Add(p => p.ShopName).Filterable(true).SetWidth(10);
+                   columns.Add(p => p.PaymentMode).Filterable(true).SetWidth(10);
+                   columns.Add(c => c.Amount).Titled("Amount").Filterable(true).SetWidth(5);
+                   columns.Add(c => c.DeliveryAddress).Titled("Delivery Address").Filterable(true).SetWidth(15);
+                   columns.Add(c => c.PhoneNumber).Titled("Phone Number").Filterable(true).SetWidth(15);
+                   columns.Add(c => c.DateEncoded).Titled("Date").Filterable(true).SetWidth(10).Format("{0:dd-MM-yyyy hh:mm tt}");
+               }).WithPaging(25).Sortable(true)
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<table id="table-excel" class="d-none">
+    <thead>
+        <tr>
+            <td>No</td>
+            <td>Order Number</td>
+            <td>Shop Name</td>
+            <td>Payment Mode</td>
+            <td>Amount</td>
+            <td>Delivery Address</td>
+            <td>Phone Number</td>
+            <td>Date</td>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.PickUpDropReportLists)
+        {
+            <tr>
+                <td>@item.No</td>
+                <td>@item.OrderNumber</td>
+                <td>@item.ShopName</td>
+                <td>@item.PaymentMode</td>
+                <td>@item.Amount</td>
+                <td>@item.DeliveryAddress</td>
+                <td>@item.PhoneNumber</td>
+                <td>@item.DateEncoded</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section Scripts
+{
+    <!--Select2-->
+    <script src="~/Scripts/select2/js/select2.js"></script>
+    <link href="~/Scripts/select2/css/select2.css" rel="stylesheet" />
+    <link href="~/Content/select2/select2.custom.css" rel="stylesheet" />
+    <!--Select2 End-->
+    <script src="~/Scripts/exporttoexcel/jquery.table2excel.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#ShopId').select2({
+                placeholder: "Search Shop",
+                ajax: {
+                    url: "/Cart/GetShopSelect2",
+                    width: '100%',
+                    delay: 250,
+                    dataType: 'json'
+                }
+            }).on('select2:select', function (e) {
+                $('input[name="ShopName"]').val(e.params.data.text);
+            });
+
+            $("#btnExport").click(function () {
+                $("#table-excel").table2excel({
+                    name: "Worksheet Name",
+                    filename: "PickUpDropReport",
+                    fileext: ".xls",
+                    exclude_links: true
+                });
+            });
+        });
+    </script>
+}

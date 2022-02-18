@@ -98,11 +98,11 @@
                                     </div>
                                     <div class="col-md-3">
                                         <label class="col-form-label" for="Price"><strong class="text-secondary">Menu Price</strong></label>
-                                        <input id="MenuPrice" type="number" class="form-control" name="MenuPrice" min="1" step="any" value="@Model.MenuPrice" required />
+                                        <input id="MenuPrice" type="number" class="form-control" name="MenuPrice" min="1" step=".01" value="@Model.MenuPrice" required />
                                     </div>
                                     <div class="col-md-3">
                                         <label class="col-form-label" for="Price"><strong class="text-secondary">Selling Price</strong></label>
-                                        <input id="Price" type="number" class="form-control" name="Price" min="1" step="any" value="@Model.Price" required />
+                                        <input id="Price" type="number" class="form-control" name="Price" min="1" step=".01" value="@Model.Price" required />
                                     </div>
                                     <div class="col-md-2">
                                         <label class="col-form-label" for="Qty"><strong class="text-secondary">Quantity</strong></label>
@@ -110,11 +110,11 @@
                                     </div>
                                     <div class="col-md-2">
                                         <label class="col-form-label" for="ShopPrice"><strong class="text-secondary">Shop Price</strong></label>
-                                        <input id="ShopPrice" type="number" class="form-control" name="ShopPrice" min="1" step="any" value="@Model.ShopPrice" readonly />
+                                        <input id="ShopPrice" type="number" class="form-control" name="ShopPrice" min="1" step=".01" value="@Model.ShopPrice" readonly />
                                     </div>
                                     <div class="col-md-2">
                                         <label class="col-form-label" for="Percentage"><strong class="text-secondary">Percentage</strong></label>
-                                        <input id="Percentage" type="number" class="form-control" name="Percentage" value="@Model.Percentage" />
+                                        <input id="Percentage" type="number" class="form-control" name="Percentage" step=".01" value="@Model.Percentage" />
                                     </div>
                                     <div class="col-md-3">
                                         <label class="col-form-label text-secondary font-weight-bold" for="DiscountCategoryId">Discount Category Name</label>

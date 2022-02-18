@@ -111,19 +111,19 @@
                     <div class="col-md-3">
                         <div class="form-group">
                             <label class="control-label" for="MenuPrice"><strong class="text-secondary">Menu Price</strong></label>
-                            <input id="MenuPrice" type="number" class="form-control" step="any" name="MenuPrice" min="1" value="@Model.MenuPrice" required />
+                            <input id="MenuPrice" type="number" class="form-control" step=".01" name="MenuPrice" min="1" value="@Model.MenuPrice" required />
                         </div>
                     </div>
                     <div class="col-md-3">
                         <div class="form-group">
                             <label class="control-label" for="Price"><strong class="text-secondary">Selling Price</strong></label>
-                            <input id="Price" type="number" class="form-control" step="any" name="Price" min="1" value="@Model.Price" required />
+                            <input id="Price" type="number" class="form-control" step=".01" name="Price" min="1" value="@Model.Price" required />
                         </div>
                     </div>
                     <div class="col-md-3">
                         <div class="form-group">
                             <label class="control-label" for="Price"><strong class="text-secondary">Percentage</strong></label>
-                            <input id="Percentage" type="number" class="form-control" name="Percentage" value="@Model.Percentage" />
+                            <input id="Percentage" type="number" class="form-control" name="Percentage" step=".01" value="@Model.Percentage" />
                         </div>
                     </div>
                     <div class="col-md-3">

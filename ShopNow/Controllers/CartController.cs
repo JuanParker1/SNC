@@ -43,7 +43,7 @@ namespace ShopNow.Controllers
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
-            model.ListItems = db.Orders.Where(i => (model.Status == 0 ? i.Status != 6 && i.Status != 7 && i.Status != 9 && i.Status != 10 && i.Status != 0 && i.Status != -1 : i.Status == model.Status) && (model.ShopId != 0 ? i.ShopId == model.ShopId : true))
+            model.ListItems = db.Orders.Where(i => (model.Status == 0 ? i.Status != 6 && i.Status != 7 && i.Status != 9 && i.Status != 10 && i.Status != 0 && i.Status != -1 : i.Status == model.Status) && (model.ShopId != 0 ? i.ShopId == model.ShopId : true) && (model.IsPickupDrop == true ? i.IsPickupDrop == true : true))
                 .Join(db.Payments, c => c.OrderNumber, p => p.OrderNumber, (c, p) => new { c, p })
                 .Join(db.Shops.Where(i => (!string.IsNullOrEmpty(model.District) ? i.DistrictName == model.District : true)), c => c.c.ShopId, s => s.Id, (c, s) => new { c, s })
             .Select(i => new OrderListViewModel.ListItem
@@ -1476,6 +1476,29 @@ namespace ShopNow.Controllers
                    MedicalCancelOrder = i.Where(a => a.o.Status == 7 && a.s.ShopCategoryId == 4).Count(),
                    CustomerCount = GetNewCustomerCount(i.Key.Value)
                }).ToList();
+            return View(model);
+        }
+
+        public ActionResult PickUpDropReport(CartReportViewModel model)
+        {
+            var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
+            ViewBag.Name = user.Name;
+            model.PickUpDropReportLists = db.Orders.Where(i => (i.IsPickupDrop == true) && (model.ShopId != 0 ? i.ShopId == model.ShopId : true) && i.Status == 6)
+                .Join(db.Payments, c => c.OrderNumber, p => p.OrderNumber, (c, p) => new { c, p })
+                .AsEnumerable()
+            .Select(i => new CartReportViewModel.PickUpDropReportList
+            {
+                Id = i.c.Id,
+                ShopName = i.c.ShopName,
+                OrderNumber = i.c.OrderNumber.ToString(),
+                DeliveryAddress = i.c.DeliveryAddress,
+                PhoneNumber = i.c.CustomerPhoneNumber,
+                DateEncoded = i.c.DateEncoded,
+                PaymentMode = i.c.PaymentMode,
+                Amount = i.c.IsPickupDrop == true ? i.c.TotalPrice : i.p.Amount - (i.p.RefundAmount ?? 0)
+            }).OrderByDescending(i => i.DateEncoded).ToList();
+            int counter = 1;
+            model.PickUpDropReportLists.ForEach(x => x.No = counter++);
             return View(model);
         }
 
