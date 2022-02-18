@@ -40,7 +40,7 @@ namespace ShopNow.ViewModels
         public double Price { get; set; }
         public double MenuPrice { get; set; }
         public int Qty { get; set; }
-        public int Percentage { get; set; }
+        public double Percentage { get; set; }
         public string GoogleTaxonomyCode { get; set; }
         public string ImagePath1 { get; set; }
         public string ImagePath2 { get; set; }
@@ -86,7 +86,7 @@ namespace ShopNow.ViewModels
         public double Price { get; set; }
         public double MenuPrice { get; set; }
         public int Qty { get; set; }
-        public int Percentage { get; set; }
+        public double Percentage { get; set; }
         public string GoogleTaxonomyCode { get; set; }
         public string ImagePath1 { get; set; }
         public string ImagePath2 { get; set; }
@@ -368,7 +368,7 @@ namespace ShopNow.ViewModels
             public double Price { get; set; }
             public double MenuPrice { get; set; }
             public int Qty { get; set; }
-            public int Percentage { get; set; }
+            public double Percentage { get; set; }
             public int DataEntry { get; set; }
             public string DiscountCategoryId { get; set; }
             public string DiscountCategoryName { get; set; }
@@ -417,7 +417,7 @@ namespace ShopNow.ViewModels
         public double SizeLBH { get; set; }
         public int IBarU { get; set; }
         public int Qty { get; set; }
-        public int Percentage { get; set; }
+        public double Percentage { get; set; }
         public int PackingType { get; set; }
         public double PackingCharge { get; set; }
         public string ASIN { get; set; }
@@ -474,7 +474,7 @@ namespace ShopNow.ViewModels
         public double MenuPrice { get; set; }
         //public Nullable<int> shopid { get; set; }
         public int Qty { get; set; }
-        public int Percentage { get; set; }
+        public double Percentage { get; set; }
         public int PackingType { get; set; }
         public double PackingCharge { get; set; }
         public bool IsPreorder { get; set; }
@@ -497,7 +497,7 @@ namespace ShopNow.ViewModels
         public double Price { get; set; }
         public double MenuPrice { get; set; }
         public int Qty { get; set; }
-        public int Percentage { get; set; }
+        public double Percentage { get; set; }
         public string GoogleTaxonomyCode { get; set; }
         public string ImagePath1 { get; set; }
         public int PackingType { get; set; }
@@ -524,7 +524,7 @@ namespace ShopNow.ViewModels
         public double Price { get; set; }
         public double MenuPrice { get; set; }
         public int Qty { get; set; }
-        public int Percentage { get; set; }
+        public double Percentage { get; set; }
         public string GoogleTaxonomyCode { get; set; }
         public string ImagePath1 { get; set; }
         public int PackingType { get; set; }
