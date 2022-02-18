@@ -1061,12 +1061,12 @@ namespace ShopNow.Controllers
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
             model.ListItems = db.Products.Where(i => i.Status == 1 && (model.ShopId != 0 ? i.ShopId == model.ShopId : false))
-                .Join(db.MasterProducts, p => p.MasterProductId, m => m.Id, (p, m) => new { p, m })
+                .GroupJoin(db.MasterProducts, p => p.MasterProductId, m => m.Id, (p, m) => new { p, m })
                 .Select(i => new ProductInactiveList.ListItem
                 {
                     Id = i.p.Id,
                     MenuPrice = i.p.MenuPrice,
-                    Name = i.m.Name,
+                    Name = i.m.Any() ? i.m.FirstOrDefault().Name: i.p.Name,
                     Quantity = i.p.Qty,
                     SellingPrice = i.p.Price,
                     ItemId = i.p.ItemId
@@ -1767,6 +1767,7 @@ namespace ShopNow.Controllers
             if (product != null)
             {
                 product.Status = 0;
+                product.IsOnline = true;
                 db.Entry(product).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
             }

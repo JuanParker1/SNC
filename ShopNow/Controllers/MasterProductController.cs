@@ -861,7 +861,7 @@ namespace ShopNow.Controllers
                     ViewBag.Message = "Error occurred: " + amazonS3Exception.Message;
                 }
             }
-            SaveKeywordData(master.Name);
+            SaveKeywordDataWithCombination(master.Name,master.DrugCompoundDetailName);
 
             return View();
         }
@@ -988,7 +988,7 @@ namespace ShopNow.Controllers
                 }
             }
             // return RedirectToAction("MedicalList");
-            SaveKeywordData(master.Name);
+            SaveKeywordDataWithCombination(master.Name,master.DrugCompoundDetailName);
             return RedirectToAction("MedicalEdit", new { id = AdminHelpers.ECodeLong(model.Id) });
         }
 
@@ -2421,6 +2421,42 @@ namespace ShopNow.Controllers
                     };
                     _db.KeywordDatas.Add(keywordData);
                     _db.SaveChanges();
+                }
+            }
+        }
+
+        public void SaveKeywordDataWithCombination(string Name,string Combination)
+        {
+            var nameArray = Name.Split(' ');
+            foreach (var name in nameArray)
+            {
+                var checkExist = _db.KeywordDatas.Any(i => i.Name.Trim().ToLower() == name.Trim().ToLower());
+                if (!checkExist)
+                {
+                    var keywordData = new KeywordData
+                    {
+                        Name = name
+                    };
+                    _db.KeywordDatas.Add(keywordData);
+                    _db.SaveChanges();
+                }
+            }
+
+            if (!string.IsNullOrEmpty(Combination))
+            {
+                var combinationArray = Combination.Split(' ');
+                foreach (var name in combinationArray)
+                {
+                    var checkExist = _db.KeywordDatas.Any(i => i.Name.Trim().ToLower() == name.Trim().ToLower());
+                    if (!checkExist)
+                    {
+                        var keywordData = new KeywordData
+                        {
+                            Name = name
+                        };
+                        _db.KeywordDatas.Add(keywordData);
+                        _db.SaveChanges();
+                    }
                 }
             }
         }
