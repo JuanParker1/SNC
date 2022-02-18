@@ -89,13 +89,13 @@
                             <div class="col-md-3">
                                 <label class="control-label" for="MenuPrice"><strong class="text-secondary">Menu Price</strong></label>
                                 <div class="form-group">
-                                    <input type="number" class="form-control" name="MenuPrice" id="MenuPrice" step=".01" min="1" value="@Model.MenuPrice" />
+                                    <input type="number" class="form-control" name="MenuPrice" id="MenuPrice" step=".01" min="0" value="@Model.MenuPrice" />
                                 </div>
                             </div>
                             <div class="col-md-3">
                                 <label class="control-label" for="Price"><strong class="text-secondary">Selling Price</strong></label>
                                 <div class="form-group">
-                                    <input type="number" class="form-control" name="Price" id="Price" step=".01" min="1" value="@Model.Price" />
+                                    <input type="number" class="form-control" name="Price" id="Price" step=".01" min="0" value="@Model.Price" />
                                     @*<input type="hidden" name="Qty" value="@Model.Qty" />*@
                                 </div>
                             </div>
@@ -108,7 +108,7 @@
                             <div class="col-md-2">
                                 <label class="control-label" for="ShopPrice"><strong class="text-secondary">Shop Price</strong></label>
                                 <div class="form-group">
-                                    <input type="number" class="form-control" name="ShopPrice" id="ShopPrice" step=".01" min="1" value="@Model.ShopPrice" readonly />
+                                    <input type="number" class="form-control" name="ShopPrice" id="ShopPrice" step=".01" min="0" value="@Model.ShopPrice" readonly />
                                 </div>
                             </div>
                             <div class="col-md-2">
