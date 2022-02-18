@@ -1392,6 +1392,194 @@ namespace ShopNow.Controllers
                 return Json(new { status = false }, JsonRequestBehavior.AllowGet);
             }
         }
+        public JsonResult ApiUpdate()
+        {
+            sncEntities db = new sncEntities();
+            try
+            {
+
+                var List = db.Orders.Where(i => i.Status == 0).Select(i => new OrderMissedListViewModel.OrderMissedList
+                {
+                    Id = i.Id,
+                    PaymentMode = i.PaymentMode,
+                    DateEncoded = i.DateEncoded,
+                    OrderNumber = i.OrderNumber,
+                    PhoneNumber = i.CustomerPhoneNumber,
+                    ShopName = i.ShopName,
+                    TotalPrice = i.TotalPrice
+                }).ToList();
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls |
+                                           SecurityProtocolType.Tls11 |
+                                           SecurityProtocolType.Tls12;
+                string key = "rzp_live_PNoamKp52vzWvR";
+                string secret = "yychwOUOsYLsSn3XoNYvD1HY";
+                RazorpayClient client = new RazorpayClient(key, secret);
+            
+                Razorpay.Api.Order varpayment = new Razorpay.Api.Order();
+                if (List.Count > 0)
+                {
+                    foreach (var varOrder in List)
+                    {
+                        Dictionary<string, object> options = new Dictionary<string, object>();
+                         options.Add("authorized", 1); // amount in the smallest currency unit
+                         options.Add("count", 100); // amount in the smallest currency unit
+                         options.Add("receipt", Convert.ToString(varOrder.OrderNumber.ToString()));
+                        var data = varpayment.All(options);
+                        if (data.Count>0)
+                        {
+                            var order = db.Orders.FirstOrDefault(i => i.OrderNumber == varOrder.OrderNumber);
+                            var payment = db.Payments.FirstOrDefault(i => i.OrderNumber == varOrder.OrderNumber);
+                            var perOrderAmount = db.PlatFormCreditRates.Where(s => s.Status == 0).FirstOrDefault();
+                            var shop= db.Shops.FirstOrDefault(i => i.Id == order.ShopId);
+                            var billingCharge = db.BillingCharges.FirstOrDefault(i => i.ShopId == order.ShopId && i.Status == 0);
+                           
+                            var deliverybill = db.DeliveryCharges.FirstOrDefault(i => i.Type == shop.DeliveryType && i.TireType == shop.DeliveryTierType && i.Status == 0);
+                            if (order != null)
+                            {
+                                if (order.Distance < 5)
+                                {
+                                    order.DeliveryCharge= deliverybill.ChargeUpto5Km;
+                                }
+                                else
+                                    {
+                                    var dist = order.Distance - 5;
+                                    var amount = dist * deliverybill.ChargePerKm;
+                                    order.DeliveryCharge = deliverybill.ChargeUpto5Km + amount;
+                                }
+                                order.ShopDeliveryDiscount = order.TotalPrice * (billingCharge.DeliveryDiscountPercentage / 100);
+                                if (order.ShopDeliveryDiscount > order.DeliveryCharge)
+                                {
+                                    order.NetDeliveryCharge = 0;
+                                    order.ShopDeliveryDiscount = order.DeliveryCharge;
+                                }
+                                else
+                                {
+                                    order.NetDeliveryCharge = order.DeliveryCharge - order.ShopDeliveryDiscount;
+                                }
+                               
+
+                                if(billingCharge.ConvenientCharge<order.TotalPrice)
+                                {
+                                    order.Convinenientcharge = perOrderAmount.RatePerOrder;
+                                }
+                                order.Status = 2;
+                                order.UpdatedBy = "service";
+                                order.DateUpdated = DateTime.Now;
+                                order.RatePerOrder = perOrderAmount.RatePerOrder;
+                                order.NetDeliveryCharge = order.NetDeliveryCharge;
+                                order.ShopDeliveryDiscount = order.ShopDeliveryDiscount;
+                                order.Packingcharge = billingCharge.PackingCharge;
+                                order.NetTotal =order.Packingcharge+order.TotalPrice+order.NetDeliveryCharge +order.Convinenientcharge;
+                                order.PaymentModeType = 1;
+                                order.PaymentMode =  "Online Payment";
+                                db.Entry(order).State = System.Data.Entity.EntityState.Modified;
+                                db.SaveChanges();
+
+                                if (payment == null)
+                                {
+                                   Models.Payment  pay = new Models.Payment();
+                                    pay.Amount = order.NetTotal;
+                                    pay.PaymentMode = "Online Payment";
+                                    pay.PaymentModeType = 1;
+                                    pay.Key = "Razor";
+                                    pay.Status = 0;
+                                    pay.DateEncoded = order.DateEncoded;
+                                    pay.DateUpdated = order.DateUpdated;
+                                   // pay.ReferenceCode = data.PaymentId;
+                                    pay.CustomerId = order.CustomerId;
+                                    pay.CustomerName = order.CustomerName;
+                                    pay.ShopId = order.ShopId;
+                                    pay.ShopName = order.ShopName;
+                                    pay.OriginalAmount = order.TotalPrice;
+                                    pay.GSTAmount = order.NetTotal;
+                                    pay.Currency = "Rupees";
+                                    pay.PaymentResult = "success";
+                                    pay.Credits = "N/A";
+                                    pay.UpdatedBy = order.UpdatedBy;
+                                    pay.CreatedBy = order.CreatedBy;
+                                    pay.OrderNumber = order.OrderNumber;
+                                    pay.PaymentCategoryType = 0;
+                                    pay.CreditType = 2;
+                                    pay.PackingCharge = order.Packingcharge;
+                                    pay.RatePerOrder = Convert.ToDouble(perOrderAmount.RatePerOrder);
+                                    pay.RefundStatus = 1;
+                                    db.Payments.Add(pay);
+                                    db.SaveChanges();
+
+                                    Razorpay.Api.Payment varpaymentdata = new Razorpay.Api.Payment();
+                                    string code = Convert.ToString(data[0]["id"].Value);
+                                    Dictionary<string, object> optionss = new Dictionary<string, object>();
+                                    //optionss.Add("Razorpay Order Id", code); // amount in the smallest currency unit
+                                    optionss.Add("order_id", code); // amount in the smallest currency unit
+                                    optionss.Add("count", 100);
+                                    var s = varpaymentdata.All(optionss);
+                                    PaymentsData pd = new PaymentsData();
+
+                                    pd.PaymentId = s[0]["id"].Value;
+                                    pd.OrderNumber = Convert.ToInt32(varOrder.OrderNumber);
+                                    pd.Entity = "payment";
+                                    pd.Amount = Convert.ToDecimal(varOrder.Amount);
+                                    pd.Currency = "INR";
+                                    pd.Status = 2;
+                                   
+                                 
+
+
+                                    pd.Invoice_Id = s[0]["invoice_id"];
+                                    if (s[0]["status"] == "created")
+                                        pd.Status = 0;
+                                    else if (s[0]["status"] == "authorized")
+                                        pd.Status = 1;
+                                    else if (s[0]["status"] == "captured")
+                                        pd.Status = 2;
+                                    else if (s[0]["status"] == "refunded")
+                                        pd.Status = 3;
+                                    else if (s[0]["status"] == "failed")
+                                        pd.Status = 4;
+                                    pd.Order_Id = s[0]["order_id"];
+                                    if (s[0]["fee"] != null && s[0]["fee"] > 0)
+                                        pd.Fee = (decimal)s[0]["fee"] / 100;
+                                    else
+                                        pd.Fee = s[0]["fee"];
+                                    pd.Entity = s[0]["entity"];
+                                    pd.Currency = s[0]["currency"];
+                                    pd.Method = s[0]["method"];
+                                    if (s[0]["tax"] != null && s[0]["tax"] > 0)
+                                        pd.Tax = (decimal)s[0]["tax"] / 100;
+                                    else
+                                        pd.Tax = s[0]["tax"];
+                                    if (s[0]["amount"] != null && s[0]["amount"] > 0)
+                                        pay.Amount = s[0]["amount"] / 100;
+                                    else
+                                        pay.Amount = s[0]["amount"];
+
+
+                                    pd.Fee -= pd.Tax; //Total fee minu tax
+         
+                                    pd.DateEncoded = DateTime.Now;
+                                    db.PaymentsDatas.Add(pd);
+                                    db.SaveChanges();
+                                }
+                              
+                               
+                                
+                            }
+                        }
+                    }
+
+
+                }
+
+                db.Dispose();
+                return Json(new { message = "Failed to Update the Order!" }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                db.Dispose();
+                return Json(new { message = "Failed to Update the Order!" }, JsonRequestBehavior.AllowGet);
+
+            }
+        }
 
         public JsonResult GetAcceptOrder(int orderNo, int customerId, int status, int priority)
         {
