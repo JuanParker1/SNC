@@ -204,6 +204,38 @@ namespace ShopNow.Controllers
             return Json(new { IsAdded = IsAdded, message = message, message1 = message1 }, JsonRequestBehavior.AllowGet);
         }
 
+        public JsonResult StaffCreate(string StaffName,string StaffId,string StaffPassword)
+        {
+            var user = ((Helpers.Sessions.User)Session["USER"]);
+            bool IsAdded = false;
+            string message = "";
+            string message1 = "";
+
+            var customerExist = db.Customers.Where(m => m.PhoneNumber == StaffId).FirstOrDefault();
+            if (customerExist == null)
+            {
+                Customer customer = new Customer();
+                customer.Position = 4;
+                customer.Name = StaffName;
+                customer.PhoneNumber = StaffId;
+                customer.Password = StaffPassword;
+                customer.CreatedBy = user.Name;
+                customer.UpdatedBy = user.Name;
+                customer.DateEncoded = DateTime.Now;
+                customer.DateUpdated = DateTime.Now;
+                db.Customers.Add(customer);
+                db.SaveChanges();
+                IsAdded = true;
+                message = customer.PhoneNumber + " Added Successfully";
+            }
+            else if (customerExist != null)
+            {
+                message1 = StaffId + " Already Exist";
+            }
+
+            return Json(new { IsAdded = IsAdded, message = message, message1 = message1 }, JsonRequestBehavior.AllowGet);
+        }
+
         [AccessPolicy(PageCode = "SNCCUR110")]
         public JsonResult Remove(int Id)
         {
