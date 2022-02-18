@@ -6112,6 +6112,7 @@ namespace ShopNow.Controllers
             var productList = searchList.Where(i => i.Type==1)
                 .Join(db.Shops.Where(i=>i.Status ==0),sh=>sh.ShopId,s=>s.Id,(sh,s)=>new { sh,s})
                 .Select(i=>new {
+                    Id = i.sh.Id,
                     ProductId = i.sh.SearchId,
                     ProductName = i.sh.SearchText,
                     ImagePath = db.MasterProducts.FirstOrDefault(a => a.Id == i.sh.MasterProductId).ImagePath1,
@@ -6133,6 +6134,7 @@ namespace ShopNow.Controllers
             var shopList = searchList.Where(i => i.Type == 2)
                 .Join(db.Shops.Where(i => i.Status == 0), sh => sh.SearchId, s => s.Id, (sh, s) => new { sh, s })
                 .Select(i => new {
+                    Id = i.sh.Id,
                     ProductId = 0,
                     ProductName = "",
                     ImagePath = "",
@@ -7026,6 +7028,29 @@ namespace ShopNow.Controllers
         {
             Helpers.LogFile.WriteToFile("Logged Successfully");
             return Json(true);
+        }
+
+        public JsonResult UpdateKeywordDataFromMaster()
+        {
+            var masterProductList = db.MasterProducts.Where(i => i.Status == 0 && i.Id > 13009).Select(i=>i.Name).ToList();
+            foreach (var item in masterProductList)
+            {
+                var nameArray = item.Split(' ');
+                foreach (var name in nameArray)
+                {
+                    var checkExist = db.KeywordDatas.Any(i => i.Name.Trim().ToLower() == name.Trim().ToLower());
+                    if (!checkExist)
+                    {
+                        var keywordData = new KeywordData
+                        {
+                            Name = name
+                        };
+                        db.KeywordDatas.Add(keywordData);
+                        db.SaveChanges();
+                    }
+                }
+            }
+            return Json(true, JsonRequestBehavior.AllowGet);
         }
       
     }
