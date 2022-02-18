@@ -2835,6 +2835,14 @@ namespace ShopNow.Controllers
             else if (shop.ShopCategoryId != 3) //not shop category for supermarkets
             {
                 model.CategoryLists = db.Database.SqlQuery<ShopDetails.CategoryList>($"select distinct CategoryId as Id, c.Name as Name from Products p join Categories c on c.Id = p.CategoryId where ShopId ={shopId}  and c.Status = 0 and CategoryId !=0 and c.Name is not null group by CategoryId,c.Name order by Name").ToList<ShopDetails.CategoryList>();
+                //Category is Multiplying
+                model.CategoryLists = model.CategoryLists.GroupBy(i => i.Name).Select(i => new ShopDetails.CategoryList
+                {
+                    Id = i.FirstOrDefault().Id,
+                    ImagePath = "../../assets/images/notavailable.png",
+                    Name =i.FirstOrDefault().Name,
+                    OrderNo = 0
+                }).OrderBy(i => i.Name).ToList();
             }
             if (shop.ShopCategoryId == 1 || shop.ShopCategoryId == 3)
             {
@@ -3628,7 +3636,8 @@ namespace ShopNow.Controllers
                              ShopName = i.ShopName,
                              CustomerName = i.CustomerName,
                              CustomerRemark = i.CustomerRemark,
-                             Rating = i.Rating
+                             Rating = i.Rating,
+                             Date = i.DateUpdated
                          }).ToList();
             model.ReviewlLists = db.CustomerReviews
                              .Where(i => i.Status == 0 && i.ShopId == shopId && i.CustomerId != customerId)
@@ -3638,7 +3647,8 @@ namespace ShopNow.Controllers
                              ShopName = i.ShopName,
                              CustomerName = i.CustomerName,
                              CustomerRemark = i.CustomerRemark,
-                             Rating = i.Rating
+                             Rating = i.Rating,
+                             Date = i.DateUpdated
                          }).OrderByDescending(i => i.Id).ToList();
             int count = model.ReviewlLists.Count();
             int CurrentPage = page;
