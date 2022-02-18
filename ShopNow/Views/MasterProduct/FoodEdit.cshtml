@@ -382,7 +382,7 @@
                                         @if (Model.ImagePath1 != null)
                                         {
                                             <img class="img-container w-100 h-100" id="img-DishImage" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePath1" onerror="this.src='/Images/noimage.png'" />
-                                            <input type="button" id="btnRemove" class="btn btn-sm btn-danger ml-3 mt-1" value="Remove" />
+                                            <input type="button" class="btn btn-sm btn-danger ml-3 mt-1 btnRemove" value="Remove" />
                                         }
                                         else
                                         {
@@ -825,6 +825,12 @@
                 $("#btnRemove").removeClass("d-none");
             });
             $("#btnRemove").on('click', function () {
+                $('#img-DishImage').attr('src', "");
+                $("#DishImage").val('');
+                $("#ImagePath").val("");
+                $(this).addClass("d-none");
+            });
+            $(".btnRemove").on('click', function () {
                 $('#img-DishImage').attr('src', "");
                 $("#DishImage").val('');
                 $("#ImagePath").val("");
