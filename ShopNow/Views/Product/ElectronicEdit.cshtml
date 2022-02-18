@@ -67,20 +67,20 @@
                                     </div>
                                     <div class="col-md-3">
                                         <label class="col-form-label" for="Price"><strong class="text-secondary">Menu Price</strong></label>
-                                        <input id="MenuPrice" type="number" class="form-control" name="MenuPrice" min="0" step="any" value="@Model.MenuPrice" />
+                                        <input id="MenuPrice" type="number" class="form-control" name="MenuPrice" min="1" step=".01" value="@Model.MenuPrice" />
                                     </div>
                                     <div class="col-md-3">
                                         <label class="col-form-label" for="Price"><strong class="text-secondary">Selling Price</strong></label>
-                                        <input id="Price" type="number" class="form-control" name="Price" step="any" value="@Model.Price" />
+                                        <input id="Price" type="number" class="form-control" name="Price" min="1" step=".01" value="@Model.Price" />
                                     </div>
                                     <div class="col-md-3">
                                         <label class="col-form-label" for="Qty"><strong class="text-secondary">Quantity</strong></label>
-                                        <input id="Qty" type="number" class="form-control" name="Qty" min="0" value="@Model.Qty" />
+                                        <input id="Qty" type="number" class="form-control" name="Qty" min="1" value="@Model.Qty" />
                                     </div>
                                     <div class="col-md-3">
                                         <div class="form-group">
                                             <label class="control-label" for="Percentage"><strong class="text-secondary">Percentage</strong></label>
-                                            <input id="Percentage" type="number" class="form-control" name="Percentage" value="@Model.Percentage" />
+                                            <input id="Percentage" type="number" class="form-control" name="Percentage" step=".01" value="@Model.Percentage" />
                                         </div>
                                     </div>
                                     <div class="col-md-3">

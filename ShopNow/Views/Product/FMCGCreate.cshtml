@@ -67,34 +67,34 @@
                                         <input type="hidden" name="NextSubCategoryName" id="NextSubCategoryName" />
                                     </div>
                                     <div class="col-md-3">
-                                        <label><strong class="text-secondary">Measurement Unit Name</strong></label>
+                                        <label class="col-form-label" for="MeasurementUnitName"><strong class="text-secondary">Measurement Unit Name</strong></label>
                                         <input type="text" class="form-control" name="MeasurementUnitName" id="MeasurementUnitName" readonly />
                                         <input type="hidden" name="MeasurementUnitId" id="MeasurementUnitId" />
                                     </div>
                                     <div class="col-md-3">
                                         <label class="col-form-label" for="MenuPrice"><strong class="text-secondary">Menu Price</strong></label>
-                                        <input id="MenuPrice" type="number" class="form-control" name="MenuPrice" min="1" />
+                                        <input id="MenuPrice" type="number" class="form-control" name="MenuPrice" min="1" step=".01" />
                                     </div>
                                     <div class="col-md-3">
                                         <label class="col-form-label" for="Price"><strong class="text-secondary">Selling Price</strong></label>
-                                        <input id="Price" type="number" class="form-control" name="Price" min="1" />
+                                        <input id="Price" type="number" class="form-control" name="Price" min="1" step=".01" />
                                     </div>
                                     <div class="col-md-2">
                                         <div class="form-group">
                                             <label class="col-form-label" for="ShopPrice"><strong class="text-secondary">Shop Price</strong></label>
-                                            <input id="ShopPrice" type="number" class="form-control" name="ShopPrice" min="1" step="any" readonly />
+                                            <input id="ShopPrice" type="number" class="form-control" name="ShopPrice" min="1" step=".01" readonly />
                                         </div>
                                     </div>
                                     <div class="col-md-2">
                                         <div class="form-group">
                                             <label class="col-form-label" for="Qty"><strong class="text-secondary">Quantity</strong></label>
-                                            <input id="Qty" type="number" class="form-control" name="Qty" min="0" />
+                                            <input id="Qty" type="number" class="form-control" name="Qty" min="1" />
                                         </div>
                                     </div>
                                     <div class="col-md-2">
                                         <div class="form-group">
                                             <label class="col-form-label" for="Percentage"><strong class="text-secondary">Percentage</strong></label>
-                                            <input id="Percentage" type="number" class="form-control" name="Percentage" readonly />
+                                            <input id="Percentage" type="number" class="form-control" name="Percentage" step=".01" readonly />
                                         </div>
                                     </div>
                                     <div class="col-md-3">
