@@ -7230,10 +7230,10 @@ namespace ShopNow.Controllers
 
         public JsonResult UpdateKeywordDataFromMaster()
         {
-            var masterProductList = db.MasterProducts.Where(i => i.Status == 0 && i.Id > 13009).Select(i=>i.Name).ToList();
+            var masterProductList = db.MasterProducts.Where(i => i.Status == 0).Select(i=> new{ Name= i.Name , Combination = i.DrugCompoundDetailName}).ToList();
             foreach (var item in masterProductList)
             {
-                var nameArray = item.Split(' ');
+                var nameArray = item.Name.Split(' ');
                 foreach (var name in nameArray)
                 {
                     var checkExist = db.KeywordDatas.Any(i => i.Name.Trim().ToLower() == name.Trim().ToLower());
@@ -7247,7 +7247,27 @@ namespace ShopNow.Controllers
                         db.SaveChanges();
                     }
                 }
+
+                if (!string.IsNullOrEmpty(item.Combination))
+                {
+                    var combinationArray = item.Combination.Split(' ');
+                    foreach (var name in combinationArray)
+                    {
+                        var checkExist = db.KeywordDatas.Any(i => i.Name.Trim().ToLower() == name.Trim().ToLower());
+                        if (!checkExist)
+                        {
+                            var keywordData = new KeywordData
+                            {
+                                Name = name
+                            };
+                            db.KeywordDatas.Add(keywordData);
+                            db.SaveChanges();
+                        }
+                    }
+                }
             }
+
+            
             return Json(true, JsonRequestBehavior.AllowGet);
         }
       
