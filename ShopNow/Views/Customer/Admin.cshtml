@@ -12,7 +12,8 @@
             <h5 class="text-success" style="letter-spacing:1px">ADMIN LIST</h5>
         </div>
         <div class="col-md-6 text-right">
-            <a data-toggle="modal" data-target="#createModal" href="createModal"><span class="fa fa-plus"></span> New Admin</a>
+            <a data-toggle="modal" data-target="#createStaffModal" href="createStaffModal"><span class="fa fa-plus"></span> New Staff</a>
+            <a data-toggle="modal" data-target="#createModal" href="createModal" class="ml-3"><span class="fa fa-plus"></span> New Admin</a>
         </div>
     </div>
     <div class="row">
@@ -96,6 +97,47 @@
             </div>
             <div class="modal-footer">
                 <input type="button" id="btnUpdate" value="Update" class="btn btn-success float-right" />
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="createStaffModal" role="dialog" aria-labelledby="createStaffModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header alert alert-info">
+                <h5 class="modal-title" id="createStaffModalLabel">New Staff</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group row">
+                    <div class="col-md-4">
+                        <label class="control-label text-secondary font-weight-bold" for="StaffName">Staff Name</label>
+                    </div>
+                    <div class="col-md-8">
+                        <input type="text" name="StaffName" id="StaffName" class="form-control" />
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-md-4">
+                        <label class="control-label text-secondary font-weight-bold" for="StaffId">UserName</label>
+                    </div>
+                    <div class="col-md-8">
+                        <input type="text" name="StaffId" id="StaffId" class="form-control" />
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-md-4">
+                        <label class="control-label text-secondary font-weight-bold" for="StaffPassword">Password</label>
+                    </div>
+                    <div class="col-md-8">
+                        <input type="text" name="StaffPassword" id="StaffPassword" class="form-control" />
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <input type="button" id="StaffCreate" name="StaffCreate" value="Save" class="btn btn-success float-right Save" />
             </div>
         </div>
     </div>
@@ -215,6 +257,34 @@
                 }
                 else {
                     swal("Password Empty", "Please enter your password!", "warning");
+                }
+            });
+
+            $('#StaffCreate').on('click', function () {
+                var StaffName = $('#StaffName').val();
+                var StaffId = $('#StaffId').val();
+                var StaffPassword = $('#StaffPassword').val();
+                var isValidate = false;
+                var requiredArr = [
+                    'StaffName',
+                    'StaffId',
+                    'StaffPassword'
+                ];
+                isValidate = ValidateEmptyRequiredFiels(requiredArr);
+                if (isValidate) {
+                    $.getJSON("/Customer/StaffCreate?StaffName=" + StaffName + "&StaffId=" + StaffId + "&StaffPassword=" + StaffPassword, function (data) {
+                        if (data.IsAdded == true) {
+                            swal({
+                                title: data.message,
+                                text: "",
+                                type: "success"
+                            }, function () {
+                                window.location.href = "/Customer/Admin";
+                            });
+                        } else if (data.message1 != null || data.message1 != "") {
+                            swal(data.message1, "UserName Already Exist", "warning");
+                        }
+                    });
                 }
             });
 
