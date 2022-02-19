@@ -373,7 +373,7 @@
                     </div>
                     <div class="card col-md-2 m-3">
                         <div class="card-body">
-                            <div class="row mt-2">
+                            <div class="row">
                                 <h5 class="text-success">Dish Image</h5>
                             </div>
                             <div class="row mt-2 mb-3">
@@ -382,7 +382,7 @@
                                         @if (Model.ImagePath1 != null)
                                         {
                                             <img class="img-container w-100 h-100" id="img-DishImage" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePath1" onerror="this.src='/Images/noimage.png'" />
-                                            <input type="button" class="btn btn-sm btn-danger ml-3 mt-1 btnRemove" value="Remove" />
+                                            <input type="button" class="btn btn-sm btn-danger ml-4 mt-3 btnRemove" value="Remove" />
                                         }
                                         else
                                         {
@@ -394,9 +394,9 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="row ml-3">
+                            <div class="row ml-3 mb-3">
                                 <div class="col-md-12">
-                                    <input type="button" id="btnRemove" class="btn btn-sm d-none btn-danger mt-1" value="Remove" />
+                                    <input type="button" id="btnRemove" class="btn btn-sm d-none btn-danger" value="Remove" />
                                 </div>
                             </div>
                         </div>
@@ -823,6 +823,7 @@
             $("#DishImage").change(function () {
                 readURLProduct(this);
                 $("#btnRemove").removeClass("d-none");
+                $(".btnRemove").addClass("d-none");
             });
             $("#btnRemove").on('click', function () {
                 $('#img-DishImage').attr('src', "");
