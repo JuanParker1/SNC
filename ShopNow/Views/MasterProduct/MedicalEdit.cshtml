@@ -164,88 +164,128 @@
                                 <div class="row">
                                     <div class="col-md-2">
                                         <label class="control-label"><strong class="text-secondary">Drug Image 1</strong></label>
-                                        <div class="img-upload-container ml-2">
-                                            @if (Model.ImagePath1 != null)
-                                            {
-                                                <img class="img-container w-100 h-100" id="img-drug1" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePath1" onerror="this.src='/Images/noimage.png'" />
-                                            }
-                                            else
-                                            {
-                                                <img class="img-container w-100 h-100" id="img-drug1" onerror="this.src='/Images/noimage.png'" />
-                                            }
-                                            <input type="file" id="MedicalImage1" name="MedicalImage1" class="d-none" />
-                                            <label for="MedicalImage1" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
-                                            <input type="hidden" name="ImagePath1" id="ImagePath1" value="@Model.ImagePath1" />
+                                        <div class="row">
+                                            <div class="img-upload-container ml-2">
+                                                @if (Model.ImagePath1 != null)
+                                                {
+                                                    <img class="img-container w-100 h-100" id="img-drug1" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePath1" onerror="this.src='/Images/noimage.png'" />
+                                                    <input type="button" class="btn btn-sm btn-danger ml-3 mt-1 btnRemove1" value="Remove" />
+                                                }
+                                                else
+                                                {
+                                                    <img class="img-container w-100 h-100" id="img-drug1" onerror="this.src='/Images/noimage.png'" />
+                                                }
+                                                <input type="file" id="MedicalImage1" name="MedicalImage1" class="d-none" />
+                                                <label for="MedicalImage1" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                                <input type="hidden" name="ImagePath1" id="ImagePath1" value="@Model.ImagePath1" />
+                                            </div>
+                                        </div>
+                                        <div class="row ml-2">
+                                            <div class="col-md-12">
+                                                <input type="button" id="btnRemove1" class="btn btn-sm d-none btn-danger mt-1" value="Remove" />
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="col-md-2">
                                         <label class="control-label"><strong class="text-secondary">Drug Image 2</strong></label>
-                                        <div class="img-upload-container ml-2">
-                                            @if (Model.ImagePath2 != null)
-                                            {
-                                                <img class="img-container w-100 h-100" id="img-drug2" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePath2" onerror="this.src='/Images/noimage.png'" />
-                                            }
-                                            else
-                                            {
-                                                <img class="img-container w-100 h-100" id="img-drug2" onerror="this.src='/Images/noimage.png'" />
-                                            }
-                                            <input type="file" id="MedicalImage2" name="MedicalImage2" class="d-none" />
-                                            <label for="MedicalImage2" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
-                                            <input type="hidden" name="ImagePath2" id="ImagePath2" value="@Model.ImagePath2" />
+                                        <div class="row">
+                                            <div class="img-upload-container ml-2">
+                                                @if (Model.ImagePath2 != null)
+                                                {
+                                                    <img class="img-container w-100 h-100" id="img-drug2" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePath2" onerror="this.src='/Images/noimage.png'" />
+                                                    <input type="button" class="btn btn-sm btn-danger ml-3 mt-1 btnRemove2" value="Remove" />
+                                                }
+                                                else
+                                                {
+                                                    <img class="img-container w-100 h-100" id="img-drug2" onerror="this.src='/Images/noimage.png'" />
+                                                }
+                                                <input type="file" id="MedicalImage2" name="MedicalImage2" class="d-none" />
+                                                <label for="MedicalImage2" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                                <input type="hidden" name="ImagePath2" id="ImagePath2" value="@Model.ImagePath2" />
+                                            </div>
+                                        </div>
+                                        <div class="row ml-2">
+                                            <div class="col-md-12">
+                                                <input type="button" id="btnRemove2" class="btn btn-sm d-none btn-danger mt-1" value="Remove" />
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="col-md-2">
                                         <label class="control-label"><strong class="text-secondary">Drug Image 3</strong></label>
-                                        <div class="img-upload-container ml-2">
-                                            @if (Model.ImagePath3 != null)
-                                            {
-                                                <img class="img-container w-100 h-100" id="img-drug3" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePath3" onerror="this.src='/Images/noimage.png'" />
-                                            }
-                                            else
-                                            {
-                                                <img class="img-container w-100 h-100" id="img-drug3" onerror="this.src='/Images/noimage.png'" />
-                                            }
-                                            <input type="file" id="MedicalImage3" name="MedicalImage3" class="d-none" />
-                                            <label for="MedicalImage3" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
-                                            <input type="hidden" name="ImagePath3" id="ImagePath3" value="@Model.ImagePath3" />
+                                        <div class="row">
+                                            <div class="img-upload-container ml-2">
+                                                @if (Model.ImagePath3 != null)
+                                                {
+                                                    <img class="img-container w-100 h-100" id="img-drug3" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePath3" onerror="this.src='/Images/noimage.png'" />
+                                                    <input type="button" class="btn btn-sm btn-danger ml-3 mt-1 btnRemove3" value="Remove" />
+                                                }
+                                                else
+                                                {
+                                                    <img class="img-container w-100 h-100" id="img-drug3" onerror="this.src='/Images/noimage.png'" />
+                                                }
+                                                <input type="file" id="MedicalImage3" name="MedicalImage3" class="d-none" />
+                                                <label for="MedicalImage3" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                                <input type="hidden" name="ImagePath3" id="ImagePath3" value="@Model.ImagePath3" />
+                                            </div>
+                                        </div>
+                                        <div class="row ml-2">
+                                            <div class="col-md-12">
+                                                <input type="button" class="btn btn-sm d-none btn-danger mt-1" id="btnRemove3" value="Remove" />
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="col-md-2">
                                         <label class="control-label"><strong class="text-secondary">Drug Image 4</strong></label>
-                                        <div class="img-upload-container ml-2">
-                                            @if (Model.ImagePath4 != null)
-                                            {
-                                                <img class="img-container w-100 h-100" id="img-drug4" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePath4" onerror="this.src='/Images/noimage.png'" />
-                                            }
-                                            else
-                                            {
-                                                <img class="img-container w-100 h-100" id="img-drug4" onerror="this.src='/Images/noimage.png'" />
-                                            }
-                                            <input type="file" id="MedicalImage4" name="MedicalImage4" class="d-none" />
-                                            <label for="MedicalImage4" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
-                                            <input type="hidden" name="ImagePath4" id="ImagePath4" value="@Model.ImagePath4" />
+                                        <div class="row">
+                                            <div class="img-upload-container ml-2">
+                                                @if (Model.ImagePath4 != null)
+                                                {
+                                                    <img class="img-container w-100 h-100" id="img-drug4" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePath4" onerror="this.src='/Images/noimage.png'" />
+                                                    <input type="button" class="btn btn-sm btn-danger ml-3 mt-1 btnRemove4" value="Remove" />
+                                                }
+                                                else
+                                                {
+                                                    <img class="img-container w-100 h-100" id="img-drug4" onerror="this.src='/Images/noimage.png'" />
+                                                }
+                                                <input type="file" id="MedicalImage4" name="MedicalImage4" class="d-none" />
+                                                <label for="MedicalImage4" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                                <input type="hidden" name="ImagePath4" id="ImagePath4" value="@Model.ImagePath4" />
+                                            </div>
+                                        </div>
+                                        <div class="row ml-2">
+                                            <div class="col-md-12">
+                                                <input type="button" class="btn btn-sm d-none btn-danger mt-1" id="btnRemove4" value="Remove" />
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="col-md-2">
                                         <label class="control-label"><strong class="text-secondary">Drug Image 5</strong></label>
-                                        <div class="img-upload-container ml-2">
-                                            @if (Model.ImagePath5 != null)
-                                            {
-                                                <img class="img-container w-100 h-100" id="img-drug5" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePath5" onerror="this.src='/Images/noimage.png'" />
-                                            }
-                                            else
-                                            {
-                                                <img class="img-container w-100 h-100" id="img-drug5" onerror="this.src='/Images/noimage.png'" />
-                                            }
-                                            <input type="file" id="MedicalImage5" name="MedicalImage5" class="d-none" />
-                                            <label for="MedicalImage5" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
-                                            <input type="hidden" name="ImagePath5" id="ImagePath5" value="@Model.ImagePath5" />
+                                        <div class="row">
+                                            <div class="img-upload-container ml-2">
+                                                @if (Model.ImagePath5 != null)
+                                                {
+                                                    <img class="img-container w-100 h-100" id="img-drug5" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePath5" onerror="this.src='/Images/noimage.png'" />
+                                                    <input type="button" class="btn btn-sm btn-danger ml-3 mt-1 btnRemove5" value="Remove" />
+                                                }
+                                                else
+                                                {
+                                                    <img class="img-container w-100 h-100" id="img-drug5" onerror="this.src='/Images/noimage.png'" />
+                                                }
+                                                <input type="file" id="MedicalImage5" name="MedicalImage5" class="d-none" />
+                                                <label for="MedicalImage5" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                                <input type="hidden" name="ImagePath5" id="ImagePath5" value="@Model.ImagePath5" />
+                                            </div>
+                                        </div>
+                                        <div class="row ml-2">
+                                            <div class="col-md-12">
+                                                <input type="button" class="btn btn-sm d-none btn-danger mt-1" id="btnRemove5" value="Remove" />
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="form-group row">
+                        <div class="form-group row mt-5">
                             <div class="col-md-3 mx-auto">
                                 <button type="submit" class="btn btn-block btn-success Save"><span class="glyphicon glyphicon-file"></span> Save</button>
                             </div>
@@ -348,8 +388,7 @@
             }).on('select2:select', function (e) {
                 $('input[name="PackageName"]').val(e.params.data.text);
             });
-
-            
+                        
             function readURLDrug1(input) {
                 if (input.files && input.files[0]) {
                     var reader = new FileReader();
@@ -361,6 +400,20 @@
             }
             $("#MedicalImage1").change(function () {
                 readURLDrug1(this);
+                $("#btnRemove1").removeClass("d-none");
+                $(".btnRemove1").addClass("d-none");
+            });
+            $("#btnRemove1").on('click', function () {
+                $('#img-drug1').attr('src', '');
+                $("#MedicalImage1").val('');
+                $("#ImagePath1").val('');
+                $(this).addClass("d-none");
+            });
+            $(".btnRemove1").on('click', function () {
+                $('#img-drug1').attr('src', '');
+                $("#MedicalImage1").val('');
+                $("#ImagePath1").val('');
+                $(this).addClass("d-none");
             });
 
             function readURLDrug2(input) {
@@ -372,9 +425,22 @@
                     reader.readAsDataURL(input.files[0]);
                 }
             }
-
             $("#MedicalImage2").change(function () {
                 readURLDrug2(this);
+                $("#btnRemove2").removeClass("d-none");
+                $(".btnRemove2").addClass("d-none");
+            });
+            $("#btnRemove2").on('click', function () {
+                $('#img-drug2').attr('src', '');
+                $("#MedicalImage2").val('');
+                $("#ImagePath2").val('');
+                $(this).addClass("d-none");
+            });
+            $(".btnRemove2").on('click', function () {
+                $('#img-drug2').attr('src', '');
+                $("#MedicalImage2").val('');
+                $("#ImagePath2").val('');
+                $(this).addClass("d-none");
             });
 
             function readURLDrug3(input) {
@@ -388,6 +454,20 @@
             }
             $("#MedicalImage3").change(function () {
                 readURLDrug3(this);
+                $("#btnRemove3").removeClass("d-none");
+                $(".btnRemove3").addClass("d-none");
+            });
+            $("#btnRemove3").on('click', function () {
+                $('#img-drug3').attr('src', '');
+                $("#MedicalImage3").val('');
+                $("#ImagePath3").val('');
+                $(this).addClass("d-none");
+            });
+            $(".btnRemove3").on('click', function () {
+                $('#img-drug3').attr('src', '');
+                $("#MedicalImage3").val('');
+                $("#ImagePath3").val('');
+                $(this).addClass("d-none");
             });
 
             function readURLDrug4(input) {
@@ -401,6 +481,20 @@
             }
             $("#MedicalImage4").change(function () {
                 readURLDrug4(this);
+                $("#btnRemove4").removeClass("d-none");
+                $(".btnRemove4").addClass("d-none");
+            });
+            $("#btnRemove4").on('click', function () {
+                $('#img-drug4').attr('src', '');
+                $("#MedicalImage4").val('');
+                $("#ImagePath4").val('');
+                $(this).addClass("d-none");
+            });
+            $(".btnRemove4").on('click', function () {
+                $('#img-drug4').attr('src', '');
+                $("#MedicalImage4").val('');
+                $("#ImagePath4").val('');
+                $(this).addClass("d-none");
             });
 
             function readURLDrug5(input) {
@@ -414,6 +508,20 @@
             }
             $("#MedicalImage5").change(function () {
                 readURLDrug5(this);
+                $("#btnRemove5").removeClass("d-none");
+                $(".btnRemove5").addClass("d-none");
+            });
+            $("#btnRemove5").on('click', function () {
+                $('#img-drug5').attr('src', '');
+                $("#MedicalImage5").val('');
+                $("#ImagePath5").val('');
+                $(this).addClass("d-none");
+            });
+            $(".btnRemove5").on('click', function () {
+                $('#img-drug5').attr('src', '');
+                $("#MedicalImage5").val('');
+                $("#ImagePath5").val('');
+                $(this).addClass("d-none");
             });
 
             $('#Length,#Width,#Height').on('change', function () {

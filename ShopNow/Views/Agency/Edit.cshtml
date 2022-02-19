@@ -126,10 +126,11 @@
                                                 </div>
                                                 <div class="row ml-5 mt-2">
                                                     <div class="col-md-12">
-                                                        <div class="img-upload-container mb-3">
+                                                        <div class="img-upload-container mb-1">
                                                             @if (Model.ImagePath != null)
                                                             {
                                                                 <img class="img-container w-100 h-100 mb-2" id="img-upload" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePath" onerror="this.src='/Images/noimage.png'" />
+                                                                <input type="button" class="btn btn-danger btn-sm mt-1 btnRemove1" value="Remove" />
                                                             }
                                                             else
                                                             {
@@ -137,31 +138,44 @@
                                                             }
                                                             <input type="file" id="AgencyImage" name="AgencyImage" class="d-none" />
                                                             <label for="AgencyImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
-                                                            <input type="hidden" name="ImagePath" value="@Model.ImagePath" />
+                                                            <input type="hidden" name="ImagePath" id="ImagePath" value="@Model.ImagePath" />
                                                         </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-12 text-center">
+                                                        <input type="button" class="btn btn-danger btn-sm d-none mt-1" id="btnRemove1" value="Remove" />
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="card border-info bg-muted">
                                             <div class="card-body">
-                                                <label class="col-md-12 text-center"><strong class="text-secondary">Pan </strong></label>
+                                                <label class="col-md-12 text-center"><strong class="text-secondary">Pan Account </strong></label>
                                                 <label class="col-md-12 text-left"><small class="text-secondary"><i>Pan Number</i></small></label>
                                                 <input id="PanNumber" type="text" class="form-control" name="PanNumber" value="@Model.PanNumber" />
-                                                <label class="col-md-12 mt-2"><small class="text-secondary"><i>Pan Image</i></small></label>
-                                                <div class="row ml-3 PanImg mt-2">
-                                                    <div class="img-upload-container mb-3">
-                                                        @if (Model.ImagePanPath != null)
-                                                        {
-                                                            <img class="img-container w-100 h-100 mb-2" id="img-pan" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePanPath" onerror="this.src='/Images/noimage.png'" />
-                                                        }
-                                                        else
-                                                        {
-                                                            <img id='img-pan' class="img-container w-100 h-100" onerror="this.src='/Images/noimage.png'" />
-                                                        }
-                                                        <input type="file" id="PanImage" name="PanImage" class="d-none" />
-                                                        <label for="PanImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
-                                                        <input type="hidden" name="ImagePanPath" value="@Model.ImagePanPath" />
+                                                <label class="col-md-12 mt-2 text-center"><small class="text-secondary"><i>Pan Image</i></small></label>
+                                                <div class="row ml-5 PanImg mt-2">
+                                                    <div class="col-md-12 mb-1">
+                                                        <div class="img-upload-container mb-2">
+                                                            @if (Model.ImagePanPath != null)
+                                                            {
+                                                                <img class="img-container w-100 h-100 mb-2" id="img-pan" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePanPath" onerror="this.src='/Images/noimage.png'" />
+                                                                <input type="button" class="btn btn-danger btn-sm ml-3 text-center mt-1 btnRemove2" value="Remove" />
+                                                            }
+                                                            else
+                                                            {
+                                                                <img id='img-pan' class="img-container w-100 h-100" onerror="this.src='/Images/noimage.png'" />
+                                                            }
+                                                            <input type="file" id="PanImage" name="PanImage" class="d-none" />
+                                                            <label for="PanImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                                            <input type="hidden" name="ImagePanPath" id="ImagePanPath" value="@Model.ImagePanPath" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row mb-3">
+                                                    <div class="col-md-12 text-center">
+                                                        <input type="button" class="btn btn-danger btn-sm d-none ml-3 mt-1" id="btnRemove2" value="Remove" />
                                                     </div>
                                                 </div>
                                             </div>
@@ -171,10 +185,11 @@
                                                 <label class="col-md-12 text-center"><strong class="text-secondary">Bank Account</strong></label>
                                                 <label class="col-md-12"><small class="text-secondary"><i>Bank Passbook Image</i></small></label>
                                                 <div class="row">
-                                                    <div class="img-upload-container mx-auto mb-3 AccountDocumentImg">
+                                                    <div class="img-upload-container mx-auto mb-1 AccountDocumentImg">
                                                         @if (Model.BankPassbookPath != null)
                                                         {
                                                             <img class="img-container w-100 h-100 mb-2" id="img-account" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.BankPassbookPath" onerror="this.src='/Images/noimage.png'" />
+                                                            <input type="button" class="btn btn-danger btn-sm mr-3 mt-1 btnRemove3" value="Remove" />
                                                         }
                                                         else
                                                         {
@@ -182,7 +197,12 @@
                                                         }
                                                         <input type="file" id="BankPassbookImage" name="BankPassbookImage" class="d-none" />
                                                         <label for="BankPassbookImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
-                                                        <input type="hidden" name="BankPassbookPath" value="@Model.BankPassbookPath" />
+                                                        <input type="hidden" name="BankPassbookPath" id="BankPassbookPath" value="@Model.BankPassbookPath" />
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-12 text-center">
+                                                        <input type="button" class="btn btn-danger btn-sm d-none mr-3 mt-1" id="btnRemove3" value="Remove" />
                                                     </div>
                                                 </div>
                                             </div>
@@ -358,47 +378,78 @@
                     reader.onload = function (e) {
                         $('#img-upload').attr('src', e.target.result);
                     }
-
                     reader.readAsDataURL(input.files[0]);
                 }
             }
+            $("#AgencyImage").change(function () {
+                readURL(this);
+                $("#btnRemove1").removeClass("d-none");
+            });
+            $("#btnRemove1").on('click', function () {
+                $('#img-upload').attr('src', '');
+                $("#AgencyImage").val('');
+                $("#ImagePath").val('');
+                $(this).addClass("d-none");
+            });
+            $(".btnRemove1").on('click', function () {
+                $('#img-upload').attr('src', '');
+                $("#AgencyImage").val('');
+                $("#ImagePath").val('');
+                $(this).addClass("d-none");
+            });
 
             function readURLlicense(input) {
                 if (input.files && input.files[0]) {
                     var reader = new FileReader();
-
                     reader.onload = function (e) {
                         $('#img-pan').attr('src', e.target.result);
                     }
-
                     reader.readAsDataURL(input.files[0]);
                 }
             }
+            $("#PanImage").change(function () {
+                readURLlicense(this);
+                $("#btnRemove2").removeClass("d-none");
+            });
+            $("#btnRemove2").on('click', function () {
+                $('#img-pan').attr('src', '');
+                $("#PanImage").val('');
+                $("#ImagePanPath").val('');
+                $(this).addClass("d-none");
+            });
+            $(".btnRemove2").on('click', function () {
+                $('#img-pan').attr('src', '');
+                $("#PanImage").val('');
+                $("#ImagePanPath").val('');
+                $(this).addClass("d-none");
+            });
+
 
             function readURLaccount(input) {
                 if (input.files && input.files[0]) {
                     var reader = new FileReader();
-
                     reader.onload = function (e) {
                         $('#img-account').attr('src', e.target.result);
                     }
-
                     reader.readAsDataURL(input.files[0]);
                 }
             }
-
-            $("#AgencyImage").change(function () {
-                readURL(this);
-            });
-
-            $("#PanImage").change(function () {
-                readURLlicense(this);
-            });
-
             $("#BankPassbookImage").change(function () {
                 readURLaccount(this);
+                $("#btnRemove3").removeClass("d-none");
             });
-
+            $("#btnRemove3").on('click', function () {
+                $('#img-account').attr('src', '');
+                $("#BankPassbookImage").val('');
+                $("#BankPassbookPath").val('');
+                $(this).addClass("d-none");
+            });
+            $(".btnRemove3").on('click', function () {
+                $('#img-account').attr('src', '');
+                $("#BankPassbookImage").val('');
+                $("#BankPassbookPath").val('');
+                $(this).addClass("d-none");
+            });
         });
 
         var map, infoWindow, markers = [];
