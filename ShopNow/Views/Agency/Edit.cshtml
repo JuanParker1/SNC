@@ -384,6 +384,7 @@
             $("#AgencyImage").change(function () {
                 readURL(this);
                 $("#btnRemove1").removeClass("d-none");
+                $(".btnRemove1").addClass("d-none");
             });
             $("#btnRemove1").on('click', function () {
                 $('#img-upload').attr('src', '');
@@ -410,6 +411,7 @@
             $("#PanImage").change(function () {
                 readURLlicense(this);
                 $("#btnRemove2").removeClass("d-none");
+                $(".btnRemove2").addClass("d-none");
             });
             $("#btnRemove2").on('click', function () {
                 $('#img-pan').attr('src', '');
@@ -437,6 +439,7 @@
             $("#BankPassbookImage").change(function () {
                 readURLaccount(this);
                 $("#btnRemove3").removeClass("d-none");
+                $(".btnRemove3").addClass("d-none");
             });
             $("#btnRemove3").on('click', function () {
                 $('#img-account').attr('src', '');
