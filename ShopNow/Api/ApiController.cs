@@ -2801,7 +2801,7 @@ namespace ShopNow.Controllers
 
             if (shop.ShopCategoryId == 4 || shop.ShopCategoryId == 3)
             {
-                model.CategoryLists = db.Database.SqlQuery<ShopDetails.CategoryList>($"select distinct CategoryId as Id, c.Name as Name,c.ImagePath,c.OrderNo from Products p join Categories c on c.Id = p.CategoryId where ShopId ={shopId}  and c.Status = 0 and CategoryId !=0 and c.Name is not null group by CategoryId,c.Name,c.ImagePath,c.OrderNo order by Name")
+                model.CategoryLists = db.Database.SqlQuery<ShopDetails.CategoryList>($"select distinct CategoryId as Id, c.Name as Name,c.ImagePath,c.OrderNo from Products p join Categories c on c.Id = p.CategoryId where ShopId ={shopId}  and c.Status = 0 and p.status=0 and CategoryId !=0 and c.Name is not null group by CategoryId,c.Name,c.ImagePath,c.OrderNo order by Name")
                     .Select(i => new ShopDetails.CategoryList
                     {
                         Id = i.Id,
@@ -2834,7 +2834,7 @@ namespace ShopNow.Controllers
             }
             else if (shop.ShopCategoryId != 3) //not shop category for supermarkets
             {
-                model.CategoryLists = db.Database.SqlQuery<ShopDetails.CategoryList>($"select distinct CategoryId as Id, c.Name as Name from Products p join Categories c on c.Id = p.CategoryId where ShopId ={shopId}  and c.Status = 0 and CategoryId !=0 and c.Name is not null group by CategoryId,c.Name order by Name").ToList<ShopDetails.CategoryList>();
+                model.CategoryLists = db.Database.SqlQuery<ShopDetails.CategoryList>($"select distinct CategoryId as Id, c.Name as Name from Products p join Categories c on c.Id = p.CategoryId where ShopId ={shopId}  and c.Status = 0 and p.status=0 and CategoryId !=0 and c.Name is not null group by CategoryId,c.Name order by Name").ToList<ShopDetails.CategoryList>();
                 //Category is Multiplying
                 model.CategoryLists = model.CategoryLists.GroupBy(i => i.Name).Select(i => new ShopDetails.CategoryList
                 {
