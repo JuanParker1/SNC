@@ -6940,6 +6940,142 @@ namespace ShopNow.Controllers
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
+        [HttpPost]
+        public JsonResult SaveShopParcelDrop(ShopCreateParcelDropViewModel model)
+        {
+            try
+            {
+                if (!db.Orders.Any(i => i.OrderNumber == model.OrderNumber))
+                {
+                    var shop = db.Shops.FirstOrDefault(i => i.Id == model.ShopId);
+                    var order = new Models.Order
+                    {
+                        OrderNumber = model.OrderNumber,
+                        CustomerId = 0,
+                        CustomerName = model.Name,
+                        CustomerPhoneNumber = model.PhoneNumber,
+                        ShopId = model.ShopId,
+                        ShopName = shop.Name,
+                        DeliveryAddress = model.DeliveryAddress,
+                        ShopPhoneNumber = shop.PhoneNumber,
+                        ShopOwnerPhoneNumber = shop.OwnerPhoneNumber,
+                        TotalProduct = 0,
+                        TotalQuantity = 0,
+                        TotalPrice = model.Amount,
+                        WalletAmount = 0,
+                        NetTotal = model.Amount + model.DeliveryCharge,
+                        DeliveryCharge = model.DeliveryCharge,
+                        ShopDeliveryDiscount = 0,
+                        NetDeliveryCharge = model.DeliveryCharge,
+                        Latitude = model.DeliveryLatitude,
+                        Longitude = model.DeliveryLongitude,
+                        Distance = model.Distance,
+                        Remarks = model.Remarks,
+                        PaymentMode = "Cash On Hand",
+                        PaymentModeType = 2,
+                        TipsAmount = 0,
+                        IsPickupDrop = true,
+                        Status = 2,
+                        DateEncoded = DateTime.Now,
+                        DateUpdated = DateTime.Now,
+                        CreatedBy = shop.Name,
+                        UpdatedBy = shop.Name,
+                        PickupAddress = shop.Address,
+                        PickupLatitude = shop.Latitude,
+                        PickupLongitude = shop.Longitude
+                    };
+                    db.Orders.Add(order);
+                    db.SaveChanges();
+
+                    //Create one OrderItem to get the OrderId in App for UpdateTimings
+                    var orderItem = new OrderItem
+                    {
+                        AddOnType = 0,
+                        BrandId = 0,
+                        CategoryId = 0,
+                        HasAddon = false,
+                        OrdeNumber = order.OrderNumber,
+                        OrderId = order.Id,
+                        ProductId = 0,
+                        ProductName = "Parcel Drop Service - From App",
+                        UpdatedTime = DateTime.Now,
+                        Price = order.TotalPrice,
+                        UnitPrice = order.TotalPrice,
+                        Quantity = 1
+                    };
+                    db.OrderItems.Add(orderItem);
+                    db.SaveChanges();
+
+                    // Payment
+                    var payment = new Models.Payment();
+                    payment.Amount = order.NetTotal;
+                    payment.PaymentMode = "Cash On Hand";
+                    payment.PaymentModeType = 2;
+                    payment.CustomerId = order.CustomerId;
+                    payment.CustomerName = order.CustomerName;
+                    payment.ShopId = shop.Id;
+                    payment.ShopName = shop.Name;
+                    payment.OriginalAmount = order.TotalPrice;
+                    payment.GSTAmount = order.NetTotal;
+                    payment.Currency = "Rupees";
+                    payment.CountryName = null;
+                    payment.PaymentResult = "pending";
+                    payment.Credits = "N/A";
+                    payment.OrderNumber = order.OrderNumber;
+                    payment.PaymentCategoryType = 0;
+                    payment.Credits = "N/A";
+                    payment.CreditType = 2;
+                    payment.ConvenientCharge = 0;
+                    payment.PackingCharge = 0;
+                    payment.DeliveryCharge = 0;
+                    payment.RatePerOrder = order.RatePerOrder;
+                    payment.RefundStatus = 1;
+                    payment.Status = 0;
+                    payment.CreatedBy = shop.Name;
+                    payment.UpdatedBy = shop.Name;
+                    payment.DateEncoded = DateTime.Now;
+                    payment.DateUpdated = DateTime.Now;
+                    db.Payments.Add(payment);
+                    db.SaveChanges();
+
+                    //To Add Shop credit
+                    var shopCredits = db.ShopCredits.FirstOrDefault(i => i.CustomerId == shop.CustomerId);
+                    if (shopCredits == null)
+                    {
+                        var shopcredit = new ShopCredit
+                        {
+                            CustomerId = shop.CustomerId,
+                            DateUpdated = DateTime.Now,
+                            DeliveryCredit = 0,
+                            PlatformCredit = 0
+                        };
+                        db.ShopCredits.Add(shopcredit);
+                        db.SaveChanges();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return Json(false, JsonRequestBehavior.AllowGet);
+            }
+            return Json(true, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult GetCustomerDeliveryAddressList(string customerPhoneNumber = "", int shopId = 0)
+        {
+            var list = db.Orders.Where(a =>  a.CustomerPhoneNumber == customerPhoneNumber && a.IsPickupDrop == true && a.ShopId == shopId)
+                .Select(i => new
+                {
+                    address = i.DeliveryAddress,
+                    latitude = i.Latitude,
+                    longitude = i.Longitude,
+                    distance = i.Distance
+                }).Distinct().OrderBy(i => i.address).ToList();
+
+            return Json(list, JsonRequestBehavior.AllowGet);
+        }
+
+        //test apis
         public JsonResult SendTestNotification(string deviceId = "", string title = "", string body = "")
         {
             Helpers.PushNotification.SendbydeviceId(body, title, "", deviceId);
@@ -7266,10 +7402,58 @@ namespace ShopNow.Controllers
                     }
                 }
             }
-
-            
             return Json(true, JsonRequestBehavior.AllowGet);
         }
-      
+
+        //To generate UpiPaymentLink
+        public async Task<JsonResult> GetUPIPaymentLinkAsync(CreateRazorPayUpiPaymentLink model)
+        {
+            var request = new RequestUpiPaymentLink
+            {
+                amount = model.Amount * 100,
+                callback_method = "get",
+                callback_url = "",
+                currency = "INR",
+                customer = new RequestUpiPaymentLink.CustomerDetails
+                {
+                    contact = model.PhoneNumber,
+                    email = model.Email,
+                    name = model.Name
+                },
+                description = $"CashHandOver for order no #{model.OrderNumber}",
+                expire_by = (int)DateTime.UtcNow.AddHours(1).Subtract(new DateTime(1970, 1, 1)).TotalSeconds,
+                reference_id = model.OrderNumber.ToString(),
+                upi_link = true,
+                notify = new RequestUpiPaymentLink.Notify
+                {
+                    email = false,
+                    sms = false
+                }
+            };
+
+            var stringRequest = JsonConvert.SerializeObject(request);
+            var httpContent = new StringContent(stringRequest, Encoding.UTF8, "application/json");
+            var httpClient = new HttpClient();
+            httpClient.DefaultRequestHeaders.Add($"Authorization", $"Basic {Base64Encode($"{BaseClass.razorpaykey}:{BaseClass.razorpaySecretkey}")}");
+            var httpResponse = await httpClient.PostAsync("https://api.razorpay.com/v1/payment_links/", httpContent);
+            if (httpResponse.Content != null)
+            {
+                var responseContent = await httpResponse.Content.ReadAsStringAsync();
+                return Json(JsonConvert.DeserializeObject<UpiLink>(responseContent), JsonRequestBehavior.AllowGet);
+            }
+            return Json(false, JsonRequestBehavior.AllowGet);
+        }
+
+        public class UpiLink
+        {
+            public string short_url { get; set; }
+        }
+
+        public static string Base64Encode(string textToEncode)
+        {
+            byte[] textAsBytes = Encoding.UTF8.GetBytes(textToEncode);
+            return Convert.ToBase64String(textAsBytes);
+        }
+
     }
 }

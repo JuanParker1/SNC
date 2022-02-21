@@ -879,5 +879,58 @@ namespace ShopNow.ViewModels
         public string AccountNumber { get; set; }
         public string IFSCCode { get; set; }
     }
-    
+
+    public class ShopCreateParcelDropViewModel
+    {
+        public int ShopId { get; set; }
+        public string PickupAddress { get; set; }
+        public double PickupLatitude { get; set; }
+        public double PickupLongitude { get; set; }
+        public string DeliveryAddress { get; set; }
+        public double DeliveryLatitude { get; set; }
+        public double DeliveryLongitude { get; set; }
+        public string Name { get; set; }
+        public string PhoneNumber { get; set; }
+        public double Amount { get; set; }
+        public double DeliveryCharge { get; set; }
+        public double Distance { get; set; }
+        public string Remarks { get; set; }
+        public int OrderNumber { get; set; }
+    }
+
+    public class RequestUpiPaymentLink
+    {
+        public CustomerDetails customer { get; set; }
+        public Notify notify { get; set; }
+        public bool upi_link { get; set; }
+        public double amount { get; set; }
+        public string currency { get; set; }
+        public int expire_by { get; set; }
+        public string reference_id { get; set; }
+        public string description { get; set; }
+        public string callback_url { get; set; }
+        public string callback_method { get; set; }
+        public class CustomerDetails
+        {
+            public string name { get; set; }
+            public string contact { get; set; }
+            public string email { get; set; }
+        }
+
+        public class Notify
+        {
+            public bool sms { get; set; }
+            public bool email { get; set; }
+        }
+
+    }
+
+    public class CreateRazorPayUpiPaymentLink
+    {
+        public double Amount { get; set; }
+        public int OrderNumber { get; set; }
+        public string PhoneNumber { get; set; }
+        public string Name { get; set; }
+        public string Email { get; set; }
+    }
 }
