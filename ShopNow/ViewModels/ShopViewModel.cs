@@ -497,6 +497,8 @@ namespace ShopNow.ViewModels
         public string SwiftCode { get; set; }
         public string UPIID { get; set; }
         public string DistributorNumber { get; set; }
+        public double Latitude { get; set; }
+        public double Longitude { get; set; }
     }
 
 
