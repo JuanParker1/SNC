@@ -2447,15 +2447,18 @@ namespace ShopNow.Controllers
                 var combinationArray = Combination.Split(' ');
                 foreach (var name in combinationArray)
                 {
-                    var checkExist = _db.KeywordDatas.Any(i => i.Name.Trim().ToLower() == name.Trim().ToLower());
-                    if (!checkExist)
+                    foreach (var itemname in name.Split(','))
                     {
-                        var keywordData = new KeywordData
+                        var checkExist = _db.KeywordDatas.Any(i => i.Name.Trim().ToLower() == itemname.Trim().ToLower());
+                        if (!checkExist)
                         {
-                            Name = name
-                        };
-                        _db.KeywordDatas.Add(keywordData);
-                        _db.SaveChanges();
+                            var keywordData = new KeywordData
+                            {
+                                Name = itemname
+                            };
+                            _db.KeywordDatas.Add(keywordData);
+                            _db.SaveChanges();
+                        }
                     }
                 }
             }

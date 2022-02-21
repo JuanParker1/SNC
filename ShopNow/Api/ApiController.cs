@@ -7433,16 +7433,19 @@ namespace ShopNow.Controllers
                     var combinationArray = item.Combination.Split(' ');
                     foreach (var name in combinationArray)
                     {
-                        var checkExist = db.KeywordDatas.Any(i => i.Name.Trim().ToLower() == name.Trim().ToLower());
-                        if (!checkExist)
+                        foreach (var itemname in name.Split(','))
                         {
-                            var keywordData = new KeywordData
+                            var checkExist = db.KeywordDatas.Any(i => i.Name.Trim().ToLower() == itemname.Trim().ToLower());
+                            if (!checkExist)
                             {
-                                Name = name
-                            };
-                            db.KeywordDatas.Add(keywordData);
-                            db.SaveChanges();
-                        }
+                                var keywordData = new KeywordData
+                                {
+                                    Name = itemname
+                                };
+                                db.KeywordDatas.Add(keywordData);
+                                db.SaveChanges();
+                            }
+                        } 
                     }
                 }
             }
