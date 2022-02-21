@@ -1447,7 +1447,7 @@ namespace ShopNow.Controllers
                                     order.DeliveryCharge = deliverybill.ChargeUpto5Km + amount;
                                 }
                                 order.ShopDeliveryDiscount = order.TotalPrice * (billingCharge.DeliveryDiscountPercentage / 100);
-                                if (order.ShopDeliveryDiscount > order.DeliveryCharge)
+                                if (order.ShopDeliveryDiscount >= order.DeliveryCharge)
                                 {
                                     order.NetDeliveryCharge = 0;
                                     order.ShopDeliveryDiscount = order.DeliveryCharge;
@@ -1458,7 +1458,7 @@ namespace ShopNow.Controllers
                                 }
                                
 
-                                if(billingCharge.ConvenientCharge<order.TotalPrice)
+                                if(billingCharge.ConvenientCharge > order.TotalPrice)
                                 {
                                     order.Convinenientcharge = perOrderAmount.RatePerOrder;
                                 }
