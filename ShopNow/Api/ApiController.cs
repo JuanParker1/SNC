@@ -7230,7 +7230,7 @@ namespace ShopNow.Controllers
 
         public JsonResult UpdateKeywordDataFromMaster()
         {
-            var masterProductList = db.MasterProducts.Where(i => i.Status == 0).Select(i=> new{ Name= i.Name , Combination = i.DrugCompoundDetailName}).ToList();
+            var masterProductList = db.MasterProducts.Where(i => i.Status == 0 && !string.IsNullOrEmpty(i.DrugCompoundDetailName)).Select(i=> new{ Name= i.Name , Combination = i.DrugCompoundDetailName}).ToList();
             foreach (var item in masterProductList)
             {
                 var nameArray = item.Name.Split(' ');
