@@ -97,788 +97,922 @@
     </div>
     <div class="row">
         <div class="col-md-12 mx-auto">
-            @using (Html.BeginForm("Edit", "Shop", FormMethod.Post, new { id = "ShopForm", role = "form", enctype = "multipart/form-data" }))
-            {
-                @Html.AntiForgeryToken()
-                <input type="hidden" name="Id" id="Id" value="@Model.Id" />
-                <input type="hidden" name="CustomerId" id="CustomerId" value="@Model.CustomerId" />
-                <input type="hidden" name="ImageLogoPath" value="@Model.ImageLogoPath" />
-                <input type="hidden" name="ImagePath" value="@Model.ImagePath" />
-                <input type="hidden" name="ImageAadharPath" id="ImageAadharPath" value="@Model.ImageAadharPath" />
-                <input type="hidden" name="ImageAccountPath" id="ImageAccountPath" value="@Model.ImageAccountPath" />
-                <input type="hidden" name="ImageGSTINPath" id="ImageGSTINPath" value="@Model.ImageGSTINPath" />
-                <input type="hidden" name="ImagePanPath" id="ImagePanPath" value="@Model.ImagePanPath" />
-                <input type="hidden" name="ImageFSSAIPath" id="ImageFSSAIPath" value="@Model.ImageFSSAIPath" />
-                <input type="hidden" name="ImageDrugPath" id="ImageDrugPath" value="@Model.ImageDrugPath" />
-                <input type="hidden" name="ImageEstablishPath" id="ImageEstablishPath" value="@Model.ImageEstablishPath" />
-                <input type="hidden" name="ImageOtherLicensePath" id="ImageOtherLicensePath" value="@Model.ImageOtherLicensePath" />
-                <input type="hidden" name="ImageAuthoriseBrandPath" id="ImageAuthoriseBrandPath" value="@Model.ImageAuthoriseBrandPath" />
-                <input type="hidden" name="Count" id="Count" value="@Model.Count" />
-                <input type="hidden" name="Status" id="Status" value="@Model.Status" />
-                <div class="card mb-4 shadow">
-                    <div class="card-body row">
-                        <div class="col-md-6">
-                            <div class="row ml-2">
-                                <input class="col-11 mb-2" id="pac-input" type="text" placeholder="Select your Shop" />
-                                <div id="location-error"></div>
-                                <div class="mb-4" id="map" style="width: 92%; height: 250px;"></div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group row">
-                                <div class="col-md-4 text-md-left">
-                                    <label class="col-form-label"><strong class="text-secondary">Name</strong></label>
-                                </div>
-                                <div class="col-md-8">
-                                    <input id="Name" type="text" class="form-control" name="Name" value="@Model.Name" />
-                                </div>
-                            </div>
-                            <div class="form-group row mobile">
-                                <div class="col-md-4 text-md-left">
-                                    <label class="col-form-label"><strong class="text-secondary">Mobile Number</strong></label>
-                                </div>
-                                <div class="col-md-8">
-                                    <input id="PhoneNumber" type="text" class="form-control" name="PhoneNumber" value="@Model.PhoneNumber" />
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <div class="col-md-4 text-md-left">
-                                    <label class="col-form-label"><strong class="text-secondary">Official Email</strong></label>
-                                </div>
-                                <div class="col-md-8">
-                                    <input id="OfficialEmail" type="text" class="form-control" name="OfficialEmail" value="@Model.OfficialEmail" />
-                                </div>
-                            </div>
-                            <div class="form-group row website">
-                                <div class="col-md-4 text-md-left">
-                                    <label class="col-form-label"><strong class="text-secondary">Website</strong></label>
-                                </div>
-                                <div class="col-md-8">
-                                    <input id="Website" type="text" class="form-control" name="Website" value="@Model.Website" readonly />
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <div class="col-md-4 text-md-left">
-                                    <label class="col-form-label"><strong class="text-secondary">Shop Type</strong></label>
-                                </div>
-                                <div class="col-md-8">
-                                    <select id="ShopCategoryId" name="ShopCategoryId" class="form-control" style="width:100%;">
-                                        <option value="@Model.ShopCategoryId">@Model.ShopCategoryName</option>
-                                    </select>
-                                    <input type="hidden" name="ShopCategoryName" id="ShopCategoryName" value="@Model.ShopCategoryName" />
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group row">
-                                <div class="col-md-2 text-md-left">
-                                    <label class="col-form-label"><strong class="text-secondary">Address</strong></label>
-                                </div>
-                                <div class="col-md-10">
-                                    <textarea class="form-control" name="Address" id="Address" style="resize: none;" readonly>@Model.Address</textarea>
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <div class="col-md-2 mt-2 text-md-left">
-                                    <label class="col-form-label"><strong class="text-secondary">Location</strong></label>
-                                </div>
-                                <div class="col-md-5">
-                                    <small class="control-label col-sm-12" for="Latitude"><i class="text-secondary">Latitude</i></small>
-                                    <input id="Latitude" type="text" class="form-control mb-2" placeholder="Latitude" name="Latitude" value="@Model.Latitude" readonly />
-                                </div>
-                                <div class="col-md-5">
-                                    <small class="control-label col-sm-12" for="Longitude"><i class="text-secondary">Longitude</i></small>
-                                    <input id="Longitude" type="text" class="form-control" placeholder="Longitude" name="Longitude" value="@Model.Longitude" readonly />
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group row">
-                                <div class="col-md-4">
-                                    <small class="control-label col-sm-12" for="StreetName"><i class="text-secondary">Locality</i></small>
-                                    <input id="StreetName" type="text" class="form-control" placeholder="Street Name" name="StreetName" value="@Model.StreetName" />
-                                </div>
-                                <div class="col-md-4">
-                                    <small class="control-label col-sm-12" for="DistrictName"><i class="text-secondary">District</i></small>
-                                    <input id="DistrictName" type="text" class="form-control" placeholder="District Name" name="DistrictName" value="@Model.DistrictName" />
-                                </div>
-                                <div class="col-md-4">
-                                    <small class="control-label col-sm-12" for="StateName"><i class="text-secondary">State / Province</i></small>
-                                    <input id="StateName" type="text" class="form-control" placeholder="State Name" name="StateName" value="@Model.StateName" />
-                                </div>
-                                <div class="col-md-4">
-                                    <small class="control-label col-sm-12" for="CountryName"><i class="text-secondary">Country</i></small>
-                                    <input id="CountryName" type="text" class="form-control" placeholder="Country Name" name="CountryName" value="@Model.CountryName" />
-                                </div>
-                                <div class="col-md-4">
-                                    <small class="control-label col-sm-12" for="PinCode"><i class="text-secondary">PIN Code</i></small>
-                                    <input id="PinCode" type="text" class="form-control" placeholder="PIN Code" name="PinCode" value="@Model.PinCode" />
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group row">
-                                <div class="col-md-4">
-                                    <label class="text-secondary font-weight-bold ml-2">Shop Image</label><br />
-                                    <div class="img-upload-container">
-                                        @*<a href="~/Home/ImageDenied">*@
-                                        <img class="img-container w-100 h-100" id="img-upload" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePath" onerror="this.src='/Images/noimage.png'" />
-                                        <input type="file" id="ShopImage" name="ShopImage" class="d-none" />
-                                        <label for="ShopImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
-                                        @*</a>*@
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <label class="text-secondary font-weight-bold ml-2">Logo Image</label><br />
-                                    <div class="img-upload-container">
-                                        @*<a href="~/Home/ImageDenied">*@
-                                        <img class="img-container w-100 h-100" id="img-logo" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageLogoPath" onerror="this.src='/Images/noimage.png'" />
-                                        <input type="file" id="LogoImage" name="LogoImage" class="d-none" />
-                                        <label for="LogoImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
-                                        @*</a>*@
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="col-md-12 form-group row">
-                                <div class="col-md-5 text-md-left">
-                                    <label class="col-form-label"><strong class="text-secondary">Google Rating</strong></label>
-                                </div>
-                                <div class="col-md-7">
-                                    <input id="Rating" type="text" class="form-control" placeholder="Rating" name="Rating" value="@Model.Rating" readonly />
-                                </div>
-                            </div>
-                            <div class="col-md-12 form-group row">
-                                <div class="col-md-5 text-md-left">
-                                    <label class="col-form-label"><strong class="text-secondary">Google Review</strong></label>
-                                </div>
-                                <div class="col-md-7">
-                                    <input id="CustomerReview" type="text" class="form-control" placeholder="Customer Review" name="CustomerReview" value="@Model.CustomerReview" readonly />
-                                </div>
-                            </div>
-                            <div class="col-md-12 form-group row">
-                                <div class="col-md-5 text-md-left">
-                                    <label class="col-form-label text-secondary font-weight-bold">Adscore</label>
-                                </div>
-                                <div class="col-md-7">
-                                    <input id="Adscore" type="number" min="1" value="@Model.Adscore" class="form-control" name="Adscore" />
-                                </div>
-                            </div>
-                            <div class="col-md-12 form-group row">
-                                <div class="col-md-5 text-md-left">
-                                    <label class="col-form-label text-secondary font-weight-bold">ShopPricePercentage</label>
-                                </div>
-                                <div class="col-md-7">
-                                    <input id="ShopPricePercentage" type="number" min="0" value="@Model.ShopPricePercentage" class="form-control" name="ShopPricePercentage" />
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="card mb-4 shadow">
-                    <div class="row">
-                        <h5 class="text-success ml-4 mt-2">Proprietor Details</h5>
-                        <div class="col-md-12 mx-auto">
+            <div class="card shadow">
+                <div class="card-body">
+                    @using (Html.BeginForm("Edit", "Shop", FormMethod.Post, new { id = "ShopForm", role = "form", enctype = "multipart/form-data" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="Id" id="Id" value="@Model.Id" />
+                        <input type="hidden" name="CustomerId" id="CustomerId" value="@Model.CustomerId" />
+                        <input type="hidden" name="ImageLogoPath" value="@Model.ImageLogoPath" />
+                        <input type="hidden" name="ImagePath" value="@Model.ImagePath" />
+                        <input type="hidden" name="ImageAadharPath" id="ImageAadharPath" value="@Model.ImageAadharPath" />
+                        <input type="hidden" name="ImageAccountPath" id="ImageAccountPath" value="@Model.ImageAccountPath" />
+                        <input type="hidden" name="ImageGSTINPath" id="ImageGSTINPath" value="@Model.ImageGSTINPath" />
+                        <input type="hidden" name="ImagePanPath" id="ImagePanPath" value="@Model.ImagePanPath" />
+                        <input type="hidden" name="ImageFSSAIPath" id="ImageFSSAIPath" value="@Model.ImageFSSAIPath" />
+                        <input type="hidden" name="ImageDrugPath" id="ImageDrugPath" value="@Model.ImageDrugPath" />
+                        <input type="hidden" name="ImageEstablishPath" id="ImageEstablishPath" value="@Model.ImageEstablishPath" />
+                        <input type="hidden" name="ImageOtherLicensePath" id="ImageOtherLicensePath" value="@Model.ImageOtherLicensePath" />
+                        <input type="hidden" name="ImageAuthoriseBrandPath" id="ImageAuthoriseBrandPath" value="@Model.ImageAuthoriseBrandPath" />
+                        <input type="hidden" name="Count" id="Count" value="@Model.Count" />
+                        <input type="hidden" name="Status" id="Status" value="@Model.Status" />
+                        <div class="card border-0 mb-4">
                             <div class="card-body row">
-                                <div class="col-md-7">
+                                <div class="col-md-6">
+                                    <div class="row ml-2">
+                                        <input class="col-11 mb-2" id="pac-input" type="text" placeholder="Select your Shop" />
+                                        <div id="location-error"></div>
+                                        <div class="mb-4" id="map" style="width: 92%; height: 250px;"></div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
                                     <div class="form-group row">
-                                        <div class="col-md-4 mt-4 text-md-left">
+                                        <div class="col-md-4 text-md-left">
                                             <label class="col-form-label"><strong class="text-secondary">Name</strong></label>
                                         </div>
                                         <div class="col-md-8">
-                                            <small class="control-label col-sm-12" for="AadharName"><i class="text-secondary">*  As in Aadhar</i></small>
-                                            <input id="AadharName" type="text" class="form-control" name="AadharName" value="@Model.AadharName" />
+                                            <input id="Name" type="text" class="form-control" name="Name" value="@Model.Name" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group row mobile">
+                                        <div class="col-md-4 text-md-left">
+                                            <label class="col-form-label"><strong class="text-secondary">Mobile Number</strong></label>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <input id="PhoneNumber" type="text" class="form-control" name="PhoneNumber" value="@Model.PhoneNumber" />
                                         </div>
                                     </div>
                                     <div class="form-group row">
                                         <div class="col-md-4 text-md-left">
-                                            <label class="col-form-label"><strong class="text-secondary">Aadhar Number</strong></label>
+                                            <label class="col-form-label"><strong class="text-secondary">Official Email</strong></label>
                                         </div>
                                         <div class="col-md-8">
-                                            <input id="AadharNumber" type="text" class="form-control" name="AadharNumber" value="@Model.AadharNumber" />
+                                            <input id="OfficialEmail" type="text" class="form-control" name="OfficialEmail" value="@Model.OfficialEmail" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group row website">
+                                        <div class="col-md-4 text-md-left">
+                                            <label class="col-form-label"><strong class="text-secondary">Website</strong></label>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <input id="Website" type="text" class="form-control" name="Website" value="@Model.Website" readonly />
                                         </div>
                                     </div>
                                     <div class="form-group row">
                                         <div class="col-md-4 text-md-left">
-                                            <label class="col-form-label"><strong class="text-secondary">Mobile Number *</strong></label>
+                                            <label class="col-form-label"><strong class="text-secondary">Shop Type</strong></label>
                                         </div>
                                         <div class="col-md-8">
-                                            <input id="OwnerPhoneNumber" type="text" class="form-control" name="OwnerPhoneNumber" value="@Model.OwnerPhoneNumber" />
+                                            <select id="ShopCategoryId" name="ShopCategoryId" class="form-control" style="width:100%;">
+                                                <option value="@Model.ShopCategoryId">@Model.ShopCategoryName</option>
+                                            </select>
+                                            <input type="hidden" name="ShopCategoryName" id="ShopCategoryName" value="@Model.ShopCategoryName" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group row">
+                                        <div class="col-md-2 text-md-left">
+                                            <label class="col-form-label"><strong class="text-secondary">Address</strong></label>
+                                        </div>
+                                        <div class="col-md-10">
+                                            <textarea class="form-control" name="Address" id="Address" style="resize: none;" readonly>@Model.Address</textarea>
                                         </div>
                                     </div>
                                     <div class="form-group row">
-                                        <div class="col-md-4 text-md-left">
-                                            <label class="col-form-label"><strong class="text-secondary">Personal Email</strong></label>
+                                        <div class="col-md-2 mt-2 text-md-left">
+                                            <label class="col-form-label"><strong class="text-secondary">Location</strong></label>
                                         </div>
-                                        <div class="col-md-8">
-                                            <input id="Email" type="text" class="form-control" name="Email" value="@Model.Email" />
+                                        <div class="col-md-5">
+                                            <small class="control-label col-sm-12" for="Latitude"><i class="text-secondary">Latitude</i></small>
+                                            <input id="Latitude" type="text" class="form-control mb-2" placeholder="Latitude" name="Latitude" value="@Model.Latitude" readonly />
                                         </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-1"></div>
-                                <div class="col-md-4">
-                                    <label class="text-secondary font-weight-bold ml-2">Aadhar Image</label><br />
-                                    <input type="radio" class="ml-3" name="AadharDocument" id="AadharDocumentImage" value="Image" checked> <label for="AadharDocumentImage"> Image</label>
-                                    <input type="radio" class="ml-3" name="AadharDocument" id="AadharDocumentPDF" value="PDF"> <label for="AadharDocumentPDF"> PDF</label>
-                                    <div class="row ml-3 AadharDocumentPdf d-none mt-2 mb-3">
-                                        <a href="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageAadharPath" target="_blank" class="mb-2"> Click here for Pdf view</a>
-                                        <input type="file" id="AadharPdf" name="AadharPdf" />
-                                    </div>
-                                    <div class="row AadharDocumentImg ml-3 mt-2">
-                                        <div class="img-upload-container">
-                                            @*<a href="~/Home/ImageDenied">*@
-                                            <img class="img-container w-100 h-100 mb-2" id="img-aadhar" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageAadharPath" onerror="this.src='/Images/noimage.png'" />
-                                            <input type="file" id="AadharImage" name="AadharImage" class="d-none" />
-                                            <label for="AadharImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
-                                            @*</a>*@
+                                        <div class="col-md-5">
+                                            <small class="control-label col-sm-12" for="Longitude"><i class="text-secondary">Longitude</i></small>
+                                            <input id="Longitude" type="text" class="form-control" placeholder="Longitude" name="Longitude" value="@Model.Longitude" readonly />
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="card mb-4 shadow">
-                    <h5 class="text-success ml-2 mt-2">License Details</h5>
-                    <div class="card-body row">
-                        <div class="card-deck">
-                            <div class="card border-primary bg-muted">
-                                <div class="card-body">
-                                    <label class="col-md-12 text-center"><strong class="text-secondary">FSSAI License</strong></label>
-                                    <label class="col-md-12 text-left"><small class="text-secondary text-left"><i>License Number</i></small></label>
-                                    <input id="FSSAINumber" type="text" class="form-control col-md-12" name="FSSAINumber" value="@Model.FSSAINumber" />
-                                    <label class="col-md-12 text-left"><small class="text-secondary"><i>License Image</i></small></label>
-                                    <input type="radio" class="ml-3" name="FssaiLicense" id="FssaiLicenseImage" value="Image" checked> <label for="FssaiLicenseImage"> Image</label>
-                                    <input type="radio" class="ml-3" name="FssaiLicense" id="FssaiLicensePDF" value="PDF"> <label for="FssaiLicensePDF"> PDF</label>
-                                    <div class="row ml-3 FssaiPdf d-none mt-2 mb-3">
-                                        <a href="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageFSSAIPath" target="_blank" class="mb-2"> Click here for Pdf view</a>
-                                        <input type="file" id="FSSAIPdf" name="FSSAIPdf" />
-                                    </div>
-                                    <div class="row FssaiImg mt-2">
-                                        <div class="img-upload-container mx-auto mb-3">
-                                            @*<a href="~/Home/ImageDenied">*@
-                                            <img class="img-container w-100 h-100 mb-2" id="img-fssai" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageFSSAIPath" onerror="this.src='/Images/noimage.png'" />
-                                            <input type="file" id="FSSAIImage" name="FSSAIImage" class="d-none" />
-                                            <label for="FSSAIImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
-                                            @*</a>*@
+                                <div class="col-md-6">
+                                    <div class="form-group row">
+                                        <div class="col-md-4">
+                                            <small class="control-label col-sm-12" for="StreetName"><i class="text-secondary">Locality</i></small>
+                                            <input id="StreetName" type="text" class="form-control" placeholder="Street Name" name="StreetName" value="@Model.StreetName" />
+                                        </div>
+                                        <div class="col-md-4">
+                                            <small class="control-label col-sm-12" for="DistrictName"><i class="text-secondary">District</i></small>
+                                            <input id="DistrictName" type="text" class="form-control" placeholder="District Name" name="DistrictName" value="@Model.DistrictName" />
+                                        </div>
+                                        <div class="col-md-4">
+                                            <small class="control-label col-sm-12" for="StateName"><i class="text-secondary">State / Province</i></small>
+                                            <input id="StateName" type="text" class="form-control" placeholder="State Name" name="StateName" value="@Model.StateName" />
+                                        </div>
+                                        <div class="col-md-4">
+                                            <small class="control-label col-sm-12" for="CountryName"><i class="text-secondary">Country</i></small>
+                                            <input id="CountryName" type="text" class="form-control" placeholder="Country Name" name="CountryName" value="@Model.CountryName" />
+                                        </div>
+                                        <div class="col-md-4">
+                                            <small class="control-label col-sm-12" for="PinCode"><i class="text-secondary">PIN Code</i></small>
+                                            <input id="PinCode" type="text" class="form-control" placeholder="PIN Code" name="PinCode" value="@Model.PinCode" />
                                         </div>
                                     </div>
-                                    @if (Model.ImageFSSAIPath != null && Model.Verify == false)
-                                    {
-                                        <div class="alert alert-success FssaiApprovedlbl font-weight-bold d-none p-2">Approved</div>
-                                        <div class="alert alert-danger FssaiRejectedlbl font-weight-bold d-none p-2">Rejected</div>
-                                        if (Model.ImageFSSAIPath == "Rejected" || Model.FSSAINumber == "Rejected")
-                                        {
-                                            <div class="alert alert-danger Fssai font-weight-bold p-2">Rejected</div>
-                                        }
-                                        else
-                                        {
-                                            <div class="alert alert-danger Fssai font-weight-bold p-2">Verification Pending</div>
-                                        }
-                                    }
-                                    @if (Model.ImageFSSAIPath != null)
-                                    {
-                                        <div class="col-md-12 text-center">
-                                            <button type="button" class="btn btn-sm btn-warning mb-2" data-toggle="modal" data-target="#FssaiModal">
-                                                + Expand
-                                            </button>
-                                            <input type="hidden" id="FSSIApprove" name="FSSIApprove" />
-                                        </div>
-                                    }
                                 </div>
-                            </div>
-                            <div class="card border-primary bg-muted">
-                                <div class="card-body">
-                                    <label class="col-md-12 text-center"><strong class="text-secondary">Drug License</strong></label>
-                                    <label class="col-md-12 text-left"><small class="text-secondary"><i>License Number</i></small></label>
-                                    <input id="DrugNumber" type="text" class="form-control" name="DrugNumber" value="@Model.DrugNumber" />
-                                    <label class="col-md-12 text-left"><small class="text-secondary"><i>License Image</i></small></label>
-                                    <input type="radio" class="ml-3" name="DrugLicense" id="DrugLicenseImage" value="Image" checked> <label for="DrugLicenseImage"> Image</label>
-                                    <input type="radio" class="ml-3" name="DrugLicense" id="DrugLicensePDF" value="PDF"> <label for="DrugLicensePDF"> PDF</label>
-                                    <div class="row ml-3 DrugPdf d-none mt-2 mb-3">
-                                        <a href="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageDrugPath" target="_blank" class="mb-2"> Click here for Pdf view</a>
-                                        <input type="file" id="DrugPdf" name="DrugPdf" />
-                                    </div>
-                                    <div class="row DrugImg">
-                                        <div class="img-upload-container mx-auto mb-3">
-                                            @*<a href="~/Home/ImageDenied">*@
-                                            <img class="img-container w-100 h-100 mb-2" id="img-drug" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageDrugPath" onerror="this.src='/Images/noimage.png'" />
-                                            <input type="file" id="DrugImage" name="DrugImage" class="d-none" />
-                                            <label for="DrugImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
-                                            @*</a>*@
-                                        </div>
-                                    </div>
-                                    @if (Model.ImageDrugPath != null && Model.Verify == false)
-                                    {
-                                        <div class="alert alert-success DrugApprovedlbl font-weight-bold d-none p-2">Approved</div>
-                                        <div class="alert alert-danger DrugRejectedlbl font-weight-bold d-none p-2">Rejected</div>
-                                        if (Model.ImageDrugPath == "Rejected" || Model.DrugNumber == "Rejected")
-                                        {
-                                            <div class="alert alert-danger font-weight-bold Drug p-2">Rejected</div>
-                                        }
-                                        else
-                                        {
-                                            <div class="alert alert-danger font-weight-bold Drug p-2">Verification Pending</div>
-                                        }
-                                    }
-                                    @if (Model.ImageDrugPath != null)
-                                    {
-                                        <div class="col-md-12 text-center">
-                                            <button type="button" class="btn btn-sm btn-warning mb-2" data-toggle="modal" data-target="#ModalDrug">
-                                                + Expand
-                                            </button>
-                                            <input type="hidden" id="DrugApprove" name="DrugApprove" />
-                                        </div>
-                                    }
-                                </div>
-                            </div>
-                            <div class="card border-primary  bg-muted">
-                                <div class="card-body">
-                                    <label class="col-md-12 text-center"><strong class="text-secondary">Establish License</strong></label>
-                                    <label class="col-md-12 text-left"><small class="text-secondary"><i>License Number</i></small></label>
-                                    <input id="EstablishNumber" type="text" class="form-control" name="EstablishNumber" value="@Model.EstablishNumber" />
-                                    <label class="col-md-12"><small class="text-secondary"><i>License Image</i></small></label>
-                                    <input type="radio" class="ml-3" name="EstablishLicense" id="EstablishLicenseImage" value="Image" checked> <label for="EstablishLicenseImage"> Image</label>
-                                    <input type="radio" class="ml-3" name="EstablishLicense" id="EstablishLicensePDF" value="PDF"> <label for="EstablishLicensePDF"> PDF</label>
-                                    <div class="row ml-3 EstPdf d-none mt-2 mb-3">
-                                        <a href="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageEstablishPath" target="_blank" class="mb-2"> Click here for Pdf view</a>
-                                        <input type="file" id="EstablishPdf" name="EstablishPdf" />
-                                    </div>
-                                    <div class="row EstImg">
-                                        <div class="img-upload-container mx-auto mb-3">
-                                            @*<a href="~/Home/ImageDenied">*@
-                                            <img class="img-container w-100 h-100 mb-2" id="img-establish" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageEstablishPath" onerror="this.src='/Images/noimage.png'" />
-                                            <input type="file" id="EstablishImage" name="EstablishImage" class="d-none" />
-                                            <label for="EstablishImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
-                                            @*</a>*@
-                                        </div>
-                                    </div>
-                                    @if (Model.ImageEstablishPath != null && Model.Verify == false)
-                                    {
-                                        <div class="alert alert-success EstablishApprovedlbl font-weight-bold d-none p-2">Approved</div>
-                                        <div class="alert alert-danger EstablishRejectedlbl font-weight-bold d-none p-2">Rejected</div>
-                                        if (Model.ImageEstablishPath == "Rejected" || Model.EstablishNumber == "Rejected")
-                                        {
-                                            <div class="alert alert-danger font-weight-bold Establish p-2">Rejected</div>
-                                        }
-                                        else
-                                        {
-                                            <div class="alert alert-danger font-weight-bold Establish p-2">Verification Pending</div>
-                                        }
-                                    }
-                                    @if (Model.ImageEstablishPath != null)
-                                    {
-                                        <div class="col-md-12 text-center">
-                                            <button type="button" class="btn btn-sm btn-warning mb-2" data-toggle="modal" data-target="#ModalEstablish">
-                                                + Expand
-                                            </button>
-                                            <input type="hidden" id="EstablishApprove" name="EstablishApprove" />
-                                        </div>
-                                    }
-                                </div>
-                            </div>
-                            <div class="card border-primary bg-muted">
-                                <div class="card-body">
-                                    <label class="col-md-12 text-center"><strong class="text-secondary">Other License</strong></label>
-                                    <label class="col-md-12 text-left"><small class="text-secondary"><i>License Name</i></small></label>
-                                    <input id="OtherLicenseName" type="text" class="form-control" name="OtherLicenseName" value="@Model.OtherLicenseName" />
-                                    <label class="col-md-12 text-left"><small class="text-secondary"><i>License Number</i></small></label>
-                                    <input id="OtherLicenseNumber" type="text" class="form-control" name="OtherLicenseNumber" value="@Model.OtherLicenseNumber" />
-                                    <label class="col-md-12"><small class="text-secondary"><i>License Image</i></small></label>
-                                    <input type="radio" class="ml-3" name="OtherLicense" id="OtherImage" value="Image" checked> <label for="OtherImage"> Image</label>
-                                    <input type="radio" class="ml-3" name="OtherLicense" id="OtherPDF" value="PDF"> <label for="OtherPDF"> PDF</label>
-                                    <div class="row ml-3 OtherPdf d-none mt-2 mb-3">
-                                        <a href="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageOtherLicensePath" target="_blank" class="mb-2"> Click here for Pdf view</a>
-                                        <input type="file" id="OtherLicensePdf" name="OtherLicensePdf" />
-                                    </div>
-                                    <div class="row OtherImg">
-                                        <div class="img-upload-container mx-auto mb-3">
-                                            @* <a href="~/Home/ImageDenied">*@
-                                            <img class="img-container w-100 h-100 mb-2" id="img-other" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageOtherLicensePath" onerror="this.src='/Images/noimage.png'" />
-                                            <input type="file" id="OtherLicenseImage" name="OtherLicenseImage" class="d-none" />
-                                            <label for="OtherLicenseImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
-                                            @* </a>*@
-                                        </div>
-                                    </div>
-                                    @if (Model.ImageOtherLicensePath != null && Model.Verify == false)
-                                    {
-                                        <div class="alert alert-success OtherApprovedlbl font-weight-bold d-none p-2">Approved</div>
-                                        <div class="alert alert-danger OtherRejectedlbl font-weight-bold d-none p-2">Rejected</div>
-                                        if (Model.ImageOtherLicensePath == "Rejected" || Model.OtherLicenseName == "Rejected" || Model.OtherLicenseNumber == "Rejected")
-                                        {
-                                            <div class="alert alert-danger font-weight-bold Other p-2">Rejected</div>
-                                        }
-                                        else
-                                        {
-                                            <div class="alert alert-danger font-weight-bold Other p-2">Verification Pending</div>
-                                        }
-                                    }
-                                    @if (Model.ImageOtherLicensePath != null)
-                                    {
-                                        <div class="col-md-12 text-center">
-                                            <button type="button" class="btn btn-sm btn-warning mb-2" data-toggle="modal" data-target="#ModalOther">
-                                                + Expand
-                                            </button>
-                                            <input type="hidden" id="OtherApprove" name="OtherApprove" />
-                                        </div>
-                                    }
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="card mb-4 shadow">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="form-group row m-3">
-                                @if (Model.ImageAuthoriseBrandPath != null || Model.ImageAuthoriseBrandPath != "")
-                                {
-                                    <div class="col-md-6">
-                                        Authorised Distributer of any Brand :
-                                        <input type="radio" class="ml-3" name="distributorCheck" value="yes" checked> Yes
-                                        <input type="radio" class="ml-3" name="distributorCheck" value="no"> No
-                                    </div>
-                                }
-                                else
-                                {
-                                    <div class="col-md-6">
-                                        Authorised Distributer of any Brand :
-                                        <input type="radio" class="ml-3" name="distributorCheck" value="yes"> Yes
-                                        <input type="radio" class="ml-3" name="distributorCheck" value="no" checked> No
-                                    </div>
-
-                                }
-                            </div>
-                            <div class="card-columns form-group row col-md-4 distributor m-3">
-                                <div class="card bg-muted">
-                                    <div class="card-body">
-                                        <div class="row form-group">
-                                            <div class="col-md-12">
-                                                <label class="text-secondary"><i>Authorised Brand Name</i></label>
+                                <div class="col-md-6">
+                                    <div class="form-group row">
+                                        <div class="col-md-4">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <label class="text-secondary font-weight-bold ml-2">Shop Image</label><br />
+                                                    <div class="img-upload-container">
+                                                        @if (Model.ImagePath != null)
+                                                        {
+                                                            <img class="img-container w-100 h-100" id="img-upload" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePath" onerror="this.src='/Images/noimage.png'" />
+                                                            <input type="button" class="btn btn-danger btn-sm btnRemove1" value="Remove" />
+                                                        }
+                                                        else
+                                                        {
+                                                            <img id='img-upload' class="img-container w-100 h-100" onerror="this.src='/Images/noimage.png'" />
+                                                        }
+                                                        <input type="file" id="ShopImage" name="ShopImage" class="d-none" />
+                                                        <label for="ShopImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                                    </div>
+                                                </div>
                                             </div>
-                                            <div class="col-md-12">
-                                                <select id="AuthorisedBrandId" name="AuthorisedBrandId" class="form-control">
-                                                    <option value="@Model.AuthorisedBrandId">@Model.AuthorisedBrandName</option>
-                                                </select>
-                                                <input type="hidden" name="AuthorisedBrandName" id="AuthorisedBrandName" value="@Model.AuthorisedBrandName" />
+                                            <div class="row">
+                                                <div class="col-md-12 ml-4">
+                                                    <input type="button" class="btn btn-sm btn-danger d-none" id="btnRemove1" value="Remove" />
+                                                </div>
                                             </div>
                                         </div>
-                                        <div class="row form-group text-center">
-                                            <div class="col-md-12">
-                                                <label class="col-md-12 text-secondary"><i>Authorised Certificate Upload</i></label>
-                                                <input type="radio" class="ml-3" name="AuthLicense" id="AuthLicenseImage" value="Image" checked> <label for="AuthLicenseImage"> Image</label>
-                                                <input type="radio" class="ml-3" name="AuthLicense" id="AuthLicensePDF" value="PDF"> <label for="AuthLicensePDF"> PDF</label>
+                                        <div class="col-md-4">
+                                            <label class="text-secondary font-weight-bold ml-2">Logo Image</label><br />
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div class="img-upload-container">
+                                                        @if (Model.ImageLogoPath != null)
+                                                        {
+                                                            <img class="img-container w-100 h-100" id="img-logo" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageLogoPath" onerror="this.src='/Images/noimage.png'" />
+                                                            <input type="button" class="btn btn-danger btn-sm btnRemove2" value="Remove" />
+                                                        }
+                                                        else
+                                                        {
+                                                            <img id='img-logo' class="img-container w-100 h-100" onerror="this.src='/Images/noimage.png'" />
+                                                        }
+                                                        <input type="file" id="LogoImage" name="LogoImage" class="d-none" />
+                                                        <label for="LogoImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-12 ml-4">
+                                                    <input type="button" class="btn btn-sm btn-danger d-none" id="btnRemove2" value="Remove" />
+                                                </div>
                                             </div>
                                         </div>
-                                        <div class="row ml-3 AuthLicensePdf d-none mt-2 mb-3">
-                                            <a href="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageAuthoriseBrandPath" target="_blank" class="mb-2"> Click here for Pdf view</a>
-                                            <input type="file" id="AuthorisedDistributorPdf" name="AuthorisedDistributorPdf" />
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="col-md-12 form-group row">
+                                        <div class="col-md-5 text-md-left">
+                                            <label class="col-form-label"><strong class="text-secondary">Google Rating</strong></label>
                                         </div>
-                                        <div class="row AuthLicenseImg">
-                                            <div class="img-upload-container mx-auto">
-                                                @*<a href="~/Home/ImageDenied">*@
-                                                <img class="img-container w-100 h-100 mb-3" id="img-authorise" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageAuthoriseBrandPath" onerror="this.src='/Images/noimage.png'" />
-                                                <input type="file" id="AuthorisedDistributorImage" name="AuthorisedDistributorImage" class="d-none" />
-                                                <label for="AuthorisedDistributorImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
-                                                @*</a>*@
-                                            </div>
+                                        <div class="col-md-7">
+                                            <input id="Rating" type="text" class="form-control" placeholder="Rating" name="Rating" value="@Model.Rating" readonly />
                                         </div>
-                                        @if (Model.ImageAuthoriseBrandPath != null && Model.Verify == false)
-                                        {
-                                            <div class="alert alert-success AuthApprovedlbl font-weight-bold d-none p-2">Approved</div>
-                                            <div class="alert alert-danger AuthRejectedlbl font-weight-bold d-none p-2">Rejected</div>
-                                            if (Model.ImageAuthoriseBrandPath == "Rejected" || Model.AuthorisedBrandName == "Rejected")
-                                            {
-                                                <div class="alert alert-danger font-weight-bold Auth p-2">Rejected</div>
-                                            }
-                                            else
-                                            {
-                                                <div class="alert alert-danger font-weight-bold Auth p-2">Verification Pending</div>
-                                            }
-                                        }
-                                        @if (Model.ImageAuthoriseBrandPath != null)
-                                        {
-                                            <div class="col-md-12">
-                                                <button type="button" class="btn btn-sm btn-warning mb-2" data-toggle="modal" data-target="#ModalBrand">
-                                                    + Expand
-                                                </button>
-                                                <input type="hidden" id="AuthApprove" name="AuthApprove" />
-                                            </div>
-                                        }
+                                    </div>
+                                    <div class="col-md-12 form-group row">
+                                        <div class="col-md-5 text-md-left">
+                                            <label class="col-form-label"><strong class="text-secondary">Google Review</strong></label>
+                                        </div>
+                                        <div class="col-md-7">
+                                            <input id="CustomerReview" type="text" class="form-control" placeholder="Customer Review" name="CustomerReview" value="@Model.CustomerReview" readonly />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12 form-group row">
+                                        <div class="col-md-5 text-md-left">
+                                            <label class="col-form-label text-secondary font-weight-bold">Adscore</label>
+                                        </div>
+                                        <div class="col-md-7">
+                                            <input id="Adscore" type="number" min="1" value="@Model.Adscore" class="form-control" name="Adscore" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12 form-group row">
+                                        <div class="col-md-5 text-md-left">
+                                            <label class="col-form-label text-secondary font-weight-bold">ShopPricePercentage</label>
+                                        </div>
+                                        <div class="col-md-7">
+                                            <input id="ShopPricePercentage" type="number" min="0" value="@Model.ShopPricePercentage" class="form-control" name="ShopPricePercentage" />
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </div>
-                <div class="card mb-4 shadow">
-                    <h5 class="text-success ml-2 mt-2">Tax Details</h5>
-                    <div class="col-md-12 mx-auto row">
-                        <div class="col-md-6">
-                            <div class="form-group row">
-                                <div class="col-md-4 text-md-left">
-                                    <label class="col-form-label"><strong class="text-secondary">GSTIN Number</strong></label>
-                                </div>
-                                <div class="col-md-6">
-                                    <input type="text" class="form-control" name="GSTINNumber" id="GSTINNumber" value="@Model.GSTINNumber " />
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <div class="col-md-4 text-md-left">
-                                    <label class="col-form-label"><strong class="text-secondary">PAN Number</strong></label>
-                                </div>
-                                <div class="col-md-6">
-                                    <input type="text" class="form-control" name="PanNumber" id="PanNumber" value="@Model.PanNumber" />
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card-columns mr-1 form-group row col-md-3">
-                            <div class="card border-primary bg-muted">
-                                <div class="card-body text-center">
-                                    <label class="col-md-12"><small class="text-secondary"><i>GSTIN Image</i></small></label>
-                                    <input type="radio" class="ml-3" name="GstinLicense" id="GstinLicenseImage" value="Image" checked> <label for="GstinLicenseImage"> Image</label>
-                                    <input type="radio" class="ml-3" name="GstinLicense" id="GstinLicensePDF" value="PDF"> <label for="GstinLicensePDF"> PDF</label>
-                                    <div class="row ml-3 GstinLicensePdf d-none mt-2 mb-3">
-                                        <a href="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageGSTINPath" target="_blank" class="mb-2"> Click here for Pdf view</a>
-                                        <input type="file" id="GSTINPdf" name="GSTINPdf" />
-                                    </div>
-                                    <div class="row GstinLicenseImg">
-                                        <div class="img-upload-container mx-auto mb-3">
-                                            @* <a href="~/Home/ImageDenied">*@
-                                            <img class="img-container w-100 h-100 mb-2" id="img-gstin" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageGSTINPath" onerror="this.src='/Images/noimage.png'" />
-                                            <input type="file" id="GSTINImage" name="GSTINImage" class="d-none" />
-                                            <label for="GSTINImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
-                                            @* </a>*@
-                                        </div>
-                                    </div>
-                                    @if (Model.ImageGSTINPath != null && Model.Verify == false)
-                                    {
-                                        <div class="alert alert-success GstinApprovedlbl font-weight-bold d-none p-2">Approved</div>
-                                        <div class="alert alert-danger GstinRejectedlbl font-weight-bold d-none p-2">Rejected</div>
-                                        if (Model.ImageGSTINPath == "Rejected" || Model.GSTINNumber == "Rejected")
-                                        {
-                                            <div class="alert alert-danger font-weight-bold Gstin p-2">Rejected</div>
-                                        }
-                                        else
-                                        {
-                                            <div class="alert alert-danger font-weight-bold Gstin p-2">Verification Pending</div>
-                                        }
-                                    }
-                                    @if (Model.ImageGSTINPath != null)
-                                    {
-                                        <div class="col-md-12 text-center">
-                                            <button type="button" class="btn btn-sm btn-warning mb-2" data-toggle="modal" data-target="#ModalGSTIN">
-                                                + Expand
-                                            </button>
-                                            <input type="hidden" id="GstinApprove" name="GstinApprove" />
-                                        </div>
-                                    }
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card-columns form-group row col-md-3">
-                            <div class="card border-primary bg-muted">
-                                <div class="card-body text-center">
-                                    <label class="col-md-12"><small class="text-secondary"><i>PAN Image</i></small></label>
-                                    <input type="radio" class="ml-3" name="PanLicense" id="PanLicenseImage" value="Image" checked> <label for="PanLicenseImage"> Image</label>
-                                    <input type="radio" class="ml-3" name="PanLicense" id="PanLicensePDF" value="PDF"> <label for="PanLicensePDF"> PDF</label>
-                                    <div class="row ml-3 PanLicensePdf d-none mt-2 mb-3">
-                                        <a href="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePanPath" target="_blank" class="mb-2"> Click here for Pdf view</a>
-                                        <input type="file" id="PanPdf" name="PanPdf" />
-                                    </div>
-                                    <div class="row PanLicenseImg">
-                                        <div class="img-upload-container mx-auto mb-3">
-                                            @* <a href="~/Home/ImageDenied">*@
-                                            <img class="img-container w-100 h-100 mb-2" id="img-pan" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePanPath" onerror="this.src='/Images/noimage.png'" />
-                                            <input type="file" id="PanImage" name="PanImage" class="d-none" />
-                                            <label for="PanImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
-                                            @* </a>*@
-                                        </div>
-                                    </div>
-                                    @if (Model.ImagePanPath != null && Model.Verify == false)
-                                    {
-                                        <div class="alert alert-success PanApprovedlbl font-weight-bold d-none p-2">Approved</div>
-                                        <div class="alert alert-danger PanRejectedlbl font-weight-bold d-none p-2">Rejected</div>
-                                        if (Model.PanNumber == "Rejected" || Model.ImagePanPath == "Rejected")
-                                        {
-                                            <div class="alert alert-danger font-weight-bold Pan p-2">Rejected</div>
-                                        }
-                                        else
-                                        {
-                                            <div class="alert alert-danger font-weight-bold Pan p-2">Verification Pending</div>
-                                        }
-                                    }
-                                    @if (Model.ImagePanPath != null)
-                                    {
-                                        <div class="col-md-12 text-center">
-                                            <button type="button" class="btn btn-sm btn-warning mb-2" data-toggle="modal" data-target="#ModalPAN">
-                                                + Expand
-                                            </button>
-                                            <input type="hidden" id="PanApprove" name="PanApprove" />
-                                        </div>
-                                    }
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="card mb-4 shadow">
-                    <h5 class="text-success ml-2 mt-2">Bank Details</h5>
-                    <div class="col-md-12 row">
-                        <div class="col-md-8">
-                            <div class="form-group row">
-                                <div class="col-md-6">
-                                    <small class="control-label col-sm-12" for="BankName"><i class="text-secondary">Bank Name</i></small>
-                                    <input id="BankName" type="text" class="form-control" name="BankName" value="@Model.BankName" />
-                                </div>
-                                <div class="col-md-6">
-                                    <small class="control-label col-sm-12" for="AccountName"><i class="text-secondary">Account Name</i></small>
-                                    <input id="AccountName" type="text" class="form-control" name="AccountName" value="@Model.AccountName" />
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <div class="col-md-6">
-                                    <small class="control-label col-sm-12" for="AccountNumber"><i class="text-secondary">Account Number</i></small>
-                                    <input id="AccountNumber" type="text" class="form-control" name="AccountNumber" value="@Model.AccountNumber" />
-                                </div>
-                                <div class="col-md-6">
-                                    <small class="control-label col-sm-12" for="IFSCCode"><i class="text-secondary">IFSC Id</i></small>
-                                    <input id="IFSCCode" type="text" class="form-control" name="IFSCCode" value="@Model.IFSCCode" />
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <div class="col-md-6">
-                                    <small class="control-label col-sm-12" for="SwiftCode"><i class="text-secondary">SWIFT Id</i></small>
-                                    <input id="SwiftCode" type="text" class="form-control" name="SwiftCode" value="@Model.SwiftCode" />
-                                </div>
-                                <div class="col-md-6">
-                                    <small class="control-label col-sm-12" for="UPIID"><i class="text-secondary">UPI Id</i></small>
-                                    <input id="UPIID" type="text" class="form-control" name="UPIID" value="@Model.UPIID" />
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                @if (Model.AcountType != "SA")
-                                {
-                                    <div class="col-md-6">
-                                        <input type="radio" name="AcountType" value="SA"> Saving Account
-                                        <input type="radio" name="AcountType" value="CA" checked> Current Account
-                                    </div>
-                                }
-                                else
-                                {
-                                    <div class="col-md-6">
-                                        <input type="radio" name="AcountType" value="SA" checked> Saving Account
-                                        <input type="radio" name="AcountType" value="CA"> Current Account
-                                    </div>
-                                }
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="card-columns form-group row col-md-12">
-                                <div class="card border-success bg-muted">
-                                    <div class="card-body text-center">
-                                        <label class="col-md-12 text-center"><strong class="text-secondary">Bank Account</strong></label>
-                                        <label class="col-md-12 text-center"><small class="text-secondary"><i>Account Proof Image</i></small></label>
-                                        <input type="radio" class="ml-3" name="AccountDocument" id="AccountDocumentImage" value="Image" checked> <label for="AccountDocumentImage"> Image</label>
-                                        <input type="radio" class="ml-3" name="AccountDocument" id="AccountDocumentPDF" value="PDF"> <label for="AccountDocumentPDF"> PDF</label>
-                                        <div class="row ml-3 AccountDocumentPdf d-none mt-2 mb-3">
-                                            <a href="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageAccountPath" target="_blank" class="mb-2"> Click here for Pdf view</a>
-                                            <input type="file" id="AccountPdf" name="AccountPdf" />
-                                        </div>
-                                        <div class="row AccountDocumentImg">
-                                            <div class="img-upload-container mx-auto mb-3">
-                                                @*  <a href="~/Home/ImageDenied">*@
-                                                <img class="img-container w-100 h-100 mb-2" id="img-account" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageAccountPath" onerror="this.src='/Images/noimage.png'" />
-                                                <input type="file" id="AccountImage" name="AccountImage" class="d-none" />
-                                                <label for="AccountImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
-                                                @*</a>*@
-                                            </div>
-                                        </div>
-                                        @if (Model.ImageAccountPath != null && Model.Verify == false)
-                                        {
-                                            <div class="alert alert-success AccountApprovedlbl font-weight-bold d-none p-2">Approved</div>
-                                            <div class="alert alert-danger AccountRejectedlbl font-weight-bold d-none p-2">Rejected</div>
-                                            if (Model.AccountName == "Rejected" || Model.BankName == "Rejected" || Model.AccountNumber == "Rejected" || Model.IFSCCode == "Rejected" || Model.ImageAccountPath == "Rejected")
-                                            {
-                                                <div class="alert alert-danger font-weight-bold Account p-2">Rejected</div>
-                                            }
-                                            else
-                                            {
-                                                <div class="alert alert-danger font-weight-bold Account p-2">Verification Pending</div>
-                                            }
-                                        }
-                                        @if (Model.ImageAccountPath != null)
-                                        {
-                                            <div class="col-md-12 text-center">
-                                                <button type="button" class="btn btn-sm btn-warning mb-2" data-toggle="modal" data-target="#ModalAccount">
-                                                    + Expand
-                                                </button>
-                                                <input type="hidden" id="AccountApprove" name="AccountApprove" />
-                                            </div>
-                                        }
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="card mb-4 shadow">
-                    <h5 class="text-success ml-2 mt-2">Delivery Charge Assign</h5>
-                    <div class="row mb-3 ml-3">
-                        <div class="col-md-12">
+                        <div class="card mb-4">
                             <div class="row">
-                                <div class="col-md-2">
-                                    <label class="col-form-label text-secondary font-weight-bold">Delivery Mode</label>
-                                    <input type="hidden" id="DeliveryType" value="@Model.DeliveryType" />
-                                    <input type="hidden" id="DeliveryTierType" value="@Model.DeliveryTierType" />
-                                </div>
-                                <div class="col-md-6 mt-2">
-                                    <div class="form-check-inline mr-3">
-                                        <label class="form-check-label">
-                                            <input type="radio" class="form-check-input" name="DeliveryType" value="0"> General
-                                        </label>
-                                    </div>
-                                    <div class="form-check-inline">
-                                        <label class="form-check-label">
-                                            <input type="radio" class="form-check-input" name="DeliveryType" value="1"> Special
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row mt-3">
-                                <div class="col-md-2">
-                                    <label class="col-form-label text-secondary font-weight-bold">Delivery Charge Type</label>
-                                </div>
-                                <div class="col-md-8 mt-2">
-                                    <div class="form-check-inline mr-3">
-                                        <label class="form-check-label">
-                                            <input type="radio" class="form-check-input" name="DeliveryTierType" value="1"> 1<sup>st</sup> Tier
-                                        </label>
-                                    </div>
-                                    <div class="form-check-inline">
-                                        <label class="form-check-label">
-                                            <input type="radio" class="form-check-input" name="DeliveryTierType" value="2"> 2<sup>nd</sup> Tier
-                                        </label>
-                                    </div>
-                                    <div class="form-check-inline">
-                                        <label class="form-check-label">
-                                            <input type="radio" class="form-check-input" name="DeliveryTierType" value="3"> 3<sup>rd</sup> Tier
-                                        </label>
+                                <h5 class="text-success ml-4 mt-2">Proprietor Details</h5>
+                                <div class="col-md-12 mx-auto">
+                                    <div class="card-body row">
+                                        <div class="col-md-7">
+                                            <div class="form-group row">
+                                                <div class="col-md-4 mt-4 text-md-left">
+                                                    <label class="col-form-label"><strong class="text-secondary">Name</strong></label>
+                                                </div>
+                                                <div class="col-md-8">
+                                                    <small class="control-label col-sm-12" for="AadharName"><i class="text-secondary">*  As in Aadhar</i></small>
+                                                    <input id="AadharName" type="text" class="form-control" name="AadharName" value="@Model.AadharName" />
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <div class="col-md-4 text-md-left">
+                                                    <label class="col-form-label"><strong class="text-secondary">Aadhar Number</strong></label>
+                                                </div>
+                                                <div class="col-md-8">
+                                                    <input id="AadharNumber" type="text" class="form-control" name="AadharNumber" value="@Model.AadharNumber" />
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <div class="col-md-4 text-md-left">
+                                                    <label class="col-form-label"><strong class="text-secondary">Mobile Number *</strong></label>
+                                                </div>
+                                                <div class="col-md-8">
+                                                    <input id="OwnerPhoneNumber" type="text" class="form-control" name="OwnerPhoneNumber" value="@Model.OwnerPhoneNumber" />
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <div class="col-md-4 text-md-left">
+                                                    <label class="col-form-label"><strong class="text-secondary">Personal Email</strong></label>
+                                                </div>
+                                                <div class="col-md-8">
+                                                    <input id="Email" type="text" class="form-control" name="Email" value="@Model.Email" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-1"></div>
+                                        <div class="col-md-4">
+                                            <label class="text-secondary font-weight-bold ml-2">Aadhar Image</label><br />
+                                            <input type="radio" class="ml-3" name="AadharDocument" id="AadharDocumentImage" value="Image" checked> <label for="AadharDocumentImage"> Image</label>
+                                            <input type="radio" class="ml-3" name="AadharDocument" id="AadharDocumentPDF" value="PDF"> <label for="AadharDocumentPDF"> PDF</label>
+                                            <div class="row ml-3 AadharDocumentPdf d-none mt-2 mb-3">
+                                                <a href="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageAadharPath" target="_blank" class="mb-2"> Click here for Pdf view</a>
+                                                <input type="file" id="AadharPdf" name="AadharPdf" />
+                                            </div>
+                                            <div class="row AadharDocumentImg ml-3 mt-2">
+                                                <div class="col-md-12">
+                                                    <div class="img-upload-container">
+                                                        @if (Model.ImageAadharPath != null)
+                                                        {
+                                                            <img class="img-container w-100 h-100 mb-2" id="img-aadhar" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageAadharPath" onerror="this.src='/Images/noimage.png'" />
+                                                            <input type="button" class="btn btn-danger btn-sm btnRemove3" value="Remove" />
+                                                        }
+                                                        else
+                                                        {
+                                                            <img class="img-container w-100 h-100 mb-2" id="img-aadhar" onerror="this.src='/Images/noimage.png'" />
+                                                        }
+                                                        <input type="file" id="AadharImage" name="AadharImage" class="d-none" />
+                                                        <label for="AadharImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-12 ml-4">
+                                                    <input type="button" class="btn btn-sm btn-danger d-none" id="btnRemove3" value="Remove" />
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </div>
-                <div class="col-md-12">
-                    <div class="form-group row">
-                        <div class="col-md-2 mx-auto">
-                            <button type="submit" class="btn btn-block btn-success btnSubmit"><span class="glyphicon glyphicon-file"></span> Save</button>
+                        <div class="card mb-4">
+                            <h5 class="text-success ml-2 mt-2">License Details</h5>
+                            <div class="card-body row">
+                                <div class="card-deck">
+                                    <div class="card border-primary bg-muted">
+                                        <div class="card-body">
+                                            <label class="col-md-12 text-center"><strong class="text-secondary">FSSAI License</strong></label>
+                                            <label class="col-md-12 text-left"><small class="text-secondary text-left"><i>License Number</i></small></label>
+                                            <input id="FSSAINumber" type="text" class="form-control col-md-12" name="FSSAINumber" value="@Model.FSSAINumber" />
+                                            <label class="col-md-12 text-left"><small class="text-secondary"><i>License Image</i></small></label>
+                                            <input type="radio" class="ml-3" name="FssaiLicense" id="FssaiLicenseImage" value="Image" checked> <label for="FssaiLicenseImage"> Image</label>
+                                            <input type="radio" class="ml-3" name="FssaiLicense" id="FssaiLicensePDF" value="PDF"> <label for="FssaiLicensePDF"> PDF</label>
+                                            <div class="row ml-3 FssaiPdf d-none mt-2 mb-3">
+                                                <a href="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageFSSAIPath" target="_blank" class="mb-2"> Click here for Pdf view</a>
+                                                <input type="file" id="FSSAIPdf" name="FSSAIPdf" />
+                                            </div>
+                                            <div class="row FssaiImg mt-2">
+                                                <div class="img-upload-container mx-auto mb-3">
+                                                    @if (Model.ImageFSSAIPath != null)
+                                                    {
+                                                        <img class="img-container w-100 h-100 mb-2" id="img-fssai" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageFSSAIPath" onerror="this.src='/Images/noimage.png'" />
+                                                        <input type="button" class="btn btn-sm btn-danger ml-4 btnRemove4 mt-3" value="Remove" />
+                                                    }
+                                                    else
+                                                    {
+                                                        <img class="img-container w-100 h-100 mb-2" id="img-fssai" onerror="this.src='/Images/noimage.png'" />
+                                                    }
+                                                    <input type="file" id="FSSAIImage" name="FSSAIImage" class="d-none" />
+                                                    <label for="FSSAIImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                                </div>
+                                                <input type="button" class="btn btn-sm btn-danger d-none" id="btnRemove4" value="Remove" />
+                                            </div>
+                                            @if (Model.ImageFSSAIPath != null && Model.Verify == false)
+                                            {
+                                                <div class="alert alert-success FssaiApprovedlbl font-weight-bold d-none p-2">Approved</div>
+                                                <div class="alert alert-danger FssaiRejectedlbl font-weight-bold d-none p-2">Rejected</div>
+                                                if (Model.ImageFSSAIPath == "Rejected" || Model.FSSAINumber == "Rejected")
+                                                {
+                                                    <div class="alert alert-danger Fssai font-weight-bold p-2">Rejected</div>
+                                                }
+                                                else
+                                                {
+                                                    <div class="alert alert-danger Fssai font-weight-bold p-2">Verification Pending</div>
+                                                }
+                                            }
+                                            @if (Model.ImageFSSAIPath != null)
+                                            {
+                                                <div class="col-md-12 text-center">
+                                                    <button type="button" class="btn btn-sm btn-warning mb-2 mt-5" data-toggle="modal" data-target="#FssaiModal">
+                                                        + Expand
+                                                    </button>
+                                                    <input type="hidden" id="FSSIApprove" name="FSSIApprove" />
+                                                </div>
+                                            }
+                                        </div>
+                                    </div>
+                                    <div class="card border-primary bg-muted">
+                                        <div class="card-body">
+                                            <label class="col-md-12 text-center"><strong class="text-secondary">Drug License</strong></label>
+                                            <label class="col-md-12 text-left"><small class="text-secondary"><i>License Number</i></small></label>
+                                            <input id="DrugNumber" type="text" class="form-control" name="DrugNumber" value="@Model.DrugNumber" />
+                                            <label class="col-md-12 text-left"><small class="text-secondary"><i>License Image</i></small></label>
+                                            <input type="radio" class="ml-3" name="DrugLicense" id="DrugLicenseImage" value="Image" checked> <label for="DrugLicenseImage"> Image</label>
+                                            <input type="radio" class="ml-3" name="DrugLicense" id="DrugLicensePDF" value="PDF"> <label for="DrugLicensePDF"> PDF</label>
+                                            <div class="row ml-3 DrugPdf d-none mt-2 mb-3">
+                                                <a href="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageDrugPath" target="_blank" class="mb-2"> Click here for Pdf view</a>
+                                                <input type="file" id="DrugPdf" name="DrugPdf" />
+                                            </div>
+                                            <div class="row DrugImg">
+                                                <div class="img-upload-container mx-auto mb-3">
+                                                    @if (Model.ImageDrugPath != null)
+                                                    {
+                                                        <img class="img-container w-100 h-100 mb-2" id="img-drug" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageDrugPath" onerror="this.src='/Images/noimage.png'" />
+                                                        <input type="button" class="btn btn-danger btn-sm btnRemove5" value="Remove" />
+                                                    }
+                                                    else
+                                                    {
+                                                        <img class="img-container w-100 h-100 mb-2" id="img-drug" onerror="this.src='/Images/noimage.png'" />
+                                                    }
+                                                    <input type="file" id="DrugImage" name="DrugImage" class="d-none" />
+                                                    <label for="DrugImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-12 ml-4">
+                                                    <input type="button" class="btn btn-sm btn-danger d-none" id="btnRemove5" value="Remove" />
+                                                </div>
+                                            </div>
+                                            @if (Model.ImageDrugPath != null && Model.Verify == false)
+                                            {
+                                                <div class="alert alert-success DrugApprovedlbl font-weight-bold d-none p-2">Approved</div>
+                                                <div class="alert alert-danger DrugRejectedlbl font-weight-bold d-none p-2">Rejected</div>
+                                                if (Model.ImageDrugPath == "Rejected" || Model.DrugNumber == "Rejected")
+                                                {
+                                                    <div class="alert alert-danger font-weight-bold Drug p-2">Rejected</div>
+                                                }
+                                                else
+                                                {
+                                                    <div class="alert alert-danger font-weight-bold Drug p-2">Verification Pending</div>
+                                                }
+                                            }
+                                            @if (Model.ImageDrugPath != null)
+                                            {
+                                                <div class="col-md-12 text-center">
+                                                    <button type="button" class="btn btn-sm btn-warning mb-2" data-toggle="modal" data-target="#ModalDrug">
+                                                        + Expand
+                                                    </button>
+                                                    <input type="hidden" id="DrugApprove" name="DrugApprove" />
+                                                </div>
+                                            }
+                                        </div>
+                                    </div>
+                                    <div class="card border-primary bg-muted">
+                                        <div class="card-body">
+                                            <label class="col-md-12 text-center"><strong class="text-secondary">Establish License</strong></label>
+                                            <label class="col-md-12 text-left"><small class="text-secondary"><i>License Number</i></small></label>
+                                            <input id="EstablishNumber" type="text" class="form-control" name="EstablishNumber" value="@Model.EstablishNumber" />
+                                            <label class="col-md-12"><small class="text-secondary"><i>License Image</i></small></label>
+                                            <input type="radio" class="ml-3" name="EstablishLicense" id="EstablishLicenseImage" value="Image" checked> <label for="EstablishLicenseImage"> Image</label>
+                                            <input type="radio" class="ml-3" name="EstablishLicense" id="EstablishLicensePDF" value="PDF"> <label for="EstablishLicensePDF"> PDF</label>
+                                            <div class="row ml-3 EstPdf d-none mt-2 mb-3">
+                                                <a href="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageEstablishPath" target="_blank" class="mb-2"> Click here for Pdf view</a>
+                                                <input type="file" id="EstablishPdf" name="EstablishPdf" />
+                                            </div>
+                                            <div class="row EstImg">
+                                                <div class="img-upload-container mx-auto mb-3">
+                                                    @if (Model.ImageEstablishPath != null)
+                                                    {
+                                                        <img class="img-container w-100 h-100 mb-2" id="img-establish" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageEstablishPath" onerror="this.src='/Images/noimage.png'" />
+                                                        <input type="button" class="btn btn-sm btn-danger d-none btnRemove6" value="Remove" />
+                                                    }
+                                                    else
+                                                    {
+                                                        <img class="img-container w-100 h-100 mb-2" id="img-establish" onerror="this.src='/Images/noimage.png'" />
+                                                    }
+                                                    <input type="file" id="EstablishImage" name="EstablishImage" class="d-none" />
+                                                    <label for="EstablishImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-12 ml-4">
+                                                    <input type="button" class="btn btn-sm btn-danger d-none" id="btnRemove6" value="Remove" />
+                                                </div>
+                                            </div>
+                                            @if (Model.ImageEstablishPath != null && Model.Verify == false)
+                                            {
+                                                <div class="alert alert-success EstablishApprovedlbl font-weight-bold d-none p-2">Approved</div>
+                                                <div class="alert alert-danger EstablishRejectedlbl font-weight-bold d-none p-2">Rejected</div>
+                                                if (Model.ImageEstablishPath == "Rejected" || Model.EstablishNumber == "Rejected")
+                                                {
+                                                    <div class="alert alert-danger font-weight-bold Establish p-2">Rejected</div>
+                                                }
+                                                else
+                                                {
+                                                    <div class="alert alert-danger font-weight-bold Establish p-2">Verification Pending</div>
+                                                }
+                                            }
+                                            @if (Model.ImageEstablishPath != null)
+                                            {
+                                                <div class="col-md-12 text-center">
+                                                    <button type="button" class="btn btn-sm btn-warning mb-2" data-toggle="modal" data-target="#ModalEstablish">
+                                                        + Expand
+                                                    </button>
+                                                    <input type="hidden" id="EstablishApprove" name="EstablishApprove" />
+                                                </div>
+                                            }
+                                        </div>
+                                    </div>
+                                    <div class="card border-primary bg-muted">
+                                        <div class="card-body">
+                                            <label class="col-md-12 text-center"><strong class="text-secondary">Other License</strong></label>
+                                            <label class="col-md-12 text-left"><small class="text-secondary"><i>License Name</i></small></label>
+                                            <input id="OtherLicenseName" type="text" class="form-control" name="OtherLicenseName" value="@Model.OtherLicenseName" />
+                                            <label class="col-md-12 text-left"><small class="text-secondary"><i>License Number</i></small></label>
+                                            <input id="OtherLicenseNumber" type="text" class="form-control" name="OtherLicenseNumber" value="@Model.OtherLicenseNumber" />
+                                            <label class="col-md-12"><small class="text-secondary"><i>License Image</i></small></label>
+                                            <input type="radio" class="ml-3" name="OtherLicense" id="OtherImage" value="Image" checked> <label for="OtherImage"> Image</label>
+                                            <input type="radio" class="ml-3" name="OtherLicense" id="OtherPDF" value="PDF"> <label for="OtherPDF"> PDF</label>
+                                            <div class="row ml-3 OtherPdf d-none mt-2 mb-3">
+                                                <a href="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageOtherLicensePath" target="_blank" class="mb-2"> Click here for Pdf view</a>
+                                                <input type="file" id="OtherLicensePdf" name="OtherLicensePdf" />
+                                            </div>
+                                            <div class="row OtherImg">
+                                                <div class="img-upload-container mx-auto mb-3">
+                                                    @if (Model.ImageOtherLicensePath != null)
+                                                    {
+                                                        <img class="img-container w-100 h-100 mb-2" id="img-other" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageOtherLicensePath" onerror="this.src='/Images/noimage.png'" />
+                                                        <input type="button" class="btn btn-sm btn-danger d-none btnRemove7" value="Remove" />
+                                                    }
+                                                    else
+                                                    {
+                                                        <img class="img-container w-100 h-100 mb-2" id="img-other" onerror="this.src='/Images/noimage.png'" />
+                                                    }
+                                                    <input type="file" id="OtherLicenseImage" name="OtherLicenseImage" class="d-none" />
+                                                    <label for="OtherLicenseImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-12 ml-4">
+                                                    <input type="button" class="btn btn-sm btn-danger d-none" id="btnRemove7" value="Remove" />
+                                                </div>
+                                            </div>
+                                            @if (Model.ImageOtherLicensePath != null && Model.Verify == false)
+                                            {
+                                                <div class="alert alert-success OtherApprovedlbl font-weight-bold d-none p-2">Approved</div>
+                                                <div class="alert alert-danger OtherRejectedlbl font-weight-bold d-none p-2">Rejected</div>
+                                                if (Model.ImageOtherLicensePath == "Rejected" || Model.OtherLicenseName == "Rejected" || Model.OtherLicenseNumber == "Rejected")
+                                                {
+                                                    <div class="alert alert-danger font-weight-bold Other p-2">Rejected</div>
+                                                }
+                                                else
+                                                {
+                                                    <div class="alert alert-danger font-weight-bold Other p-2">Verification Pending</div>
+                                                }
+                                            }
+                                            @if (Model.ImageOtherLicensePath != null)
+                                            {
+                                                <div class="col-md-12 text-center">
+                                                    <button type="button" class="btn btn-sm btn-warning mb-2" data-toggle="modal" data-target="#ModalOther">
+                                                        + Expand
+                                                    </button>
+                                                    <input type="hidden" id="OtherApprove" name="OtherApprove" />
+                                                </div>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                    </div>
+                        <div class="card mb-4">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group row m-3">
+                                        @if (Model.ImageAuthoriseBrandPath != null || Model.ImageAuthoriseBrandPath != "")
+                                        {
+                                            <div class="col-md-6">
+                                                Authorised Distributer of any Brand :
+                                                <input type="radio" class="ml-3" name="distributorCheck" value="yes" checked> Yes
+                                                <input type="radio" class="ml-3" name="distributorCheck" value="no"> No
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="col-md-6">
+                                                Authorised Distributer of any Brand :
+                                                <input type="radio" class="ml-3" name="distributorCheck" value="yes"> Yes
+                                                <input type="radio" class="ml-3" name="distributorCheck" value="no" checked> No
+                                            </div>
+                                        }
+                                    </div>
+                                    <div class="card-columns form-group row col-md-4 distributor m-3">
+                                        <div class="card bg-muted">
+                                            <div class="card-body">
+                                                <div class="row form-group">
+                                                    <div class="col-md-12">
+                                                        <label class="text-secondary"><i>Authorised Brand Name</i></label>
+                                                    </div>
+                                                    <div class="col-md-12">
+                                                        <select id="AuthorisedBrandId" name="AuthorisedBrandId" class="form-control">
+                                                            <option value="@Model.AuthorisedBrandId">@Model.AuthorisedBrandName</option>
+                                                        </select>
+                                                        <input type="hidden" name="AuthorisedBrandName" id="AuthorisedBrandName" value="@Model.AuthorisedBrandName" />
+                                                    </div>
+                                                </div>
+                                                <div class="row form-group text-center">
+                                                    <div class="col-md-12">
+                                                        <label class="col-md-12 text-secondary"><i>Authorised Certificate Upload</i></label>
+                                                        <input type="radio" class="ml-3" name="AuthLicense" id="AuthLicenseImage" value="Image" checked> <label for="AuthLicenseImage"> Image</label>
+                                                        <input type="radio" class="ml-3" name="AuthLicense" id="AuthLicensePDF" value="PDF"> <label for="AuthLicensePDF"> PDF</label>
+                                                    </div>
+                                                </div>
+                                                <div class="row ml-3 AuthLicensePdf d-none mt-2 mb-3">
+                                                    <a href="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageAuthoriseBrandPath" target="_blank" class="mb-2"> Click here for Pdf view</a>
+                                                    <input type="file" id="AuthorisedDistributorPdf" name="AuthorisedDistributorPdf" />
+                                                </div>
+                                                <div class="row AuthLicenseImg">
+                                                    @*@if (Model.ImageAuthoriseBrandPath != null)
+                                                    {
+                                                        <img class="img-container w-100 h-100 mb-3" id="img-authorise" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageAuthoriseBrandPath" onerror="this.src='/Images/noimage.png'" />
+                                                        <input type="button" class="btn btn-sm btn-danger btnRemove8" value="Remove" />
+                                                    }
+                                                    else
+                                                    {
+                                                        <img class="img-container w-100 h-100 mb-3" id="img-authorise" onerror="this.src='/Images/noimage.png'" />
+                                                    }
+                                                    <input type="file" id="AuthorisedDistributorImage" name="AuthorisedDistributorImage" class="d-none" />
+                                                    <label for="AuthorisedDistributorImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>*@
+                                                    <div class="img-upload-container mx-auto">
+                                                        <img class="img-container w-100 h-100 mb-3" id="img-authorise" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageAuthoriseBrandPath" onerror="this.src='/Images/noimage.png'" />
+                                                        <input type="file" id="AuthorisedDistributorImage" name="AuthorisedDistributorImage" class="d-none" />
+                                                        <label for="AuthorisedDistributorImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-12 ml-4">
+                                                        <input type="button" class="btn btn-sm btn-danger d-none" id="btnRemove8" value="Remove" />
+                                                    </div>
+                                                </div>
+                                                @if (Model.ImageAuthoriseBrandPath != null && Model.Verify == false)
+                                                {
+                                                    <div class="alert alert-success AuthApprovedlbl font-weight-bold d-none p-2">Approved</div>
+                                                    <div class="alert alert-danger AuthRejectedlbl font-weight-bold d-none p-2">Rejected</div>
+                                                    if (Model.ImageAuthoriseBrandPath == "Rejected" || Model.AuthorisedBrandName == "Rejected")
+                                                    {
+                                                        <div class="alert alert-danger font-weight-bold Auth p-2">Rejected</div>
+                                                    }
+                                                    else
+                                                    {
+                                                        <div class="alert alert-danger font-weight-bold Auth p-2">Verification Pending</div>
+                                                    }
+                                                }
+                                                @if (Model.ImageAuthoriseBrandPath != null)
+                                                {
+                                                    <div class="col-md-12">
+                                                        <button type="button" class="btn btn-sm btn-warning mb-2" data-toggle="modal" data-target="#ModalBrand">
+                                                            + Expand
+                                                        </button>
+                                                        <input type="hidden" id="AuthApprove" name="AuthApprove" />
+                                                    </div>
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card mb-4">
+                            <h5 class="text-success ml-2 mt-2">Tax Details</h5>
+                            <div class="col-md-12 mx-auto row">
+                                <div class="col-md-6">
+                                    <div class="form-group row">
+                                        <div class="col-md-4 text-md-left">
+                                            <label class="col-form-label"><strong class="text-secondary">GSTIN Number</strong></label>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <input type="text" class="form-control" name="GSTINNumber" id="GSTINNumber" value="@Model.GSTINNumber " />
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-md-4 text-md-left">
+                                            <label class="col-form-label"><strong class="text-secondary">PAN Number</strong></label>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <input type="text" class="form-control" name="PanNumber" id="PanNumber" value="@Model.PanNumber" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-columns mr-1 form-group row col-md-3">
+                                    <div class="card border-primary bg-muted">
+                                        <div class="card-body text-center">
+                                            <label class="col-md-12"><small class="text-secondary"><i>GSTIN Image</i></small></label>
+                                            <input type="radio" class="ml-3" name="GstinLicense" id="GstinLicenseImage" value="Image" checked> <label for="GstinLicenseImage"> Image</label>
+                                            <input type="radio" class="ml-3" name="GstinLicense" id="GstinLicensePDF" value="PDF"> <label for="GstinLicensePDF"> PDF</label>
+                                            <div class="row ml-3 GstinLicensePdf d-none mt-2 mb-3">
+                                                <a href="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageGSTINPath" target="_blank" class="mb-2"> Click here for Pdf view</a>
+                                                <input type="file" id="GSTINPdf" name="GSTINPdf" />
+                                                <input type="button" class="btn btn-sm btn-danger btnRemove9" value="Remove" />
+                                            </div>
+                                            <div class="row GstinLicenseImg">
+                                                <div class="img-upload-container mx-auto mb-3">
+                                                    @if (Model.ImageGSTINPath != null)
+                                                    {
+                                                        <img class="img-container w-100 h-100 mb-2" id="img-gstin" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageGSTINPath" onerror="this.src='/Images/noimage.png'" />
+                                                        <input type="button" class="btn btn-sm btn-danger btnRemove9" value="Remove" />
+                                                    }
+                                                    else
+                                                    {
+                                                        <img class="img-container w-100 h-100 mb-2" id="img-gstin" onerror="this.src='/Images/noimage.png'" />
+                                                    }
+                                                    <input type="file" id="GSTINImage" name="GSTINImage" class="d-none" />
+                                                    <label for="GSTINImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-12 ml-4">
+                                                    <input type="button" class="btn btn-sm btn-danger d-none" id="btnRemove9" value="Remove" />
+                                                </div>
+                                            </div>
+                                            @if (Model.ImageGSTINPath != null && Model.Verify == false)
+                                            {
+                                                <div class="alert alert-success GstinApprovedlbl font-weight-bold d-none p-2">Approved</div>
+                                                <div class="alert alert-danger GstinRejectedlbl font-weight-bold d-none p-2">Rejected</div>
+                                                if (Model.ImageGSTINPath == "Rejected" || Model.GSTINNumber == "Rejected")
+                                                {
+                                                    <div class="alert alert-danger font-weight-bold Gstin p-2">Rejected</div>
+                                                }
+                                                else
+                                                {
+                                                    <div class="alert alert-danger font-weight-bold Gstin p-2">Verification Pending</div>
+                                                }
+                                            }
+                                            @if (Model.ImageGSTINPath != null)
+                                            {
+                                                <div class="col-md-12 text-center">
+                                                    <button type="button" class="btn btn-sm btn-warning mb-2" data-toggle="modal" data-target="#ModalGSTIN">
+                                                        + Expand
+                                                    </button>
+                                                    <input type="hidden" id="GstinApprove" name="GstinApprove" />
+                                                </div>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-columns form-group row col-md-3">
+                                    <div class="card border-primary bg-muted">
+                                        <div class="card-body text-center">
+                                            <label class="col-md-12"><small class="text-secondary"><i>PAN Image</i></small></label>
+                                            <input type="radio" class="ml-3" name="PanLicense" id="PanLicenseImage" value="Image" checked> <label for="PanLicenseImage"> Image</label>
+                                            <input type="radio" class="ml-3" name="PanLicense" id="PanLicensePDF" value="PDF"> <label for="PanLicensePDF"> PDF</label>
+                                            <div class="row ml-3 PanLicensePdf d-none mt-2 mb-3">
+                                                <a href="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePanPath" target="_blank" class="mb-2"> Click here for Pdf view</a>
+                                                <input type="file" id="PanPdf" name="PanPdf" />
+                                            </div>
+                                            <div class="row PanLicenseImg">
+                                                <div class="img-upload-container mx-auto mb-3">
+                                                    @if (Model.ImagePanPath != null)
+                                                    {
+                                                        <img class="img-container w-100 h-100 mb-2" id="img-pan" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePanPath" onerror="this.src='/Images/noimage.png'" />
+                                                        <input type="button" class="btn btn-sm btn-danger btnRemove10" value="Remove" />
+                                                    }
+                                                    else
+                                                    {
+                                                        <img class="img-container w-100 h-100 mb-2" id="img-pan" onerror="this.src='/Images/noimage.png'" />
+                                                    }
+                                                    <input type="file" id="PanImage" name="PanImage" class="d-none" />
+                                                    <label for="PanImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-12 ml-4">
+                                                    <input type="button" class="btn btn-sm btn-danger d-none" id="btnRemove10" value="Remove" />
+                                                </div>
+                                            </div>
+                                            @if (Model.ImagePanPath != null && Model.Verify == false)
+                                            {
+                                                <div class="alert alert-success PanApprovedlbl font-weight-bold d-none p-2">Approved</div>
+                                                <div class="alert alert-danger PanRejectedlbl font-weight-bold d-none p-2">Rejected</div>
+                                                if (Model.PanNumber == "Rejected" || Model.ImagePanPath == "Rejected")
+                                                {
+                                                    <div class="alert alert-danger font-weight-bold Pan p-2">Rejected</div>
+                                                }
+                                                else
+                                                {
+                                                    <div class="alert alert-danger font-weight-bold Pan p-2">Verification Pending</div>
+                                                }
+                                            }
+                                            @if (Model.ImagePanPath != null)
+                                            {
+                                                <div class="col-md-12 text-center">
+                                                    <button type="button" class="btn btn-sm btn-warning mb-2" data-toggle="modal" data-target="#ModalPAN">
+                                                        + Expand
+                                                    </button>
+                                                    <input type="hidden" id="PanApprove" name="PanApprove" />
+                                                </div>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card mb-4">
+                            <h5 class="text-success ml-2 mt-2">Bank Details</h5>
+                            <div class="col-md-12 row">
+                                <div class="col-md-8">
+                                    <div class="form-group row">
+                                        <div class="col-md-6">
+                                            <small class="control-label col-sm-12" for="BankName"><i class="text-secondary">Bank Name</i></small>
+                                            <input id="BankName" type="text" class="form-control" name="BankName" value="@Model.BankName" />
+                                        </div>
+                                        <div class="col-md-6">
+                                            <small class="control-label col-sm-12" for="AccountName"><i class="text-secondary">Account Name</i></small>
+                                            <input id="AccountName" type="text" class="form-control" name="AccountName" value="@Model.AccountName" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-md-6">
+                                            <small class="control-label col-sm-12" for="AccountNumber"><i class="text-secondary">Account Number</i></small>
+                                            <input id="AccountNumber" type="text" class="form-control" name="AccountNumber" value="@Model.AccountNumber" />
+                                        </div>
+                                        <div class="col-md-6">
+                                            <small class="control-label col-sm-12" for="IFSCCode"><i class="text-secondary">IFSC Id</i></small>
+                                            <input id="IFSCCode" type="text" class="form-control" name="IFSCCode" value="@Model.IFSCCode" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-md-6">
+                                            <small class="control-label col-sm-12" for="SwiftCode"><i class="text-secondary">SWIFT Id</i></small>
+                                            <input id="SwiftCode" type="text" class="form-control" name="SwiftCode" value="@Model.SwiftCode" />
+                                        </div>
+                                        <div class="col-md-6">
+                                            <small class="control-label col-sm-12" for="UPIID"><i class="text-secondary">UPI Id</i></small>
+                                            <input id="UPIID" type="text" class="form-control" name="UPIID" value="@Model.UPIID" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        @if (Model.AcountType != "SA")
+                                        {
+                                            <div class="col-md-6">
+                                                <input type="radio" name="AcountType" value="SA"> Saving Account
+                                                <input type="radio" name="AcountType" value="CA" checked> Current Account
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="col-md-6">
+                                                <input type="radio" name="AcountType" value="SA" checked> Saving Account
+                                                <input type="radio" name="AcountType" value="CA"> Current Account
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="card-columns form-group row col-md-12">
+                                        <div class="card border-success bg-muted">
+                                            <div class="card-body text-center">
+                                                <label class="col-md-12 text-center"><strong class="text-secondary">Bank Account</strong></label>
+                                                <label class="col-md-12 text-center"><small class="text-secondary"><i>Account Proof Image</i></small></label>
+                                                <input type="radio" class="ml-3" name="AccountDocument" id="AccountDocumentImage" value="Image" checked> <label for="AccountDocumentImage"> Image</label>
+                                                <input type="radio" class="ml-3" name="AccountDocument" id="AccountDocumentPDF" value="PDF"> <label for="AccountDocumentPDF"> PDF</label>
+                                                <div class="row ml-3 AccountDocumentPdf d-none mt-2 mb-3">
+                                                    <a href="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageAccountPath" target="_blank" class="mb-2"> Click here for Pdf view</a>
+                                                    <input type="file" id="AccountPdf" name="AccountPdf" />
+                                                </div>
+                                                <div class="row AccountDocumentImg">
+                                                    <div class="img-upload-container mx-auto mb-3">
+                                                        @if (Model.ImageAccountPath != null)
+                                                        {
+                                                            <img class="img-container w-100 h-100 mb-2" id="img-account" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageAccountPath" onerror="this.src='/Images/noimage.png'" />
+                                                            <input type="button" class="btn btn-sm btn-danger btnRemove11" value="Remove" />
+                                                        }
+                                                        else
+                                                        {
+                                                            <img class="img-container w-100 h-100 mb-2" id="img-account" onerror="this.src='/Images/noimage.png'" />
+                                                        }
+                                                        <input type="file" id="AccountImage" name="AccountImage" class="d-none" />
+                                                        <label for="AccountImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-12 ml-4">
+                                                        <input type="button" class="btn btn-sm btn-danger d-none" id="btnRemove11" value="Remove" />
+                                                    </div>
+                                                </div>
+                                                @if (Model.ImageAccountPath != null && Model.Verify == false)
+                                                {
+                                                    <div class="alert alert-success AccountApprovedlbl font-weight-bold d-none p-2">Approved</div>
+                                                    <div class="alert alert-danger AccountRejectedlbl font-weight-bold d-none p-2">Rejected</div>
+                                                    if (Model.AccountName == "Rejected" || Model.BankName == "Rejected" || Model.AccountNumber == "Rejected" || Model.IFSCCode == "Rejected" || Model.ImageAccountPath == "Rejected")
+                                                    {
+                                                        <div class="alert alert-danger font-weight-bold Account p-2">Rejected</div>
+                                                    }
+                                                    else
+                                                    {
+                                                        <div class="alert alert-danger font-weight-bold Account p-2">Verification Pending</div>
+                                                    }
+                                                }
+                                                @if (Model.ImageAccountPath != null)
+                                                {
+                                                    <div class="col-md-12 text-center">
+                                                        <button type="button" class="btn btn-sm btn-warning mb-2" data-toggle="modal" data-target="#ModalAccount">
+                                                            + Expand
+                                                        </button>
+                                                        <input type="hidden" id="AccountApprove" name="AccountApprove" />
+                                                    </div>
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card mb-4">
+                            <h5 class="text-success ml-2 mt-2">Delivery Charge Assign</h5>
+                            <div class="row mb-3 ml-3">
+                                <div class="col-md-12">
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <label class="col-form-label text-secondary font-weight-bold">Delivery Mode</label>
+                                            <input type="hidden" id="DeliveryType" value="@Model.DeliveryType" />
+                                            <input type="hidden" id="DeliveryTierType" value="@Model.DeliveryTierType" />
+                                        </div>
+                                        <div class="col-md-6 mt-2">
+                                            <div class="form-check-inline mr-3">
+                                                <label class="form-check-label">
+                                                    <input type="radio" class="form-check-input" name="DeliveryType" value="0"> General
+                                                </label>
+                                            </div>
+                                            <div class="form-check-inline">
+                                                <label class="form-check-label">
+                                                    <input type="radio" class="form-check-input" name="DeliveryType" value="1"> Special
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row mt-3">
+                                        <div class="col-md-2">
+                                            <label class="col-form-label text-secondary font-weight-bold">Delivery Charge Type</label>
+                                        </div>
+                                        <div class="col-md-8 mt-2">
+                                            <div class="form-check-inline mr-3">
+                                                <label class="form-check-label">
+                                                    <input type="radio" class="form-check-input" name="DeliveryTierType" value="1"> 1<sup>st</sup> Tier
+                                                </label>
+                                            </div>
+                                            <div class="form-check-inline">
+                                                <label class="form-check-label">
+                                                    <input type="radio" class="form-check-input" name="DeliveryTierType" value="2"> 2<sup>nd</sup> Tier
+                                                </label>
+                                            </div>
+                                            <div class="form-check-inline">
+                                                <label class="form-check-label">
+                                                    <input type="radio" class="form-check-input" name="DeliveryTierType" value="3"> 3<sup>rd</sup> Tier
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group row">
+                                <div class="col-md-2 mx-auto">
+                                    <button type="submit" class="btn btn-block btn-success btnSubmit"><span class="glyphicon glyphicon-file"></span> Save</button>
+                                </div>
+                            </div>
+                        </div>
+                    }
                 </div>
-            }
+            </div>
         </div>
     </div>
 </div>
@@ -897,9 +1031,7 @@
                 <div class="row" id="print-FSSAI">
                     <div class="col-md-6">
                         <a href="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageFSSAIPath" target="_blank" class="ml-3 fssai-pdf"> Click here for Pdf view</a>
-                        @*<a href="~/Home/ImageDenied">*@
                         <img class="img-container w-100 h-100 mb-2 fssai-img" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageFSSAIPath" onerror="this.src='/Images/noimage.png'" />
-                        @*</a>*@
                     </div>
                     <div class="col-md-6">
                         <label class="text-left text-secondary font-weight-bold mt-1"><i>License Number</i></label>
@@ -933,9 +1065,7 @@
                 <div class="row" id="print-Drug">
                     <div class="col-md-6">
                         <a href="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageDrugPath" target="_blank" class="mb-2 drug-pdf"> Click here for Pdf view</a>
-                        @*<a href="~/Home/ImageDenied">*@
                         <img class="img-container w-100 h-100 mb-2 drug-img" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageDrugPath" onerror="this.src='/Images/noimage.png'" />
-                        @*</a>*@
                     </div>
                     <div class="col-md-6">
                         <div class="col-md-12">
@@ -971,9 +1101,7 @@
                 <div class="row" id="print-Establish">
                     <div class="col-md-6">
                         <a href="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageEstablishPath" target="_blank" class="mb-2 establish-pdf"> Click here for Pdf view</a>
-                        @*  <a href="~/Home/ImageDenied">*@
                         <img class="img-container w-100 h-100 mb-2 establish-img" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageEstablishPath" onerror="this.src='/Images/noimage.png'" />
-                        @* </a>*@
                     </div>
                     <div class="col-md-6">
                         <div class="col-md-12">
@@ -1047,9 +1175,7 @@
                 <div class="row" id="print-GSTIN">
                     <div class="col-md-6">
                         <a href="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageGSTINPath" target="_blank" class="mb-2 gstin-pdf"> Click here for Pdf view</a>
-                        @*<a href="~/Home/ImageDenied">*@
                         <img class="img-container w-100 h-100 mb-2 gstin-img" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageGSTINPath" onerror="this.src='/Images/noimage.png'" />
-                        @* </a>*@
                     </div>
                     <div class="col-md-6">
                         <label class="text-left text-secondary font-weight-bold mt-1"><i>GSTIN Number</i></label>
@@ -1083,9 +1209,7 @@
                 <div class="row" id="print-Pan">
                     <div class="col-md-6">
                         <a href="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePanPath" target="_blank" class="mb-2 pan-pdf"> Click here for Pdf view</a>
-                        @*<a href="~/Home/ImageDenied">*@
                         <img class="img-container w-100 h-100 mb-2 pan-img" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePanPath" onerror="this.src='/Images/noimage.png'" />
-                        @*</a>*@
                     </div>
                     <div class="col-md-6">
                         <label class="col-md-4 text-left text-secondary font-weight-bold mt-1"><i>Pan Number</i></label>
@@ -1119,9 +1243,7 @@
                 <div class="row" id="print-Account">
                     <div class="col-md-6">
                         <a href="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageAccountPath" target="_blank" class="mb-2 pan-pdf"> Click here for Pdf view</a>
-                        @*<a href="~/Home/ImageDenied">*@
                         <img class="img-container w-100 h-100 mb-2 pan-img" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageAccountPath" onerror="this.src='/Images/noimage.png'" />
-                        @* </a>*@
                     </div>
                     <div class="col-md-6">
                         <label class="col-md-4 text-left text-secondary font-weight-bold mt-1"><i>Bank Name</i></label>
@@ -1161,9 +1283,7 @@
                 <div class="row" id="print-Auth">
                     <div class="col-md-6">
                         <a href="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageAuthoriseBrandPath" target="_blank" class="mb-2 auth-pdf"> Click here for Pdf view</a>
-                        @*<a href="~/Home/ImageDenied">*@
                         <img class="img-container w-100 h-100 mb-2 auth-img" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageAuthoriseBrandPath" onerror="this.src='/Images/noimage.png'" />
-                        @*</a>*@
                     </div>
                     <div class="col-md-6">
                         <label class="col-md-4 text-left text-secondary font-weight-bold mt-1"><i>Authorised Brand Name</i></label>
@@ -1316,6 +1436,7 @@
                 $('#btnAuthApprove').addClass('d-none');
                 $('#btnAuthReject').addClass('d-none');
             }
+            var resAadhar = strAadhar.match(regExp);
             var strFssai = $("#ImageFSSAIPath").val();
             var strDrug = $("#ImageDrugPath").val();
             var strEstablish = $("#ImageEstablishPath").val();
@@ -1334,7 +1455,23 @@
             var resGstin = strGstin.match(regExp);
             var resPan = strPan.match(regExp);
             var resAccount = strAccount.match(regExp);
-            var resAadhar = strAadhar.match(regExp);
+
+            if (resAadhar == ".pdf") {
+                $("#AadharDocumentPDF").prop("checked", true);
+                $('.AadharDocumentImg').addClass('d-none');
+                $('.AadharDocumentPdf').removeClass('d-none');
+                $("#AadharImage").val("");
+                $("#btnRemove3").addClass("d-none");
+                $(".btnRemove3").addClass("d-none");
+                $("#img-aadhar").attr('src', '');
+            } else {
+                $("#AadharDocumentImage").prop("checked", true);
+                $('.AadharDocumentImg').removeClass('d-none');
+                $('.AadharDocumentPdf').addClass('d-none');
+                $("#AadharPdf").val("");
+                $("#btnRemove3").addClass("d-none");
+                $(".btnRemove3").addClass("d-none");
+            }
 
             if (resFssai == ".pdf") {
                 $("#FssaiLicensePDF").prop("checked", true);
@@ -1466,19 +1603,6 @@
                 $('.AccountDocumentImg').removeClass('d-none');
                 $('.AccountDocumentPdf').addClass('d-none');
                 $("#AccountPdf").val("");
-            }
-
-            if (resAadhar == ".pdf") {
-                $("#AadharDocumentPDF").prop("checked", true);
-                $('.AadharDocumentImg').addClass('d-none');
-                $('.AadharDocumentPdf').removeClass('d-none');
-                $("#AadharImage").val("");
-                $("#img-aadhar").attr('src', '');
-            } else {
-                $("#AadharDocumentImage").prop("checked", true);
-                $('.AadharDocumentImg').removeClass('d-none');
-                $('.AadharDocumentPdf').addClass('d-none');
-                $("#AadharPdf").val("");
             }
 
             $('input:radio[name="FssaiLicense"]').change(function () {
@@ -1925,179 +2049,305 @@
                 }
             });
 
-            function readAuthoriseURL(input) {
-                if (input.files && input.files[0]) {
-                    var reader = new FileReader();
-
-                    reader.onload = function (e) {
-                        $('#img-authorise').attr('src', e.target.result);
-                    }
-
-                    reader.readAsDataURL(input.files[0]);
-                }
-            }
-            $("#AuthorisedDistributorImage").change(function () {
-                readAuthoriseURL(this);
-            });
-
-            function readOtherLicenseURL(input) {
-                if (input.files && input.files[0]) {
-                    var reader = new FileReader();
-
-                    reader.onload = function (e) {
-                        $('#img-other').attr('src', e.target.result);
-                    }
-
-                    reader.readAsDataURL(input.files[0]);
-                }
-            }
-            $("#OtherLicenseImage").change(function () {
-                readOtherLicenseURL(this);
-            });
-
-            function readEstablishURL(input) {
-                if (input.files && input.files[0]) {
-                    var reader = new FileReader();
-
-                    reader.onload = function (e) {
-                        $('#img-establish').attr('src', e.target.result);
-                    }
-
-                    reader.readAsDataURL(input.files[0]);
-                }
-            }
-            $("#EstablishImage").change(function () {
-                readEstablishURL(this);
-            });
-
-            function readDrugURL(input) {
-                if (input.files && input.files[0]) {
-                    var reader = new FileReader();
-
-                    reader.onload = function (e) {
-                        $('#img-drug').attr('src', e.target.result);
-                    }
-
-                    reader.readAsDataURL(input.files[0]);
-                }
-            }
-            $("#DrugImage").change(function () {
-                readDrugURL(this);
-            });
-
-            function readFssaiURL(input) {
-                if (input.files && input.files[0]) {
-                    var reader = new FileReader();
-
-                    reader.onload = function (e) {
-                        $('#img-fssai').attr('src', e.target.result);
-                    }
-
-                    reader.readAsDataURL(input.files[0]);
-                }
-            }
-            $("#FSSAIImage").change(function () {
-                readFssaiURL(this);
-            });
-
-            function readURLPan(input) {
-                if (input.files && input.files[0]) {
-                    var reader = new FileReader();
-
-                    reader.onload = function (e) {
-                        $('#img-pan').attr('src', e.target.result);
-                    }
-
-                    reader.readAsDataURL(input.files[0]);
-                }
-            }
-            $("#PanImage").change(function () {
-                readURLPan(this);
-            });
-
-            function readURLGstin(input) {
-                if (input.files && input.files[0]) {
-                    var reader = new FileReader();
-
-                    reader.onload = function (e) {
-                        $('#img-gstin').attr('src', e.target.result);
-                    }
-
-                    reader.readAsDataURL(input.files[0]);
-                }
-            }
-            $("#GSTINImage").change(function () {
-                readURLGstin(this);
-            });
-
-            function readURLAccount(input) {
-                if (input.files && input.files[0]) {
-                    var reader = new FileReader();
-
-                    reader.onload = function (e) {
-                        $('#img-account').attr('src', e.target.result);
-                    }
-
-                    reader.readAsDataURL(input.files[0]);
-                }
-            }
-            $("#AccountImage").change(function () {
-                readURLAccount(this);
-            });
-
             function readURL(input) {
                 if (input.files && input.files[0]) {
                     var reader = new FileReader();
-
                     reader.onload = function (e) {
                         $('#img-upload').attr('src', e.target.result);
                     }
-
                     reader.readAsDataURL(input.files[0]);
                 }
             }
             $("#ShopImage").change(function () {
                 readURL(this);
+                $("#btnRemove1").removeClass("d-none");
+                $(".btnRemove1").addClass("d-none");
+            });
+            $("#btnRemove1").on('click', function () {
+                $('#img-upload').attr('src', '');
+                $("#ShopImage").val('');
+                $(this).addClass("d-none");
+            });
+            $(".btnRemove1").on('click', function () {
+                $('#img-upload').attr('src', '');
+                $("#ShopImage").val('');
+                $(this).addClass("d-none");
             });
 
             function readURLLogo(input) {
                 if (input.files && input.files[0]) {
                     var reader = new FileReader();
-
                     reader.onload = function (e) {
                         $('#img-logo').attr('src', e.target.result);
                     }
-
                     reader.readAsDataURL(input.files[0]);
                 }
             }
             $("#LogoImage").change(function () {
                 readURLLogo(this);
+                $("#btnRemove2").removeClass("d-none");
+                $(".btnRemove2").addClass("d-none");
             });
-
-            function readURLBanner(input) {
-                if (input.files && input.files[0]) {
-                    var reader = new FileReader();
-
-                    reader.onload = function (e) {
-                        $('#img-banner').attr('src', e.target.result);
-                    }
-
-                    reader.readAsDataURL(input.files[0]);
-                }
-            }
-            $("#BannerImage").change(function () {
-                readURLBanner(this);
+            $("#btnRemove2").on('click', function () {
+                $('#img-logo').attr('src', '');
+                $("#LogoImage").val('');
+                $(this).addClass("d-none");
+            });
+            $(".btnRemove2").on('click', function () {
+                $('#img-logo').attr('src', '');
+                $("#LogoImage").val('');
+                $(this).addClass("d-none");
             });
 
             function readURLLicence(input) {
                 if (input.files && input.files[0]) {
                     var reader = new FileReader();
+                    reader.onload = function (e) {
+                        $('#img-aadhar').attr('src', e.target.result);
+                    }
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
+            $("#AadharImage").change(function () {
+                readURLLicence(this);
+                $("#btnRemove3").removeClass("d-none");
+                $(".btnRemove3").addClass("d-none");
+            });
+            $("#btnRemove3").on('click', function () {
+                $('#img-aadhar').attr('src', '');
+                $("#AadharImage").val('');
+                $(this).addClass("d-none");
+            });
+            $(".btnRemove3").on('click', function () {
+                $('#img-aadhar').attr('src', '');
+                $("#AadharImage").val('');
+                $(this).addClass("d-none");
+            });
 
+            function readFssaiURL(input) {
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        $('#img-fssai').attr('src', e.target.result);
+                    }
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
+            $("#FSSAIImage").change(function () {
+                readFssaiURL(this);
+                $("#btnRemove4").removeClass("d-none");
+                $(".btnRemove4").addClass("d-none");
+            });
+            $("#btnRemove4").on('click', function () {
+                $('#img-fssai').attr('src', '');
+                $("#FSSAIImage").val('');
+                $(this).addClass("d-none");
+            });
+            $(".btnRemove4").on('click', function () {
+                $('#img-fssai').attr('src', '');
+                $("#FSSAIImage").val('');
+                $(this).addClass("d-none");
+            });
+
+            function readDrugURL(input) {
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        $('#img-drug').attr('src', e.target.result);
+                    }
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
+            $("#DrugImage").change(function () {
+                readDrugURL(this);
+                $("#btnRemove5").removeClass("d-none");
+                $(".btnRemove5").addClass("d-none");
+            });
+            $("#btnRemove5").on('click', function () {
+                $('#img-drug').attr('src', '');
+                $("#DrugImage").val('');
+                $(this).addClass("d-none");
+            });
+            $(".btnRemove5").on('click', function () {
+                $('#img-drug').attr('src', '');
+                $("#DrugImage").val('');
+                $(this).addClass("d-none");
+            });
+
+            function readEstablishURL(input) {
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        $('#img-establish').attr('src', e.target.result);
+                    }
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
+            $("#EstablishImage").change(function () {
+                readEstablishURL(this);
+                $("#btnRemove6").removeClass("d-none");
+                $(".btnRemove6").addClass("d-none");
+            });
+            $("#btnRemove6").on('click', function () {
+                $('#img-establish').attr('src', '');
+                $("#EstablishImage").val('');
+                $(this).addClass("d-none");
+            });
+            $(".btnRemove6").on('click', function () {
+                $('#img-establish').attr('src', '');
+                $("#EstablishImage").val('');
+                $(this).addClass("d-none");
+            });
+
+            function readOtherLicenseURL(input) {
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        $('#img-other').attr('src', e.target.result);
+                    }
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
+            $("#OtherLicenseImage").change(function () {
+                readOtherLicenseURL(this);
+                $("#btnRemove7").removeClass("d-none");
+                $(".btnRemove7").addClass("d-none");
+            });
+            $("#btnRemove7").on('click', function () {
+                $('#img-other').attr('src', '');
+                $("#OtherLicenseImage").val('');
+                $(this).addClass("d-none");
+            });
+            $(".btnRemove7").on('click', function () {
+                $('#img-other').attr('src', '');
+                $("#OtherLicenseImage").val('');
+                $(this).addClass("d-none");
+            });
+
+            function readAuthoriseURL(input) {
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        $('#img-authorise').attr('src', e.target.result);
+                    }
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
+
+            $("#AuthorisedDistributorImage").change(function () {
+                readAuthoriseURL(this);
+            });
+
+            //$("#AuthorisedDistributorImage").change(function () {
+            //    readAuthoriseURL(this);
+            //    $("#btnRemove8").removeClass("d-none");
+            //    $(".btnRemove8").addClass("d-none");
+            //});
+            //$("#btnRemove8").on('click', function () {
+            //    $('#img-authorise').attr('src', '');
+            //    $("#AuthorisedDistributorImage").val('');
+            //    $(this).addClass("d-none");
+            //});
+            //$(".btnRemove8").on('click', function () {
+            //    $('#img-authorise').attr('src', '');
+            //    $("#AuthorisedDistributorImage").val('');
+            //    $(this).addClass("d-none");
+            //});
+
+            function readURLGstin(input) {
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        $('#img-gstin').attr('src', e.target.result);
+                    }
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
+            $("#GSTINImage").change(function () {
+                readURLGstin(this);
+                $("#btnRemove9").removeClass("d-none");
+                $(".btnRemove9").addClass("d-none");
+            });
+            $("#btnRemove9").on('click', function () {
+                $('#img-gstin').attr('src', '');
+                $("#GSTINImage").val('');
+                $(this).addClass("d-none");
+            });
+            $(".btnRemove9").on('click', function () {
+                $('#img-gstin').attr('src', '');
+                $("#GSTINImage").val('');
+                $(this).addClass("d-none");
+            });
+
+            function readURLPan(input) {
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        $('#img-pan').attr('src', e.target.result);
+                    }
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
+            $("#PanImage").change(function () {
+                readURLPan(this);
+                $("#btnRemove10").removeClass("d-none");
+                $(".btnRemove10").addClass("d-none");
+            });
+            $("#btnRemove10").on('click', function () {
+                $('#img-pan').attr('src', '');
+                $("#PanImage").val('');
+                $(this).addClass("d-none");
+            });
+            $(".btnRemove10").on('click', function () {
+                $('#img-pan').attr('src', '');
+                $("#PanImage").val('');
+                $(this).addClass("d-none");
+            });
+
+            function readURLAccount(input) {
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        $('#img-account').attr('src', e.target.result);
+                    }
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
+            $("#AccountImage").change(function () {
+                readURLAccount(this);
+                $("#btnRemove11").removeClass("d-none");
+                $(".btnRemove11").addClass("d-none");
+            });
+            $("#btnRemove11").on('click', function () {
+                $('#img-account').attr('src', '');
+                $("#AccountImage").val('');
+                $(this).addClass("d-none");
+            });
+            $(".btnRemove11").on('click', function () {
+                $('#img-account').attr('src', '');
+                $("#AccountImage").val('');
+                $(this).addClass("d-none");
+            });
+
+            function readURLBanner(input) {
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        $('#img-banner').attr('src', e.target.result);
+                    }
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
+            $("#BannerImage").change(function () {
+                readURLBanner(this);          
+            });
+
+            function readURLLicence(input) {
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
                     reader.onload = function (e) {
                         $('#img-license').attr('src', e.target.result);
                     }
-
                     reader.readAsDataURL(input.files[0]);
                 }
             }
@@ -2105,20 +2355,6 @@
                 readURLLicence(this);
             });
 
-            function readURLLicence(input) {
-                if (input.files && input.files[0]) {
-                    var reader = new FileReader();
-
-                    reader.onload = function (e) {
-                        $('#img-aadhar').attr('src', e.target.result);
-                    }
-
-                    reader.readAsDataURL(input.files[0]);
-                }
-            }
-            $("#AadharImage").change(function () {
-                readURLLicence(this);
-            });
         });
 
         var map, infoWindow, markers = [];
