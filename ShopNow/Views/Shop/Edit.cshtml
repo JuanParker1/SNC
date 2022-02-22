@@ -228,7 +228,7 @@
                                                         @if (Model.ImagePath != null)
                                                         {
                                                             <img class="img-container w-100 h-100" id="img-upload" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePath" onerror="this.src='/Images/noimage.png'" />
-                                                            <input type="button" class="btn btn-danger btn-sm btnRemove1" value="Remove" />
+                                                            <input type="button" class="btn btn-danger mt-2 ml-3 btn-sm btnRemove1" value="Remove" />
                                                         }
                                                         else
                                                         {
@@ -253,7 +253,7 @@
                                                         @if (Model.ImageLogoPath != null)
                                                         {
                                                             <img class="img-container w-100 h-100" id="img-logo" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageLogoPath" onerror="this.src='/Images/noimage.png'" />
-                                                            <input type="button" class="btn btn-danger btn-sm btnRemove2" value="Remove" />
+                                                            <input type="button" class="btn btn-danger mt-2 ml-3 btn-sm btnRemove2" value="Remove" />
                                                         }
                                                         else
                                                         {
@@ -363,7 +363,7 @@
                                                         @if (Model.ImageAadharPath != null)
                                                         {
                                                             <img class="img-container w-100 h-100 mb-2" id="img-aadhar" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageAadharPath" onerror="this.src='/Images/noimage.png'" />
-                                                            <input type="button" class="btn btn-danger btn-sm btnRemove3" value="Remove" />
+                                                            <input type="button" class="btn btn-danger mt-2 ml-3 btn-sm btnRemove3" value="Remove" />
                                                         }
                                                         else
                                                         {
@@ -405,7 +405,7 @@
                                                     @if (Model.ImageFSSAIPath != null)
                                                     {
                                                         <img class="img-container w-100 h-100 mb-2" id="img-fssai" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageFSSAIPath" onerror="this.src='/Images/noimage.png'" />
-                                                        <input type="button" class="btn btn-sm btn-danger ml-4 btnRemove4 mt-3" value="Remove" />
+                                                        <input type="button" class="btn btn-sm btn-danger ml-4 btnRemove4" value="Remove" />
                                                     }
                                                     else
                                                     {
@@ -414,7 +414,11 @@
                                                     <input type="file" id="FSSAIImage" name="FSSAIImage" class="d-none" />
                                                     <label for="FSSAIImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
                                                 </div>
-                                                <input type="button" class="btn btn-sm btn-danger d-none" id="btnRemove4" value="Remove" />
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-12 ml-5">
+                                                    <input type="button" class="btn btn-sm btn-danger d-none ml-5" id="btnRemove4" value="Remove" />
+                                                </div>
                                             </div>
                                             @if (Model.ImageFSSAIPath != null && Model.Verify == false)
                                             {
@@ -422,17 +426,17 @@
                                                 <div class="alert alert-danger FssaiRejectedlbl font-weight-bold d-none p-2">Rejected</div>
                                                 if (Model.ImageFSSAIPath == "Rejected" || Model.FSSAINumber == "Rejected")
                                                 {
-                                                    <div class="alert alert-danger Fssai font-weight-bold p-2">Rejected</div>
+                                                    <div class="alert alert-danger Fssi font-weight-bold p-2">Rejected</div>
                                                 }
                                                 else
                                                 {
-                                                    <div class="alert alert-danger Fssai font-weight-bold p-2">Verification Pending</div>
+                                                    <div class="alert alert-danger d-none penFssi font-weight-bold p-2 mt-4">Verification Pending</div>
                                                 }
                                             }
                                             @if (Model.ImageFSSAIPath != null)
                                             {
                                                 <div class="col-md-12 text-center">
-                                                    <button type="button" class="btn btn-sm btn-warning mb-2 mt-5" data-toggle="modal" data-target="#FssaiModal">
+                                                    <button type="button" class="btn btn-sm btn-warning expand1 mb-2 mt-4" data-toggle="modal" data-target="#FssaiModal">
                                                         + Expand
                                                     </button>
                                                     <input type="hidden" id="FSSIApprove" name="FSSIApprove" />
@@ -457,7 +461,7 @@
                                                     @if (Model.ImageDrugPath != null)
                                                     {
                                                         <img class="img-container w-100 h-100 mb-2" id="img-drug" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageDrugPath" onerror="this.src='/Images/noimage.png'" />
-                                                        <input type="button" class="btn btn-danger btn-sm btnRemove5" value="Remove" />
+                                                        <input type="button" class="btn btn-danger btn-sm btnRemove5 ml-4" value="Remove" />
                                                     }
                                                     else
                                                     {
@@ -468,8 +472,8 @@
                                                 </div>
                                             </div>
                                             <div class="row">
-                                                <div class="col-md-12 ml-4">
-                                                    <input type="button" class="btn btn-sm btn-danger d-none" id="btnRemove5" value="Remove" />
+                                                <div class="col-md-12 ml-5">
+                                                    <input type="button" class="btn btn-sm btn-danger ml-5 d-none" id="btnRemove5" value="Remove" />
                                                 </div>
                                             </div>
                                             @if (Model.ImageDrugPath != null && Model.Verify == false)
@@ -482,13 +486,13 @@
                                                 }
                                                 else
                                                 {
-                                                    <div class="alert alert-danger font-weight-bold Drug p-2">Verification Pending</div>
+                                                    <div class="alert alert-danger font-weight-bold d-none penDrug p-2 mt-4">Verification Pending</div>
                                                 }
                                             }
                                             @if (Model.ImageDrugPath != null)
                                             {
                                                 <div class="col-md-12 text-center">
-                                                    <button type="button" class="btn btn-sm btn-warning mb-2" data-toggle="modal" data-target="#ModalDrug">
+                                                    <button type="button" class="btn btn-sm btn-warning expand2 mb-2 mt-4" data-toggle="modal" data-target="#ModalDrug">
                                                         + Expand
                                                     </button>
                                                     <input type="hidden" id="DrugApprove" name="DrugApprove" />
@@ -513,7 +517,7 @@
                                                     @if (Model.ImageEstablishPath != null)
                                                     {
                                                         <img class="img-container w-100 h-100 mb-2" id="img-establish" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageEstablishPath" onerror="this.src='/Images/noimage.png'" />
-                                                        <input type="button" class="btn btn-sm btn-danger d-none btnRemove6" value="Remove" />
+                                                        <input type="button" class="btn btn-sm btn-danger ml-4 btnRemove6" value="Remove" />
                                                     }
                                                     else
                                                     {
@@ -524,8 +528,8 @@
                                                 </div>
                                             </div>
                                             <div class="row">
-                                                <div class="col-md-12 ml-4">
-                                                    <input type="button" class="btn btn-sm btn-danger d-none" id="btnRemove6" value="Remove" />
+                                                <div class="col-md-12 ml-5">
+                                                    <input type="button" class="btn btn-sm btn-danger d-none ml-5" id="btnRemove6" value="Remove" />
                                                 </div>
                                             </div>
                                             @if (Model.ImageEstablishPath != null && Model.Verify == false)
@@ -538,13 +542,13 @@
                                                 }
                                                 else
                                                 {
-                                                    <div class="alert alert-danger font-weight-bold Establish p-2">Verification Pending</div>
+                                                    <div class="alert alert-danger font-weight-bold d-none penEsta p-2 mt-4">Verification Pending</div>
                                                 }
                                             }
                                             @if (Model.ImageEstablishPath != null)
                                             {
                                                 <div class="col-md-12 text-center">
-                                                    <button type="button" class="btn btn-sm btn-warning mb-2" data-toggle="modal" data-target="#ModalEstablish">
+                                                    <button type="button" class="btn btn-sm btn-warning expand3 mb-2 mt-4" data-toggle="modal" data-target="#ModalEstablish">
                                                         + Expand
                                                     </button>
                                                     <input type="hidden" id="EstablishApprove" name="EstablishApprove" />
@@ -571,7 +575,7 @@
                                                     @if (Model.ImageOtherLicensePath != null)
                                                     {
                                                         <img class="img-container w-100 h-100 mb-2" id="img-other" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageOtherLicensePath" onerror="this.src='/Images/noimage.png'" />
-                                                        <input type="button" class="btn btn-sm btn-danger d-none btnRemove7" value="Remove" />
+                                                        <input type="button" class="btn btn-sm btn-danger btnRemove7 ml-4" value="Remove" />
                                                     }
                                                     else
                                                     {
@@ -583,7 +587,7 @@
                                             </div>
                                             <div class="row">
                                                 <div class="col-md-12 ml-4">
-                                                    <input type="button" class="btn btn-sm btn-danger d-none" id="btnRemove7" value="Remove" />
+                                                    <input type="button" class="btn btn-sm btn-danger d-none ml-5" id="btnRemove7" value="Remove" />
                                                 </div>
                                             </div>
                                             @if (Model.ImageOtherLicensePath != null && Model.Verify == false)
@@ -596,13 +600,13 @@
                                                 }
                                                 else
                                                 {
-                                                    <div class="alert alert-danger font-weight-bold Other p-2">Verification Pending</div>
+                                                    <div class="alert alert-danger font-weight-bold d-none penOther p-2 mt-5">Verification Pending</div>
                                                 }
                                             }
                                             @if (Model.ImageOtherLicensePath != null)
                                             {
                                                 <div class="col-md-12 text-center">
-                                                    <button type="button" class="btn btn-sm btn-warning mb-2" data-toggle="modal" data-target="#ModalOther">
+                                                    <button type="button" class="btn btn-sm btn-warning expand4 mb-2 mt-4" data-toggle="modal" data-target="#ModalOther">
                                                         + Expand
                                                     </button>
                                                     <input type="hidden" id="OtherApprove" name="OtherApprove" />
@@ -635,7 +639,7 @@
                                         }
                                     </div>
                                     <div class="card-columns form-group row col-md-4 distributor m-3">
-                                        <div class="card bg-muted">
+                                        <div class="card border-primary bg-muted">
                                             <div class="card-body">
                                                 <div class="row form-group">
                                                     <div class="col-md-12">
@@ -660,25 +664,22 @@
                                                     <input type="file" id="AuthorisedDistributorPdf" name="AuthorisedDistributorPdf" />
                                                 </div>
                                                 <div class="row AuthLicenseImg">
-                                                    @*@if (Model.ImageAuthoriseBrandPath != null)
-                                                    {
-                                                        <img class="img-container w-100 h-100 mb-3" id="img-authorise" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageAuthoriseBrandPath" onerror="this.src='/Images/noimage.png'" />
-                                                        <input type="button" class="btn btn-sm btn-danger btnRemove8" value="Remove" />
-                                                    }
-                                                    else
-                                                    {
-                                                        <img class="img-container w-100 h-100 mb-3" id="img-authorise" onerror="this.src='/Images/noimage.png'" />
-                                                    }
-                                                    <input type="file" id="AuthorisedDistributorImage" name="AuthorisedDistributorImage" class="d-none" />
-                                                    <label for="AuthorisedDistributorImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>*@
-                                                    <div class="img-upload-container mx-auto">
-                                                        <img class="img-container w-100 h-100 mb-3" id="img-authorise" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageAuthoriseBrandPath" onerror="this.src='/Images/noimage.png'" />
+                                                    <div class="img-upload-container mx-auto mb-3">
+                                                        @if (Model.ImageAuthoriseBrandPath != null)
+                                                        {
+                                                            <img class="img-container w-100 h-100 mb-2" id="img-authorise" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageAuthoriseBrandPath" onerror="this.src='/Images/noimage.png'" />
+                                                            <input type="button" class="btn btn-sm btn-danger btnRemove8 ml-5" value="Remove" />
+                                                        }
+                                                        else
+                                                        {
+                                                            <img class="img-container w-100 h-100 mb-2" id="img-authorise" onerror="this.src='/Images/noimage.png'" />
+                                                        }
                                                         <input type="file" id="AuthorisedDistributorImage" name="AuthorisedDistributorImage" class="d-none" />
                                                         <label for="AuthorisedDistributorImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
                                                     </div>
                                                 </div>
                                                 <div class="row">
-                                                    <div class="col-md-12 ml-4">
+                                                    <div class="col-md-12 text-center">
                                                         <input type="button" class="btn btn-sm btn-danger d-none" id="btnRemove8" value="Remove" />
                                                     </div>
                                                 </div>
@@ -692,13 +693,13 @@
                                                     }
                                                     else
                                                     {
-                                                        <div class="alert alert-danger font-weight-bold Auth p-2">Verification Pending</div>
+                                                        <div class="alert alert-danger font-weight-bold d-none penAuth p-2 mt-4">Verification Pending</div>
                                                     }
                                                 }
                                                 @if (Model.ImageAuthoriseBrandPath != null)
                                                 {
                                                     <div class="col-md-12">
-                                                        <button type="button" class="btn btn-sm btn-warning mb-2" data-toggle="modal" data-target="#ModalBrand">
+                                                        <button type="button" class="btn btn-sm btn-warning expand5 mb-2 mt-4" data-toggle="modal" data-target="#ModalBrand">
                                                             + Expand
                                                         </button>
                                                         <input type="hidden" id="AuthApprove" name="AuthApprove" />
@@ -747,7 +748,7 @@
                                                     @if (Model.ImageGSTINPath != null)
                                                     {
                                                         <img class="img-container w-100 h-100 mb-2" id="img-gstin" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageGSTINPath" onerror="this.src='/Images/noimage.png'" />
-                                                        <input type="button" class="btn btn-sm btn-danger btnRemove9" value="Remove" />
+                                                        <input type="button" class="btn btn-sm btn-danger btnRemove9 ml-4" value="Remove" />
                                                     }
                                                     else
                                                     {
@@ -759,7 +760,7 @@
                                             </div>
                                             <div class="row">
                                                 <div class="col-md-12 ml-4">
-                                                    <input type="button" class="btn btn-sm btn-danger d-none" id="btnRemove9" value="Remove" />
+                                                    <input type="button" class="btn btn-sm btn-danger d-none ml-5" id="btnRemove9" value="Remove" />
                                                 </div>
                                             </div>
                                             @if (Model.ImageGSTINPath != null && Model.Verify == false)
@@ -772,13 +773,13 @@
                                                 }
                                                 else
                                                 {
-                                                    <div class="alert alert-danger font-weight-bold Gstin p-2">Verification Pending</div>
+                                                    <div class="alert alert-danger font-weight-bold d-none penGstin p-2 mt-4">Verification Pending</div>
                                                 }
                                             }
                                             @if (Model.ImageGSTINPath != null)
                                             {
                                                 <div class="col-md-12 text-center">
-                                                    <button type="button" class="btn btn-sm btn-warning mb-2" data-toggle="modal" data-target="#ModalGSTIN">
+                                                    <button type="button" class="btn btn-sm btn-warning expand6 mb-2 mt-4" data-toggle="modal" data-target="#ModalGSTIN">
                                                         + Expand
                                                     </button>
                                                     <input type="hidden" id="GstinApprove" name="GstinApprove" />
@@ -802,7 +803,7 @@
                                                     @if (Model.ImagePanPath != null)
                                                     {
                                                         <img class="img-container w-100 h-100 mb-2" id="img-pan" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePanPath" onerror="this.src='/Images/noimage.png'" />
-                                                        <input type="button" class="btn btn-sm btn-danger btnRemove10" value="Remove" />
+                                                        <input type="button" class="btn btn-sm btn-danger btnRemove10 ml-4" value="Remove" />
                                                     }
                                                     else
                                                     {
@@ -814,7 +815,7 @@
                                             </div>
                                             <div class="row">
                                                 <div class="col-md-12 ml-4">
-                                                    <input type="button" class="btn btn-sm btn-danger d-none" id="btnRemove10" value="Remove" />
+                                                    <input type="button" class="btn btn-sm btn-danger d-none ml-5" id="btnRemove10" value="Remove" />
                                                 </div>
                                             </div>
                                             @if (Model.ImagePanPath != null && Model.Verify == false)
@@ -827,13 +828,13 @@
                                                 }
                                                 else
                                                 {
-                                                    <div class="alert alert-danger font-weight-bold Pan p-2">Verification Pending</div>
+                                                    <div class="alert alert-danger font-weight-bold d-none penPan p-2 mt-4">Verification Pending</div>
                                                 }
                                             }
                                             @if (Model.ImagePanPath != null)
                                             {
                                                 <div class="col-md-12 text-center">
-                                                    <button type="button" class="btn btn-sm btn-warning mb-2" data-toggle="modal" data-target="#ModalPAN">
+                                                    <button type="button" class="btn btn-sm btn-warning expand7 mb-2 mt-4" data-toggle="modal" data-target="#ModalPAN">
                                                         + Expand
                                                     </button>
                                                     <input type="hidden" id="PanApprove" name="PanApprove" />
@@ -897,7 +898,7 @@
                                 </div>
                                 <div class="col-md-4">
                                     <div class="card-columns form-group row col-md-12">
-                                        <div class="card border-success bg-muted">
+                                        <div class="card border-primary bg-muted">
                                             <div class="card-body text-center">
                                                 <label class="col-md-12 text-center"><strong class="text-secondary">Bank Account</strong></label>
                                                 <label class="col-md-12 text-center"><small class="text-secondary"><i>Account Proof Image</i></small></label>
@@ -912,7 +913,7 @@
                                                         @if (Model.ImageAccountPath != null)
                                                         {
                                                             <img class="img-container w-100 h-100 mb-2" id="img-account" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageAccountPath" onerror="this.src='/Images/noimage.png'" />
-                                                            <input type="button" class="btn btn-sm btn-danger btnRemove11" value="Remove" />
+                                                            <input type="button" class="btn btn-sm btn-danger btnRemove11 ml-4" value="Remove" />
                                                         }
                                                         else
                                                         {
@@ -924,7 +925,7 @@
                                                 </div>
                                                 <div class="row">
                                                     <div class="col-md-12 ml-4">
-                                                        <input type="button" class="btn btn-sm btn-danger d-none" id="btnRemove11" value="Remove" />
+                                                        <input type="button" class="btn btn-sm btn-danger d-none ml-5" id="btnRemove11" value="Remove" />
                                                     </div>
                                                 </div>
                                                 @if (Model.ImageAccountPath != null && Model.Verify == false)
@@ -937,13 +938,13 @@
                                                     }
                                                     else
                                                     {
-                                                        <div class="alert alert-danger font-weight-bold Account p-2">Verification Pending</div>
+                                                        <div class="alert alert-danger font-weight-bold d-none penAccount p-2 mt-4">Verification Pending</div>
                                                     }
                                                 }
                                                 @if (Model.ImageAccountPath != null)
                                                 {
                                                     <div class="col-md-12 text-center">
-                                                        <button type="button" class="btn btn-sm btn-warning mb-2" data-toggle="modal" data-target="#ModalAccount">
+                                                        <button type="button" class="btn btn-sm btn-warning expand8 mb-2 mt-4" data-toggle="modal" data-target="#ModalAccount">
                                                             + Expand
                                                         </button>
                                                         <input type="hidden" id="AccountApprove" name="AccountApprove" />
@@ -1436,7 +1437,6 @@
                 $('#btnAuthApprove').addClass('d-none');
                 $('#btnAuthReject').addClass('d-none');
             }
-            var resAadhar = strAadhar.match(regExp);
             var strFssai = $("#ImageFSSAIPath").val();
             var strDrug = $("#ImageDrugPath").val();
             var strEstablish = $("#ImageEstablishPath").val();
@@ -1455,22 +1455,23 @@
             var resGstin = strGstin.match(regExp);
             var resPan = strPan.match(regExp);
             var resAccount = strAccount.match(regExp);
+            var resAadhar = strAadhar.match(regExp);
 
             if (resAadhar == ".pdf") {
                 $("#AadharDocumentPDF").prop("checked", true);
                 $('.AadharDocumentImg').addClass('d-none');
                 $('.AadharDocumentPdf').removeClass('d-none');
                 $("#AadharImage").val("");
-                $("#btnRemove3").addClass("d-none");
-                $(".btnRemove3").addClass("d-none");
                 $("#img-aadhar").attr('src', '');
+                $("#btnRemove3").addClass("d-none");
+                $(".btnRemove3").removeClass("d-none");
             } else {
                 $("#AadharDocumentImage").prop("checked", true);
                 $('.AadharDocumentImg').removeClass('d-none');
                 $('.AadharDocumentPdf').addClass('d-none');
                 $("#AadharPdf").val("");
                 $("#btnRemove3").addClass("d-none");
-                $(".btnRemove3").addClass("d-none");
+                $(".btnRemove3").removeClass("d-none");
             }
 
             if (resFssai == ".pdf") {
@@ -1479,15 +1480,21 @@
                 $('.FssaiPdf').removeClass('d-none');
                 $("#FSSAIImage").val("");
                 $("#img-fssai").attr('src', '');
-                $('.penFssi').addClass('d-none');
+                $('.penFssi').removeClass('d-none');
+                $('.expand1').removeClass('d-none');
                 $('.fssai-img').addClass('d-none');
+                $("#btnRemove4").addClass("d-none");
+                $(".btnRemove4").removeClass("d-none");
             } else {
                 $("#FssaiLicenseImage").prop("checked", true);
                 $('.FssaiImg').removeClass('d-none');
                 $('.FssaiPdf').addClass('d-none');
                 $("#FSSAIPdf").val("");
-                $('.penFssi').addClass('d-none');
+                $('.penFssi').removeClass('d-none');
+                $('.expand1').removeClass('d-none');
                 $('.fssai-pdf').addClass('d-none');
+                $("#btnRemove4").addClass("d-none");
+                $(".btnRemove4").removeClass("d-none");
             }
 
             if (resDrug == ".pdf") {
@@ -1497,14 +1504,20 @@
                 $('.DrugPdf').removeClass('d-none');
                 $("#DrugImage").val("");
                 $("#img-drug").attr('src', '');
-                $('.penDrug').addClass('d-none');
+                $('.penDrug').removeClass('d-none');
+                $('.expand2').removeClass('d-none');
+                $("#btnRemove5").addClass("d-none");
+                $(".btnRemove5").removeClass("d-none");
             } else {
                 $("#DrugLicenseImage").prop("checked", true);
                 $('.drug-pdf').addClass('d-none');
                 $('.DrugImg').removeClass('d-none');
                 $('.DrugPdf').addClass('d-none');
                 $("#DrugPdf").val("");
-                $('.penDrug').addClass('d-none');
+                $('.penDrug').removeClass('d-none');
+                $('.expand2').removeClass('d-none');
+                $("#btnRemove5").addClass("d-none");
+                $(".btnRemove5").removeClass("d-none");
             }
 
             if (resEstablish == ".pdf") {
@@ -1514,14 +1527,20 @@
                 $('.EstPdf').removeClass('d-none');
                 $("#EstablishImage").val("");
                 $("#img-establish").attr('src', '');
-                $('.penEsta').addClass('d-none');
+                $('.penEsta').removeClass('d-none');
+                $('.expand3').removeClass('d-none');
+                $("#btnRemove6").addClass("d-none");
+                $(".btnRemove6").removeClass("d-none");
             } else {
                 $("#EstablishLicenseImage").prop("checked", true);
                 $('.establish-pdf').addClass('d-none');
                 $('.EstImg').removeClass('d-none');
                 $('.EstPdf').addClass('d-none');
                 $("#EstablishPdf").val("");
-                $('.penEsta').addClass('d-none');
+                $('.penEsta').removeClass('d-none');
+                $('.expand3').removeClass('d-none');
+                $("#btnRemove6").addClass("d-none");
+                $(".btnRemove6").removeClass("d-none");
             }
 
             if (resOther == ".pdf") {
@@ -1531,14 +1550,20 @@
                 $('.OtherPdf').removeClass('d-none');
                 $("#OtherLicenseImage").val("");
                 $("#img-other").attr('src', '');
-                $('.penOther').addClass('d-none');
+                $('.penOther').removeClass('d-none');
+                $('.expand4').removeClass('d-none');
+                $("#btnRemove7").addClass("d-none");
+                $(".btnRemove7").removeClass("d-none");
             } else {
                 $("#OtherImage").prop("checked", true);
                 $('.other-pdf').addClass('d-none');
                 $('.OtherImg').removeClass('d-none');
                 $('.OtherPdf').addClass('d-none');
                 $("#OtherLicensePdf").val("");
-                $('.penOther').addClass('d-none');
+                $('.penOther').removeClass('d-none');
+                $('.expand4').removeClass('d-none');
+                $("#btnRemove7").addClass("d-none");
+                $(".btnRemove7").removeClass("d-none");
             }
 
             if (resAuth == ".pdf") {
@@ -1548,14 +1573,20 @@
                 $('.AuthLicensePdf').removeClass('d-none');
                 $("#AuthorisedDistributorImage").val("");
                 $("#img-authorise").attr('src', '');
-                $('.penAuth').addClass('d-none');
+                $('.penAuth').removeClass('d-none');
+                $('.expand5').removeClass('d-none');
+                $("#btnRemove8").addClass("d-none");
+                $(".btnRemove8").removeClass("d-none");
             } else {
                 $("#AuthLicenseImage").prop("checked", true);
                 $('.auth-pdf').addClass('d-none');
                 $('.AuthLicenseImg').removeClass('d-none');
                 $('.AuthLicensePdf').addClass('d-none');
                 $("#AuthorisedDistributorPdf").val("");
-                $('.penAuth').addClass('d-none');
+                $('.penAuth').removeClass('d-none');
+                $('.expand5').removeClass('d-none');
+                $("#btnRemove8").addClass("d-none");
+                $(".btnRemove8").removeClass("d-none");
             }
 
             if (resGstin == ".pdf") {
@@ -1565,14 +1596,20 @@
                 $('.GstinLicensePdf').removeClass('d-none');
                 $("#GSTINImage").val("");
                 $("#img-gstin").attr('src', '');
-                $('.penGstn').addClass('d-none');
+                $('.penGstin').removeClass('d-none');
+                $('.expand6').removeClass('d-none');
+                $("#btnRemove9").addClass("d-none");
+                $(".btnRemove9").removeClass("d-none");
             } else {
                 $("#GstinLicenseImage").prop("checked", true);
                 $('.gstin-pdf').addClass('d-none');
                 $('.GstinLicenseImg').removeClass('d-none');
                 $('.GstinLicensePdf').addClass('d-none');
                 $("#GSTINPdf").val("");
-                $('.penGstn').addClass('d-none');
+                $('.penGstin').removeClass('d-none');
+                $('.expand6').removeClass('d-none');
+                $("#btnRemove9").addClass("d-none");
+                $(".btnRemove9").removeClass("d-none");
             }
 
             if (resPan == ".pdf") {
@@ -1582,14 +1619,20 @@
                 $('.PanLicensePdf').removeClass('d-none');
                 $("#PanImage").val("");
                 $("#img-pan").attr('src', '');
-                $('.penPan').addClass('d-none');
+                $('.penPan').removeClass('d-none');
+                $('.expand7').removeClass('d-none');
+                $("#btnRemove10").addClass("d-none");
+                $(".btnRemove10").removeClass("d-none");
             } else {
                 $("#PanLicenseImage").prop("checked", true);
                 $('.pan-pdf').addClass('d-none');
                 $('.PanLicenseImg').removeClass('d-none');
                 $('.PanLicensePdf').addClass('d-none');
                 $("#PanPdf").val("");
-                $('.penPan').addClass('d-none');
+                $('.penPan').removeClass('d-none');
+                $('.expand7').removeClass('d-none');
+                $("#btnRemove10").addClass("d-none");
+                $(".btnRemove10").removeClass("d-none");
             }
 
             if (resAccount == ".pdf") {
@@ -1598,12 +1641,37 @@
                 $('.AccountDocumentPdf').removeClass('d-none');
                 $("#AccountImage").val("");
                 $("#img-account").attr('src', '');
+                $('.penAccount').removeClass('d-none');
+                $('.expand8').removeClass('d-none');
+                $("#btnRemove11").addClass("d-none");
+                $(".btnRemove11").removeClass("d-none");
             } else {
                 $("#AccountDocumentImage").prop("checked", true);
                 $('.AccountDocumentImg').removeClass('d-none');
                 $('.AccountDocumentPdf').addClass('d-none');
                 $("#AccountPdf").val("");
+                $('.penAccount').removeClass('d-none');
+                $('.expand8').removeClass('d-none');
+                $("#btnRemove11").addClass("d-none");
+                $(".btnRemove11").removeClass("d-none");
             }
+
+            $('input:radio[name="AadharDocument"]').change(function () {
+                if (this.checked && this.value == 'Image') {
+                    $('.AadharDocumentImg').removeClass('d-none');
+                    $('.AadharDocumentPdf').addClass('d-none');
+                    $("#AadharPdf").val("");
+                    $("#btnRemove3").addClass("d-none");
+                    $(".btnRemove3").addClass("d-none");
+                } else {
+                    $('.AadharDocumentImg').addClass('d-none');
+                    $('.AadharDocumentPdf').removeClass('d-none');
+                    $("#AadharImage").val("");
+                    $("#img-aadhar").attr('src', '');
+                    $("#btnRemove3").addClass("d-none");
+                    $(".btnRemove3").addClass("d-none");
+                }
+            });
 
             $('input:radio[name="FssaiLicense"]').change(function () {
                 if (this.checked && this.value == 'Image') {
@@ -1611,12 +1679,18 @@
                     $('.FssaiPdf').addClass('d-none');
                     $("#FSSAIPdf").val("");
                     $('.penFssi').addClass('d-none');
+                    $('.expand1').addClass('d-none');
+                    $("#btnRemove4").addClass("d-none");
+                    $(".btnRemove4").addClass("d-none");
                 } else {
                     $('.FssaiImg').addClass('d-none');
                     $('.FssaiPdf').removeClass('d-none');
                     $("#FSSAIImage").val("");
                     $("#img-fssai").attr('src', '');
                     $('.penFssi').addClass('d-none');
+                    $('.expand1').addClass('d-none');
+                    $("#btnRemove4").addClass("d-none");
+                    $(".btnRemove4").addClass("d-none");
                 }
             });
 
@@ -1626,12 +1700,18 @@
                     $('.DrugPdf').addClass('d-none');
                     $("#DrugPdf").val("");
                     $('.penDrug').addClass('d-none');
+                    $('.expand2').addClass('d-none');
+                    $("#btnRemove5").addClass("d-none");
+                    $(".btnRemove5").addClass("d-none");
                 } else {
                     $('.DrugImg').addClass('d-none');
                     $('.DrugPdf').removeClass('d-none');
                     $("#DrugImage").val("");
                     $("#img-drug").attr('src', '');
                     $('.penDrug').addClass('d-none');
+                    $('.expand2').addClass('d-none');
+                    $("#btnRemove5").addClass("d-none");
+                    $(".btnRemove5").addClass("d-none");
                 }
             });
 
@@ -1641,12 +1721,18 @@
                     $('.EstPdf').addClass('d-none');
                     $("#EstablishPdf").val("");
                     $('.penEsta').addClass('d-none');
+                    $('.expand3').addClass('d-none');
+                    $("#btnRemove6").addClass("d-none");
+                    $(".btnRemove6").addClass("d-none");
                 } else {
                     $('.EstImg').addClass('d-none');
                     $('.EstPdf').removeClass('d-none');
                     $("#EstablishImage").val("");
                     $("#img-establish").attr('src', '');
                     $('.penEsta').addClass('d-none');
+                    $('.expand3').addClass('d-none');
+                    $("#btnRemove6").addClass("d-none");
+                    $(".btnRemove6").addClass("d-none");
                 }
             });
 
@@ -1656,12 +1742,18 @@
                     $('.OtherPdf').addClass('d-none');
                     $("#OtherLicensePdf").val("");
                     $('.penOther').addClass('d-none');
+                    $('.expand4').addClass('d-none');
+                    $("#btnRemove7").addClass("d-none");
+                    $(".btnRemove7").addClass("d-none");
                 } else {
                     $('.OtherImg').addClass('d-none');
                     $('.OtherPdf').removeClass('d-none');
                     $("#OtherLicenseImage").val("");
                     $("#img-other").attr('src', '');
                     $('.penOther').addClass('d-none');
+                    $('.expand4').addClass('d-none');
+                    $("#btnRemove7").addClass("d-none");
+                    $(".btnRemove7").addClass("d-none");
                 }
             });
 
@@ -1671,12 +1763,18 @@
                     $('.AuthLicensePdf').addClass('d-none');
                     $("#AuthorisedDistributorPdf").val("");
                     $('.penAuth').addClass('d-none');
+                    $('.expand5').addClass('d-none');
+                    $("#btnRemove8").addClass("d-none");
+                    $(".btnRemove8").addClass("d-none");
                 } else {
                     $('.AuthLicenseImg').addClass('d-none');
                     $('.AuthLicensePdf').removeClass('d-none');
                     $("#AuthorisedDistributorImage").val("");
                     $("#img-authorise").attr('src', '');
                     $('.penAuth').addClass('d-none');
+                    $('.expand5').addClass('d-none');
+                    $("#btnRemove8").addClass("d-none");
+                    $(".btnRemove8").addClass("d-none");
                 }
             });
 
@@ -1685,13 +1783,19 @@
                     $('.GstinLicenseImg').removeClass('d-none');
                     $('.GstinLicensePdf').addClass('d-none');
                     $("#GSTINPdf").val("");
-                    $('.penGstn').addClass('d-none');
+                    $('.penGstin').addClass('d-none');
+                    $('.expand6').addClass('d-none');
+                    $("#btnRemove9").addClass("d-none");
+                    $(".btnRemove9").addClass("d-none");
                 } else {
                     $('.GstinLicenseImg').addClass('d-none');
                     $('.GstinLicensePdf').removeClass('d-none');
                     $("#GSTINImage").val("");
                     $("#img-gstin").attr('src', '');
-                    $('.penGstn').addClass('d-none');
+                    $('.penGstin').addClass('d-none');
+                    $('.expand6').addClass('d-none');
+                    $("#btnRemove9").addClass("d-none");
+                    $(".btnRemove9").addClass("d-none");
                 }
             });
 
@@ -1701,25 +1805,18 @@
                     $('.PanLicensePdf').addClass('d-none');
                     $("#PanPdf").val("");
                     $('.penPan').addClass('d-none');
+                    $('.expand7').addClass('d-none');
+                    $("#btnRemove10").addClass("d-none");
+                    $(".btnRemove10").addClass("d-none");
                 } else {
                     $('.PanLicenseImg').addClass('d-none');
                     $('.PanLicensePdf').removeClass('d-none');
                     $("#PanImage").val("");
                     $("#img-pan").attr('src', '');
                     $('.penPan').addClass('d-none');
-                }
-            });
-
-            $('input:radio[name="AadharDocument"]').change(function () {
-                if (this.checked && this.value == 'Image') {
-                    $('.AadharDocumentImg').removeClass('d-none');
-                    $('.AadharDocumentPdf').addClass('d-none');
-                    $("#AadharPdf").val("");
-                } else {
-                    $('.AadharDocumentImg').addClass('d-none');
-                    $('.AadharDocumentPdf').removeClass('d-none');
-                    $("#AadharImage").val("");
-                    $("#img-aadhar").attr('src', '');
+                    $('.expand7').addClass('d-none');
+                    $("#btnRemove10").addClass("d-none");
+                    $(".btnRemove10").addClass("d-none");
                 }
             });
 
@@ -1728,11 +1825,19 @@
                     $('.AccountDocumentImg').removeClass('d-none');
                     $('.AccountDocumentPdf').addClass('d-none');
                     $("#AccountPdf").val("");
+                    $('.penAccount').addClass('d-none');
+                    $('.expand8').addClass('d-none');
+                    $("#btnRemove11").addClass("d-none");
+                    $(".btnRemove11").addClass("d-none");
                 } else {
                     $('.AccountDocumentImg').addClass('d-none');
                     $('.AccountDocumentPdf').removeClass('d-none');
                     $("#AccountImage").val("");
                     $("#img-account").attr('src', '');
+                    $('.penAccount').addClass('d-none');
+                    $('.expand8').addClass('d-none');
+                    $("#btnRemove11").addClass("d-none");
+                    $(".btnRemove11").addClass("d-none");
                 }
             });
 
@@ -2123,6 +2228,18 @@
                 $("#AadharImage").val('');
                 $(this).addClass("d-none");
             });
+            $("#AadharPdf").change(function () {
+                $("#btnRemove3").removeClass("d-none");
+                $(".btnRemove3").addClass("d-none");
+            });
+            $("#btnRemove3").on('click', function () {
+                $("#AadharPdf").val("");
+                $(this).addClass("d-none");
+            });
+            $(".btnRemove3").on('click', function () {
+                $("#AadharPdf").val("");
+                $(this).addClass("d-none");
+            });
 
             function readFssaiURL(input) {
                 if (input.files && input.files[0]) {
@@ -2136,16 +2253,40 @@
             $("#FSSAIImage").change(function () {
                 readFssaiURL(this);
                 $("#btnRemove4").removeClass("d-none");
+                $('.penFssi').removeClass('d-none');
+                $('.expand1').removeClass('d-none');
                 $(".btnRemove4").addClass("d-none");
             });
             $("#btnRemove4").on('click', function () {
                 $('#img-fssai').attr('src', '');
                 $("#FSSAIImage").val('');
+                $('.penFssi').addClass('d-none');
+                $('.expand1').addClass('d-none');
                 $(this).addClass("d-none");
             });
             $(".btnRemove4").on('click', function () {
                 $('#img-fssai').attr('src', '');
                 $("#FSSAIImage").val('');
+                $('.penFssi').addClass('d-none');
+                $('.expand1').addClass('d-none');
+                $(this).addClass("d-none");
+            });
+            $("#FSSAIPdf").change(function () {
+                $("#btnRemove4").removeClass("d-none");
+                $('.penFssi').removeClass('d-none');
+                $('.expand1').removeClass('d-none');
+                $(".btnRemove4").addClass("d-none");
+            });
+            $("#btnRemove4").on('click', function () {
+                $("#FSSAIPdf").val("");
+                $('.penFssi').addClass('d-none');
+                $('.expand1').addClass('d-none');
+                $(this).addClass("d-none");
+            });
+            $(".btnRemove4").on('click', function () {
+                $("#FSSAIPdf").val("");
+                $('.penFssi').addClass('d-none');
+                $('.expand1').addClass('d-none');
                 $(this).addClass("d-none");
             });
 
@@ -2162,15 +2303,39 @@
                 readDrugURL(this);
                 $("#btnRemove5").removeClass("d-none");
                 $(".btnRemove5").addClass("d-none");
+                $('.penDrug').removeClass('d-none');
+                $('.expand2').removeClass('d-none');
             });
             $("#btnRemove5").on('click', function () {
                 $('#img-drug').attr('src', '');
                 $("#DrugImage").val('');
+                $('.penDrug').addClass('d-none');
+                $('.expand2').addClass('d-none');
                 $(this).addClass("d-none");
             });
             $(".btnRemove5").on('click', function () {
                 $('#img-drug').attr('src', '');
                 $("#DrugImage").val('');
+                $('.penDrug').addClass('d-none');
+                $('.expand2').addClass('d-none');
+                $(this).addClass("d-none");
+            });
+            $("#DrugPdf").change(function () {
+                $("#btnRemove5").removeClass("d-none");
+                $('.penDrug').removeClass('d-none');
+                $('.expand2').removeClass('d-none');
+                $(".btnRemove5").addClass("d-none");
+            });
+            $("#btnRemove5").on('click', function () {
+                $("#DrugPdf").val("");
+                $('.penDrug').addClass('d-none');
+                $('.expand2').addClass('d-none');
+                $(this).addClass("d-none");
+            });
+            $(".btnRemove5").on('click', function () {
+                $("#DrugPdf").val("");
+                $('.penDrug').addClass('d-none');
+                $('.expand2').addClass('d-none');
                 $(this).addClass("d-none");
             });
 
@@ -2187,15 +2352,39 @@
                 readEstablishURL(this);
                 $("#btnRemove6").removeClass("d-none");
                 $(".btnRemove6").addClass("d-none");
+                $('.penEsta').removeClass('d-none');
+                $('.expand3').removeClass('d-none');
             });
             $("#btnRemove6").on('click', function () {
                 $('#img-establish').attr('src', '');
                 $("#EstablishImage").val('');
+                $('.penEsta').addClass('d-none');
+                $('.expand3').addClass('d-none');
                 $(this).addClass("d-none");
             });
             $(".btnRemove6").on('click', function () {
                 $('#img-establish').attr('src', '');
                 $("#EstablishImage").val('');
+                $('.penEsta').addClass('d-none');
+                $('.expand3').addClass('d-none');
+                $(this).addClass("d-none");
+            });
+            $("#EstablishPdf").change(function () {
+                $("#btnRemove6").removeClass("d-none");
+                $('.penEsta').removeClass('d-none');
+                $('.expand3').removeClass('d-none');
+                $(".btnRemove6").addClass("d-none");
+            });
+            $("#btnRemove6").on('click', function () {
+                $("#EstablishPdf").val("");
+                $('.penEsta').addClass('d-none');
+                $('.expand3').addClass('d-none');
+                $(this).addClass("d-none");
+            });
+            $(".btnRemove6").on('click', function () {
+                $("#EstablishPdf").val("");
+                $('.penEsta').addClass('d-none');
+                $('.expand3').addClass('d-none');
                 $(this).addClass("d-none");
             });
 
@@ -2212,15 +2401,39 @@
                 readOtherLicenseURL(this);
                 $("#btnRemove7").removeClass("d-none");
                 $(".btnRemove7").addClass("d-none");
+                $('.penOther').removeClass('d-none');
+                $('.expand4').removeClass('d-none');
             });
             $("#btnRemove7").on('click', function () {
                 $('#img-other').attr('src', '');
                 $("#OtherLicenseImage").val('');
+                $('.penOther').addClass('d-none');
+                $('.expand4').addClass('d-none');
                 $(this).addClass("d-none");
             });
             $(".btnRemove7").on('click', function () {
                 $('#img-other').attr('src', '');
                 $("#OtherLicenseImage").val('');
+                $('.penOther').addClass('d-none');
+                $('.expand4').addClass('d-none');
+                $(this).addClass("d-none");
+            });
+            $("#OtherLicensePdf").change(function () {
+                $("#btnRemove7").removeClass("d-none");
+                $('.penOther').removeClass('d-none');
+                $('.expand4').removeClass('d-none');
+                $(".btnRemove7").addClass("d-none");
+            });
+            $("#btnRemove7").on('click', function () {
+                $("#OtherLicensePdf").val("");
+                $('.penOther').addClass('d-none');
+                $('.expand4').addClass('d-none');
+                $(this).addClass("d-none");
+            });
+            $(".btnRemove7").on('click', function () {
+                $("#OtherLicensePdf").val("");
+                $('.penOther').addClass('d-none');
+                $('.expand4').addClass('d-none');
                 $(this).addClass("d-none");
             });
 
@@ -2233,26 +2446,45 @@
                     reader.readAsDataURL(input.files[0]);
                 }
             }
-
             $("#AuthorisedDistributorImage").change(function () {
                 readAuthoriseURL(this);
+                $("#btnRemove8").removeClass("d-none");
+                $(".btnRemove8").addClass("d-none");
+                $('.penAuth').removeClass('d-none');
+                $('.expand5').removeClass('d-none');
             });
-
-            //$("#AuthorisedDistributorImage").change(function () {
-            //    readAuthoriseURL(this);
-            //    $("#btnRemove8").removeClass("d-none");
-            //    $(".btnRemove8").addClass("d-none");
-            //});
-            //$("#btnRemove8").on('click', function () {
-            //    $('#img-authorise').attr('src', '');
-            //    $("#AuthorisedDistributorImage").val('');
-            //    $(this).addClass("d-none");
-            //});
-            //$(".btnRemove8").on('click', function () {
-            //    $('#img-authorise').attr('src', '');
-            //    $("#AuthorisedDistributorImage").val('');
-            //    $(this).addClass("d-none");
-            //});
+            $("#btnRemove8").on('click', function () {
+                $('#img-authorise').attr('src', '');
+                $("#AuthorisedDistributorImage").val('');
+                $('.penAuth').addClass('d-none');
+                $('.expand5').addClass('d-none');
+                $(this).addClass("d-none");
+            });
+            $(".btnRemove8").on('click', function () {
+                $('#img-authorise').attr('src', '');
+                $("#AuthorisedDistributorImage").val('');
+                $('.penAuth').addClass('d-none');
+                $('.expand5').addClass('d-none');
+                $(this).addClass("d-none");
+            });
+            $("#OtherLicensePdf").change(function () {
+                $("#btnRemove8").removeClass("d-none");
+                $('.penAuth').removeClass('d-none');
+                $('.expand5').removeClass('d-none');
+                $(".btnRemove8").addClass("d-none");
+            });
+            $("#btnRemove8").on('click', function () {
+                $("#OtherLicensePdf").val("");
+                $('.penAuth').addClass('d-none');
+                $('.expand5').addClass('d-none');
+                $(this).addClass("d-none");
+            });
+            $(".btnRemove8").on('click', function () {
+                $("#OtherLicensePdf").val("");
+                $('.penAuth').addClass('d-none');
+                $('.expand5').addClass('d-none');
+                $(this).addClass("d-none");
+            });
 
             function readURLGstin(input) {
                 if (input.files && input.files[0]) {
@@ -2267,15 +2499,39 @@
                 readURLGstin(this);
                 $("#btnRemove9").removeClass("d-none");
                 $(".btnRemove9").addClass("d-none");
+                $('.penGstin').removeClass('d-none');
+                $('.expand6').removeClass('d-none');
             });
             $("#btnRemove9").on('click', function () {
                 $('#img-gstin').attr('src', '');
                 $("#GSTINImage").val('');
+                $('.penGstin').addClass('d-none');
+                $('.expand6').addClass('d-none');
                 $(this).addClass("d-none");
             });
             $(".btnRemove9").on('click', function () {
                 $('#img-gstin').attr('src', '');
                 $("#GSTINImage").val('');
+                $('.penGstin').addClass('d-none');
+                $('.expand6').addClass('d-none');
+                $(this).addClass("d-none");
+            });
+            $("#GSTINPdf").change(function () {
+                $("#btnRemove9").removeClass("d-none");
+                $('.penGstin').removeClass('d-none');
+                $('.expand6').removeClass('d-none');
+                $(".btnRemove9").addClass("d-none");
+            });
+            $("#btnRemove9").on('click', function () {
+                $("#GSTINPdf").val("");
+                $('.penGstin').addClass('d-none');
+                $('.expand6').addClass('d-none');
+                $(this).addClass("d-none");
+            });
+            $(".btnRemove9").on('click', function () {
+                $("#GSTINPdf").val("");
+                $('.penGstin').addClass('d-none');
+                $('.expand6').addClass('d-none');
                 $(this).addClass("d-none");
             });
 
@@ -2292,15 +2548,39 @@
                 readURLPan(this);
                 $("#btnRemove10").removeClass("d-none");
                 $(".btnRemove10").addClass("d-none");
+                $('.penPan').removeClass('d-none');
+                $('.expand7').removeClass('d-none');
             });
             $("#btnRemove10").on('click', function () {
                 $('#img-pan').attr('src', '');
                 $("#PanImage").val('');
+                $('.penPan').removeClass('d-none');
+                $('.expand7').removeClass('d-none');
                 $(this).addClass("d-none");
             });
             $(".btnRemove10").on('click', function () {
                 $('#img-pan').attr('src', '');
                 $("#PanImage").val('');
+                $('.penPan').removeClass('d-none');
+                $('.expand7').removeClass('d-none');
+                $(this).addClass("d-none");
+            });
+            $("#PanPdf").change(function () {
+                $("#btnRemove10").removeClass("d-none");
+                $('.penPan').removeClass('d-none');
+                $('.expand7').removeClass('d-none');
+                $(".btnRemove10").addClass("d-none");
+            });
+            $("#btnRemove10").on('click', function () {
+                $("#PanPdf").val("");
+                $('.penPan').addClass('d-none');
+                $('.expand7').addClass('d-none');
+                $(this).addClass("d-none");
+            });
+            $(".btnRemove10").on('click', function () {
+                $("#PanPdf").val("");
+                $('.penPan').addClass('d-none');
+                $('.expand7').addClass('d-none');
                 $(this).addClass("d-none");
             });
 
@@ -2317,15 +2597,39 @@
                 readURLAccount(this);
                 $("#btnRemove11").removeClass("d-none");
                 $(".btnRemove11").addClass("d-none");
+                $('.penAccount').removeClass('d-none');
+                $('.expand8').removeClass('d-none');
             });
             $("#btnRemove11").on('click', function () {
                 $('#img-account').attr('src', '');
                 $("#AccountImage").val('');
+                $('.penAccount').addClass('d-none');
+                $('.expand8').addClass('d-none');
                 $(this).addClass("d-none");
             });
             $(".btnRemove11").on('click', function () {
                 $('#img-account').attr('src', '');
                 $("#AccountImage").val('');
+                $('.penAccount').addClass('d-none');
+                $('.expand8').addClass('d-none');
+                $(this).addClass("d-none");
+            });
+            $("#AccountPdf").change(function () {
+                $("#btnRemove11").removeClass("d-none");
+                $('.penAccount').removeClass('d-none');
+                $('.expand8').removeClass('d-none');
+                $(".btnRemove11").addClass("d-none");
+            });
+            $("#btnRemove11").on('click', function () {
+                $("#AccountPdf").val("");
+                $('.penAccount').addClass('d-none');
+                $('.expand8').addClass('d-none');
+                $(this).addClass("d-none");
+            });
+            $(".btnRemove11").on('click', function () {
+                $("#AccountPdf").val("");
+                $('.penAccount').addClass('d-none');
+                $('.expand8').addClass('d-none');
                 $(this).addClass("d-none");
             });
 
@@ -2339,7 +2643,7 @@
                 }
             }
             $("#BannerImage").change(function () {
-                readURLBanner(this);          
+                readURLBanner(this);
             });
 
             function readURLLicence(input) {
