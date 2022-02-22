@@ -1668,7 +1668,7 @@ namespace ShopNow.Controllers
         {
             db.Configuration.ProxyCreationEnabled = false;
             var model = new GetAllOrderListViewModel();
-            model.OrderLists = db.Orders.Where(i => i.ShopId == shopId && i.Status == status)
+            model.OrderLists = db.Orders.Where(i => i.ShopId == shopId && i.IsPickupDrop == false && i.Status == status)
                  .Join(db.Payments, o => o.OrderNumber, p => p.OrderNumber, (o, p) => new { o, p })
                  .GroupJoin(db.OrderItems, o => o.o.Id, oi => oi.OrderId, (o, oi) => new { o, oi })
                  .Select(i => new GetAllOrderListViewModel.OrderList
@@ -2327,7 +2327,7 @@ namespace ShopNow.Controllers
         public JsonResult GetShopReAssignOrders(int shopId, int page = 1, int pageSize = 5)
         {
             var model = new CartAcceptListApiViewModel();
-            model.List = db.Orders.Where(j => j.Status == 3 && j.ShopId == shopId)
+            model.List = db.Orders.Where(j => j.Status == 3 && j.ShopId == shopId && j.IsPickupDrop == false)
                  .GroupJoin(db.OrderItems, o => o.Id, oi => oi.OrderId, (o, oi) => new { o, oi })
                 .Join(db.Payments.Where(i => i.PaymentResult == "success" || i.PaymentMode == "Cash On Hand"), c => c.o.OrderNumber, p => p.OrderNumber, (c, p) => new { c, p })
                 .Join(db.Shops, py => py.c.o.ShopId, s => s.Id, (py, s) => new { py, s })
@@ -2391,7 +2391,7 @@ namespace ShopNow.Controllers
 
             //if (mode == 0)
             //{
-            model.OrderLists = db.Orders.Where(i => i.ShopId == shopId && (mode == 0 ? i.Status == 2 : (i.Status == 3 || i.Status == 4 || i.Status == 8)))
+            model.OrderLists = db.Orders.Where(i => i.ShopId == shopId && i.IsPickupDrop == false && (mode == 0 ? i.Status == 2 : (i.Status == 3 || i.Status == 4 || i.Status == 8)))
              .Join(db.Payments, o => o.OrderNumber, p => p.OrderNumber, (o, p) => new { o, p })
              .GroupJoin(db.OrderItems, o => o.o.Id, oi => oi.OrderId, (o, oi) => new { o, oi })
              .Select(i => new GetAllOrderListViewModel.OrderList
@@ -2559,7 +2559,7 @@ namespace ShopNow.Controllers
             db.Configuration.ProxyCreationEnabled = false;
 
             var model = new GetAllOrderListViewModel();
-            model.OrderLists = db.Orders.Where(i => i.ShopId == shopId && (i.Status == 3 || i.Status == 4 || i.Status == 5 || i.Status == 8))
+            model.OrderLists = db.Orders.Where(i => i.ShopId == shopId && i.IsPickupDrop == false && (i.Status == 3 || i.Status == 4 || i.Status == 5 || i.Status == 8))
                  .Join(db.Payments, o => o.OrderNumber, p => p.OrderNumber, (o, p) => new { o, p })
                  //.Join(db.DeliveryBoys, o => o.o.DeliveryBoyId, d => d.Id, (o, d) => new { o, d })
                  .GroupJoin(db.OrderItems, o => o.o.Id, oi => oi.OrderId, (o, oi) => new { o, oi })
@@ -7085,13 +7085,14 @@ namespace ShopNow.Controllers
             model.ListItems = db.Orders.Where(i => shop.Contains(i.ShopId) && i.IsPickupDrop == true)
                 .Select(i => new ShopParcelDropListViewModel.ListItem
                 {
+                    ShopName = i.ShopName,
                     Amount = i.TotalPrice,
                     DateEncoded = i.DateEncoded,
                     DeliveryAddress = i.DeliveryAddress,
                     DeliveryCharge = i.DeliveryCharge,
                     Distance = i.Distance + "Kms",
-                    Name = i.CustomerName,
-                    PhoneNumber = i.CustomerPhoneNumber,
+                    CustomerName = i.CustomerName,
+                    CustomerPhoneNumber = i.CustomerPhoneNumber,
                     PickupAddress = i.PickupAddress,
                     Remarks = i.Remarks,
                     Status = i.Status,
