@@ -5679,22 +5679,10 @@ namespace ShopNow.Controllers
 
         public JsonResult GetCustomerPaymentMode(int customerId)//If Customer Cancel the order(not pick up the phone on delivery) next 5 orders should be Online Mode
         {
-            //var lastCancelledOrder = db.Orders.AsEnumerable().LastOrDefault(i => i.CustomerId == customerId && (i.Status == 9 || i.Status == 10));
-            //if (lastCancelledOrder != null)
-            //{
-            //    int orderCountAfterLC = db.Orders.Where(i => i.CustomerId == customerId && i.Status == 6 && (i.DateEncoded > lastCancelledOrder.DateEncoded)).Count();
-            //    if (orderCountAfterLC < 5)
-            //        return Json(new { isOnlinePayment = false }, JsonRequestBehavior.AllowGet);
-            //    else
-            //        return Json(new { isOnlinePayment = true }, JsonRequestBehavior.AllowGet);
-            //}
-            //return Json(new { isOnlinePayment = true }, JsonRequestBehavior.AllowGet);
-
-
-            var customerOrders = db.Orders.Where(i => i.CustomerId == customerId && (i.Status == 9 || i.Status == 10 || i.Status==6)).ToList();
-            if (customerOrders.Where(i=>i.Status == 9 || i.Status == 10).Count() > 0)
+            var customerOrders = db.Orders.Where(i => i.CustomerId == customerId && (/*i.Status == 9 ||*/ i.Status == 10 || i.Status==6)).ToList();
+            if (customerOrders.Where(i=>/*i.Status == 9 ||*/ i.Status == 10).Count() > 0)
             {
-                DateTime lastOrderCancelledDate = customerOrders.Where(i => i.Status == 9 || i.Status == 10).OrderByDescending(i => i.Id).FirstOrDefault().DateEncoded;
+                DateTime lastOrderCancelledDate = customerOrders.Where(i => /*i.Status == 9 ||*/ i.Status == 10).OrderByDescending(i => i.Id).FirstOrDefault().DateEncoded;
                 int orderCountAfterLC = customerOrders.Where(i => i.CustomerId == customerId && i.Status == 6 && (i.DateEncoded > lastOrderCancelledDate)).Count();
                 if (orderCountAfterLC < 5)
                     return Json(new { isOnlinePayment = false }, JsonRequestBehavior.AllowGet);

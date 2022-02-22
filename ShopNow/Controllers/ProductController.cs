@@ -1071,6 +1071,7 @@ namespace ShopNow.Controllers
                     SellingPrice = i.p.Price,
                     ItemId = i.p.ItemId
                 }).ToList();
+            model.TotalCount = model.ListItems.Count();
             return View(model);
         }
 
