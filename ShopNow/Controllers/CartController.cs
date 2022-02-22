@@ -617,6 +617,7 @@ namespace ShopNow.Controllers
             ViewBag.Name = user.Name;
             var dInt = AdminHelpers.DCodeLong(id);
             var cart = db.Orders.FirstOrDefault(i => i.Id == dInt);
+            var payment = db.Payments.FirstOrDefault(i => OrderNumber == cart.OrderNumber);
             var model = new CartListViewModel();
             if (cart != null)
             {
@@ -635,8 +636,8 @@ namespace ShopNow.Controllers
                 model.DateEncoded = cart.DateEncoded;
                 model.PenaltyAmount = cart.PenaltyAmount;
                 model.WaitingCharge = cart.WaitingCharge;
-                model.TotalPrice = cart.TotalPrice;
-                model.NetTotal = cart.NetTotal;
+                model.TotalPrice = cart.TotalPrice - (payment.RefundAmount??0);
+                model.NetTotal = cart.NetTotal - (payment.RefundAmount ?? 0);
                 model.PaymentMode = cart.PaymentMode;
                 model.PrescriptionImagePath = cart.PrescriptionImagePath;
                 model.IsPickupDrop = cart.IsPickupDrop;
