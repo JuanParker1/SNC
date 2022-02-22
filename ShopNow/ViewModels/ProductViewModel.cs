@@ -726,6 +726,17 @@ namespace ShopNow.ViewModels
             public double SellingPrice { get; set; }
             public int Quantity { get; set; }
             public int ItemId { get; set; }
+            public bool IsMapped { get; set; }
+            public string MappedText
+            {
+                get
+                {
+                    if (this.IsMapped)
+                        return "Mapped";
+                    else
+                        return "UnMapped";
+                }
+            }
         }
     }
 }

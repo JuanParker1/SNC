@@ -1069,7 +1069,8 @@ namespace ShopNow.Controllers
                     Name = i.m.Any() ? i.m.FirstOrDefault().Name: i.p.Name,
                     Quantity = i.p.Qty,
                     SellingPrice = i.p.Price,
-                    ItemId = i.p.ItemId
+                    ItemId = i.p.ItemId,
+                    IsMapped = i.m.Any()
                 }).ToList();
             model.TotalCount = model.ListItems.Count();
             return View(model);
