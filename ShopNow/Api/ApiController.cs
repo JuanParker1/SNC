@@ -1668,7 +1668,7 @@ namespace ShopNow.Controllers
         {
             db.Configuration.ProxyCreationEnabled = false;
             var model = new GetAllOrderListViewModel();
-            model.OrderLists = db.Orders.Where(i => i.ShopId == shopId && i.Status == status)
+            model.OrderLists = db.Orders.Where(i => i.ShopId == shopId && i.IsPickupDrop == false && i.Status == status)
                  .Join(db.Payments, o => o.OrderNumber, p => p.OrderNumber, (o, p) => new { o, p })
                  .GroupJoin(db.OrderItems, o => o.o.Id, oi => oi.OrderId, (o, oi) => new { o, oi })
                  .Select(i => new GetAllOrderListViewModel.OrderList
@@ -2327,7 +2327,7 @@ namespace ShopNow.Controllers
         public JsonResult GetShopReAssignOrders(int shopId, int page = 1, int pageSize = 5)
         {
             var model = new CartAcceptListApiViewModel();
-            model.List = db.Orders.Where(j => j.Status == 3 && j.ShopId == shopId)
+            model.List = db.Orders.Where(j => j.Status == 3 && j.ShopId == shopId && j.IsPickupDrop == false)
                  .GroupJoin(db.OrderItems, o => o.Id, oi => oi.OrderId, (o, oi) => new { o, oi })
                 .Join(db.Payments.Where(i => i.PaymentResult == "success" || i.PaymentMode == "Cash On Hand"), c => c.o.OrderNumber, p => p.OrderNumber, (c, p) => new { c, p })
                 .Join(db.Shops, py => py.c.o.ShopId, s => s.Id, (py, s) => new { py, s })
@@ -2391,7 +2391,7 @@ namespace ShopNow.Controllers
 
             //if (mode == 0)
             //{
-            model.OrderLists = db.Orders.Where(i => i.ShopId == shopId && (mode == 0 ? i.Status == 2 : (i.Status == 3 || i.Status == 4 || i.Status == 8)))
+            model.OrderLists = db.Orders.Where(i => i.ShopId == shopId && i.IsPickupDrop == false && (mode == 0 ? i.Status == 2 : (i.Status == 3 || i.Status == 4 || i.Status == 8)))
              .Join(db.Payments, o => o.OrderNumber, p => p.OrderNumber, (o, p) => new { o, p })
              .GroupJoin(db.OrderItems, o => o.o.Id, oi => oi.OrderId, (o, oi) => new { o, oi })
              .Select(i => new GetAllOrderListViewModel.OrderList
@@ -2559,7 +2559,7 @@ namespace ShopNow.Controllers
             db.Configuration.ProxyCreationEnabled = false;
 
             var model = new GetAllOrderListViewModel();
-            model.OrderLists = db.Orders.Where(i => i.ShopId == shopId && (i.Status == 3 || i.Status == 4 || i.Status == 5 || i.Status == 8))
+            model.OrderLists = db.Orders.Where(i => i.ShopId == shopId && i.IsPickupDrop == false && (i.Status == 3 || i.Status == 4 || i.Status == 5 || i.Status == 8))
                  .Join(db.Payments, o => o.OrderNumber, p => p.OrderNumber, (o, p) => new { o, p })
                  //.Join(db.DeliveryBoys, o => o.o.DeliveryBoyId, d => d.Id, (o, d) => new { o, d })
                  .GroupJoin(db.OrderItems, o => o.o.Id, oi => oi.OrderId, (o, oi) => new { o, oi })
@@ -5679,22 +5679,10 @@ namespace ShopNow.Controllers
 
         public JsonResult GetCustomerPaymentMode(int customerId)//If Customer Cancel the order(not pick up the phone on delivery) next 5 orders should be Online Mode
         {
-            //var lastCancelledOrder = db.Orders.AsEnumerable().LastOrDefault(i => i.CustomerId == customerId && (i.Status == 9 || i.Status == 10));
-            //if (lastCancelledOrder != null)
-            //{
-            //    int orderCountAfterLC = db.Orders.Where(i => i.CustomerId == customerId && i.Status == 6 && (i.DateEncoded > lastCancelledOrder.DateEncoded)).Count();
-            //    if (orderCountAfterLC < 5)
-            //        return Json(new { isOnlinePayment = false }, JsonRequestBehavior.AllowGet);
-            //    else
-            //        return Json(new { isOnlinePayment = true }, JsonRequestBehavior.AllowGet);
-            //}
-            //return Json(new { isOnlinePayment = true }, JsonRequestBehavior.AllowGet);
-
-
-            var customerOrders = db.Orders.Where(i => i.CustomerId == customerId && (i.Status == 9 || i.Status == 10 || i.Status==6)).ToList();
-            if (customerOrders.Where(i=>i.Status == 9 || i.Status == 10).Count() > 0)
+            var customerOrders = db.Orders.Where(i => i.CustomerId == customerId && (/*i.Status == 9 ||*/ i.Status == 10 || i.Status==6)).ToList();
+            if (customerOrders.Where(i=>/*i.Status == 9 ||*/ i.Status == 10).Count() > 0)
             {
-                DateTime lastOrderCancelledDate = customerOrders.Where(i => i.Status == 9 || i.Status == 10).OrderByDescending(i => i.Id).FirstOrDefault().DateEncoded;
+                DateTime lastOrderCancelledDate = customerOrders.Where(i => /*i.Status == 9 ||*/ i.Status == 10).OrderByDescending(i => i.Id).FirstOrDefault().DateEncoded;
                 int orderCountAfterLC = customerOrders.Where(i => i.CustomerId == customerId && i.Status == 6 && (i.DateEncoded > lastOrderCancelledDate)).Count();
                 if (orderCountAfterLC < 5)
                     return Json(new { isOnlinePayment = false }, JsonRequestBehavior.AllowGet);
@@ -7078,6 +7066,29 @@ namespace ShopNow.Controllers
             return Json(list, JsonRequestBehavior.AllowGet);
         }
 
+        public JsonResult GetShopParcelDropList(int customerid=0)
+        {
+            int[] shop = db.Shops.Where(i => i.CustomerId == customerid && i.Status == 0).Select(S => S.Id).ToArray();
+            var model = new ShopParcelDropListViewModel();
+            model.ListItems = db.Orders.Where(i => shop.Contains(i.ShopId) && i.IsPickupDrop == true)
+                .Select(i => new ShopParcelDropListViewModel.ListItem
+                {
+                    ShopName = i.ShopName,
+                    Amount = i.TotalPrice,
+                    DateEncoded = i.DateEncoded,
+                    DeliveryAddress = i.DeliveryAddress,
+                    DeliveryCharge = i.DeliveryCharge,
+                    Distance = i.Distance + "Kms",
+                    CustomerName = i.CustomerName,
+                    CustomerPhoneNumber = i.CustomerPhoneNumber,
+                    PickupAddress = i.PickupAddress,
+                    Remarks = i.Remarks,
+                    Status = i.Status,
+                    OrderNumber = i.OrderNumber
+                }).ToList();
+            return Json(model.ListItems, JsonRequestBehavior.AllowGet);
+        }
+
         //To generate UpiPaymentLink
         public async Task<JsonResult> GetUPIPaymentLink(CreateRazorPayUpiPaymentLink model)
         {
@@ -7094,7 +7105,7 @@ namespace ShopNow.Controllers
                     name = model.Name
                 },
                 description = $"CashHandOver for order no #{model.OrderNumber}",
-                expire_by = (int)DateTime.UtcNow.AddHours(1).Subtract(new DateTime(1970, 1, 1)).TotalSeconds,
+                expire_by = (int)DateTime.UtcNow.AddDays(5).Subtract(new DateTime(1970, 1, 1)).TotalSeconds,
                 reference_id = model.OrderNumber.ToString(),
                 upi_link = true,
                 notify = new RequestUpiPaymentLink.Notify
