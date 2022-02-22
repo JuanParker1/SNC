@@ -7078,6 +7078,28 @@ namespace ShopNow.Controllers
             return Json(list, JsonRequestBehavior.AllowGet);
         }
 
+        public JsonResult GetShopParcelDropList(int customerid=0)
+        {
+            int[] shop = db.Shops.Where(i => i.CustomerId == customerid && i.Status == 0).Select(S => S.Id).ToArray();
+            var model = new ShopParcelDropListViewModel();
+            model.ListItems = db.Orders.Where(i => shop.Contains(i.ShopId) && i.IsPickupDrop == true)
+                .Select(i => new ShopParcelDropListViewModel.ListItem
+                {
+                    Amount = i.TotalPrice,
+                    DateEncoded = i.DateEncoded,
+                    DeliveryAddress = i.DeliveryAddress,
+                    DeliveryCharge = i.DeliveryCharge,
+                    Distance = i.Distance + "Kms",
+                    Name = i.CustomerName,
+                    PhoneNumber = i.CustomerPhoneNumber,
+                    PickupAddress = i.PickupAddress,
+                    Remarks = i.Remarks,
+                    Status = i.Status,
+                    OrderNumber = i.OrderNumber
+                }).ToList();
+            return Json(model.ListItems, JsonRequestBehavior.AllowGet);
+        }
+
         //To generate UpiPaymentLink
         public async Task<JsonResult> GetUPIPaymentLink(CreateRazorPayUpiPaymentLink model)
         {
@@ -7094,7 +7116,7 @@ namespace ShopNow.Controllers
                     name = model.Name
                 },
                 description = $"CashHandOver for order no #{model.OrderNumber}",
-                expire_by = (int)DateTime.UtcNow.AddHours(1).Subtract(new DateTime(1970, 1, 1)).TotalSeconds,
+                expire_by = (int)DateTime.UtcNow.AddDays(5).Subtract(new DateTime(1970, 1, 1)).TotalSeconds,
                 reference_id = model.OrderNumber.ToString(),
                 upi_link = true,
                 notify = new RequestUpiPaymentLink.Notify

@@ -933,4 +933,53 @@ namespace ShopNow.ViewModels
         public string Name { get; set; }
         public string Email { get; set; }
     }
+
+    public class ShopParcelDropListViewModel
+    {
+        public List<ListItem> ListItems { get; set; }
+        public class ListItem
+        {
+            public string PickupAddress { get; set; }
+            public string DeliveryAddress { get; set; }
+            public string Name { get; set; }
+            public string PhoneNumber { get; set; }
+            public double Amount { get; set; }
+            public double DeliveryCharge { get; set; }
+            public string Distance { get; set; }
+            public string Remarks { get; set; }
+            public int Status { get; set; }
+            public DateTime DateEncoded { get; set; }
+            public int OrderNumber { get; set; }
+            public string OrderStatusText
+            {
+                get
+                {
+                    switch (this.Status)
+                    {
+                        case 2:
+                            return "Pending";
+                        case 3:
+                            return "Order is being Prepared";
+                        case 4:
+                            return "Assigned for Delivery. Waiting for Pickup";
+                        case 5:
+                            return "On the Way to Delivery";
+                        case 6:
+                            return "Delivered";
+                        case 7:
+                            return "Cancelled";
+                        case 8:
+                            return "Order Ready";
+                        case 9:
+                            return "Customer Cancelled";
+                        case 10:
+                            return "Customer Not Pickup";
+                        default:
+                            return "N/A";
+                    }
+                }
+            }
+
+        }
+    }
 }
