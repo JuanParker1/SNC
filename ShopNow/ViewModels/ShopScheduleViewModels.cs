@@ -9,6 +9,7 @@ namespace ShopNow.ViewModels
     {
         public int FilterShopId { get; set; }
         public string FilterShopName { get; set; }
+        public string FilterDistrict { get; set; }
         public List<ListItem> ListItems { get; set; }
         public class ListItem
         {

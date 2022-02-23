@@ -22,20 +22,21 @@ namespace ShopNow.Controllers
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
             model.ListItems = db.ProductSchedules.Where(i => i.Status == 0 && (model.FilterProductId != 0 ? i.ProductId == model.FilterProductId : true))
-                .Join(db.Products.Where(i=> i.Status == 0), psc => psc.ProductId, p => p.Id, (psc, p) => new { psc, p })
+                .Join(db.Products.Where(i => model.FilterShopId != 0 ? i.ShopId == model.FilterShopId : true).Where(i => i.Status == 0), psc => psc.ProductId, p => p.Id, (psc, p) => new { psc, p })
                 .Join(db.MasterProducts, psc => psc.p.MasterProductId, m => m.Id, (psc, m) => new { psc, m })
-                .GroupBy(i => i.psc.psc.ProductId)
+                .Join(db.Shops.Where(i => (!string.IsNullOrEmpty(model.FilterDistrict)) ? i.DistrictName == model.FilterDistrict : true), psc => psc.psc.p.ShopId, s => s.Id, (psc, s) => new { psc, s })
+                .GroupBy(i => i.psc.psc.psc.ProductId)
             .Select(i => new ProductScheduleIndexViewModel.ListItem
             {
-                HasSchedule = i.FirstOrDefault().psc.p.HasSchedule ?? false,
+                HasSchedule = i.FirstOrDefault().psc.psc.p.HasSchedule ?? false,
                 ProductId = i.Key,
-                ProductName = i.FirstOrDefault().m.Name + " - " + i.FirstOrDefault().psc.p.ShopName,
-                AvailableDays = i.FirstOrDefault().psc.psc.AvailableDays,
-                TimeListItems = i.Where(a => a.psc.psc.Status == 0).Select(a => new ProductScheduleIndexViewModel.ListItem.TimeListItem
+                ProductName = i.FirstOrDefault().psc.m.Name + " - " + i.FirstOrDefault().psc.psc.p.ShopName,
+                AvailableDays = i.FirstOrDefault().psc.psc.psc.AvailableDays,
+                TimeListItems = i.Where(a => a.psc.psc.psc.Status == 0).Select(a => new ProductScheduleIndexViewModel.ListItem.TimeListItem
                 {
-                    Id= a.psc.psc.Id,
-                    OffTime = a.psc.psc.OffTime,
-                    OnTime = a.psc.psc.OnTime
+                    Id = a.psc.psc.psc.Id,
+                    OffTime = a.psc.psc.psc.OffTime,
+                    OnTime = a.psc.psc.psc.OnTime
                 }).ToList()
             }).ToList();
             return View(model);
