@@ -104,8 +104,8 @@
                         @Html.AntiForgeryToken()
                         <input type="hidden" name="Id" id="Id" value="@Model.Id" />
                         <input type="hidden" name="CustomerId" id="CustomerId" value="@Model.CustomerId" />
-                        <input type="hidden" name="ImageLogoPath" value="@Model.ImageLogoPath" />
-                        <input type="hidden" name="ImagePath" value="@Model.ImagePath" />
+                        <input type="hidden" name="ImageLogoPath" id="ImageLogoPath" value="@Model.ImageLogoPath" />
+                        <input type="hidden" name="ImagePath" id="ImagePath" value="@Model.ImagePath" />
                         <input type="hidden" name="ImageAadharPath" id="ImageAadharPath" value="@Model.ImageAadharPath" />
                         <input type="hidden" name="ImageAccountPath" id="ImageAccountPath" value="@Model.ImageAccountPath" />
                         <input type="hidden" name="ImageGSTINPath" id="ImageGSTINPath" value="@Model.ImageGSTINPath" />
@@ -359,11 +359,11 @@
                                             </div>
                                             <div class="row AadharDocumentImg ml-3 mt-2">
                                                 <div class="col-md-12">
-                                                    <div class="img-upload-container">
+                                                    <div class="img-upload-container mx-auto mb-3">
                                                         @if (Model.ImageAadharPath != null)
                                                         {
                                                             <img class="img-container w-100 h-100 mb-2" id="img-aadhar" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageAadharPath" onerror="this.src='/Images/noimage.png'" />
-                                                            <input type="button" class="btn btn-danger mt-2 ml-3 btn-sm btnRemove3" value="Remove" />
+                                                            <input type="button" class="btn btn-sm btn-danger ml-4 btnRemove3" value="Remove" />
                                                         }
                                                         else
                                                         {
@@ -375,8 +375,8 @@
                                                 </div>
                                             </div>
                                             <div class="row">
-                                                <div class="col-md-12 ml-4">
-                                                    <input type="button" class="btn btn-sm btn-danger d-none" id="btnRemove3" value="Remove" />
+                                                <div class="col-md-12 ml-5">
+                                                    <input type="button" class="btn btn-sm btn-danger d-none ml-2" id="btnRemove3" value="Remove" />
                                                 </div>
                                             </div>
                                         </div>
@@ -389,7 +389,7 @@
                             <div class="card-body row">
                                 <div class="card-deck">
                                     <div class="card border-primary bg-muted">
-                                        <div class="card-body">
+                                        <div class="card-body text-center">
                                             <label class="col-md-12 text-center"><strong class="text-secondary">FSSAI License</strong></label>
                                             <label class="col-md-12 text-left"><small class="text-secondary text-left"><i>License Number</i></small></label>
                                             <input id="FSSAINumber" type="text" class="form-control col-md-12" name="FSSAINumber" value="@Model.FSSAINumber" />
@@ -416,8 +416,8 @@
                                                 </div>
                                             </div>
                                             <div class="row">
-                                                <div class="col-md-12 ml-5">
-                                                    <input type="button" class="btn btn-sm btn-danger d-none ml-5" id="btnRemove4" value="Remove" />
+                                                <div class="col-md-12 text-center">
+                                                    <input type="button" class="btn btn-sm btn-danger d-none" id="btnRemove4" value="Remove" />
                                                 </div>
                                             </div>
                                             @if (Model.ImageFSSAIPath != null && Model.Verify == false)
@@ -445,7 +445,7 @@
                                         </div>
                                     </div>
                                     <div class="card border-primary bg-muted">
-                                        <div class="card-body">
+                                        <div class="card-body text-center">
                                             <label class="col-md-12 text-center"><strong class="text-secondary">Drug License</strong></label>
                                             <label class="col-md-12 text-left"><small class="text-secondary"><i>License Number</i></small></label>
                                             <input id="DrugNumber" type="text" class="form-control" name="DrugNumber" value="@Model.DrugNumber" />
@@ -472,8 +472,8 @@
                                                 </div>
                                             </div>
                                             <div class="row">
-                                                <div class="col-md-12 ml-5">
-                                                    <input type="button" class="btn btn-sm btn-danger ml-5 d-none" id="btnRemove5" value="Remove" />
+                                                <div class="col-md-12 text-center">
+                                                    <input type="button" class="btn btn-sm btn-danger d-none" id="btnRemove5" value="Remove" />
                                                 </div>
                                             </div>
                                             @if (Model.ImageDrugPath != null && Model.Verify == false)
@@ -501,7 +501,7 @@
                                         </div>
                                     </div>
                                     <div class="card border-primary bg-muted">
-                                        <div class="card-body">
+                                        <div class="card-body text-center">
                                             <label class="col-md-12 text-center"><strong class="text-secondary">Establish License</strong></label>
                                             <label class="col-md-12 text-left"><small class="text-secondary"><i>License Number</i></small></label>
                                             <input id="EstablishNumber" type="text" class="form-control" name="EstablishNumber" value="@Model.EstablishNumber" />
@@ -528,8 +528,8 @@
                                                 </div>
                                             </div>
                                             <div class="row">
-                                                <div class="col-md-12 ml-5">
-                                                    <input type="button" class="btn btn-sm btn-danger d-none ml-5" id="btnRemove6" value="Remove" />
+                                                <div class="col-md-12 text-center">
+                                                    <input type="button" class="btn btn-sm btn-danger d-none" id="btnRemove6" value="Remove" />
                                                 </div>
                                             </div>
                                             @if (Model.ImageEstablishPath != null && Model.Verify == false)
@@ -557,7 +557,7 @@
                                         </div>
                                     </div>
                                     <div class="card border-primary bg-muted">
-                                        <div class="card-body">
+                                        <div class="card-body text-center">
                                             <label class="col-md-12 text-center"><strong class="text-secondary">Other License</strong></label>
                                             <label class="col-md-12 text-left"><small class="text-secondary"><i>License Name</i></small></label>
                                             <input id="OtherLicenseName" type="text" class="form-control" name="OtherLicenseName" value="@Model.OtherLicenseName" />
@@ -586,8 +586,8 @@
                                                 </div>
                                             </div>
                                             <div class="row">
-                                                <div class="col-md-12 ml-4">
-                                                    <input type="button" class="btn btn-sm btn-danger d-none ml-5" id="btnRemove7" value="Remove" />
+                                                <div class="col-md-12 text-center">
+                                                    <input type="button" class="btn btn-sm btn-danger d-none" id="btnRemove7" value="Remove" />
                                                 </div>
                                             </div>
                                             @if (Model.ImageOtherLicensePath != null && Model.Verify == false)
@@ -600,7 +600,7 @@
                                                 }
                                                 else
                                                 {
-                                                    <div class="alert alert-danger font-weight-bold d-none penOther p-2 mt-5">Verification Pending</div>
+                                                    <div class="alert alert-danger font-weight-bold d-none penOther p-2 mt-4">Verification Pending</div>
                                                 }
                                             }
                                             @if (Model.ImageOtherLicensePath != null)
@@ -640,7 +640,7 @@
                                     </div>
                                     <div class="card-columns form-group row col-md-4 distributor m-3">
                                         <div class="card border-primary bg-muted">
-                                            <div class="card-body">
+                                            <div class="card-body text-center">
                                                 <div class="row form-group">
                                                     <div class="col-md-12">
                                                         <label class="text-secondary"><i>Authorised Brand Name</i></label>
@@ -665,10 +665,10 @@
                                                 </div>
                                                 <div class="row AuthLicenseImg">
                                                     <div class="img-upload-container mx-auto mb-3">
-                                                        @if (Model.ImageAuthoriseBrandPath != null)
+                                                       @if (Model.ImageAuthoriseBrandPath != null)
                                                         {
                                                             <img class="img-container w-100 h-100 mb-2" id="img-authorise" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageAuthoriseBrandPath" onerror="this.src='/Images/noimage.png'" />
-                                                            <input type="button" class="btn btn-sm btn-danger btnRemove8 ml-5" value="Remove" />
+                                                            <input type="button" class="btn btn-sm btn-danger btnRemove8 ml-4" value="Remove" />
                                                         }
                                                         else
                                                         {
@@ -698,7 +698,7 @@
                                                 }
                                                 @if (Model.ImageAuthoriseBrandPath != null)
                                                 {
-                                                    <div class="col-md-12">
+                                                    <div class="col-md-12 text-center">
                                                         <button type="button" class="btn btn-sm btn-warning expand5 mb-2 mt-4" data-toggle="modal" data-target="#ModalBrand">
                                                             + Expand
                                                         </button>
@@ -759,8 +759,8 @@
                                                 </div>
                                             </div>
                                             <div class="row">
-                                                <div class="col-md-12 ml-4">
-                                                    <input type="button" class="btn btn-sm btn-danger d-none ml-5" id="btnRemove9" value="Remove" />
+                                                <div class="col-md-12 text-center">
+                                                    <input type="button" class="btn btn-sm btn-danger d-none" id="btnRemove9" value="Remove" />
                                                 </div>
                                             </div>
                                             @if (Model.ImageGSTINPath != null && Model.Verify == false)
@@ -814,8 +814,8 @@
                                                 </div>
                                             </div>
                                             <div class="row">
-                                                <div class="col-md-12 ml-4">
-                                                    <input type="button" class="btn btn-sm btn-danger d-none ml-5" id="btnRemove10" value="Remove" />
+                                                <div class="col-md-12 text-center">
+                                                    <input type="button" class="btn btn-sm btn-danger d-none" id="btnRemove10" value="Remove" />
                                                 </div>
                                             </div>
                                             @if (Model.ImagePanPath != null && Model.Verify == false)
@@ -924,8 +924,8 @@
                                                     </div>
                                                 </div>
                                                 <div class="row">
-                                                    <div class="col-md-12 ml-4">
-                                                        <input type="button" class="btn btn-sm btn-danger d-none ml-5" id="btnRemove11" value="Remove" />
+                                                    <div class="col-md-12 text-center">
+                                                        <input type="button" class="btn btn-sm btn-danger d-none" id="btnRemove11" value="Remove" />
                                                     </div>
                                                 </div>
                                                 @if (Model.ImageAccountPath != null && Model.Verify == false)
@@ -2171,11 +2171,13 @@
             $("#btnRemove1").on('click', function () {
                 $('#img-upload').attr('src', '');
                 $("#ShopImage").val('');
+                $("#ImagePath").val('');
                 $(this).addClass("d-none");
             });
             $(".btnRemove1").on('click', function () {
                 $('#img-upload').attr('src', '');
                 $("#ShopImage").val('');
+                $("#ImagePath").val('');
                 $(this).addClass("d-none");
             });
 
@@ -2196,15 +2198,17 @@
             $("#btnRemove2").on('click', function () {
                 $('#img-logo').attr('src', '');
                 $("#LogoImage").val('');
+                $("#ImageLogoPath").val('');
                 $(this).addClass("d-none");
             });
             $(".btnRemove2").on('click', function () {
                 $('#img-logo').attr('src', '');
                 $("#LogoImage").val('');
+                $("#ImageLogoPath").val('');
                 $(this).addClass("d-none");
             });
 
-            function readURLLicence(input) {
+            function readURLAadhar(input) {
                 if (input.files && input.files[0]) {
                     var reader = new FileReader();
                     reader.onload = function (e) {
@@ -2214,18 +2218,20 @@
                 }
             }
             $("#AadharImage").change(function () {
-                readURLLicence(this);
+                readURLAadhar(this);
                 $("#btnRemove3").removeClass("d-none");
                 $(".btnRemove3").addClass("d-none");
             });
             $("#btnRemove3").on('click', function () {
                 $('#img-aadhar').attr('src', '');
                 $("#AadharImage").val('');
+                $("#ImageAadharPath").val('');
                 $(this).addClass("d-none");
             });
             $(".btnRemove3").on('click', function () {
                 $('#img-aadhar').attr('src', '');
                 $("#AadharImage").val('');
+                $("#ImageAadharPath").val('');
                 $(this).addClass("d-none");
             });
             $("#AadharPdf").change(function () {
@@ -2260,6 +2266,7 @@
             $("#btnRemove4").on('click', function () {
                 $('#img-fssai').attr('src', '');
                 $("#FSSAIImage").val('');
+                $("#ImageFSSAIPath").val('');
                 $('.penFssi').addClass('d-none');
                 $('.expand1').addClass('d-none');
                 $(this).addClass("d-none");
@@ -2267,6 +2274,7 @@
             $(".btnRemove4").on('click', function () {
                 $('#img-fssai').attr('src', '');
                 $("#FSSAIImage").val('');
+                $("#ImageFSSAIPath").val('');
                 $('.penFssi').addClass('d-none');
                 $('.expand1').addClass('d-none');
                 $(this).addClass("d-none");
@@ -2279,12 +2287,14 @@
             });
             $("#btnRemove4").on('click', function () {
                 $("#FSSAIPdf").val("");
+                $("#ImageFSSAIPath").val('');
                 $('.penFssi').addClass('d-none');
                 $('.expand1').addClass('d-none');
                 $(this).addClass("d-none");
             });
             $(".btnRemove4").on('click', function () {
                 $("#FSSAIPdf").val("");
+                $("#ImageFSSAIPath").val('');
                 $('.penFssi').addClass('d-none');
                 $('.expand1').addClass('d-none');
                 $(this).addClass("d-none");
@@ -2309,6 +2319,7 @@
             $("#btnRemove5").on('click', function () {
                 $('#img-drug').attr('src', '');
                 $("#DrugImage").val('');
+                $("#ImageDrugPath").val('');
                 $('.penDrug').addClass('d-none');
                 $('.expand2').addClass('d-none');
                 $(this).addClass("d-none");
@@ -2316,6 +2327,7 @@
             $(".btnRemove5").on('click', function () {
                 $('#img-drug').attr('src', '');
                 $("#DrugImage").val('');
+                $("#ImageDrugPath").val('');
                 $('.penDrug').addClass('d-none');
                 $('.expand2').addClass('d-none');
                 $(this).addClass("d-none");
@@ -2328,12 +2340,14 @@
             });
             $("#btnRemove5").on('click', function () {
                 $("#DrugPdf").val("");
+                $("#ImageDrugPath").val('');
                 $('.penDrug').addClass('d-none');
                 $('.expand2').addClass('d-none');
                 $(this).addClass("d-none");
             });
             $(".btnRemove5").on('click', function () {
                 $("#DrugPdf").val("");
+                $("#ImageDrugPath").val('');
                 $('.penDrug').addClass('d-none');
                 $('.expand2').addClass('d-none');
                 $(this).addClass("d-none");
@@ -2358,6 +2372,7 @@
             $("#btnRemove6").on('click', function () {
                 $('#img-establish').attr('src', '');
                 $("#EstablishImage").val('');
+                $("#ImageEstablishPath").val('');
                 $('.penEsta').addClass('d-none');
                 $('.expand3').addClass('d-none');
                 $(this).addClass("d-none");
@@ -2365,6 +2380,7 @@
             $(".btnRemove6").on('click', function () {
                 $('#img-establish').attr('src', '');
                 $("#EstablishImage").val('');
+                $("#ImageEstablishPath").val('');
                 $('.penEsta').addClass('d-none');
                 $('.expand3').addClass('d-none');
                 $(this).addClass("d-none");
@@ -2377,12 +2393,14 @@
             });
             $("#btnRemove6").on('click', function () {
                 $("#EstablishPdf").val("");
+                $("#ImageEstablishPath").val('');
                 $('.penEsta').addClass('d-none');
                 $('.expand3').addClass('d-none');
                 $(this).addClass("d-none");
             });
             $(".btnRemove6").on('click', function () {
                 $("#EstablishPdf").val("");
+                $("#ImageEstablishPath").val('');
                 $('.penEsta').addClass('d-none');
                 $('.expand3').addClass('d-none');
                 $(this).addClass("d-none");
@@ -2407,6 +2425,7 @@
             $("#btnRemove7").on('click', function () {
                 $('#img-other').attr('src', '');
                 $("#OtherLicenseImage").val('');
+                $("#ImageOtherLicensePath").val('');
                 $('.penOther').addClass('d-none');
                 $('.expand4').addClass('d-none');
                 $(this).addClass("d-none");
@@ -2414,6 +2433,7 @@
             $(".btnRemove7").on('click', function () {
                 $('#img-other').attr('src', '');
                 $("#OtherLicenseImage").val('');
+                $("#ImageOtherLicensePath").val('');
                 $('.penOther').addClass('d-none');
                 $('.expand4').addClass('d-none');
                 $(this).addClass("d-none");
@@ -2426,12 +2446,14 @@
             });
             $("#btnRemove7").on('click', function () {
                 $("#OtherLicensePdf").val("");
+                $("#ImageOtherLicensePath").val('');
                 $('.penOther').addClass('d-none');
                 $('.expand4').addClass('d-none');
                 $(this).addClass("d-none");
             });
             $(".btnRemove7").on('click', function () {
                 $("#OtherLicensePdf").val("");
+                $("#ImageOtherLicensePath").val('');
                 $('.penOther').addClass('d-none');
                 $('.expand4').addClass('d-none');
                 $(this).addClass("d-none");
@@ -2456,6 +2478,7 @@
             $("#btnRemove8").on('click', function () {
                 $('#img-authorise').attr('src', '');
                 $("#AuthorisedDistributorImage").val('');
+                $("#ImageAuthoriseBrandPath").val('');
                 $('.penAuth').addClass('d-none');
                 $('.expand5').addClass('d-none');
                 $(this).addClass("d-none");
@@ -2463,24 +2486,27 @@
             $(".btnRemove8").on('click', function () {
                 $('#img-authorise').attr('src', '');
                 $("#AuthorisedDistributorImage").val('');
+                $("#ImageAuthoriseBrandPath").val('');
                 $('.penAuth').addClass('d-none');
                 $('.expand5').addClass('d-none');
                 $(this).addClass("d-none");
             });
-            $("#OtherLicensePdf").change(function () {
+            $("#AuthorisedDistributorPdf").change(function () {
                 $("#btnRemove8").removeClass("d-none");
                 $('.penAuth').removeClass('d-none');
                 $('.expand5').removeClass('d-none');
                 $(".btnRemove8").addClass("d-none");
             });
             $("#btnRemove8").on('click', function () {
-                $("#OtherLicensePdf").val("");
+                $("#AuthorisedDistributorPdf").val("");
+                $("#ImageAuthoriseBrandPath").val('');
                 $('.penAuth').addClass('d-none');
                 $('.expand5').addClass('d-none');
                 $(this).addClass("d-none");
             });
             $(".btnRemove8").on('click', function () {
-                $("#OtherLicensePdf").val("");
+                $("#AuthorisedDistributorPdf").val("");
+                $("#ImageAuthoriseBrandPath").val('');
                 $('.penAuth').addClass('d-none');
                 $('.expand5').addClass('d-none');
                 $(this).addClass("d-none");
@@ -2505,6 +2531,7 @@
             $("#btnRemove9").on('click', function () {
                 $('#img-gstin').attr('src', '');
                 $("#GSTINImage").val('');
+                $("#ImageGSTINPath").val('');
                 $('.penGstin').addClass('d-none');
                 $('.expand6').addClass('d-none');
                 $(this).addClass("d-none");
@@ -2512,6 +2539,7 @@
             $(".btnRemove9").on('click', function () {
                 $('#img-gstin').attr('src', '');
                 $("#GSTINImage").val('');
+                $("#ImageGSTINPath").val('');
                 $('.penGstin').addClass('d-none');
                 $('.expand6').addClass('d-none');
                 $(this).addClass("d-none");
@@ -2524,12 +2552,14 @@
             });
             $("#btnRemove9").on('click', function () {
                 $("#GSTINPdf").val("");
+                $("#ImageGSTINPath").val('');
                 $('.penGstin').addClass('d-none');
                 $('.expand6').addClass('d-none');
                 $(this).addClass("d-none");
             });
             $(".btnRemove9").on('click', function () {
                 $("#GSTINPdf").val("");
+                $("#ImageGSTINPath").val('');
                 $('.penGstin').addClass('d-none');
                 $('.expand6').addClass('d-none');
                 $(this).addClass("d-none");
@@ -2554,6 +2584,7 @@
             $("#btnRemove10").on('click', function () {
                 $('#img-pan').attr('src', '');
                 $("#PanImage").val('');
+                $("#ImagePanPath").val('');
                 $('.penPan').removeClass('d-none');
                 $('.expand7').removeClass('d-none');
                 $(this).addClass("d-none");
@@ -2561,6 +2592,7 @@
             $(".btnRemove10").on('click', function () {
                 $('#img-pan').attr('src', '');
                 $("#PanImage").val('');
+                $("#ImagePanPath").val('');
                 $('.penPan').removeClass('d-none');
                 $('.expand7').removeClass('d-none');
                 $(this).addClass("d-none");
@@ -2573,12 +2605,14 @@
             });
             $("#btnRemove10").on('click', function () {
                 $("#PanPdf").val("");
+                $("#ImagePanPath").val('');
                 $('.penPan').addClass('d-none');
                 $('.expand7').addClass('d-none');
                 $(this).addClass("d-none");
             });
             $(".btnRemove10").on('click', function () {
                 $("#PanPdf").val("");
+                $("#ImagePanPath").val('');
                 $('.penPan').addClass('d-none');
                 $('.expand7').addClass('d-none');
                 $(this).addClass("d-none");
@@ -2603,6 +2637,7 @@
             $("#btnRemove11").on('click', function () {
                 $('#img-account').attr('src', '');
                 $("#AccountImage").val('');
+                $("#ImageAccountPath").val('');
                 $('.penAccount').addClass('d-none');
                 $('.expand8').addClass('d-none');
                 $(this).addClass("d-none");
@@ -2610,6 +2645,7 @@
             $(".btnRemove11").on('click', function () {
                 $('#img-account').attr('src', '');
                 $("#AccountImage").val('');
+                $("#ImageAccountPath").val('');
                 $('.penAccount').addClass('d-none');
                 $('.expand8').addClass('d-none');
                 $(this).addClass("d-none");
@@ -2622,12 +2658,14 @@
             });
             $("#btnRemove11").on('click', function () {
                 $("#AccountPdf").val("");
+                $("#ImageAccountPath").val('');
                 $('.penAccount').addClass('d-none');
                 $('.expand8').addClass('d-none');
                 $(this).addClass("d-none");
             });
             $(".btnRemove11").on('click', function () {
                 $("#AccountPdf").val("");
+                $("#ImageAccountPath").val('');
                 $('.penAccount').addClass('d-none');
                 $('.expand8').addClass('d-none');
                 $(this).addClass("d-none");
