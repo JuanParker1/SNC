@@ -1068,8 +1068,11 @@ namespace ShopNow.Controllers
 
                     pay.Fee -= pay.Tax; //Total fee minu tax
                     pay.DateEncoded = DateTime.Now;
-                    db.PaymentsDatas.Add(pay);
-                    db.SaveChanges();
+                    if (!db.PaymentsDatas.Any(i => i.OrderNumber == pay.OrderNumber))
+                    {
+                        db.PaymentsDatas.Add(pay);
+                        db.SaveChanges();
+                    }
                 }
 
                 if (model.CreditType == 0 || model.CreditType == 1)
@@ -1208,8 +1211,11 @@ namespace ShopNow.Controllers
 
                     pay.Fee -= pay.Tax; //Total fee minu tax
                     pay.DateEncoded = DateTime.Now;
-                    db.PaymentsDatas.Add(pay);
-                    db.SaveChanges();
+                    if (!db.PaymentsDatas.Any(i => i.OrderNumber == pay.OrderNumber))
+                    {
+                        db.PaymentsDatas.Add(pay);
+                        db.SaveChanges();
+                    }
                     return Json(new { status = false, message = "Successfully Added to Payment!" }, JsonRequestBehavior.AllowGet);
                 }
                 else
@@ -1557,8 +1563,11 @@ namespace ShopNow.Controllers
                                     pd.Fee -= pd.Tax; //Total fee minu tax
          
                                     pd.DateEncoded = DateTime.Now;
-                                    db.PaymentsDatas.Add(pd);
-                                    db.SaveChanges();
+                                    if (!db.PaymentsDatas.Any(i => i.OrderNumber == pay.OrderNumber))
+                                    {
+                                        db.PaymentsDatas.Add(pd);
+                                        db.SaveChanges();
+                                    }
                                 }
                               
                                
@@ -2050,7 +2059,7 @@ namespace ShopNow.Controllers
                     models.ShopId = order.ShopId;
                     models.CustomerId = order.CustomerId;
                     models.CustomerName = order.CustomerName;
-                    models.PhoneNumber = order.DeliveryBoyPhoneNumber;
+                    models.PhoneNumber = order.CustomerPhoneNumber;
                     models.Otp = _generatedCode;
                     models.ReferenceCode = _referenceCode;
                     models.Verify = false;
@@ -5679,22 +5688,10 @@ namespace ShopNow.Controllers
 
         public JsonResult GetCustomerPaymentMode(int customerId)//If Customer Cancel the order(not pick up the phone on delivery) next 5 orders should be Online Mode
         {
-            //var lastCancelledOrder = db.Orders.AsEnumerable().LastOrDefault(i => i.CustomerId == customerId && (i.Status == 9 || i.Status == 10));
-            //if (lastCancelledOrder != null)
-            //{
-            //    int orderCountAfterLC = db.Orders.Where(i => i.CustomerId == customerId && i.Status == 6 && (i.DateEncoded > lastCancelledOrder.DateEncoded)).Count();
-            //    if (orderCountAfterLC < 5)
-            //        return Json(new { isOnlinePayment = false }, JsonRequestBehavior.AllowGet);
-            //    else
-            //        return Json(new { isOnlinePayment = true }, JsonRequestBehavior.AllowGet);
-            //}
-            //return Json(new { isOnlinePayment = true }, JsonRequestBehavior.AllowGet);
-
-
-            var customerOrders = db.Orders.Where(i => i.CustomerId == customerId && (i.Status == 9 || i.Status == 10 || i.Status==6)).ToList();
-            if (customerOrders.Where(i=>i.Status == 9 || i.Status == 10).Count() > 0)
+            var customerOrders = db.Orders.Where(i => i.CustomerId == customerId && (/*i.Status == 9 ||*/ i.Status == 10 || i.Status==6)).ToList();
+            if (customerOrders.Where(i=>/*i.Status == 9 ||*/ i.Status == 10).Count() > 0)
             {
-                DateTime lastOrderCancelledDate = customerOrders.Where(i => i.Status == 9 || i.Status == 10).OrderByDescending(i => i.Id).FirstOrDefault().DateEncoded;
+                DateTime lastOrderCancelledDate = customerOrders.Where(i => /*i.Status == 9 ||*/ i.Status == 10).OrderByDescending(i => i.Id).FirstOrDefault().DateEncoded;
                 int orderCountAfterLC = customerOrders.Where(i => i.CustomerId == customerId && i.Status == 6 && (i.DateEncoded > lastOrderCancelledDate)).Count();
                 if (orderCountAfterLC < 5)
                     return Json(new { isOnlinePayment = false }, JsonRequestBehavior.AllowGet);
@@ -6609,7 +6606,7 @@ namespace ShopNow.Controllers
                         if (!string.IsNullOrEmpty(keyword) && page == 1)
                         {
                             CustomerSearchData sData = new CustomerSearchData();
-                            sData.ResultCount = searchResult.Products.Count();
+                            sData.ResultCount = searchResult.Products.Count() + searchResult.Shop.Count();
                             sData.SearchKeyword = keyword;
                             sData.DateEncoded = DateTime.Now;
                             db.CustomerSearchDatas.Add(sData);

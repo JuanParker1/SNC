@@ -17,7 +17,15 @@
                 <div class="card-body">
                     <form method="get" action="/ShopSchedule/Index">
                         <div class="row mb-3">
-                            <div class="col-md-4">
+                            <div class="col-md-3">
+                                <select id="select-district" class="form-control" name="FilterDistrict">
+                                    @if (Model.FilterDistrict != "")
+                                    {
+                                        <option value="@Model.FilterDistrict">@Model.FilterDistrict</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="col-md-3">
                                 <select id="select-shop-filter" class="form-control" name="FilterShopId">
                                     @if (Model.FilterShopId != 0)
                                     {
@@ -26,6 +34,7 @@
                                 </select>
                                 <input type="hidden" name="FilterShopName" />
                             </div>
+
                             <div class="col-md-4">
                                 <input type="submit" class="btn btn-info mr-3" value="Filter" />
                                 <a href="/ShopSchedule/Index" class="btn btn-warning">Clear</a>
@@ -304,6 +313,16 @@
                 width: '100%',
                 ajax: {
                     url: "/Cart/GetShopSelect2",
+                    delay: 250,
+                    dataType: 'json'
+                }
+            });
+
+            $('#select-district').select2({
+                placeholder: "Search District",
+                ajax: {
+                    url: "/Shop/GetDistrictSelect2",
+                    width: '100%',
                     delay: 250,
                     dataType: 'json'
                 }

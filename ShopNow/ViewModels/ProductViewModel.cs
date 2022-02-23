@@ -716,6 +716,7 @@ namespace ShopNow.ViewModels
     {
         public int ShopId { get; set; }
         public string ShopName { get; set; }
+        public int TotalCount { get; set; }
         public List<ListItem> ListItems { get; set; }
         public class ListItem
         {
@@ -725,6 +726,17 @@ namespace ShopNow.ViewModels
             public double SellingPrice { get; set; }
             public int Quantity { get; set; }
             public int ItemId { get; set; }
+            public bool IsMapped { get; set; }
+            public string MappedText
+            {
+                get
+                {
+                    if (this.IsMapped)
+                        return "Mapped";
+                    else
+                        return "UnMapped";
+                }
+            }
         }
     }
 }

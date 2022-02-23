@@ -17,7 +17,24 @@
                 <div class="card-body">
                     <form method="get" action="/ProductSchedule/Index">
                         <div class="row mb-3">
-                            <div class="col-md-4">
+                            <div class="col-md-3">
+                                <select id="select-district" class="form-control" name="FilterDistrict">
+                                    @if (Model.FilterDistrict != "")
+                                    {
+                                        <option value="@Model.FilterDistrict">@Model.FilterDistrict</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <select id="select-shop-filter" class="form-control" name="FilterShopId">
+                                    @if (Model.FilterShopId != 0)
+                                    {
+                                        <option value="@Model.FilterShopId">@Model.FilterShopName</option>
+                                    }
+                                </select>
+                                <input type="hidden" name="FilterShopName" />
+                            </div>
+                            <div class="col-md-3">
                                 <select id="select-product-filter" class="form-control" name="FilterProductId">
                                     @if (Model.FilterProductId != 0)
                                     {
@@ -26,7 +43,7 @@
                                 </select>
                                 <input type="hidden" name="FilterProductName" />
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-3">
                                 <input type="submit" class="btn btn-info mr-3" value="Filter" />
                                 <a href="/ProductSchedule/Index" class="btn btn-warning">Clear</a>
                             </div>
@@ -303,7 +320,29 @@
                 }
             }).on('select2:select', function (e) {
                 $('input[name="FilterProductName"]').val(e.params.data.text);
+                });
+
+            $('#select-shop-filter').select2({
+                placeholder: "Search Shop",
+                width: '100%',
+                ajax: {
+                    url: "/Product/GetActiveShopSelect2",
+                    delay: 250,
+                    dataType: 'json'
+                }
+            }).on('select2:select', function (e) {
+                $('input[name="FilterShopName"]').val(e.params.data.text);
+                });
+            $('#select-district').select2({
+                placeholder: "Search District",
+                ajax: {
+                    url: "/Shop/GetDistrictSelect2",
+                    width: '100%',
+                    delay: 250,
+                    dataType: 'json'
+                }
             });
+
 
             $('#select-shop').select2({
                 placeholder: "Select Shop",
