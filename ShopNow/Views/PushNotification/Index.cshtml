@@ -51,8 +51,8 @@
         <div class="col-md-4">
             <div class="card shadow w-100">
                 <div class="card-body">
-                    <h5 class="text-success" style="letter-spacing:1px">Count</h5>
-                    <div style="height:500px;overflow-y:auto;">
+                    <h5 class="text-success" style="letter-spacing:1px">Customer Count</h5>
+                    <div style="height:460px;overflow-y:auto;">
                         @Html.Grid(Model.ListItems).Columns(columns =>
                               {
                              columns.Add(s => s.DistrictName).Titled("District Name").Filterable(true).SetWidth(30);
