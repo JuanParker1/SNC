@@ -1068,8 +1068,11 @@ namespace ShopNow.Controllers
 
                     pay.Fee -= pay.Tax; //Total fee minu tax
                     pay.DateEncoded = DateTime.Now;
-                    db.PaymentsDatas.Add(pay);
-                    db.SaveChanges();
+                    if (!db.PaymentsDatas.Any(i => i.OrderNumber == pay.OrderNumber))
+                    {
+                        db.PaymentsDatas.Add(pay);
+                        db.SaveChanges();
+                    }
                 }
 
                 if (model.CreditType == 0 || model.CreditType == 1)
@@ -1208,8 +1211,11 @@ namespace ShopNow.Controllers
 
                     pay.Fee -= pay.Tax; //Total fee minu tax
                     pay.DateEncoded = DateTime.Now;
-                    db.PaymentsDatas.Add(pay);
-                    db.SaveChanges();
+                    if (!db.PaymentsDatas.Any(i => i.OrderNumber == pay.OrderNumber))
+                    {
+                        db.PaymentsDatas.Add(pay);
+                        db.SaveChanges();
+                    }
                     return Json(new { status = false, message = "Successfully Added to Payment!" }, JsonRequestBehavior.AllowGet);
                 }
                 else
@@ -1557,8 +1563,11 @@ namespace ShopNow.Controllers
                                     pd.Fee -= pd.Tax; //Total fee minu tax
          
                                     pd.DateEncoded = DateTime.Now;
-                                    db.PaymentsDatas.Add(pd);
-                                    db.SaveChanges();
+                                    if (!db.PaymentsDatas.Any(i => i.OrderNumber == pay.OrderNumber))
+                                    {
+                                        db.PaymentsDatas.Add(pd);
+                                        db.SaveChanges();
+                                    }
                                 }
                               
                                
