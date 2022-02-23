@@ -6597,7 +6597,7 @@ namespace ShopNow.Controllers
                         if (!string.IsNullOrEmpty(keyword) && page == 1)
                         {
                             CustomerSearchData sData = new CustomerSearchData();
-                            sData.ResultCount = searchResult.Products.Count();
+                            sData.ResultCount = searchResult.Products.Count() + searchResult.Shop.Count();
                             sData.SearchKeyword = keyword;
                             sData.DateEncoded = DateTime.Now;
                             db.CustomerSearchDatas.Add(sData);
