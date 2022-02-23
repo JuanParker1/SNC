@@ -2059,7 +2059,7 @@ namespace ShopNow.Controllers
                     models.ShopId = order.ShopId;
                     models.CustomerId = order.CustomerId;
                     models.CustomerName = order.CustomerName;
-                    models.PhoneNumber = order.DeliveryBoyPhoneNumber;
+                    models.PhoneNumber = order.CustomerPhoneNumber;
                     models.Otp = _generatedCode;
                     models.ReferenceCode = _referenceCode;
                     models.Verify = false;
