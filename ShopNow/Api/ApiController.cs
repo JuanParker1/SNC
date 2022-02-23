@@ -1483,7 +1483,7 @@ namespace ShopNow.Controllers
 
                                 if (payment == null)
                                 {
-                                   Models.Payment  pay = new Models.Payment();
+                                    Models.Payment pay = new Models.Payment();
                                     pay.Amount = order.NetTotal;
                                     pay.PaymentMode = "Online Payment";
                                     pay.PaymentModeType = 1;
@@ -1491,7 +1491,7 @@ namespace ShopNow.Controllers
                                     pay.Status = 0;
                                     pay.DateEncoded = order.DateEncoded;
                                     pay.DateUpdated = order.DateUpdated;
-                                   // pay.ReferenceCode = data.PaymentId;
+                                    // pay.ReferenceCode = data.PaymentId;
                                     pay.CustomerId = order.CustomerId;
                                     pay.CustomerName = order.CustomerName;
                                     pay.ShopId = order.ShopId;
@@ -1527,8 +1527,8 @@ namespace ShopNow.Controllers
                                     pd.Amount = Convert.ToDecimal(varOrder.Amount);
                                     pd.Currency = "INR";
                                     pd.Status = 2;
-                                   
-                                 
+
+
 
 
                                     pd.Invoice_Id = s[0]["invoice_id"];
@@ -1561,16 +1561,11 @@ namespace ShopNow.Controllers
 
 
                                     pd.Fee -= pd.Tax; //Total fee minu tax
-         
+
                                     pd.DateEncoded = DateTime.Now;
-                                    if (!db.PaymentsDatas.Any(i => i.OrderNumber == pay.OrderNumber))
-                                    {
-                                        db.PaymentsDatas.Add(pd);
-                                        db.SaveChanges();
-                                    }
+                                    db.PaymentsDatas.Add(pd);
+                                    db.SaveChanges();
                                 }
-                              
-                               
                                 
                             }
                         }

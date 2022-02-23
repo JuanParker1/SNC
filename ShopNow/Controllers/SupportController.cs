@@ -415,8 +415,11 @@ namespace ShopNow.Controllers
                     pd.Fee = model.Fee;
                     pd.Tax = model.Tax;
                     pd.DateEncoded = DateTime.Now;
-                    db.PaymentsDatas.Add(pd);
-                    db.SaveChanges();
+                    if (!db.PaymentsDatas.Any(i => i.OrderNumber == model.OrderNumber))
+                    {
+                        db.PaymentsDatas.Add(pd);
+                        db.SaveChanges();
+                    }
                 }
             }
             return RedirectToAction("OrderMissed");
