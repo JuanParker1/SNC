@@ -35,7 +35,7 @@
                 <h4 class="mt-1 text-success" style="letter-spacing:1px">Single User Access</h4>
             </div>
             @*<div class="col-md-2 col-sm-4 mb-2 data-search">
-            </div>*@
+                </div>*@
             <div class="col-md-3 float-right">
                 <select name="CustomerId" id="CustomerId" class="form-control">
                     @if (Model.CustomerId != 0)
@@ -47,7 +47,7 @@
             </div>
             <div class="col-md-4">
                 <button type="button" class="btn btn-info" id="btnFilter">Apply Filter</button>
-                <a href="~/AccessPolicy/List" class="btn btn-secondary ml-2" >Clear</a>
+                <a href="~/AccessPolicy/List" class="btn btn-secondary ml-2">Clear</a>
             </div>
             <div class="col-md-2">
                 @*<label class="col-form-label">Select All</label>*@
@@ -66,12 +66,21 @@
                 <div class="card my-3 shadow">
                     <div class="card-body">
                         @Html.Grid(Model.List).Columns(columns =>
-              {
-                  columns.Add(c => c.No).Titled("Sl.No").SetWidth(10);
-                  columns.Add(c => c.PageName).Titled("Page Name").Filterable(true).SetWidth(30);
-                  columns.Add().Encoded(false).Sanitized(false)
-              .RenderValueAs(o => (o.IsAccess == true) ? "<input type='checkbox' class='form-control Access' name='Access' style='height:calc(0.7em + 0.75rem + 2px)' checked />" : "<input type='checkbox' class='form-control Access' name='Access' style='height:calc(0.7em + 0.75rem + 2px)' />").Titled("Action").SetWidth(10);
-              }).Sortable(true)
+                   {
+                   columns.Add(c => c.No).Titled("Sl.No").SetWidth(10);
+                   columns.Add(c => c.PageName).Titled("Page Name").Filterable(true).SetWidth(30);
+                   columns.Add().Encoded(false).Sanitized(false).Titled("Action").SetWidth(10)
+            .RenderValueAs(o => @<div>
+                                    @if (o.IsAccess == true)
+                                     {
+                                    <input type='checkbox' class='form-control Access' id="@o.PageCode" name="@o.PageName" style='height:calc(0.7em + 0.75rem + 2px)' checked/>
+                                     }
+                                     else
+                                     {
+                                    <input type='checkbox' class='form-control Access' id="@o.PageCode" name="@o.PageName" style='height:calc(0.7em + 0.75rem + 2px)' />
+                                    }
+                                </div>);
+                           }).Sortable(true)
                         @*<table class="table table-striped table-hover table-borderless table-hover" id="accesspolicy-list">
                                 <thead>
                                     <tr>
@@ -187,15 +196,12 @@
                     swal("Notice!", "Please Select Customer Name!", "warning");
                 }
             });
-            $(document).on('change', 'input[type="checkbox"]', function (e) {
-                var $row = $(this).closest("tr").find(".td");
-                var $txtValue = $row.find(".txt").val();
-                var geek = $txtValue.split(' ');
+            $('.Access').change(function () {
                 var customerId = $("#CustomerId").val();
                 var customerName = $("#CustomerName").val();
                 if ($(this).is(":checked")) {
-                    var PageCode = geek[0];
-                    var PageName = geek[1];
+                    var PageCode = $(this)[0].id;
+                    var PageName = $(this)[0].name;
                     var IsAccess = true;
                     $.getJSON("/AccessPolicy/AddManageSession/", {
                         PageCode: PageCode, PageName: PageName, IsAccess: IsAccess,
@@ -204,8 +210,8 @@
                     });
                 }
                 else {
-                    var PageCode = geek[0];
-                    var PageName = geek[1];
+                    var PageCode = $(this)[0].id;
+                    var PageName = $(this)[0].name;
                     var IsAccess = false;
                     $.getJSON("/AccessPolicy/RemoveManageSession/", {
                         PageCode: PageCode, PageName: PageName, IsAccess: IsAccess,
@@ -214,6 +220,34 @@
                     });
                 }
             });
+
+            //$(".Access").on('change', 'input[type="checkbox"]', function (e) {
+            //    var $row = $(this).closest("tr").find(".td");
+            //    var $txtValue = $row.find(".txt").val();
+            //    var geek = $txtValue.split(' ');
+            //    var customerId = $("#CustomerId").val();
+            //    var customerName = $("#CustomerName").val();
+            //    if ($(this).is(":checked")) {
+            //        var PageCode = geek[0];
+            //        var PageName = geek[1];
+            //        var IsAccess = true;
+            //        $.getJSON("/AccessPolicy/AddManageSession/", {
+            //            PageCode: PageCode, PageName: PageName, IsAccess: IsAccess,
+            //            customerId: customerId, CustomerName: customerName
+            //        }, function (data) {
+            //        });
+            //    }
+            //    else {
+            //        var PageCode = geek[0];
+            //        var PageName = geek[1];
+            //        var IsAccess = false;
+            //        $.getJSON("/AccessPolicy/RemoveManageSession/", {
+            //            PageCode: PageCode, PageName: PageName, IsAccess: IsAccess,
+            //            CustomerId: customerId, CustomerName: customerName
+            //        }, function (data) {
+            //        });
+            //    }
+            //});
 
             $("#checkAll").click(function () {
                 var customerId = $("#CustomerId").val();
