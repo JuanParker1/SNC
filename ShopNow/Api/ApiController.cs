@@ -7072,11 +7072,10 @@ namespace ShopNow.Controllers
             return Json(list, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult GetShopParcelDropList(int customerid=0)
+        public JsonResult GetShopParcelDropList(int shopid=0)
         {
-            int[] shop = db.Shops.Where(i => i.CustomerId == customerid && i.Status == 0).Select(S => S.Id).ToArray();
             var model = new ShopParcelDropListViewModel();
-            model.ListItems = db.Orders.Where(i => shop.Contains(i.ShopId) && i.IsPickupDrop == true)
+            model.ListItems = db.Orders.Where(i => i.ShopId == shopid && i.IsPickupDrop == true)
                 .Select(i => new ShopParcelDropListViewModel.ListItem
                 {
                     ShopName = i.ShopName,
