@@ -88,7 +88,7 @@
             <td type="string">@item.FirstOrDefault().AccountNumber</td>
             <td>@item.FirstOrDefault().IfscCode</td>
             <td>@item.Sum(i => i.FinalAmount).ToString("0.00")</td>
-            <td></td>
+            <td>@item.FirstOrDefault().AccountName.ToUpper()</td>
             <td></td>
             <td></td>
             <td></td>

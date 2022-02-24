@@ -19,8 +19,8 @@ namespace ShopNow.Controllers
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
-            model.ListItems = db.ShopSchedules.Where(i => i.Status == 0 && (model.FilterShopId !=0 ? i.ShopId == model.FilterShopId : true))
-                .Join(db.Shops, sc => sc.ShopId, s => s.Id, (sc, s) => new { sc, s })
+            model.ListItems = db.ShopSchedules.Where(i => i.Status == 0 && (model.FilterShopId != 0 ? i.ShopId == model.FilterShopId : true))
+                .Join(db.Shops.Where(i => (!string.IsNullOrEmpty(model.FilterDistrict)) ? i.DistrictName == model.FilterDistrict : true), sc => sc.ShopId, s => s.Id, (sc, s) => new { sc, s })
                 .GroupBy(i => i.sc.ShopId)
             .Select(i => new ShopScheduleIndexViewModel.ListItem
             {

@@ -401,11 +401,11 @@
                                                 <input type="file" id="FSSAIPdf" name="FSSAIPdf" />
                                             </div>
                                             <div class="row FssaiImg mt-2">
-                                                <div class="img-upload-container mx-auto mb-3">
+                                                <div class="img-upload-container mx-auto mb-4">
                                                     @if (Model.ImageFSSAIPath != null)
                                                     {
                                                         <img class="img-container w-100 h-100 mb-2" id="img-fssai" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageFSSAIPath" onerror="this.src='/Images/noimage.png'" />
-                                                        <input type="button" class="btn btn-sm btn-danger ml-4 btnRemove4" value="Remove" />
+                                                        <input type="button" class="btn btn-sm btn-danger btnRemove4" value="Remove" />
                                                     }
                                                     else
                                                     {
@@ -436,7 +436,7 @@
                                             @if (Model.ImageFSSAIPath != null)
                                             {
                                                 <div class="col-md-12 text-center">
-                                                    <button type="button" class="btn btn-sm btn-warning expand1 mb-2 mt-4" data-toggle="modal" data-target="#FssaiModal">
+                                                    <button type="button" class="btn btn-sm btn-warning expand1 mb-2" data-toggle="modal" data-target="#FssaiModal">
                                                         + Expand
                                                     </button>
                                                     <input type="hidden" id="FSSIApprove" name="FSSIApprove" />
@@ -457,11 +457,11 @@
                                                 <input type="file" id="DrugPdf" name="DrugPdf" />
                                             </div>
                                             <div class="row DrugImg">
-                                                <div class="img-upload-container mx-auto mb-3">
+                                                <div class="img-upload-container mx-auto mb-4">
                                                     @if (Model.ImageDrugPath != null)
                                                     {
                                                         <img class="img-container w-100 h-100 mb-2" id="img-drug" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageDrugPath" onerror="this.src='/Images/noimage.png'" />
-                                                        <input type="button" class="btn btn-danger btn-sm btnRemove5 ml-4" value="Remove" />
+                                                        <input type="button" class="btn btn-danger btn-sm btnRemove5" value="Remove" />
                                                     }
                                                     else
                                                     {
@@ -492,7 +492,7 @@
                                             @if (Model.ImageDrugPath != null)
                                             {
                                                 <div class="col-md-12 text-center">
-                                                    <button type="button" class="btn btn-sm btn-warning expand2 mb-2 mt-4" data-toggle="modal" data-target="#ModalDrug">
+                                                    <button type="button" class="btn btn-sm btn-warning expand2 mb-2" data-toggle="modal" data-target="#ModalDrug">
                                                         + Expand
                                                     </button>
                                                     <input type="hidden" id="DrugApprove" name="DrugApprove" />
@@ -513,11 +513,11 @@
                                                 <input type="file" id="EstablishPdf" name="EstablishPdf" />
                                             </div>
                                             <div class="row EstImg">
-                                                <div class="img-upload-container mx-auto mb-3">
+                                                <div class="img-upload-container mx-auto mb-4">
                                                     @if (Model.ImageEstablishPath != null)
                                                     {
                                                         <img class="img-container w-100 h-100 mb-2" id="img-establish" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageEstablishPath" onerror="this.src='/Images/noimage.png'" />
-                                                        <input type="button" class="btn btn-sm btn-danger ml-4 btnRemove6" value="Remove" />
+                                                        <input type="button" class="btn btn-sm btn-danger btnRemove6" value="Remove" />
                                                     }
                                                     else
                                                     {
@@ -548,7 +548,7 @@
                                             @if (Model.ImageEstablishPath != null)
                                             {
                                                 <div class="col-md-12 text-center">
-                                                    <button type="button" class="btn btn-sm btn-warning expand3 mb-2 mt-4" data-toggle="modal" data-target="#ModalEstablish">
+                                                    <button type="button" class="btn btn-sm btn-warning expand3 mb-2" data-toggle="modal" data-target="#ModalEstablish">
                                                         + Expand
                                                     </button>
                                                     <input type="hidden" id="EstablishApprove" name="EstablishApprove" />
@@ -571,11 +571,11 @@
                                                 <input type="file" id="OtherLicensePdf" name="OtherLicensePdf" />
                                             </div>
                                             <div class="row OtherImg">
-                                                <div class="img-upload-container mx-auto mb-3">
+                                                <div class="img-upload-container mx-auto mb-4">
                                                     @if (Model.ImageOtherLicensePath != null)
                                                     {
                                                         <img class="img-container w-100 h-100 mb-2" id="img-other" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageOtherLicensePath" onerror="this.src='/Images/noimage.png'" />
-                                                        <input type="button" class="btn btn-sm btn-danger btnRemove7 ml-4" value="Remove" />
+                                                        <input type="button" class="btn btn-sm btn-danger btnRemove7" value="Remove" />
                                                     }
                                                     else
                                                     {
@@ -606,7 +606,7 @@
                                             @if (Model.ImageOtherLicensePath != null)
                                             {
                                                 <div class="col-md-12 text-center">
-                                                    <button type="button" class="btn btn-sm btn-warning expand4 mb-2 mt-4" data-toggle="modal" data-target="#ModalOther">
+                                                    <button type="button" class="btn btn-sm btn-warning expand4 mb-2" data-toggle="modal" data-target="#ModalOther">
                                                         + Expand
                                                     </button>
                                                     <input type="hidden" id="OtherApprove" name="OtherApprove" />
@@ -664,11 +664,11 @@
                                                     <input type="file" id="AuthorisedDistributorPdf" name="AuthorisedDistributorPdf" />
                                                 </div>
                                                 <div class="row AuthLicenseImg">
-                                                    <div class="img-upload-container mx-auto mb-3">
+                                                    <div class="img-upload-container mx-auto mb-4">
                                                        @if (Model.ImageAuthoriseBrandPath != null)
                                                         {
                                                             <img class="img-container w-100 h-100 mb-2" id="img-authorise" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageAuthoriseBrandPath" onerror="this.src='/Images/noimage.png'" />
-                                                            <input type="button" class="btn btn-sm btn-danger btnRemove8 ml-4" value="Remove" />
+                                                            <input type="button" class="btn btn-sm btn-danger btnRemove8" value="Remove" />
                                                         }
                                                         else
                                                         {
@@ -699,7 +699,7 @@
                                                 @if (Model.ImageAuthoriseBrandPath != null)
                                                 {
                                                     <div class="col-md-12 text-center">
-                                                        <button type="button" class="btn btn-sm btn-warning expand5 mb-2 mt-4" data-toggle="modal" data-target="#ModalBrand">
+                                                        <button type="button" class="btn btn-sm btn-warning expand5 mb-2" data-toggle="modal" data-target="#ModalBrand">
                                                             + Expand
                                                         </button>
                                                         <input type="hidden" id="AuthApprove" name="AuthApprove" />
@@ -744,11 +744,11 @@
                                                 <input type="button" class="btn btn-sm btn-danger btnRemove9" value="Remove" />
                                             </div>
                                             <div class="row GstinLicenseImg">
-                                                <div class="img-upload-container mx-auto mb-3">
+                                                <div class="img-upload-container mx-auto mb-4">
                                                     @if (Model.ImageGSTINPath != null)
                                                     {
                                                         <img class="img-container w-100 h-100 mb-2" id="img-gstin" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageGSTINPath" onerror="this.src='/Images/noimage.png'" />
-                                                        <input type="button" class="btn btn-sm btn-danger btnRemove9 ml-4" value="Remove" />
+                                                        <input type="button" class="btn btn-sm btn-danger btnRemove9" value="Remove" />
                                                     }
                                                     else
                                                     {
@@ -779,7 +779,7 @@
                                             @if (Model.ImageGSTINPath != null)
                                             {
                                                 <div class="col-md-12 text-center">
-                                                    <button type="button" class="btn btn-sm btn-warning expand6 mb-2 mt-4" data-toggle="modal" data-target="#ModalGSTIN">
+                                                    <button type="button" class="btn btn-sm btn-warning expand6 mb-2" data-toggle="modal" data-target="#ModalGSTIN">
                                                         + Expand
                                                     </button>
                                                     <input type="hidden" id="GstinApprove" name="GstinApprove" />
@@ -799,11 +799,11 @@
                                                 <input type="file" id="PanPdf" name="PanPdf" />
                                             </div>
                                             <div class="row PanLicenseImg">
-                                                <div class="img-upload-container mx-auto mb-3">
+                                                <div class="img-upload-container mx-auto mb-4">
                                                     @if (Model.ImagePanPath != null)
                                                     {
                                                         <img class="img-container w-100 h-100 mb-2" id="img-pan" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePanPath" onerror="this.src='/Images/noimage.png'" />
-                                                        <input type="button" class="btn btn-sm btn-danger btnRemove10 ml-4" value="Remove" />
+                                                        <input type="button" class="btn btn-sm btn-danger btnRemove10" value="Remove" />
                                                     }
                                                     else
                                                     {
@@ -834,7 +834,7 @@
                                             @if (Model.ImagePanPath != null)
                                             {
                                                 <div class="col-md-12 text-center">
-                                                    <button type="button" class="btn btn-sm btn-warning expand7 mb-2 mt-4" data-toggle="modal" data-target="#ModalPAN">
+                                                    <button type="button" class="btn btn-sm btn-warning expand7 mb-2" data-toggle="modal" data-target="#ModalPAN">
                                                         + Expand
                                                     </button>
                                                     <input type="hidden" id="PanApprove" name="PanApprove" />
@@ -909,11 +909,11 @@
                                                     <input type="file" id="AccountPdf" name="AccountPdf" />
                                                 </div>
                                                 <div class="row AccountDocumentImg">
-                                                    <div class="img-upload-container mx-auto mb-3">
+                                                    <div class="img-upload-container mx-auto mb-4">
                                                         @if (Model.ImageAccountPath != null)
                                                         {
                                                             <img class="img-container w-100 h-100 mb-2" id="img-account" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageAccountPath" onerror="this.src='/Images/noimage.png'" />
-                                                            <input type="button" class="btn btn-sm btn-danger btnRemove11 ml-4" value="Remove" />
+                                                            <input type="button" class="btn btn-sm btn-danger btnRemove11" value="Remove" />
                                                         }
                                                         else
                                                         {
@@ -944,7 +944,7 @@
                                                 @if (Model.ImageAccountPath != null)
                                                 {
                                                     <div class="col-md-12 text-center">
-                                                        <button type="button" class="btn btn-sm btn-warning expand8 mb-2 mt-4" data-toggle="modal" data-target="#ModalAccount">
+                                                        <button type="button" class="btn btn-sm btn-warning expand8 mb-2" data-toggle="modal" data-target="#ModalAccount">
                                                             + Expand
                                                         </button>
                                                         <input type="hidden" id="AccountApprove" name="AccountApprove" />

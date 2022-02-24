@@ -110,7 +110,12 @@
 
                 <td class="two-decimals">@item.Sum(i => i.TotalDeliveryBoyAmount).ToString("0.00")</td>
 
-                <td></td>
+                <td>
+                    @if (!string.IsNullOrEmpty(item.FirstOrDefault().AccountName))
+                    {@item.FirstOrDefault().AccountName}
+                else
+                { }
+                </td>
 
                 <td></td>
 

@@ -1068,8 +1068,11 @@ namespace ShopNow.Controllers
 
                     pay.Fee -= pay.Tax; //Total fee minu tax
                     pay.DateEncoded = DateTime.Now;
-                    db.PaymentsDatas.Add(pay);
-                    db.SaveChanges();
+                    if (!db.PaymentsDatas.Any(i => i.OrderNumber == pay.OrderNumber))
+                    {
+                        db.PaymentsDatas.Add(pay);
+                        db.SaveChanges();
+                    }
                 }
 
                 if (model.CreditType == 0 || model.CreditType == 1)
@@ -1208,8 +1211,11 @@ namespace ShopNow.Controllers
 
                     pay.Fee -= pay.Tax; //Total fee minu tax
                     pay.DateEncoded = DateTime.Now;
-                    db.PaymentsDatas.Add(pay);
-                    db.SaveChanges();
+                    if (!db.PaymentsDatas.Any(i => i.OrderNumber == pay.OrderNumber))
+                    {
+                        db.PaymentsDatas.Add(pay);
+                        db.SaveChanges();
+                    }
                     return Json(new { status = false, message = "Successfully Added to Payment!" }, JsonRequestBehavior.AllowGet);
                 }
                 else
@@ -1477,7 +1483,7 @@ namespace ShopNow.Controllers
 
                                 if (payment == null)
                                 {
-                                   Models.Payment  pay = new Models.Payment();
+                                    Models.Payment pay = new Models.Payment();
                                     pay.Amount = order.NetTotal;
                                     pay.PaymentMode = "Online Payment";
                                     pay.PaymentModeType = 1;
@@ -1485,7 +1491,7 @@ namespace ShopNow.Controllers
                                     pay.Status = 0;
                                     pay.DateEncoded = order.DateEncoded;
                                     pay.DateUpdated = order.DateUpdated;
-                                   // pay.ReferenceCode = data.PaymentId;
+                                    // pay.ReferenceCode = data.PaymentId;
                                     pay.CustomerId = order.CustomerId;
                                     pay.CustomerName = order.CustomerName;
                                     pay.ShopId = order.ShopId;
@@ -1521,8 +1527,8 @@ namespace ShopNow.Controllers
                                     pd.Amount = Convert.ToDecimal(varOrder.Amount);
                                     pd.Currency = "INR";
                                     pd.Status = 2;
-                                   
-                                 
+
+
 
 
                                     pd.Invoice_Id = s[0]["invoice_id"];
@@ -1555,13 +1561,11 @@ namespace ShopNow.Controllers
 
 
                                     pd.Fee -= pd.Tax; //Total fee minu tax
-         
+
                                     pd.DateEncoded = DateTime.Now;
                                     db.PaymentsDatas.Add(pd);
                                     db.SaveChanges();
                                 }
-                              
-                               
                                 
                             }
                         }
@@ -2050,7 +2054,7 @@ namespace ShopNow.Controllers
                     models.ShopId = order.ShopId;
                     models.CustomerId = order.CustomerId;
                     models.CustomerName = order.CustomerName;
-                    models.PhoneNumber = order.DeliveryBoyPhoneNumber;
+                    models.PhoneNumber = order.CustomerPhoneNumber;
                     models.Otp = _generatedCode;
                     models.ReferenceCode = _referenceCode;
                     models.Verify = false;
@@ -5098,8 +5102,9 @@ namespace ShopNow.Controllers
                      WalletAmount = i.o.o.WalletAmount,
                      TipsAmount = i.o.o.TipsAmount,
                      //Otp = GetOtp(i.o.o.OrderNumber),
-                     Otp = db.OtpVerifications.FirstOrDefault(a=>a.OrderNo == i.o.o.OrderNumber).Otp,
-                     OrderItemLists = i.oi.Select(a => new GetAllOrderListViewModel.OrderList.OrderItemList {
+                     Otp = db.OtpVerifications.FirstOrDefault(a => a.OrderNo == i.o.o.OrderNumber).Otp,
+                     OrderItemLists = i.oi.Select(a => new GetAllOrderListViewModel.OrderList.OrderItemList
+                     {
                          AddOnType = a.AddOnType,
                          BrandId = a.BrandId,
                          BrandName = a.BrandName,
@@ -5116,9 +5121,10 @@ namespace ShopNow.Controllers
                          UnitPrice = a.UnitPrice,
                          ShopId = i.o.o.ShopId,
                          ShopName = i.o.o.ShopName,
-                         OutletId = db.Products.FirstOrDefault(b=>b.Id == a.ProductId).OutletId,
+                         OutletId = a.ProductId != 0 ? db.Products.FirstOrDefault(b => b.Id == a.ProductId).OutletId : 0,
                          //OfferQuantityLimit = db.Products.FirstOrDefault(b=>b.Id == a.ProductId).OfferQuantityLimit,
-                         OrderItemAddonLists = db.OrderItemAddons.Where(b => b.OrderItemId == a.Id).Select(b => new GetAllOrderListViewModel.OrderList.OrderItemList.OrderItemAddonList {
+                         OrderItemAddonLists = db.OrderItemAddons.Where(b => b.OrderItemId == a.Id).Select(b => new GetAllOrderListViewModel.OrderList.OrderItemList.OrderItemAddonList
+                         {
                              AddonName = b.AddonName,
                              AddonPrice = b.AddonPrice,
                              CrustName = b.CrustName,
@@ -7066,11 +7072,10 @@ namespace ShopNow.Controllers
             return Json(list, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult GetShopParcelDropList(int customerid=0)
+        public JsonResult GetShopParcelDropList(int shopid=0)
         {
-            int[] shop = db.Shops.Where(i => i.CustomerId == customerid && i.Status == 0).Select(S => S.Id).ToArray();
             var model = new ShopParcelDropListViewModel();
-            model.ListItems = db.Orders.Where(i => shop.Contains(i.ShopId) && i.IsPickupDrop == true)
+            model.ListItems = db.Orders.Where(i => i.ShopId == shopid && i.IsPickupDrop == true).OrderByDescending(i=>i.Id)
                 .Select(i => new ShopParcelDropListViewModel.ListItem
                 {
                     ShopName = i.ShopName,

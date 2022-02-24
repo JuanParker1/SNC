@@ -1950,7 +1950,7 @@ namespace ShopNow.Controllers
                 shopBill.OrderNumber = OrderNumber;
                 shopBill.DateEncoded = DateTime.Now;
                 shopBill.UpdatedBy = user.Name;
-                db.Entry(shopBill).State = EntityState.Modified;
+                db.Entry(shopBill).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
             }
             else if (!string.IsNullOrEmpty(BillNo))
@@ -1961,8 +1961,11 @@ namespace ShopNow.Controllers
                 shopBillDetail.OrderNumber = OrderNumber;
                 shopBillDetail.DateEncoded = DateTime.Now;
                 shopBillDetail.UpdatedBy = user.Name;
-                db.ShopBillDetails.Add(shopBillDetail);
-                db.SaveChanges();
+                if (!db.ShopBillDetails.Any(i => i.OrderNumber == OrderNumber))
+                {
+                    db.ShopBillDetails.Add(shopBillDetail);
+                    db.SaveChanges();
+                }
             }
             return RedirectToAction("PickupSlip", new { OrderNumber = OrderNumber, id = OrderId });
         }

@@ -26,7 +26,7 @@ namespace ShopNow.Controllers
                     Count = i.Count(),
                     DistrictName = i.FirstOrDefault().DistrictName,
                     Index = 0
-                }).ToList();
+                }).OrderByDescending(i=>i.Count).ToList();
             return View(model);
         }
 
