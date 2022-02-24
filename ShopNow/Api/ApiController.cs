@@ -7075,7 +7075,7 @@ namespace ShopNow.Controllers
         public JsonResult GetShopParcelDropList(int shopid=0)
         {
             var model = new ShopParcelDropListViewModel();
-            model.ListItems = db.Orders.Where(i => i.ShopId == shopid && i.IsPickupDrop == true)
+            model.ListItems = db.Orders.Where(i => i.ShopId == shopid && i.IsPickupDrop == true).OrderByDescending(i=>i.Id)
                 .Select(i => new ShopParcelDropListViewModel.ListItem
                 {
                     ShopName = i.ShopName,
