@@ -5102,8 +5102,9 @@ namespace ShopNow.Controllers
                      WalletAmount = i.o.o.WalletAmount,
                      TipsAmount = i.o.o.TipsAmount,
                      //Otp = GetOtp(i.o.o.OrderNumber),
-                     Otp = db.OtpVerifications.FirstOrDefault(a=>a.OrderNo == i.o.o.OrderNumber).Otp,
-                     OrderItemLists = i.oi.Select(a => new GetAllOrderListViewModel.OrderList.OrderItemList {
+                     Otp = db.OtpVerifications.FirstOrDefault(a => a.OrderNo == i.o.o.OrderNumber).Otp,
+                     OrderItemLists = i.oi.Select(a => new GetAllOrderListViewModel.OrderList.OrderItemList
+                     {
                          AddOnType = a.AddOnType,
                          BrandId = a.BrandId,
                          BrandName = a.BrandName,
@@ -5120,9 +5121,10 @@ namespace ShopNow.Controllers
                          UnitPrice = a.UnitPrice,
                          ShopId = i.o.o.ShopId,
                          ShopName = i.o.o.ShopName,
-                         OutletId = db.Products.FirstOrDefault(b=>b.Id == a.ProductId).OutletId,
+                         OutletId = a.ProductId != 0 ? db.Products.FirstOrDefault(b => b.Id == a.ProductId).OutletId : 0,
                          //OfferQuantityLimit = db.Products.FirstOrDefault(b=>b.Id == a.ProductId).OfferQuantityLimit,
-                         OrderItemAddonLists = db.OrderItemAddons.Where(b => b.OrderItemId == a.Id).Select(b => new GetAllOrderListViewModel.OrderList.OrderItemList.OrderItemAddonList {
+                         OrderItemAddonLists = db.OrderItemAddons.Where(b => b.OrderItemId == a.Id).Select(b => new GetAllOrderListViewModel.OrderList.OrderItemList.OrderItemAddonList
+                         {
                              AddonName = b.AddonName,
                              AddonPrice = b.AddonPrice,
                              CrustName = b.CrustName,
