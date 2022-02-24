@@ -7076,7 +7076,7 @@ namespace ShopNow.Controllers
         {
             var model = new ShopParcelDropListViewModel();
             model.ListItems = db.Orders.Where(i => i.ShopId == shopid && i.IsPickupDrop == true).OrderByDescending(i=>i.Id)
-                .Select(i => new ShopParcelDropListViewModel.ListItem
+                .Select(i => new ShopParcelDropListViewModel.ListItem 
                 {
                     ShopName = i.ShopName,
                     Amount = i.TotalPrice,
