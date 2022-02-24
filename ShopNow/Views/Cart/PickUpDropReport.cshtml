@@ -14,10 +14,23 @@
 <div class="container-fluid">
     <form method="get" action="~/Cart/PickUpDropReport">
         <div class="row">
-            <div class="col-md-3">
+            <div class="col-md-2">
                 <h5 class="text-success">@ViewBag.Title</h5>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label>From Date</label>
+                    <input id="date-start" type="date" class="form-control" name="StartDate" @if (Model.StartDate != null) { <text> value="@Model.StartDate.Value.ToString("yyyy-MM-dd")" </text> } />
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label>To Date</label>
+                    <input id="date-end" type="date" class="form-control" name="EndDate" @if (Model.EndDate != null) { <text> value="@Model.EndDate.Value.ToString("yyyy-MM-dd")" </text> } />
+                </div>
+            </div>
+            <div class="col-md-3">
+                <label>Select Shop</label>
                 <select name="ShopId" id="ShopId" class="form-control">
                     @if (!string.IsNullOrEmpty(Model.ShopName))
                     {
@@ -26,14 +39,14 @@
                 </select>
                 <input type="hidden" id="ShopName" name="ShopName" value="@Model.ShopName" />
             </div>
-            <div class="col-md-2">
-                <input type="submit" class="form-control btn btn-success" name="filter" value="Apply Filter" />
+            <div class="col-md-1 mt-1">
+                <input type="submit" class="form-control btn btn-success mt-4" name="filter" value="Filter" />
             </div>
-            <div class="col-md-1">
-                <a href="~/Cart/PickUpDropReport" class="form-control btn btn-warning">Clear</a>
+            <div class="col-md-1 mt-1">
+                <a href="~/Cart/PickUpDropReport" class="form-control btn btn-warning mt-4">Clear</a>
             </div>
-            <div class="col-md-2 text-right">
-                <button id="btnExport" class="btn btn-secondary"><i class="fa fa-file-excel-o fa-lg" aria-hidden="true"></i></button>
+            <div class="col-md-1 mt-1 text-right">
+                <button id="btnExport" class="btn btn-secondary mt-4"><i class="fa fa-file-excel-o fa-lg" aria-hidden="true"></i></button>
             </div>
         </div>
     </form>

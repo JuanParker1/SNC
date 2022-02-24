@@ -158,7 +158,7 @@ namespace ShopNow.Controllers
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
-            model.DeliveryAgentAssignedLists = db.Orders.Where(i => (model.ShopId != 0 ? i.ShopId == model.ShopId : true) && i.Status == 4 && i.DeliveryBoyId !=0 && i.DeliveryBoyOnWork == 0)
+            model.DeliveryAgentAssignedLists = db.Orders.Where(i => (model.ShopId != 0 ? i.ShopId == model.ShopId : true) && i.Status == 4 && i.DeliveryBoyId != 0 && i.DeliveryBoyOnWork == 0)
                 //.Join(db.DeliveryBoys.Where(i => i.isAssign == 1 && i.OnWork == 0), c => c.DeliveryBoyId, d => d.Id, (c, d) => new { c, d })
                 .Join(db.Payments, c => c.OrderNumber, p => p.OrderNumber, (c, p) => new { c, p })
                 .Select(i => new CartListViewModel.DeliveryAgentAssignedList
@@ -185,8 +185,8 @@ namespace ShopNow.Controllers
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
-            model.DeliveryAgentAssignedLists = db.Orders.Where(i => (model.ShopId != 0 ? i.ShopId == model.ShopId : true) && i.Status == 4 &&i.DeliveryBoyId !=0 && i.DeliveryBoyOnWork==0 && SqlFunctions.DateDiff("minute", i.DateUpdated, DateTime.Now) >= 5)
-               // .Join(db.DeliveryBoys.Where(i => i.isAssign == 1 && i.OnWork == 0), c => c.DeliveryBoyId, d => d.Id, (c, d) => new { c, d })
+            model.DeliveryAgentAssignedLists = db.Orders.Where(i => (model.ShopId != 0 ? i.ShopId == model.ShopId : true) && i.Status == 4 && i.DeliveryBoyId != 0 && i.DeliveryBoyOnWork == 0 && SqlFunctions.DateDiff("minute", i.DateUpdated, DateTime.Now) >= 5)
+                // .Join(db.DeliveryBoys.Where(i => i.isAssign == 1 && i.OnWork == 0), c => c.DeliveryBoyId, d => d.Id, (c, d) => new { c, d })
                 .Join(db.Payments, c => c.OrderNumber, p => p.OrderNumber, (c, p) => new { c, p })
                 .Select(i => new CartListViewModel.DeliveryAgentAssignedList
                 {
@@ -213,7 +213,7 @@ namespace ShopNow.Controllers
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
-            model.PickupLists = db.Orders.Where(i => i.Status == 4 && i.DeliveryBoyId !=0 &&i.DeliveryBoyOnWork == 1 && (model.ShopId != 0 ? i.ShopId == model.ShopId : true))
+            model.PickupLists = db.Orders.Where(i => i.Status == 4 && i.DeliveryBoyId != 0 && i.DeliveryBoyOnWork == 1 && (model.ShopId != 0 ? i.ShopId == model.ShopId : true))
                 //.Join(db.DeliveryBoys.Where(i => i.isAssign == 1 && i.OnWork == 1), c => c.DeliveryBoyId, d => d.Id, (c, d) => new { c, d })
                 .Join(db.Payments, c => c.OrderNumber, p => p.OrderNumber, (c, p) => new { c, p })
                  .Select(i => new CartListViewModel.PickupList
@@ -636,7 +636,7 @@ namespace ShopNow.Controllers
                 model.DateEncoded = cart.DateEncoded;
                 model.PenaltyAmount = cart.PenaltyAmount;
                 model.WaitingCharge = cart.WaitingCharge;
-                model.TotalPrice = cart.TotalPrice - (payment.RefundAmount??0);
+                model.TotalPrice = cart.TotalPrice - (payment.RefundAmount ?? 0);
                 model.NetTotal = cart.NetTotal - (payment.RefundAmount ?? 0);
                 model.PaymentMode = cart.PaymentMode;
                 model.PrescriptionImagePath = cart.PrescriptionImagePath;
@@ -1484,7 +1484,9 @@ namespace ShopNow.Controllers
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
-            model.PickUpDropReportLists = db.Orders.Where(i => (i.IsPickupDrop == true) && (model.ShopId != 0 ? i.ShopId == model.ShopId : true) && i.Status == 6)
+            model.PickUpDropReportLists = db.Orders.Where(i => (i.IsPickupDrop == true) && (model.ShopId != 0 ? i.ShopId == model.ShopId : true) &&
+                ((DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(model.StartDate)) &&
+                 (DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(model.EndDate))) && i.Status == 6)
                 .Join(db.Payments, c => c.OrderNumber, p => p.OrderNumber, (c, p) => new { c, p })
                 .AsEnumerable()
             .Select(i => new CartReportViewModel.PickUpDropReportList

@@ -25,8 +25,8 @@
             {
                 @Html.AntiForgeryToken()
                 <input type="hidden" name="Id" id="Id" value="@Model.Id" />
-                <input type="hidden" name="ImagePath" value="@Model.ImagePath" />
-                <input type="hidden" name="CVPath" value="@Model.CVPath" />
+                <input type="hidden" name="ImagePath" id="ImagePath" value="@Model.ImagePath" />
+                <input type="hidden" name="CVPath" id="CVPath" value="@Model.CVPath" />
                 <input type="hidden" name="DrivingLicenseImagePath" id="DrivingLicenseImagePath" value="@Model.DrivingLicenseImagePath" />
                 <input type="hidden" name="BankPassbookPath" id="BankPassbookPath" value="@Model.BankPassbookPath" />
                 <input type="hidden" name="Count" id="Count" value="@Model.Count" />
@@ -118,11 +118,22 @@
                                         <label class="col-md-12 small font-italic">* Upload recent photo</label>
                                         <div class="row">
                                             <div class="img-upload-container mx-auto text-center">
-                                                @*<a href="~/Home/ImageDenied">*@
+                                                @if (Model.ImagePath != null)
+                                                {
                                                     <img class="img-container w-100 h-100" id="img-upload" src="@Model.ImagePath" onerror="this.src='/Images/noimage.png'" />
-                                               @* </a>*@
+                                                    <input type="button" class="btn btn-sm btn-danger DeliveryBoyImage" value="Remove" />
+                                                }
+                                                else
+                                                {
+                                                    <img class="img-container w-100 h-100" id="img-upload" onerror="this.src='/Images/noimage.png'" />
+                                                }
                                                 <input type="file" id="DeliveryBoyImage" name="DeliveryBoyImage" class="d-none" />
                                                 <label for="DeliveryBoyImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <input type="button" class="btn btn-sm btn-danger" id="DeliveryBoyImage" value="Remove" />
                                             </div>
                                         </div>
                                     </div>
@@ -132,8 +143,17 @@
                                         <label class="col-md-12 text-center"><strong class="text-secondary">Resume</strong></label>
                                         <div class="row">
                                             <div class="col-md-12 my-3 text-center">
-                                                <a href="@Model.CVPath" target="_blank"> Click here for Pdf view</a>
+                                                @if (Model.CVPath != null)
+                                                {
+                                                    <a href="@Model.CVPath" target="_blank"> Click here for Pdf view</a>
+                                                    <input type="button" class="btn btn-sm btn-danger btnCVPathRemove" value="Remove" />
+                                                }
                                                 <input type="file" id="CVPdf" class="my-3" name="CVPdf" />
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <input type="button" class="btn btn-sm btn-danger" id="btnCVPathRemove" value="Remove" />
                                             </div>
                                         </div>
                                     </div>
@@ -158,11 +178,22 @@
                                         </div>
                                         <div class="row DrivingImg">
                                             <div class="img-upload-container mx-auto">
-                                               @* <a href="~/Home/ImageDenied">*@
+                                                @if (Model.DrivingLicenseImagePath != null)
+                                                {
                                                     <img class="img-container w-100 h-100" id="img-license" src="@Model.DrivingLicenseImagePath" onerror="this.src='/Images/noimage.png'" />
-                                               @* </a>*@
+                                                    <input type="button" class="btn btn-sm btn-danger btnLicenseRemove" value="Remove" />
+                                                }
+                                                else
+                                                {
+                                                    <img class="img-container w-100 h-100" id="img-license" onerror="this.src='/Images/noimage.png'" />
+                                                }
                                                 <input type="file" id="DrivingLicenseImage" name="DrivingLicenseImage" class="d-none" />
                                                 <label for="DrivingLicenseImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <input type="button" class="btn btn-sm btn-danger" id="btnLicenseRemove" value="Remove" />
                                             </div>
                                         </div>
                                         @if (Model.DrivingLicenseImagePath != null && Model.Status == 1)
@@ -228,11 +259,22 @@
                                             </div>
                                             <div class="row AccountDocumentImg">
                                                 <div class="img-upload-container mx-auto">
-                                                    @*<a href="~/Home/ImageDenied">*@
+                                                    @if (Model.BankPassbookPath != null)
+                                                    {
                                                         <img class="img-container w-100 h-100 mb-2" id="img-account" src="@Model.BankPassbookPath" onerror="this.src='/Images/noimage.png'" />
-                                                    @*</a>*@
+                                                        <input type="button" class="btn btn-sm btn-danger btnBankAccountRemove" value="Remove" />
+                                                    }
+                                                    else
+                                                    {
+                                                        <img class="img-container w-100 h-100 mb-2" id="img-account" onerror="this.src='/Images/noimage.png'" />
+                                                    }
                                                     <input type="file" id="BankPassbookImage" name="BankPassbookImage" class="d-none" />
                                                     <label for="BankPassbookImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <input type="button" class="btn btn-sm btn-danger" id="btnBankAccountRemove" value="Remove" />
                                                 </div>
                                             </div>
                                             @if (Model.BankPassbookPath != null && Model.Status == 1)
@@ -287,9 +329,7 @@
                 <div class="row" id="print-License">
                     <div class="col-md-6">
                         <a href="@Model.DrivingLicenseImagePath" target="_blank" class="ml-3 license-pdf d-none"> Click here for Pdf view</a>
-                       @* <a href="~/Home/ImageDenied">*@
-                            <img class="img-container w-100 h-100 mb-2 license-img" src="@Model.DrivingLicenseImagePath" onerror="this.src='/Images/noimage.png'" />
-                       @* </a>*@
+                        <img class="img-container w-100 h-100 mb-2 license-img" src="@Model.DrivingLicenseImagePath" onerror="this.src='/Images/noimage.png'" />
                     </div>
                     <div class="col-md-6">
                         <label class="text-left text-secondary font-weight-bold mt-1"><i>License Number</i></label>
@@ -323,9 +363,7 @@
                 <div class="row" id="print-Account">
                     <div class="col-md-6">
                         <a href="@Model.BankPassbookPath" target="_blank" class="mb-2 account-pdf d-none"> Click here for Pdf view</a>
-                       @* <a href="~/Home/ImageDenied">*@
-                            <img class="img-container w-100 h-100 mb-2 account-img" src="@Model.BankPassbookPath" onerror="this.src='/Images/noimage.png'" />
-                       @* </a>*@
+                        <img class="img-container w-100 h-100 mb-2 account-img" src="@Model.BankPassbookPath" onerror="this.src='/Images/noimage.png'" />
                     </div>
                     <div class="col-md-6">
                         <label class="col-md-4 text-left text-secondary font-weight-bold mt-1"><i>Bank Name</i></label>
