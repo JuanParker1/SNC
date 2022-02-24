@@ -5780,7 +5780,7 @@ namespace ShopNow.Controllers
         public JsonResult GetPrescriptionList(int customerid)
         {
             var model = new CustomerPrescriptionListViewModel();
-            model.ListItems = db.CustomerPrescriptions.Where(i => i.CustomerId == customerid && i.Status ==0)
+            var list1 = db.CustomerPrescriptions.Where(i => i.CustomerId == customerid && i.Status ==0)
                 .AsEnumerable()
                 .Select(i => new CustomerPrescriptionListViewModel.ListItem
                 {
@@ -5792,6 +5792,18 @@ namespace ShopNow.Controllers
                     Remarks = i.Remarks,
                     Status = i.Status
                 }).ToList();
+            var list2 = db.CustomerGroceryUploads.Where(i => i.CustomerId == customerid && i.Status == 0)
+                .AsEnumerable()
+                .Select(i => new CustomerPrescriptionListViewModel.ListItem
+                {
+                    AudioPath = (!string.IsNullOrEmpty(i.AudioPath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Audio/" + i.AudioPath : "",
+                    DateEncoded = i.DateEncoded,
+                    Id = i.Id,
+                    ImagePath = GetFirstGroceryImage(i.Id),
+                    Remarks = i.Remarks,
+                    Status = i.Status
+                }).ToList();
+            model.ListItems = list1.Union(list2).ToList();
             return Json(new { list = model.ListItems }, JsonRequestBehavior.AllowGet);
         }
 
@@ -5799,6 +5811,15 @@ namespace ShopNow.Controllers
         {
             var imagePath = "";
             var image = db.CustomerPrescriptionImages.FirstOrDefault(i => i.CustomerPrescriptionId == id);
+            if (image != null)
+                imagePath = ((!string.IsNullOrEmpty(image.ImagePath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + image.ImagePath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/notavailable.png");
+            return imagePath;
+        }
+
+        public string GetFirstGroceryImage(int id)
+        {
+            var imagePath = "";
+            var image = db.CustomerGroceryUploadImages.FirstOrDefault(i => i.CustomerGroceryUploadId == id);
             if (image != null)
                 imagePath = ((!string.IsNullOrEmpty(image.ImagePath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + image.ImagePath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/notavailable.png");
             return imagePath;
