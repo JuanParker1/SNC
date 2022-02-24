@@ -7139,38 +7139,53 @@ namespace ShopNow.Controllers
         //To generate UpiPaymentLink
         public async Task<JsonResult> GetUPIPaymentLink(CreateRazorPayUpiPaymentLink model)
         {
-            var request = new RequestUpiPaymentLink
+            var payment = db.Payments.FirstOrDefault(i => i.OrderNumber == model.OrderNumber);
+            if (!string.IsNullOrEmpty(payment.CashHandOverUpiPaymentLink))
             {
-                amount = model.Amount * 100,
-                callback_method = "get",
-                callback_url = "",
-                currency = "INR",
-                customer = new RequestUpiPaymentLink.CustomerDetails
+                return Json(new { short_url = payment.CashHandOverUpiPaymentLink }, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                var request = new RequestUpiPaymentLink
                 {
-                    contact = model.PhoneNumber,
-                    email = model.Email,
-                    name = model.Name
-                },
-                description = $"CashHandOver for order no #{model.OrderNumber}",
-                expire_by = (int)DateTime.UtcNow.AddDays(5).Subtract(new DateTime(1970, 1, 1)).TotalSeconds,
-                reference_id = model.OrderNumber.ToString(),
-                upi_link = true,
-                notify = new RequestUpiPaymentLink.Notify
-                {
-                    email = false,
-                    sms = false
-                }
-            };
+                    amount = model.Amount * 100,
+                    callback_method = "get",
+                    callback_url = "",
+                    currency = "INR",
+                    customer = new RequestUpiPaymentLink.CustomerDetails
+                    {
+                        contact = model.PhoneNumber,
+                        email = model.Email,
+                        name = model.Name
+                    },
+                    description = $"CashHandOver for order no #{model.OrderNumber}",
+                    expire_by = (int)DateTime.UtcNow.AddDays(30).Subtract(new DateTime(1970, 1, 1)).TotalSeconds,
+                    reference_id = model.OrderNumber.ToString(),
+                    upi_link = true,
+                    notify = new RequestUpiPaymentLink.Notify
+                    {
+                        email = false,
+                        sms = false
+                    }
+                };
 
-            var stringRequest = JsonConvert.SerializeObject(request);
-            var httpContent = new StringContent(stringRequest, Encoding.UTF8, "application/json");
-            var httpClient = new HttpClient();
-            httpClient.DefaultRequestHeaders.Add($"Authorization", $"Basic {Base64Encode($"{BaseClass.razorpaykey}:{BaseClass.razorpaySecretkey}")}");
-            var httpResponse = await httpClient.PostAsync("https://api.razorpay.com/v1/payment_links/", httpContent);
-            if (httpResponse.Content != null)
-            {
-                var responseContent = await httpResponse.Content.ReadAsStringAsync();
-                return Json(JsonConvert.DeserializeObject<UpiLink>(responseContent), JsonRequestBehavior.AllowGet);
+                var stringRequest = JsonConvert.SerializeObject(request);
+                var httpContent = new StringContent(stringRequest, Encoding.UTF8, "application/json");
+                var httpClient = new HttpClient();
+                httpClient.DefaultRequestHeaders.Add($"Authorization", $"Basic {Base64Encode($"{BaseClass.razorpaykey}:{BaseClass.razorpaySecretkey}")}");
+                var httpResponse = await httpClient.PostAsync("https://api.razorpay.com/v1/payment_links/", httpContent);
+                if (httpResponse.Content != null)
+                {
+                    var responseContent = await httpResponse.Content.ReadAsStringAsync();
+                    var url = JsonConvert.DeserializeObject<UpiLink>(responseContent);
+                    if (url != null)
+                    {
+                        payment.CashHandOverUpiPaymentLink = url.short_url;
+                        db.Entry(payment).State = System.Data.Entity.EntityState.Modified;
+                        db.SaveChanges();
+                    }
+                    return Json(url, JsonRequestBehavior.AllowGet);
+                }
             }
             return Json(false, JsonRequestBehavior.AllowGet);
         }
