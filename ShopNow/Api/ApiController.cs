@@ -7072,7 +7072,7 @@ namespace ShopNow.Controllers
             return Json(list, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult GetShopParcelDropList(int shopid=0)
+        public JsonResult GetShopParcelDropList(int shopid=0, int page = 1, int pageSize = 10)
         {
             var model = new ShopParcelDropListViewModel();
             model.ListItems = db.Orders.Where(i => i.ShopId == shopid && i.IsPickupDrop == true).OrderByDescending(i=>i.Id)
@@ -7091,7 +7091,28 @@ namespace ShopNow.Controllers
                     Status = i.Status,
                     OrderNumber = i.OrderNumber
                 }).ToList();
-            return Json(model.ListItems, JsonRequestBehavior.AllowGet);
+            int count = model.ListItems.Count();
+            int CurrentPage = page;
+            int PageSize = pageSize;
+            int TotalCount = count;
+            int TotalPages = (int)Math.Ceiling(count / (double)PageSize);
+            var items = model.ListItems.Skip((CurrentPage - 1) * PageSize).Take(PageSize).ToList();
+            var previous = CurrentPage - 1;
+            var previousurl = apipath + "Api/GetShopParcelDropList?shopid=" + shopid + "&page=" + previous;
+            var previousPage = CurrentPage > 1 ? previousurl : "No";
+            var current = CurrentPage + 1;
+            var nexturl = apipath + "Api/GetShopParcelDropList?shopid=" + shopid + "&page=" + current;
+            var nextPage = CurrentPage < TotalPages ? nexturl : "No";
+            var paginationMetadata = new
+            {
+                totalCount = TotalCount,
+                pageSize = PageSize,
+                currentPage = CurrentPage,
+                totalPages = TotalPages,
+                previousPage,
+                nextPage
+            };
+            return Json(new { Page = paginationMetadata, items }, JsonRequestBehavior.AllowGet);
         }
 
         //To generate UpiPaymentLink
