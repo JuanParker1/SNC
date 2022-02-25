@@ -2066,6 +2066,16 @@ namespace ShopNow.Controllers
             }
         }
 
+        public ActionResult DeliveredCancel(int id)
+        {
+            var order = db.Orders.FirstOrDefault(i => i.Id == id);
+            order.Status = 7;
+            order.CancelledRemark = "Test Order";
+            db.Entry(order).State = System.Data.Entity.EntityState.Modified;
+            db.SaveChanges();
+            return RedirectToAction("Delivered");
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)
