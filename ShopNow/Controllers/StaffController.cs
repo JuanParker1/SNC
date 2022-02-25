@@ -149,6 +149,19 @@ namespace ShopNow.Controllers
                         db.ShopStaffs.Add(ss);
                         db.SaveChanges();
                     }
+                    var customer = new Customer
+                    {
+                        Name = model.Name,
+                        PhoneNumber = model.PhoneNumber,
+                        Position = 2,
+                        CreatedBy = user.Name,
+                        UpdatedBy = user.Name,
+                        DateEncoded = DateTime.Now,
+                        DateUpdated = DateTime.Now
+                    };
+                    db.Customers.Add(customer);
+                    db.SaveChanges();
+
                 }
                 return RedirectToAction("List");
             }

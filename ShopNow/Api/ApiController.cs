@@ -179,7 +179,7 @@ namespace ShopNow.Controllers
                         db.SaveChanges();
                         if (otpmodel != null)
                         {
-                            UpdateOrderCustomerIdOfPickupService(user.PhoneNumber, user.Id);
+                            UpdateOrderCustomerIdOfPickupService(user.PhoneNumber, user.Id); //To update the pickuporder so that when customer create an account in snowch they can track the orders
                             return Json(new { message = "Successfully Registered and OTP send!", id = user.Id, user.Position });
 
                         }
