@@ -182,6 +182,9 @@
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
             <div class="modal-body">
+                <label class="text-danger">* Click Image to Open in New Window</label>
+                <button id="btn-rotate" class="btn btn-sm btn-secondary float-right mb-2"><i class="fa fa-repeat" aria-hidden="true"></i> Rotate Image</button>
+                <div class="clearfix"></div>
                 <div class="row" id="print-Prescription">
                     <img class="modal-content img-fluid w-100" id="PresImage" />
                 </div>
@@ -349,6 +352,18 @@
             $(".btnCancel").on('click', function () {
                 $('#Id').val($(this).data('id'));
                 $('#modal-cancel').modal('show');
+            });
+            var angle = 90;
+            $('#btn-rotate').on('click', function () {
+                $("#PresImage").css({ 'transform': 'rotate(' + angle + 'deg)' });
+                angle += 90;
+            });
+
+            $('#myModal').on('hidden.bs.modal', function () {
+                $("#PresImage").css({ 'transform': '' });
+            });
+            $("#PresImage").on('click', function () {
+                window.open($(this).attr('src'));
             });
         });
     </script>

@@ -53,7 +53,7 @@
                                     <td>
                                         @foreach (var im in item.ImagePathLists)
                                         {
-                                            <img alt="Image" data-toggle="modal" data-target="#myModal" class="img-thumbnail PrescriptionImage p-1" onerror="this.src='/Images/noimage.png'" style="width:45px;height:45px" />
+                                            <img alt="Image" data-toggle="modal" data-target="#myModal" class="img-thumbnail PrescriptionImage p-1" src="@im.ImagePath" onerror="this.src='/Images/noimage.png'" style="width:45px;height:45px" />
                                         }
                                     </td>
                                     <td>
@@ -90,6 +90,9 @@
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
             <div class="modal-body">
+                <p class="text-danger">* Click Image to Open in New Window</p>
+                <button id="btn-rotate" class="btn btn-sm btn-secondary float-right mb-2"><i class="fa fa-repeat" aria-hidden="true"></i> Rotate Image</button>
+                <div class="clearfix"></div>
                 <div class="row" id="print-Prescription">
                     <img class="modal-content img-fluid w-100" id="GroceryImage" />
                 </div>
@@ -257,6 +260,18 @@
             $(".btnCancel").on('click', function () {
                 $('#Id').val($(this).data('id'));
                 $('#modal-cancel').modal('show');
+            });
+            var angle = 90;
+            $('#btn-rotate').on('click', function () {
+                $("#GroceryImage").css({ 'transform': 'rotate(' + angle + 'deg)' });
+                angle += 90;
+            });
+
+            $('#myModal').on('hidden.bs.modal', function () {
+                $("#GroceryImage").css({ 'transform': '' });
+            });
+            $("#GroceryImage").on('click', function () {
+                window.open($(this).attr('src'));
             });
         });
     </script>
