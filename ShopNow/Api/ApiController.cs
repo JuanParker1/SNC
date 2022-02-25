@@ -5087,14 +5087,13 @@ namespace ShopNow.Controllers
         }
 
         [HttpGet]
-        public JsonResult GetAllOrders(int customerId, int page = 1, int pageSize = 5, int type = 0) //1-Live,2-Past
+        public JsonResult GetAllOrders(int customerId, int page = 1, int pageSize = 5, int type = 0,bool isBuyAgain=false) //1-Live,2-Past
         {
             db.Configuration.ProxyCreationEnabled = false;
             var model = new GetAllOrderListViewModel();
-            model.OrderLists = db.Orders.Where(i => i.CustomerId == customerId && (type == 1 ? (i.Status >= 2 && i.Status <= 5) || i.Status == 8 : (i.Status == 6 || i.Status == 7 || i.Status == 9 || i.Status == 10)))
+            model.OrderLists = db.Orders.Where(i => i.CustomerId == customerId && (type == 1 ? (i.Status >= 2 && i.Status <= 5) || i.Status == 8 : isBuyAgain == true ? i.Status == 6 : (i.Status == 6 || i.Status == 7 || i.Status == 9 || i.Status == 10)))
                  .Join(db.Payments, o => o.OrderNumber, p => p.OrderNumber, (o, p) => new { o, p })
                  .GroupJoin(db.OrderItems, o => o.o.Id, oi => oi.OrderId, (o, oi) => new { o, oi })
-                 //.AsEnumerable()
                  .Select(i => new GetAllOrderListViewModel.OrderList
                  {
                      Convinenientcharge = i.o.o.Convinenientcharge,
@@ -5130,7 +5129,6 @@ namespace ShopNow.Controllers
                      PaymentMode = i.o.p.PaymentMode,
                      WalletAmount = i.o.o.WalletAmount,
                      TipsAmount = i.o.o.TipsAmount,
-                     //Otp = GetOtp(i.o.o.OrderNumber),
                      Otp = db.OtpVerifications.FirstOrDefault(a => a.OrderNo == i.o.o.OrderNumber).Otp,
                      OrderItemLists = i.oi.Select(a => new GetAllOrderListViewModel.OrderList.OrderItemList
                      {
@@ -5151,7 +5149,6 @@ namespace ShopNow.Controllers
                          ShopId = i.o.o.ShopId,
                          ShopName = i.o.o.ShopName,
                          OutletId = a.ProductId != 0 ? db.Products.FirstOrDefault(b => b.Id == a.ProductId).OutletId : 0,
-                         //OfferQuantityLimit = db.Products.FirstOrDefault(b=>b.Id == a.ProductId).OfferQuantityLimit,
                          OrderItemAddonLists = db.OrderItemAddons.Where(b => b.OrderItemId == a.Id).Select(b => new GetAllOrderListViewModel.OrderList.OrderItemList.OrderItemAddonList
                          {
                              AddonName = b.AddonName,
