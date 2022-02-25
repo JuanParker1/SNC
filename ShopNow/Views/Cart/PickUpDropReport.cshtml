@@ -7,8 +7,11 @@
 <link href="~/Content/Gridmvc.css" rel="stylesheet" />
 <script src="~/Scripts/gridmvc.js"></script>
 <style>
-    table > thead > tr > th:first-child {
-        padding: 12px 5px;
+    table > thead > tr > th:nth-child(1) {
+        padding: 12px 6px;
+    }
+    table > thead > tr > th:nth-child(7) {
+        padding: 12px 14px;
     }
 </style>
 <div class="container-fluid">
@@ -62,7 +65,7 @@
                    columns.Add(p => p.PaymentMode).Filterable(true).SetWidth(10);
                    columns.Add(c => c.Amount).Titled("Amount").Filterable(true).SetWidth(5);
                    columns.Add(c => c.DeliveryAddress).Titled("Delivery Address").Filterable(true).SetWidth(15);
-                   columns.Add(c => c.PhoneNumber).Titled("Phone Number").Filterable(true).SetWidth(15);
+                   columns.Add(c => c.PhoneNumber).Titled("Customer Phone No").Filterable(true).SetWidth(15);
                    columns.Add(c => c.DateEncoded).Titled("Date").Filterable(true).SetWidth(10).Format("{0:dd-MM-yyyy hh:mm tt}");
                }).WithPaging(25).Sortable(true)
                 </div>
@@ -79,7 +82,7 @@
             <td>Payment Mode</td>
             <td>Amount</td>
             <td>Delivery Address</td>
-            <td>Phone Number</td>
+            <td>Customer Phone Number</td>
             <td>Date</td>
         </tr>
     </thead>
