@@ -17,5 +17,6 @@ namespace ShopNow.Models
         public int Id { get; set; }
         public int ShopId { get; set; }
         public int StaffId { get; set; }
+        public int StaffCustomerId { get; set; }
     }
 }

@@ -1547,6 +1547,7 @@
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="ShopId" Type="int" Nullable="false" />
           <Property Name="StaffId" Type="int" Nullable="false" />
+          <Property Name="StaffCustomerId" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="Specifications">
           <Key>
@@ -2778,14 +2779,6 @@
           <Property Name="UpdatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="CreatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
-        <EntityType Name="ShopStaff">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="ShopId" Type="Int32" Nullable="false" />
-          <Property Name="StaffId" Type="Int32" Nullable="false" />
-        </EntityType>
         <EntityType Name="Specification">
           <Key>
             <PropertyRef Name="Id" />
@@ -2917,7 +2910,6 @@
           <EntitySet Name="ShopCredits" EntityType="Self.ShopCredit" />
           <EntitySet Name="ShopDishAddOns" EntityType="Self.ShopDishAddOn" />
           <EntitySet Name="ShopMembers" EntityType="Self.ShopMember" />
-          <EntitySet Name="ShopStaffs" EntityType="Self.ShopStaff" />
           <EntitySet Name="Specifications" EntityType="Self.Specification" />
           <EntitySet Name="Staffs" EntityType="Self.Staff" />
           <EntitySet Name="SubCategories" EntityType="Self.SubCategory" />
@@ -3063,6 +3055,7 @@
           <EntitySet Name="FAQs" EntityType="sncModel.FAQ" />
           <EntitySet Name="CustomerSearchHistories" EntityType="sncModel.CustomerSearchHistory" />
           <EntitySet Name="Payments" EntityType="sncModel.Payment" />
+          <EntitySet Name="ShopStaffs" EntityType="sncModel.ShopStaff" />
         </EntityContainer>
         <ComplexType Name="GetDEliveryBoyList_Result">
           <Property Type="Int32" Name="Id" Nullable="false" />
@@ -3740,6 +3733,15 @@
           <Property Name="CreatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="DateEncoded" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="DateUpdated" Type="DateTime" Nullable="false" Precision="3" />
+        </EntityType>
+        <EntityType Name="ShopStaff">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ShopId" Type="Int32" Nullable="false" />
+          <Property Name="StaffId" Type="Int32" Nullable="false" />
+          <Property Name="StaffCustomerId" Type="Int32" Nullable="false" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -4763,15 +4765,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="ShopStaffs">
-            <EntityTypeMapping TypeName="sncModel.ShopStaff">
-              <MappingFragment StoreEntitySet="ShopStaffs">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="ShopId" ColumnName="ShopId" />
-                <ScalarProperty Name="StaffId" ColumnName="StaffId" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="Specifications">
             <EntityTypeMapping TypeName="sncModel.Specification">
               <MappingFragment StoreEntitySet="Specifications">
@@ -5597,6 +5590,16 @@
                 <ScalarProperty Name="PaymentMode" ColumnName="PaymentMode" />
                 <ScalarProperty Name="Amount" ColumnName="Amount" />
                 <ScalarProperty Name="CorporateID" ColumnName="CorporateID" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ShopStaffs">
+            <EntityTypeMapping TypeName="sncModel.ShopStaff">
+              <MappingFragment StoreEntitySet="ShopStaffs">
+                <ScalarProperty Name="StaffCustomerId" ColumnName="StaffCustomerId" />
+                <ScalarProperty Name="StaffId" ColumnName="StaffId" />
+                <ScalarProperty Name="ShopId" ColumnName="ShopId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
