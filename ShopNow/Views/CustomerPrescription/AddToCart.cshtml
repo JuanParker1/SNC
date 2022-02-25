@@ -300,7 +300,7 @@
                         totalSize += parseFloat(size);
 
                         $(".ItemTotal").text(itemTotal.toFixed(2));
-                        $.getJSON("/CustomerPrescription/GetShopCharge", { shopid: shopid, itemTotal: itemTotal, customerid: customerid, totalSize: totalSize, totalWeight: totalWeight }, function (data) {
+                        $.getJSON("/CustomerPrescription/GetShopCharge", { prescriptionid: $('#PrescriptionId').val(), shopid: shopid, itemTotal: itemTotal, customerid: customerid, totalSize: totalSize, totalWeight: totalWeight }, function (data) {
                             $("#PackingCharge").val(data.PackingCharge);
                             $(".PackingCharge").text(data.PackingCharge);
                             $("#ConvenientCharge").val(data.ConvenientCharge);

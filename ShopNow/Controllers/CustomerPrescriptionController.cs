@@ -335,12 +335,12 @@ namespace ShopNow.Controllers
             return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult GetShopCharge(int shopid, double itemTotal, int customerid, double totalSize, double totalWeight)
+        public JsonResult GetShopCharge(int prescriptionid,int shopid, double itemTotal, int customerid, double totalSize, double totalWeight)
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             var model = new BillingDeliveryChargeViewModel();
             model = CommonHelpers.GetDeliveryCharge(shopid, totalSize, totalWeight);
-            var customerPrescription = db.CustomerPrescriptions.FirstOrDefault(i => i.CustomerId == customerid);
+            var customerPrescription = db.CustomerPrescriptions.FirstOrDefault(i => i.Id == prescriptionid);
 
             var shop = db.Shops.Where(i => i.Id == shopid && i.Status == 0).FirstOrDefault();
             var ConvenientCharge = 0.0;
