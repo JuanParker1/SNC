@@ -352,7 +352,10 @@
                                     <input type="radio" class="ml-3" name="FssaiLicense" id="FssaiLicenseImage" value="Image" checked> <label for="FssaiLicenseImage"> Image</label>
                                     <input type="radio" class="ml-3" name="FssaiLicense" id="FssaiLicensePDF" value="PDF"> <label for="FssaiLicensePDF"> PDF</label>
                                     <div class="row ml-3 FssaiPdf d-none mt-2 mb-3">
-                                        <a href="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageFSSAIPath" target="_blank" class=" FssaiPdflink mb-2"> Click here for Pdf view</a>
+                                        @if (Model.ImageFSSAIPath != null)
+                                        {
+                                        <a href="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageFSSAIPath" target="_blank" class="FssaiPdflink mb-2"> Click here for Pdf view</a>
+                                        }
                                         <input type="file" id="FSSAIPdf" name="FSSAIPdf" />
                                     </div>
                                     <div class="row FssaiImg mt-2">
@@ -362,18 +365,20 @@
                                             <label for="FSSAIImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
                                         </div>
                                     </div>
-                                    @if (Model.ImageFSSAIPath != null)
-                                    {
+                                   
                                         <div class="row mb-2">
                                             <div class="col-md-12 text-center">
-                                                <button type="button" class="btn btn-sm btn-danger" id="btnFssaiRemove">Remove</button>
-                                                <button type="button" class="btn btn-sm btn-warning" id="btnFssaiExpand" data-toggle="modal" data-target="#FssaiModal">
-                                                    + Expand
-                                                </button>
-                                                <input type="hidden" id="FSSIApprove" name="FSSIApprove" />
+                                                <button type="button" class="btn btn-sm btn-danger d-none" id="btnFssaiRemove">Remove</button>
+                                                @if (Model.ImageFSSAIPath != null)
+                                                {
+                                                    <button type="button" class="btn btn-sm btn-warning" id="btnFssaiExpand" data-toggle="modal" data-target="#FssaiModal">
+                                                        + Expand
+                                                    </button>
+                                                    <input type="hidden" id="FSSIApprove" name="FSSIApprove" />
+                                                }
                                             </div>
                                         </div>
-                                    }
+                                    
                                     @if (Model.ImageFSSAIPath != null && Model.Verify == false)
                                     {
                                         <div class="row divFssaiLabels">
@@ -1350,6 +1355,7 @@
                 $("#img-fssai").attr('src', '');
                 $('.penFssi').addClass('d-none');
                 $('.fssai-img').addClass('d-none');
+                $("#btnFssaiRemove").removeClass("d-none");
             } else {
                 $("#FssaiLicenseImage").prop("checked", true);
                 $('.FssaiImg').removeClass('d-none');
@@ -1357,6 +1363,7 @@
                 $("#FSSAIPdf").val("");
                 $('.penFssi').addClass('d-none');
                 $('.fssai-pdf').addClass('d-none');
+                $("#btnFssaiRemove").removeClass("d-none");
             }
 
             if (resDrug == ".pdf") {
@@ -1488,45 +1495,18 @@
             }
 
             $('input:radio[name="FssaiLicense"]').change(function () {
-                if (this.checked && this.value == 'Image' && resFssai == ".pdf") {
+                if (this.checked && this.value == 'Image') {
                     $('.FssaiImg').removeClass('d-none');
                     $('.FssaiPdf').addClass('d-none');
                     $("#FSSAIPdf").val("");
                     $('.penFssi').addClass('d-none');
-                    $("#btnFssaiRemove").addClass("d-none");
-                    $('#btnFssaiExpand').addClass('d-none');
-                    $('.divFssaiLabels').addClass('d-none');
                 } else {
                     $('.FssaiImg').addClass('d-none');
                     $('.FssaiPdf').removeClass('d-none');
                     $("#FSSAIImage").val("");
-                    $("#img-fssai").attr('src', '');
+                    //$("#img-fssai").attr('src', '');
                     $('.penFssi').addClass('d-none');
-                    $("#btnFssaiRemove").addClass("d-none");
-                    $('#btnFssaiExpand').addClass('d-none');
-                    $('.divFssaiLabels').addClass('d-none');
-                    $('.FssaiPdflink').addClass('d-none');
-
                 }
-                //if (this.checked && this.value == 'Image') {
-                //    $('.FssaiImg').removeClass('d-none');
-                //    $('.FssaiPdf').addClass('d-none');
-                //    $("#FSSAIPdf").val("");
-                //    $('.penFssi').addClass('d-none');
-                //    $("#btnFssaiRemove").addClass("d-none");
-                //    $('#btnFssaiExpand').addClass('d-none');
-                //    $('.divFssaiLabels').addClass('d-none');
-                //} else {
-                //    $('.FssaiImg').addClass('d-none');
-                //    $('.FssaiPdf').removeClass('d-none');
-                //    $("#FSSAIImage").val("");
-                //    $("#img-fssai").attr('src', '');
-                //    $('.penFssi').addClass('d-none');
-                //    $("#btnFssaiRemove").addClass("d-none");
-                //    $('#btnFssaiExpand').addClass('d-none');
-                //    $('.divFssaiLabels').addClass('d-none');
-                //    $('.FssaiPdflink').addClass('d-none');
-                //}
             });
 
             $('input:radio[name="DrugLicense"]').change(function () {
@@ -1700,7 +1680,7 @@
                 $('.FssaiPdflink').addClass('d-none');
                 $('#btnFssaiExpand').addClass('d-none');
                 $('.divFssaiLabels').addClass('d-none');
-                $("#ImageFSSAIPath").val();
+                $("#ImageFSSAIPath").val("");
             });
 
             $("#btnDrugApprove").click(function () {
