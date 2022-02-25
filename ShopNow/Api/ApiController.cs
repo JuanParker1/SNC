@@ -167,9 +167,6 @@ namespace ShopNow.Controllers
                         otpmodel.CreatedBy = user.Name;
                         otpmodel.UpdatedBy = user.Name;
                         otpmodel.DateEncoded = DateTime.Now;
-                        //var dateAndTime = DateTime.Now;
-                        //var date = dateAndTime.ToString("d");
-                        //var time = dateAndTime.ToString("HH:mm");
                         string joyra = "04448134440";
                         string Msg = "Hi, " + otpmodel.Otp + " is the OTP for (Shop Now Chat) Verification at " + DateTime.Now.ToString("HH:mm") + " with " + otpmodel.ReferenceCode + " reference - Joyra";
                         string result = SendSMS.execute(joyra, model.PhoneNumber, Msg);
@@ -179,7 +176,7 @@ namespace ShopNow.Controllers
                         db.SaveChanges();
                         if (otpmodel != null)
                         {
-                            UpdateOrderCustomerIdOfPickupService(user.PhoneNumber, user.Id);
+                            UpdateOrderCustomerIdOfPickupService(user.PhoneNumber, user.Id); //To update the pickuporder so that when customer create an account in snowch they can track the orders
                             return Json(new { message = "Successfully Registered and OTP send!", id = user.Id, user.Position });
 
                         }
@@ -1483,7 +1480,7 @@ namespace ShopNow.Controllers
 
                                 if (payment == null)
                                 {
-                                   Models.Payment  pay = new Models.Payment();
+                                    Models.Payment pay = new Models.Payment();
                                     pay.Amount = order.NetTotal;
                                     pay.PaymentMode = "Online Payment";
                                     pay.PaymentModeType = 1;
@@ -1491,7 +1488,7 @@ namespace ShopNow.Controllers
                                     pay.Status = 0;
                                     pay.DateEncoded = order.DateEncoded;
                                     pay.DateUpdated = order.DateUpdated;
-                                   // pay.ReferenceCode = data.PaymentId;
+                                    // pay.ReferenceCode = data.PaymentId;
                                     pay.CustomerId = order.CustomerId;
                                     pay.CustomerName = order.CustomerName;
                                     pay.ShopId = order.ShopId;
@@ -1527,8 +1524,8 @@ namespace ShopNow.Controllers
                                     pd.Amount = Convert.ToDecimal(varOrder.Amount);
                                     pd.Currency = "INR";
                                     pd.Status = 2;
-                                   
-                                 
+
+
 
 
                                     pd.Invoice_Id = s[0]["invoice_id"];
@@ -1561,16 +1558,11 @@ namespace ShopNow.Controllers
 
 
                                     pd.Fee -= pd.Tax; //Total fee minu tax
-         
+
                                     pd.DateEncoded = DateTime.Now;
-                                    if (!db.PaymentsDatas.Any(i => i.OrderNumber == pay.OrderNumber))
-                                    {
-                                        db.PaymentsDatas.Add(pd);
-                                        db.SaveChanges();
-                                    }
+                                    db.PaymentsDatas.Add(pd);
+                                    db.SaveChanges();
                                 }
-                              
-                               
                                 
                             }
                         }
@@ -3753,30 +3745,62 @@ namespace ShopNow.Controllers
         public JsonResult GetAllShops(int customerId)
         {
             var model = new CustomerShopAllListViewModel();
-            model.List = db.Shops.Where(i => i.CustomerId == customerId)
-                 .GroupJoin(db.Customers, s => s.CustomerId, c => c.Id, (s, c) => new { s, c })
-                .GroupJoin(db.OtpVerifications, ss => ss.s.Id, o => o.ShopId, (ss, o) => new { ss, o })
-                             .AsEnumerable()
-                            .Select(i => new CustomerShopAllListViewModel.ShopList
-                            {
-                                Id = i.ss.s.Id,
-                                Name = i.ss.s.Name,
-                                PhoneNumber = i.ss.s.PhoneNumber,
-                                ShopCategoryId = i.ss.s.ShopCategoryId,
-                                ShopCategoryName = i.ss.s.ShopCategoryName,
-                                Otp = i.o.Any() ? i.o.LastOrDefault().Otp : "N/A",
-                                Password = i.ss.c.FirstOrDefault().Password != null ? "Password Generated" : "Not Password Generated",
-                                Status = i.ss.s.Status,
-                                isOnline = i.ss.s.IsOnline,
-                                Rating = i.ss.s.Rating,
-                                ImagePath = ((!string.IsNullOrEmpty(i.ss.s.ImagePath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.ss.s.ImagePath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/noimageres.svg"),
-                                DistrictName = i.ss.s.DistrictName,
-                                Verify = i.ss.s.Verify,
-                                OtpVerify = i.o.Any() ? i.o.LastOrDefault().Verify : false,
-                                CustomerId = i.ss.s.CustomerId,
-                                DateEncoded = i.o.Any() ? i.o.LastOrDefault().DateEncoded.ToString("dd/MMM/yyyy") : "N/A",
-                                NextOnTime = i.ss.s.NextOnTime
-                            }).ToList();
+            var customer = db.Customers.FirstOrDefault(i => i.Id == customerId);
+            if (customer != null && customer.Position == 2)
+            {
+                int[] staffshop = db.Staffs.Join(db.ShopStaffs.Where(i => i.StaffCustomerId == customerId), s => s.Id, ss => ss.StaffId, (s, ss) => new { s, ss }).Select(i => i.ss.ShopId).ToArray();
+                model.List = db.Shops.Where(i => staffshop.Contains(i.Id))
+                    .GroupJoin(db.Customers, s => s.CustomerId, c => c.Id, (s, c) => new { s, c })
+                   .GroupJoin(db.OtpVerifications, ss => ss.s.Id, o => o.ShopId, (ss, o) => new { ss, o })
+                                .AsEnumerable()
+                               .Select(i => new CustomerShopAllListViewModel.ShopList
+                               {
+                                   Id = i.ss.s.Id,
+                                   Name = i.ss.s.Name,
+                                   PhoneNumber = i.ss.s.PhoneNumber,
+                                   ShopCategoryId = i.ss.s.ShopCategoryId,
+                                   ShopCategoryName = i.ss.s.ShopCategoryName,
+                                   Otp = i.o.Any() ? i.o.LastOrDefault().Otp : "N/A",
+                                   Password = i.ss.c.FirstOrDefault().Password != null ? "Password Generated" : "Not Password Generated",
+                                   Status = i.ss.s.Status,
+                                   isOnline = i.ss.s.IsOnline,
+                                   Rating = RatingCalculation(i.ss.s.Id),
+                                   ImagePath = ((!string.IsNullOrEmpty(i.ss.s.ImagePath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.ss.s.ImagePath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/noimageres.svg"),
+                                   DistrictName = i.ss.s.DistrictName,
+                                   Verify = i.ss.s.Verify,
+                                   OtpVerify = i.o.Any() ? i.o.LastOrDefault().Verify : false,
+                                   CustomerId = i.ss.s.CustomerId,
+                                   DateEncoded = i.o.Any() ? i.o.LastOrDefault().DateEncoded.ToString("dd/MMM/yyyy") : "N/A",
+                                   NextOnTime = i.ss.s.NextOnTime
+                               }).ToList();
+            }
+            else
+            {
+                model.List = db.Shops.Where(i => i.CustomerId == customerId)
+                     .GroupJoin(db.Customers, s => s.CustomerId, c => c.Id, (s, c) => new { s, c })
+                    .GroupJoin(db.OtpVerifications, ss => ss.s.Id, o => o.ShopId, (ss, o) => new { ss, o })
+                                 .AsEnumerable()
+                                .Select(i => new CustomerShopAllListViewModel.ShopList
+                                {
+                                    Id = i.ss.s.Id,
+                                    Name = i.ss.s.Name,
+                                    PhoneNumber = i.ss.s.PhoneNumber,
+                                    ShopCategoryId = i.ss.s.ShopCategoryId,
+                                    ShopCategoryName = i.ss.s.ShopCategoryName,
+                                    Otp = i.o.Any() ? i.o.LastOrDefault().Otp : "N/A",
+                                    Password = i.ss.c.FirstOrDefault().Password != null ? "Password Generated" : "Not Password Generated",
+                                    Status = i.ss.s.Status,
+                                    isOnline = i.ss.s.IsOnline,
+                                    Rating = RatingCalculation(i.ss.s.Id),
+                                    ImagePath = ((!string.IsNullOrEmpty(i.ss.s.ImagePath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.ss.s.ImagePath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/noimageres.svg"),
+                                    DistrictName = i.ss.s.DistrictName,
+                                    Verify = i.ss.s.Verify,
+                                    OtpVerify = i.o.Any() ? i.o.LastOrDefault().Verify : false,
+                                    CustomerId = i.ss.s.CustomerId,
+                                    DateEncoded = i.o.Any() ? i.o.LastOrDefault().DateEncoded.ToString("dd/MMM/yyyy") : "N/A",
+                                    NextOnTime = i.ss.s.NextOnTime
+                                }).ToList();
+            }
             return Json(model, JsonRequestBehavior.AllowGet);
         }
 
@@ -5107,8 +5131,9 @@ namespace ShopNow.Controllers
                      WalletAmount = i.o.o.WalletAmount,
                      TipsAmount = i.o.o.TipsAmount,
                      //Otp = GetOtp(i.o.o.OrderNumber),
-                     Otp = db.OtpVerifications.FirstOrDefault(a=>a.OrderNo == i.o.o.OrderNumber).Otp,
-                     OrderItemLists = i.oi.Select(a => new GetAllOrderListViewModel.OrderList.OrderItemList {
+                     Otp = db.OtpVerifications.FirstOrDefault(a => a.OrderNo == i.o.o.OrderNumber).Otp,
+                     OrderItemLists = i.oi.Select(a => new GetAllOrderListViewModel.OrderList.OrderItemList
+                     {
                          AddOnType = a.AddOnType,
                          BrandId = a.BrandId,
                          BrandName = a.BrandName,
@@ -5125,9 +5150,10 @@ namespace ShopNow.Controllers
                          UnitPrice = a.UnitPrice,
                          ShopId = i.o.o.ShopId,
                          ShopName = i.o.o.ShopName,
-                         OutletId = db.Products.FirstOrDefault(b=>b.Id == a.ProductId).OutletId,
+                         OutletId = a.ProductId != 0 ? db.Products.FirstOrDefault(b => b.Id == a.ProductId).OutletId : 0,
                          //OfferQuantityLimit = db.Products.FirstOrDefault(b=>b.Id == a.ProductId).OfferQuantityLimit,
-                         OrderItemAddonLists = db.OrderItemAddons.Where(b => b.OrderItemId == a.Id).Select(b => new GetAllOrderListViewModel.OrderList.OrderItemList.OrderItemAddonList {
+                         OrderItemAddonLists = db.OrderItemAddons.Where(b => b.OrderItemId == a.Id).Select(b => new GetAllOrderListViewModel.OrderList.OrderItemList.OrderItemAddonList
+                         {
                              AddonName = b.AddonName,
                              AddonPrice = b.AddonPrice,
                              CrustName = b.CrustName,
@@ -5783,7 +5809,7 @@ namespace ShopNow.Controllers
         public JsonResult GetPrescriptionList(int customerid)
         {
             var model = new CustomerPrescriptionListViewModel();
-            model.ListItems = db.CustomerPrescriptions.Where(i => i.CustomerId == customerid && i.Status ==0)
+            var list1 = db.CustomerPrescriptions.Where(i => i.CustomerId == customerid && i.Status ==0)
                 .AsEnumerable()
                 .Select(i => new CustomerPrescriptionListViewModel.ListItem
                 {
@@ -5795,6 +5821,18 @@ namespace ShopNow.Controllers
                     Remarks = i.Remarks,
                     Status = i.Status
                 }).ToList();
+            var list2 = db.CustomerGroceryUploads.Where(i => i.CustomerId == customerid && i.Status == 0)
+                .AsEnumerable()
+                .Select(i => new CustomerPrescriptionListViewModel.ListItem
+                {
+                    AudioPath = (!string.IsNullOrEmpty(i.AudioPath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Audio/" + i.AudioPath : "",
+                    DateEncoded = i.DateEncoded,
+                    Id = i.Id,
+                    ImagePath = GetFirstGroceryImage(i.Id),
+                    Remarks = i.Remarks,
+                    Status = i.Status
+                }).ToList();
+            model.ListItems = list1.Union(list2).ToList();
             return Json(new { list = model.ListItems }, JsonRequestBehavior.AllowGet);
         }
 
@@ -5802,6 +5840,15 @@ namespace ShopNow.Controllers
         {
             var imagePath = "";
             var image = db.CustomerPrescriptionImages.FirstOrDefault(i => i.CustomerPrescriptionId == id);
+            if (image != null)
+                imagePath = ((!string.IsNullOrEmpty(image.ImagePath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + image.ImagePath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/notavailable.png");
+            return imagePath;
+        }
+
+        public string GetFirstGroceryImage(int id)
+        {
+            var imagePath = "";
+            var image = db.CustomerGroceryUploadImages.FirstOrDefault(i => i.CustomerGroceryUploadId == id);
             if (image != null)
                 imagePath = ((!string.IsNullOrEmpty(image.ImagePath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + image.ImagePath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/notavailable.png");
             return imagePath;
@@ -7075,64 +7122,178 @@ namespace ShopNow.Controllers
             return Json(list, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult GetShopParcelDropList(int customerid=0)
+        public JsonResult GetShopParcelDropList(int shopid=0,int type=0, int page = 1, int pageSize = 10)
         {
-            int[] shop = db.Shops.Where(i => i.CustomerId == customerid && i.Status == 0).Select(S => S.Id).ToArray();
             var model = new ShopParcelDropListViewModel();
-            model.ListItems = db.Orders.Where(i => shop.Contains(i.ShopId) && i.IsPickupDrop == true)
-                .Select(i => new ShopParcelDropListViewModel.ListItem
-                {
-                    ShopName = i.ShopName,
-                    Amount = i.TotalPrice,
-                    DateEncoded = i.DateEncoded,
-                    DeliveryAddress = i.DeliveryAddress,
-                    DeliveryCharge = i.DeliveryCharge,
-                    Distance = i.Distance + "Kms",
-                    CustomerName = i.CustomerName,
-                    CustomerPhoneNumber = i.CustomerPhoneNumber,
-                    PickupAddress = i.PickupAddress,
-                    Remarks = i.Remarks,
-                    Status = i.Status,
-                    OrderNumber = i.OrderNumber
-                }).ToList();
-            return Json(model.ListItems, JsonRequestBehavior.AllowGet);
+            if (type == 0)
+            {
+                model.ListItems = db.Orders.Where(i => i.ShopId == shopid && i.IsPickupDrop == true).OrderByDescending(i => i.Id)
+                    .Select(i => new ShopParcelDropListViewModel.ListItem
+                    {
+                        ShopName = i.ShopName,
+                        Amount = i.TotalPrice,
+                        DateEncoded = i.DateEncoded,
+                        DeliveryAddress = i.DeliveryAddress,
+                        DeliveryCharge = i.DeliveryCharge,
+                        Distance = i.Distance + "Kms",
+                        CustomerName = i.CustomerName,
+                        CustomerPhoneNumber = i.CustomerPhoneNumber,
+                        PickupAddress = i.PickupAddress,
+                        Remarks = i.Remarks,
+                        Status = i.Status,
+                        OrderNumber = i.OrderNumber
+                    }).ToList();
+            }
+            else if (type == 1)
+            {
+                model.ListItems = db.Orders.Where(i => i.ShopId == shopid && i.IsPickupDrop == true && i.Status ==2).OrderByDescending(i => i.Id)
+                    .Select(i => new ShopParcelDropListViewModel.ListItem
+                    {
+                        ShopName = i.ShopName,
+                        Amount = i.TotalPrice,
+                        DateEncoded = i.DateEncoded,
+                        DeliveryAddress = i.DeliveryAddress,
+                        DeliveryCharge = i.DeliveryCharge,
+                        Distance = i.Distance + "Kms",
+                        CustomerName = i.CustomerName,
+                        CustomerPhoneNumber = i.CustomerPhoneNumber,
+                        PickupAddress = i.PickupAddress,
+                        Remarks = i.Remarks,
+                        Status = i.Status,
+                        OrderNumber = i.OrderNumber
+                    }).ToList();
+            }
+            else if (type == 2)
+            {
+                model.ListItems = db.Orders.Where(i => i.ShopId == shopid && i.IsPickupDrop == true && (i.Status == 3 || i.Status == 4 || i.Status == 5 || i.Status == 8)).OrderByDescending(i => i.Id)
+                    .Select(i => new ShopParcelDropListViewModel.ListItem
+                    {
+                        ShopName = i.ShopName,
+                        Amount = i.TotalPrice,
+                        DateEncoded = i.DateEncoded,
+                        DeliveryAddress = i.DeliveryAddress,
+                        DeliveryCharge = i.DeliveryCharge,
+                        Distance = i.Distance + "Kms",
+                        CustomerName = i.CustomerName,
+                        CustomerPhoneNumber = i.CustomerPhoneNumber,
+                        PickupAddress = i.PickupAddress,
+                        Remarks = i.Remarks,
+                        Status = i.Status,
+                        OrderNumber = i.OrderNumber
+                    }).ToList();
+            }
+            else if (type == 3)
+            {
+                model.ListItems = db.Orders.Where(i => i.ShopId == shopid && i.IsPickupDrop == true && i.Status == 6).OrderByDescending(i => i.Id)
+                   .Select(i => new ShopParcelDropListViewModel.ListItem
+                   {
+                       ShopName = i.ShopName,
+                       Amount = i.TotalPrice,
+                       DateEncoded = i.DateEncoded,
+                       DeliveryAddress = i.DeliveryAddress,
+                       DeliveryCharge = i.DeliveryCharge,
+                       Distance = i.Distance + "Kms",
+                       CustomerName = i.CustomerName,
+                       CustomerPhoneNumber = i.CustomerPhoneNumber,
+                       PickupAddress = i.PickupAddress,
+                       Remarks = i.Remarks,
+                       Status = i.Status,
+                       OrderNumber = i.OrderNumber
+                   }).ToList();
+            }
+            else
+            {
+                model.ListItems = db.Orders.Where(i => i.ShopId == shopid && i.IsPickupDrop == true && (i.Status == 7 || i.Status == 9 || i.Status == 10)).OrderByDescending(i => i.Id)
+                   .Select(i => new ShopParcelDropListViewModel.ListItem
+                   {
+                       ShopName = i.ShopName,
+                       Amount = i.TotalPrice,
+                       DateEncoded = i.DateEncoded,
+                       DeliveryAddress = i.DeliveryAddress,
+                       DeliveryCharge = i.DeliveryCharge,
+                       Distance = i.Distance + "Kms",
+                       CustomerName = i.CustomerName,
+                       CustomerPhoneNumber = i.CustomerPhoneNumber,
+                       PickupAddress = i.PickupAddress,
+                       Remarks = i.Remarks,
+                       Status = i.Status,
+                       OrderNumber = i.OrderNumber
+                   }).ToList();
+            }
+            int count = model.ListItems.Count();
+            int CurrentPage = page;
+            int PageSize = pageSize;
+            int TotalCount = count;
+            int TotalPages = (int)Math.Ceiling(count / (double)PageSize);
+            var items = model.ListItems.Skip((CurrentPage - 1) * PageSize).Take(PageSize).ToList();
+            var previous = CurrentPage - 1;
+            var previousurl = apipath + "Api/GetShopParcelDropList?shopid=" + shopid + "&page=" + previous;
+            var previousPage = CurrentPage > 1 ? previousurl : "No";
+            var current = CurrentPage + 1;
+            var nexturl = apipath + "Api/GetShopParcelDropList?shopid=" + shopid + "&page=" + current;
+            var nextPage = CurrentPage < TotalPages ? nexturl : "No";
+            var paginationMetadata = new
+            {
+                totalCount = TotalCount,
+                pageSize = PageSize,
+                currentPage = CurrentPage,
+                totalPages = TotalPages,
+                previousPage,
+                nextPage
+            };
+            return Json(new { Page = paginationMetadata, items }, JsonRequestBehavior.AllowGet);
         }
 
         //To generate UpiPaymentLink
         public async Task<JsonResult> GetUPIPaymentLink(CreateRazorPayUpiPaymentLink model)
         {
-            var request = new RequestUpiPaymentLink
+            var payment = db.Payments.FirstOrDefault(i => i.OrderNumber == model.OrderNumber);
+            if (!string.IsNullOrEmpty(payment.CashHandOverUpiPaymentLink))
             {
-                amount = model.Amount * 100,
-                callback_method = "get",
-                callback_url = "",
-                currency = "INR",
-                customer = new RequestUpiPaymentLink.CustomerDetails
+                return Json(new { short_url = payment.CashHandOverUpiPaymentLink }, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                var request = new RequestUpiPaymentLink
                 {
-                    contact = model.PhoneNumber,
-                    email = model.Email,
-                    name = model.Name
-                },
-                description = $"CashHandOver for order no #{model.OrderNumber}",
-                expire_by = (int)DateTime.UtcNow.AddDays(5).Subtract(new DateTime(1970, 1, 1)).TotalSeconds,
-                reference_id = model.OrderNumber.ToString(),
-                upi_link = true,
-                notify = new RequestUpiPaymentLink.Notify
-                {
-                    email = false,
-                    sms = false
-                }
-            };
+                    amount = model.Amount * 100,
+                    callback_method = "get",
+                    callback_url = "",
+                    currency = "INR",
+                    customer = new RequestUpiPaymentLink.CustomerDetails
+                    {
+                        contact = model.PhoneNumber,
+                        email = model.Email,
+                        name = model.Name
+                    },
+                    description = $"CashHandOver for order no #{model.OrderNumber}",
+                    expire_by = (int)DateTime.UtcNow.AddDays(30).Subtract(new DateTime(1970, 1, 1)).TotalSeconds,
+                    reference_id = model.OrderNumber.ToString(),
+                    upi_link = true,
+                    notify = new RequestUpiPaymentLink.Notify
+                    {
+                        email = false,
+                        sms = false
+                    }
+                };
 
-            var stringRequest = JsonConvert.SerializeObject(request);
-            var httpContent = new StringContent(stringRequest, Encoding.UTF8, "application/json");
-            var httpClient = new HttpClient();
-            httpClient.DefaultRequestHeaders.Add($"Authorization", $"Basic {Base64Encode($"{BaseClass.razorpaykey}:{BaseClass.razorpaySecretkey}")}");
-            var httpResponse = await httpClient.PostAsync("https://api.razorpay.com/v1/payment_links/", httpContent);
-            if (httpResponse.Content != null)
-            {
-                var responseContent = await httpResponse.Content.ReadAsStringAsync();
-                return Json(JsonConvert.DeserializeObject<UpiLink>(responseContent), JsonRequestBehavior.AllowGet);
+                var stringRequest = JsonConvert.SerializeObject(request);
+                var httpContent = new StringContent(stringRequest, Encoding.UTF8, "application/json");
+                var httpClient = new HttpClient();
+                httpClient.DefaultRequestHeaders.Add($"Authorization", $"Basic {Base64Encode($"{BaseClass.razorpaykey}:{BaseClass.razorpaySecretkey}")}");
+                var httpResponse = await httpClient.PostAsync("https://api.razorpay.com/v1/payment_links/", httpContent);
+                if (httpResponse.Content != null)
+                {
+                    var responseContent = await httpResponse.Content.ReadAsStringAsync();
+                    var url = JsonConvert.DeserializeObject<UpiLink>(responseContent);
+                    if (url != null)
+                    {
+                        payment.CashHandOverUpiPaymentLink = url.short_url;
+                        db.Entry(payment).State = System.Data.Entity.EntityState.Modified;
+                        db.SaveChanges();
+                    }
+                    return Json(url, JsonRequestBehavior.AllowGet);
+                }
             }
             return Json(false, JsonRequestBehavior.AllowGet);
         }

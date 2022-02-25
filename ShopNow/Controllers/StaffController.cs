@@ -115,13 +115,6 @@ namespace ShopNow.Controllers
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
             var staff = _mapper.Map<StaffCreateEditViewModel, Staff>(model);
-            //var shopid = model.ShopIds[0];
-            //var shop = db.Shops.FirstOrDefault(i => i.Id == shopid);
-            //if (shop != null)
-            //{
-            //    staff.CustomerId = shop.CustomerId;
-            //    staff.CustomerName = shop.CustomerName;
-            //}
             staff.CreatedBy = user.Name;
             staff.UpdatedBy = user.Name;
             staff.Status = 0;
@@ -141,11 +134,36 @@ namespace ShopNow.Controllers
                 // ShopStaff
                 if (staff != null && model.ShopIds != null)
                 {
+                    var customer = new Customer();
+                    if (!db.Customers.Any(i => i.PhoneNumber == model.PhoneNumber))
+                    {
+                        customer = new Customer
+                        {
+                            Name = model.Name,
+                            PhoneNumber = model.PhoneNumber,
+                            Position = 2,
+                            CreatedBy = user.Name,
+                            UpdatedBy = user.Name,
+                            DateEncoded = DateTime.Now,
+                            DateUpdated = DateTime.Now
+                        };
+                        db.Customers.Add(customer);
+                        db.SaveChanges();
+                    }
+                    else
+                    {
+                        customer = db.Customers.FirstOrDefault(i => i.PhoneNumber == model.PhoneNumber);
+                        customer.Position = 2;
+                        db.Entry(customer).State = System.Data.Entity.EntityState.Modified;
+                        db.SaveChanges();
+                    }
+
                     foreach (var item in model.ShopIds)
                     {
                         ShopStaff ss = new ShopStaff();
                         ss.ShopId = item;
                         ss.StaffId = staff.Id;
+                        ss.StaffCustomerId = customer.Id;
                         db.ShopStaffs.Add(ss);
                         db.SaveChanges();
                     }
@@ -217,7 +235,7 @@ namespace ShopNow.Controllers
 
             staff.DateUpdated = DateTime.Now;
             staff.UpdatedBy = user.Name;
-
+            
             try
             {
                 // Staff Image
@@ -238,9 +256,11 @@ namespace ShopNow.Controllers
                         var shopStaff = db.ShopStaffs.Where(i=> i.ShopId == sid && i.StaffId == staff.Id).FirstOrDefault();
                         if (shopStaff == null)
                         {
+                           var customer = db.Customers.FirstOrDefault(i => i.PhoneNumber == staff.PhoneNumber);
                             ShopStaff ss = new ShopStaff();
                             ss.ShopId = sid;
                             ss.StaffId = staff.Id;
+                            ss.StaffCustomerId = customer != null ? customer.Id : 0;
                             db.ShopStaffs.Add(ss);
                             db.SaveChanges();
                         }
