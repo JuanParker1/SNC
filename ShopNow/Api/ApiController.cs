@@ -7319,6 +7319,21 @@ namespace ShopNow.Controllers
                 return false;
         }
 
+        public JsonResult GetShopStaffList(int customerId)
+        {
+            int[] shop = db.Shops.Where(i => i.CustomerId == customerId && i.Status == 0).Select(s => s.Id).ToArray();
+
+            var list = db.Staffs.Where(i => i.Status == 0)
+              .Join(db.ShopStaffs.Where(i => shop.Contains(i.ShopId)), s => s.Id, stf => stf.StaffId, (s, stf) => new { s, stf })
+              .Select(i => new 
+              {
+                  ImagePath = ((!string.IsNullOrEmpty(i.s.ImagePath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.s.ImagePath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/notavailable.png"),
+                  Name = i.s.Name,
+                  PhoneNumber = i.s.PhoneNumber
+              }).ToList();
+            return Json(list, JsonRequestBehavior.AllowGet);
+        }
+
         //test apis
         public JsonResult SendTestNotification(string deviceId = "", string title = "", string body = "")
         {
