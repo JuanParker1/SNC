@@ -7093,25 +7093,104 @@ namespace ShopNow.Controllers
             return Json(list, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult GetShopParcelDropList(int shopid=0, int page = 1, int pageSize = 10)
+        public JsonResult GetShopParcelDropList(int shopid=0,int type=0, int page = 1, int pageSize = 10)
         {
             var model = new ShopParcelDropListViewModel();
-            model.ListItems = db.Orders.Where(i => i.ShopId == shopid && i.IsPickupDrop == true).OrderByDescending(i=>i.Id)
-                .Select(i => new ShopParcelDropListViewModel.ListItem 
-                {
-                    ShopName = i.ShopName,
-                    Amount = i.TotalPrice,
-                    DateEncoded = i.DateEncoded,
-                    DeliveryAddress = i.DeliveryAddress,
-                    DeliveryCharge = i.DeliveryCharge,
-                    Distance = i.Distance + "Kms",
-                    CustomerName = i.CustomerName,
-                    CustomerPhoneNumber = i.CustomerPhoneNumber,
-                    PickupAddress = i.PickupAddress,
-                    Remarks = i.Remarks,
-                    Status = i.Status,
-                    OrderNumber = i.OrderNumber
-                }).ToList();
+            if (type == 0)
+            {
+                model.ListItems = db.Orders.Where(i => i.ShopId == shopid && i.IsPickupDrop == true).OrderByDescending(i => i.Id)
+                    .Select(i => new ShopParcelDropListViewModel.ListItem
+                    {
+                        ShopName = i.ShopName,
+                        Amount = i.TotalPrice,
+                        DateEncoded = i.DateEncoded,
+                        DeliveryAddress = i.DeliveryAddress,
+                        DeliveryCharge = i.DeliveryCharge,
+                        Distance = i.Distance + "Kms",
+                        CustomerName = i.CustomerName,
+                        CustomerPhoneNumber = i.CustomerPhoneNumber,
+                        PickupAddress = i.PickupAddress,
+                        Remarks = i.Remarks,
+                        Status = i.Status,
+                        OrderNumber = i.OrderNumber
+                    }).ToList();
+            }
+            else if (type == 1)
+            {
+                model.ListItems = db.Orders.Where(i => i.ShopId == shopid && i.IsPickupDrop == true && i.Status ==2).OrderByDescending(i => i.Id)
+                    .Select(i => new ShopParcelDropListViewModel.ListItem
+                    {
+                        ShopName = i.ShopName,
+                        Amount = i.TotalPrice,
+                        DateEncoded = i.DateEncoded,
+                        DeliveryAddress = i.DeliveryAddress,
+                        DeliveryCharge = i.DeliveryCharge,
+                        Distance = i.Distance + "Kms",
+                        CustomerName = i.CustomerName,
+                        CustomerPhoneNumber = i.CustomerPhoneNumber,
+                        PickupAddress = i.PickupAddress,
+                        Remarks = i.Remarks,
+                        Status = i.Status,
+                        OrderNumber = i.OrderNumber
+                    }).ToList();
+            }
+            else if (type == 2)
+            {
+                model.ListItems = db.Orders.Where(i => i.ShopId == shopid && i.IsPickupDrop == true && (i.Status == 3 || i.Status == 4 || i.Status == 5 || i.Status == 8)).OrderByDescending(i => i.Id)
+                    .Select(i => new ShopParcelDropListViewModel.ListItem
+                    {
+                        ShopName = i.ShopName,
+                        Amount = i.TotalPrice,
+                        DateEncoded = i.DateEncoded,
+                        DeliveryAddress = i.DeliveryAddress,
+                        DeliveryCharge = i.DeliveryCharge,
+                        Distance = i.Distance + "Kms",
+                        CustomerName = i.CustomerName,
+                        CustomerPhoneNumber = i.CustomerPhoneNumber,
+                        PickupAddress = i.PickupAddress,
+                        Remarks = i.Remarks,
+                        Status = i.Status,
+                        OrderNumber = i.OrderNumber
+                    }).ToList();
+            }
+            else if (type == 3)
+            {
+                model.ListItems = db.Orders.Where(i => i.ShopId == shopid && i.IsPickupDrop == true && i.Status == 6).OrderByDescending(i => i.Id)
+                   .Select(i => new ShopParcelDropListViewModel.ListItem
+                   {
+                       ShopName = i.ShopName,
+                       Amount = i.TotalPrice,
+                       DateEncoded = i.DateEncoded,
+                       DeliveryAddress = i.DeliveryAddress,
+                       DeliveryCharge = i.DeliveryCharge,
+                       Distance = i.Distance + "Kms",
+                       CustomerName = i.CustomerName,
+                       CustomerPhoneNumber = i.CustomerPhoneNumber,
+                       PickupAddress = i.PickupAddress,
+                       Remarks = i.Remarks,
+                       Status = i.Status,
+                       OrderNumber = i.OrderNumber
+                   }).ToList();
+            }
+            else
+            {
+                model.ListItems = db.Orders.Where(i => i.ShopId == shopid && i.IsPickupDrop == true && (i.Status == 7 || i.Status == 9 || i.Status == 10)).OrderByDescending(i => i.Id)
+                   .Select(i => new ShopParcelDropListViewModel.ListItem
+                   {
+                       ShopName = i.ShopName,
+                       Amount = i.TotalPrice,
+                       DateEncoded = i.DateEncoded,
+                       DeliveryAddress = i.DeliveryAddress,
+                       DeliveryCharge = i.DeliveryCharge,
+                       Distance = i.Distance + "Kms",
+                       CustomerName = i.CustomerName,
+                       CustomerPhoneNumber = i.CustomerPhoneNumber,
+                       PickupAddress = i.PickupAddress,
+                       Remarks = i.Remarks,
+                       Status = i.Status,
+                       OrderNumber = i.OrderNumber
+                   }).ToList();
+            }
             int count = model.ListItems.Count();
             int CurrentPage = page;
             int PageSize = pageSize;
