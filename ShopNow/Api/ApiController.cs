@@ -3745,30 +3745,62 @@ namespace ShopNow.Controllers
         public JsonResult GetAllShops(int customerId)
         {
             var model = new CustomerShopAllListViewModel();
-            model.List = db.Shops.Where(i => i.CustomerId == customerId)
-                 .GroupJoin(db.Customers, s => s.CustomerId, c => c.Id, (s, c) => new { s, c })
-                .GroupJoin(db.OtpVerifications, ss => ss.s.Id, o => o.ShopId, (ss, o) => new { ss, o })
-                             .AsEnumerable()
-                            .Select(i => new CustomerShopAllListViewModel.ShopList
-                            {
-                                Id = i.ss.s.Id,
-                                Name = i.ss.s.Name,
-                                PhoneNumber = i.ss.s.PhoneNumber,
-                                ShopCategoryId = i.ss.s.ShopCategoryId,
-                                ShopCategoryName = i.ss.s.ShopCategoryName,
-                                Otp = i.o.Any() ? i.o.LastOrDefault().Otp : "N/A",
-                                Password = i.ss.c.FirstOrDefault().Password != null ? "Password Generated" : "Not Password Generated",
-                                Status = i.ss.s.Status,
-                                isOnline = i.ss.s.IsOnline,
-                                Rating = RatingCalculation(i.ss.s.Id),
-                                ImagePath = ((!string.IsNullOrEmpty(i.ss.s.ImagePath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.ss.s.ImagePath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/noimageres.svg"),
-                                DistrictName = i.ss.s.DistrictName,
-                                Verify = i.ss.s.Verify,
-                                OtpVerify = i.o.Any() ? i.o.LastOrDefault().Verify : false,
-                                CustomerId = i.ss.s.CustomerId,
-                                DateEncoded = i.o.Any() ? i.o.LastOrDefault().DateEncoded.ToString("dd/MMM/yyyy") : "N/A",
-                                NextOnTime = i.ss.s.NextOnTime
-                            }).ToList();
+            var customer = db.Customers.FirstOrDefault(i => i.Id == customerId);
+            if (customer != null && customer.Position == 2)
+            {
+                int[] staffshop = db.Staffs.Join(db.ShopStaffs.Where(i => i.StaffCustomerId == customerId), s => s.Id, ss => ss.StaffId, (s, ss) => new { s, ss }).Select(i => i.ss.ShopId).ToArray();
+                model.List = db.Shops.Where(i => staffshop.Contains(i.Id))
+                    .GroupJoin(db.Customers, s => s.CustomerId, c => c.Id, (s, c) => new { s, c })
+                   .GroupJoin(db.OtpVerifications, ss => ss.s.Id, o => o.ShopId, (ss, o) => new { ss, o })
+                                .AsEnumerable()
+                               .Select(i => new CustomerShopAllListViewModel.ShopList
+                               {
+                                   Id = i.ss.s.Id,
+                                   Name = i.ss.s.Name,
+                                   PhoneNumber = i.ss.s.PhoneNumber,
+                                   ShopCategoryId = i.ss.s.ShopCategoryId,
+                                   ShopCategoryName = i.ss.s.ShopCategoryName,
+                                   Otp = i.o.Any() ? i.o.LastOrDefault().Otp : "N/A",
+                                   Password = i.ss.c.FirstOrDefault().Password != null ? "Password Generated" : "Not Password Generated",
+                                   Status = i.ss.s.Status,
+                                   isOnline = i.ss.s.IsOnline,
+                                   Rating = RatingCalculation(i.ss.s.Id),
+                                   ImagePath = ((!string.IsNullOrEmpty(i.ss.s.ImagePath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.ss.s.ImagePath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/noimageres.svg"),
+                                   DistrictName = i.ss.s.DistrictName,
+                                   Verify = i.ss.s.Verify,
+                                   OtpVerify = i.o.Any() ? i.o.LastOrDefault().Verify : false,
+                                   CustomerId = i.ss.s.CustomerId,
+                                   DateEncoded = i.o.Any() ? i.o.LastOrDefault().DateEncoded.ToString("dd/MMM/yyyy") : "N/A",
+                                   NextOnTime = i.ss.s.NextOnTime
+                               }).ToList();
+            }
+            else
+            {
+                model.List = db.Shops.Where(i => i.CustomerId == customerId)
+                     .GroupJoin(db.Customers, s => s.CustomerId, c => c.Id, (s, c) => new { s, c })
+                    .GroupJoin(db.OtpVerifications, ss => ss.s.Id, o => o.ShopId, (ss, o) => new { ss, o })
+                                 .AsEnumerable()
+                                .Select(i => new CustomerShopAllListViewModel.ShopList
+                                {
+                                    Id = i.ss.s.Id,
+                                    Name = i.ss.s.Name,
+                                    PhoneNumber = i.ss.s.PhoneNumber,
+                                    ShopCategoryId = i.ss.s.ShopCategoryId,
+                                    ShopCategoryName = i.ss.s.ShopCategoryName,
+                                    Otp = i.o.Any() ? i.o.LastOrDefault().Otp : "N/A",
+                                    Password = i.ss.c.FirstOrDefault().Password != null ? "Password Generated" : "Not Password Generated",
+                                    Status = i.ss.s.Status,
+                                    isOnline = i.ss.s.IsOnline,
+                                    Rating = RatingCalculation(i.ss.s.Id),
+                                    ImagePath = ((!string.IsNullOrEmpty(i.ss.s.ImagePath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.ss.s.ImagePath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/noimageres.svg"),
+                                    DistrictName = i.ss.s.DistrictName,
+                                    Verify = i.ss.s.Verify,
+                                    OtpVerify = i.o.Any() ? i.o.LastOrDefault().Verify : false,
+                                    CustomerId = i.ss.s.CustomerId,
+                                    DateEncoded = i.o.Any() ? i.o.LastOrDefault().DateEncoded.ToString("dd/MMM/yyyy") : "N/A",
+                                    NextOnTime = i.ss.s.NextOnTime
+                                }).ToList();
+            }
             return Json(model, JsonRequestBehavior.AllowGet);
         }
 
