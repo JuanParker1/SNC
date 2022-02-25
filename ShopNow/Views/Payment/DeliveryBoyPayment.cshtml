@@ -97,12 +97,10 @@
                 <td>PAB_VENDOR</td>
                 <td>@item.FirstOrDefault().PaymentMode</td>
                 <td type="string">609505027294</td>
-                <td>
-                    @if (!string.IsNullOrEmpty(item.FirstOrDefault().AccountName))
+                <td>@if (!string.IsNullOrEmpty(item.FirstOrDefault().AccountName))
                     {@item.FirstOrDefault().AccountName}
                 else
-                { }
-                </td>
+                { }</td>
 
                 <td type="string">@item.FirstOrDefault().AccountNumber</td>
 
@@ -110,12 +108,10 @@
 
                 <td class="two-decimals">@item.Sum(i => i.TotalDeliveryBoyAmount).ToString("0.00")</td>
 
-                <td>
-                    @if (!string.IsNullOrEmpty(item.FirstOrDefault().AccountName))
+                <td>@if (!string.IsNullOrEmpty(item.FirstOrDefault().AccountName))
                     {@item.FirstOrDefault().AccountName}
                 else
-                { }
-                </td>
+                { }</td>
 
                 <td></td>
 
