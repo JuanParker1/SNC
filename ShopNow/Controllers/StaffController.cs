@@ -134,18 +134,29 @@ namespace ShopNow.Controllers
                 // ShopStaff
                 if (staff != null && model.ShopIds != null)
                 {
-                    var customer = new Customer
+                    var customer = new Customer();
+                    if (!db.Customers.Any(i => i.PhoneNumber == model.PhoneNumber))
                     {
-                        Name = model.Name,
-                        PhoneNumber = model.PhoneNumber,
-                        Position = 2,
-                        CreatedBy = user.Name,
-                        UpdatedBy = user.Name,
-                        DateEncoded = DateTime.Now,
-                        DateUpdated = DateTime.Now
-                    };
-                    db.Customers.Add(customer);
-                    db.SaveChanges();
+                        customer = new Customer
+                        {
+                            Name = model.Name,
+                            PhoneNumber = model.PhoneNumber,
+                            Position = 2,
+                            CreatedBy = user.Name,
+                            UpdatedBy = user.Name,
+                            DateEncoded = DateTime.Now,
+                            DateUpdated = DateTime.Now
+                        };
+                        db.Customers.Add(customer);
+                        db.SaveChanges();
+                    }
+                    else
+                    {
+                        customer = db.Customers.FirstOrDefault(i => i.PhoneNumber == model.PhoneNumber);
+                        customer.Position = 2;
+                        db.Entry(customer).State = System.Data.Entity.EntityState.Modified;
+                        db.SaveChanges();
+                    }
 
                     foreach (var item in model.ShopIds)
                     {
@@ -224,7 +235,7 @@ namespace ShopNow.Controllers
 
             staff.DateUpdated = DateTime.Now;
             staff.UpdatedBy = user.Name;
-
+            
             try
             {
                 // Staff Image
@@ -245,9 +256,11 @@ namespace ShopNow.Controllers
                         var shopStaff = db.ShopStaffs.Where(i=> i.ShopId == sid && i.StaffId == staff.Id).FirstOrDefault();
                         if (shopStaff == null)
                         {
+                           var customer = db.Customers.FirstOrDefault(i => i.PhoneNumber == staff.PhoneNumber);
                             ShopStaff ss = new ShopStaff();
                             ss.ShopId = sid;
                             ss.StaffId = staff.Id;
+                            ss.StaffCustomerId = customer != null ? customer.Id : 0;
                             db.ShopStaffs.Add(ss);
                             db.SaveChanges();
                         }
