@@ -5080,6 +5080,8 @@ namespace ShopNow.Controllers
             if (model.Distance > 0)
             {
                 var locationDetails = _mapper.Map<LocationDetailsCreateViewModel, LocationDetail>(model);
+                locationDetails.SourceLongitude = model.SourceLontitude;
+                locationDetails.DestinationLongitude = model.DestinationLontitude;
                 db.LocationDetails.Add(locationDetails);
                 db.SaveChanges();
             }
