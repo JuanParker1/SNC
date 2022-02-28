@@ -61,7 +61,8 @@ namespace ShopNow.Controllers
                 RefundAmount = i.c.p.RefundAmount ?? 0,
                 RefundRemark = i.c.p.RefundRemark ?? "",
                 DateEncoded = i.c.c.DateEncoded,
-                IsPickupDrop = i.c.c.IsPickupDrop
+                IsPickupDrop = i.c.c.IsPickupDrop,
+                ShopDistrict = i.s.DistrictName
             }).OrderBy(i => i.Status).OrderByDescending(i => i.DateEncoded).ToList();
             int counter = 1;
             model.ListItems.ForEach(x => x.No = counter++);
