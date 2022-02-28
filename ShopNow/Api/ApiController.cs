@@ -5082,6 +5082,7 @@ namespace ShopNow.Controllers
                 var locationDetails = _mapper.Map<LocationDetailsCreateViewModel, LocationDetail>(model);
                 locationDetails.SourceLongitude = model.SourceLontitude;
                 locationDetails.DestinationLongitude = model.DestinationLontitude;
+                locationDetails.DateEncoded = DateTime.Now;
                 db.LocationDetails.Add(locationDetails);
                 db.SaveChanges();
             }
