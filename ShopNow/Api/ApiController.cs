@@ -5748,9 +5748,24 @@ namespace ShopNow.Controllers
                 db.Entry(order).State = EntityState.Modified;
                 db.SaveChanges();
 
+                var payment = db.Payments.FirstOrDefault(i => i.OrderNumber == order.OrderNumber);
+                if (payment != null && payment.PaymentModeType == 1)
+                {
+                    payment.RefundAmount = payment.Amount;
+                    payment.RefundRemark = "Cancelled By Customer";
+                    payment.UpdatedBy = order.CustomerName;
+                    payment.DateUpdated = DateTime.Now;
+                    db.Entry(payment).State = System.Data.Entity.EntityState.Modified;
+                    db.SaveChanges();
 
-
-
+                    if (order.CustomerId != 0)
+                    {
+                        var fcmToken = (from c in db.Customers
+                                        where c.Id == order.CustomerId
+                                        select c.FcmTocken ?? "").FirstOrDefault().ToString();
+                        Helpers.PushNotification.SendbydeviceId($"Your refund of amount {payment.RefundAmount} for order no {payment.OrderNumber} is initiated and will get credited with in 7 working days.", "ShopNowChat", "a.mp3", fcmToken.ToString());
+                    }
+                }
                 return Json(true, JsonRequestBehavior.AllowGet);
             }
             return Json(false, JsonRequestBehavior.AllowGet);
