@@ -741,6 +741,7 @@
           <Property Name="DestinationLongitude" Type="float" Nullable="false" />
           <Property Name="Distance" Type="float" Nullable="false" />
           <Property Name="Duration" Type="float" Nullable="false" />
+          <Property Name="DateEncoded" Type="datetime" />
         </EntityType>
         <EntityType Name="MarketingAgents">
           <Key>
@@ -2316,18 +2317,6 @@
           <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
         </EntityType>
-        <EntityType Name="LocationDetail">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="SourceLatitude" Type="Double" Nullable="false" />
-          <Property Name="SourceLongitude" Type="Double" Nullable="false" />
-          <Property Name="DestinationLatitude" Type="Double" Nullable="false" />
-          <Property Name="DestinationLongitude" Type="Double" Nullable="false" />
-          <Property Name="Distance" Type="Double" Nullable="false" />
-          <Property Name="Duration" Type="Double" Nullable="false" />
-        </EntityType>
         <EntityType Name="MarketingAgent">
           <Key>
             <PropertyRef Name="Id" />
@@ -2883,7 +2872,6 @@
           <EntitySet Name="DiscountCategories" EntityType="Self.DiscountCategory" />
           <EntitySet Name="DrugCompoundDetails" EntityType="Self.DrugCompoundDetail" />
           <EntitySet Name="KeywordDatas" EntityType="Self.KeywordData" />
-          <EntitySet Name="LocationDetails" EntityType="Self.LocationDetail" />
           <EntitySet Name="MarketingAgents" EntityType="Self.MarketingAgent" />
           <EntitySet Name="MasterProducts" EntityType="Self.MasterProduct" />
           <EntitySet Name="MeasurementUnits" EntityType="Self.MeasurementUnit" />
@@ -3056,6 +3044,7 @@
           <EntitySet Name="CustomerSearchHistories" EntityType="sncModel.CustomerSearchHistory" />
           <EntitySet Name="Payments" EntityType="sncModel.Payment" />
           <EntitySet Name="ShopStaffs" EntityType="sncModel.ShopStaff" />
+          <EntitySet Name="LocationDetails" EntityType="sncModel.LocationDetail" />
         </EntityContainer>
         <ComplexType Name="GetDEliveryBoyList_Result">
           <Property Type="Int32" Name="Id" Nullable="false" />
@@ -3743,6 +3732,19 @@
           <Property Name="StaffId" Type="Int32" Nullable="false" />
           <Property Name="StaffCustomerId" Type="Int32" Nullable="false" />
         </EntityType>
+        <EntityType Name="LocationDetail">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SourceLatitude" Type="Double" Nullable="false" />
+          <Property Name="SourceLongitude" Type="Double" Nullable="false" />
+          <Property Name="DestinationLatitude" Type="Double" Nullable="false" />
+          <Property Name="DestinationLongitude" Type="Double" Nullable="false" />
+          <Property Name="Distance" Type="Double" Nullable="false" />
+          <Property Name="Duration" Type="Double" Nullable="false" />
+          <Property Name="DateEncoded" Type="DateTime" Precision="3" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -4272,19 +4274,6 @@
               <MappingFragment StoreEntitySet="KeywordData">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="LocationDetails">
-            <EntityTypeMapping TypeName="sncModel.LocationDetail">
-              <MappingFragment StoreEntitySet="LocationDetails">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="SourceLatitude" ColumnName="SourceLatitude" />
-                <ScalarProperty Name="SourceLongitude" ColumnName="SourceLongitude" />
-                <ScalarProperty Name="DestinationLatitude" ColumnName="DestinationLatitude" />
-                <ScalarProperty Name="DestinationLongitude" ColumnName="DestinationLongitude" />
-                <ScalarProperty Name="Distance" ColumnName="Distance" />
-                <ScalarProperty Name="Duration" ColumnName="Duration" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -5600,6 +5589,20 @@
                 <ScalarProperty Name="StaffCustomerId" ColumnName="StaffCustomerId" />
                 <ScalarProperty Name="StaffId" ColumnName="StaffId" />
                 <ScalarProperty Name="ShopId" ColumnName="ShopId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="LocationDetails">
+            <EntityTypeMapping TypeName="sncModel.LocationDetail">
+              <MappingFragment StoreEntitySet="LocationDetails">
+                <ScalarProperty Name="DateEncoded" ColumnName="DateEncoded" />
+                <ScalarProperty Name="Duration" ColumnName="Duration" />
+                <ScalarProperty Name="Distance" ColumnName="Distance" />
+                <ScalarProperty Name="DestinationLongitude" ColumnName="DestinationLongitude" />
+                <ScalarProperty Name="DestinationLatitude" ColumnName="DestinationLatitude" />
+                <ScalarProperty Name="SourceLongitude" ColumnName="SourceLongitude" />
+                <ScalarProperty Name="SourceLatitude" ColumnName="SourceLatitude" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

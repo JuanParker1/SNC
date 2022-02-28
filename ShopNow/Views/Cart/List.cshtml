@@ -66,7 +66,7 @@
                         </select>
                     </div>
                     <div class="col-md-2">
-                        <input name="IsPickupDrop" type="hidden"/>
+                        <input name="IsPickupDrop" type="hidden" />
                         <input type="submit" class="btn btn-success btn-block" value="Filter" />
                     </div>
                     <div class="col-md-2">
@@ -83,8 +83,7 @@
                 <div class="card-body">
                     <div class="d-flex justify-content-between">
                         <label> <input type="checkbox" id="pickup-check" value="@Model.IsPickupDrop" /> Pickup Drop</label>
-
-<button id="btn-assign-deliveryboymodal" class="btn btn-primary float-right mb-3" data-toggle="modal" data-target="#modal-assign-deliveryboy" disabled>Assign Delivery Boy</button>
+                        <button id="btn-assign-deliveryboymodal" class="btn btn-primary float-right mb-3" data-toggle="modal" data-target="#modal-assign-deliveryboy" disabled>Assign Delivery Boy</button>
                         @*<div class="clearfix"></div>*@
                     </div>
                     @Html.Grid(Model.ListItems).Columns(columns =>
@@ -100,7 +99,7 @@
                    //columns.Add(c => c.DateEncoded).Titled("Date").Filterable(true).SetWidth(10).Format("{0:dd-MMM-yyyy}");
                    // columns.Add(c => c.OrderStatusText).Titled("Order Status").Filterable(true).SetWidth(15);
                    columns.Add().Encoded(false).Sanitized(false)
-                 .RenderValueAs(o=>o.IsPickupDrop == true?"<span>"+o.OrderStatusText+"</span><br/><span class='text-primary font-weight-bold'>Pickup-Drop</span>": "<span>" + o.OrderStatusText + "</span>").Titled("Order Status").SetWidth(5);
+                 .RenderValueAs(o => o.IsPickupDrop == true ? "<span>" + o.OrderStatusText + "</span><br/><span class='text-primary font-weight-bold'>Pickup-Drop</span>" : "<span>" + o.OrderStatusText + "</span>").Titled("Order Status").SetWidth(5);
                    columns.Add().Encoded(false).Sanitized(false)
                    .RenderValueAs(o => Html.ActionLink("View", "Edit", new { OrderNumber = o.OrderNumber, id = @ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id) }, new { @class = "btn btn-vsm btn-info", @style = "padding: 3px 26px" }).ToHtmlString() +
                    Html.ActionLink("Details", "Details", new { id = @ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id) }, new { @class = "btn btn-vsm btn-secondary mt-1", @style = "padding: 3px 20px" }).ToHtmlString()).Titled("Action").SetWidth(5);
@@ -141,7 +140,7 @@
     </div>
 </div>
 
-<div class="modal fade" id="modal-assign-deliveryboy" tabindex="-1" role="dialog">
+<div class="modal fade" id="modal-assign-deliveryboy" role="dialog">
     <div class="modal-dialog modal-sm">
         <div class="modal-content">
             <div class="modal-body">
@@ -189,7 +188,6 @@
             }).on('select2:select', function (e) {
                 $('input[name="ShopName"]').val(e.params.data.text);
             });
-
             
             $(".btn-modal-refund").click(function () {
                 var id = $(this).data('id');
