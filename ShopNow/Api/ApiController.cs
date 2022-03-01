@@ -28,6 +28,8 @@ using System.Data.Entity.Migrations;
 using Z.EntityFramework.Extensions;
 using System.Data.Entity.SqlServer;
 using System.Configuration;
+using Amazon.S3;
+using Amazon.S3.Model;
 
 namespace ShopNow.Controllers
 {
@@ -1395,7 +1397,28 @@ namespace ShopNow.Controllers
                 return Json(new { status = false }, JsonRequestBehavior.AllowGet);
             }
         }
-        public JsonResult ApiUpdate()
+        public JsonResult ApibakUpload()
+        {
+            var bucketRegion = Amazon.RegionEndpoint.APSouth1;   // Your bucket region
+            var s3 = new AmazonS3Client("AKIA4QM7WPQWLYO32URU", "jZ9w2onLdgc5pDjB6tvq/G6yFUZkG23S3oVeSFMc", bucketRegion);
+            var putRequest = new PutObjectRequest();
+            DirectoryInfo d = new DirectoryInfo(@"E:\backup\db\snciis"); //Assuming Test is your Folder
+
+            FileInfo[] Files = d.GetFiles("*.bak"); //Getting Text files
+
+            foreach (FileInfo file in Files)
+            {
+                 if(file.Name.Contains(DateTime.Now.Year+"_"+ ((Convert.ToString(DateTime.Now.Month).Length)==1?"0"+ DateTime.Now.Month.ToString(): DateTime.Now.Month.ToString()) +"_"+ DateTime.Now.Day))
+                {
+                    putRequest.Key = file.Name.Trim();
+                    putRequest.FilePath = file.FullName;
+                    putRequest.BucketName = "shopnowchat.com/Database";
+                    PutObjectResponse putResponse = s3.PutObject(putRequest);
+                }
+            }
+            return Json(new { message = "Success" }, JsonRequestBehavior.AllowGet);
+        }
+            public JsonResult ApiUpdate()
         {
             sncEntities db = new sncEntities();
             try
@@ -7352,7 +7375,7 @@ namespace ShopNow.Controllers
         //test apis
         public JsonResult SendTestNotification(string deviceId = "", string title = "", string body = "")
         {
-            Helpers.PushNotification.SendbydeviceId(body, title, "", deviceId);
+            Helpers.PushNotification.SendbydeviceId(body, title, "test", deviceId);
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
