@@ -7374,55 +7374,57 @@ namespace ShopNow.Controllers
 
         public JsonResult AddShopStaff(AddShopStaffViewModel model)
         {
-            var staff = new Staff
+            if (!db.Staffs.Any(i => i.PhoneNumber == model.PhoneNumber))
             {
-                Name = model.Name,
-                PhoneNumber = model.PhoneNumber,
-                ImagePath = model.ImagePath,
-                Password = model.Password,
-                CreatedBy = model.ShopOwnerName,
-                UpdatedBy = model.ShopOwnerName,
-                DateEncoded = DateTime.Now,
-                DateUpdated = DateTime.Now,
-                Status = 0
-            };
-            db.Staffs.Add(staff);
-            db.SaveChanges();
-
-            if (staff.Id != 0)
-            {
-                var customer = new Models.Customer();
-                if (!db.Customers.Any(i => i.PhoneNumber == model.PhoneNumber))
+                var staff = new Staff
                 {
-                    customer = new Models.Customer
-                    {
-                        Name = model.Name,
-                        PhoneNumber = model.PhoneNumber,
-                        Position = 2,
-                        CreatedBy = staff.Name,
-                        UpdatedBy = staff.Name,
-                        DateEncoded = DateTime.Now,
-                        DateUpdated = DateTime.Now
-                    };
-                    db.Customers.Add(customer);
-                    db.SaveChanges();
-                }
-                else
-                {
-                    customer = db.Customers.FirstOrDefault(i => i.PhoneNumber == model.PhoneNumber);
-                    customer.Position = 2;
-                    db.Entry(customer).State = System.Data.Entity.EntityState.Modified;
-                    db.SaveChanges();
-                }
-
-                ShopStaff ss = new ShopStaff();
-                ss.ShopId = model.ShopId;
-                ss.StaffId = staff.Id;
-                ss.StaffCustomerId = customer.Id;
-                db.ShopStaffs.Add(ss);
+                    Name = model.Name,
+                    PhoneNumber = model.PhoneNumber,
+                    ImagePath = model.ImagePath,
+                    Password = model.Password,
+                    CreatedBy = model.ShopOwnerName,
+                    UpdatedBy = model.ShopOwnerName,
+                    DateEncoded = DateTime.Now,
+                    DateUpdated = DateTime.Now,
+                    Status = 0
+                };
+                db.Staffs.Add(staff);
                 db.SaveChanges();
-            }
 
+                if (staff.Id != 0)
+                {
+                    var customer = new Models.Customer();
+                    if (!db.Customers.Any(i => i.PhoneNumber == model.PhoneNumber))
+                    {
+                        customer = new Models.Customer
+                        {
+                            Name = model.Name,
+                            PhoneNumber = model.PhoneNumber,
+                            Position = 2,
+                            CreatedBy = staff.Name,
+                            UpdatedBy = staff.Name,
+                            DateEncoded = DateTime.Now,
+                            DateUpdated = DateTime.Now
+                        };
+                        db.Customers.Add(customer);
+                        db.SaveChanges();
+                    }
+                    else
+                    {
+                        customer = db.Customers.FirstOrDefault(i => i.PhoneNumber == model.PhoneNumber);
+                        customer.Position = 2;
+                        db.Entry(customer).State = System.Data.Entity.EntityState.Modified;
+                        db.SaveChanges();
+                    }
+
+                    ShopStaff ss = new ShopStaff();
+                    ss.ShopId = model.ShopId;
+                    ss.StaffId = staff.Id;
+                    ss.StaffCustomerId = customer.Id;
+                    db.ShopStaffs.Add(ss);
+                    db.SaveChanges();
+                }
+            }
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
