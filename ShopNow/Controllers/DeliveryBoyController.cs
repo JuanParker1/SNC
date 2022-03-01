@@ -624,9 +624,9 @@ namespace ShopNow.Controllers
             return RedirectToAction("List");
         }
 
-        public async Task<JsonResult> GetDeliveryBoyWithinLimitSelect2(string q = "")
+        public async Task<JsonResult> GetDeliveryBoyWithinLimitSelect2(string q = "",string district="")
         {
-            var model = await db.DeliveryBoys.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0).Select(i => new
+            var model = await db.DeliveryBoys.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0 && a.DistrictName == district).Select(i => new
             {
                 id = i.Id,
                 text = i.Name

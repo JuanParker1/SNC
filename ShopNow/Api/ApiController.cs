@@ -28,6 +28,8 @@ using System.Data.Entity.Migrations;
 using Z.EntityFramework.Extensions;
 using System.Data.Entity.SqlServer;
 using System.Configuration;
+using Amazon.S3;
+using Amazon.S3.Model;
 
 namespace ShopNow.Controllers
 {
@@ -1395,7 +1397,28 @@ namespace ShopNow.Controllers
                 return Json(new { status = false }, JsonRequestBehavior.AllowGet);
             }
         }
-        public JsonResult ApiUpdate()
+        public JsonResult ApibakUpload()
+        {
+            var bucketRegion = Amazon.RegionEndpoint.APSouth1;   // Your bucket region
+            var s3 = new AmazonS3Client("AKIA4QM7WPQWLYO32URU", "jZ9w2onLdgc5pDjB6tvq/G6yFUZkG23S3oVeSFMc", bucketRegion);
+            var putRequest = new PutObjectRequest();
+            DirectoryInfo d = new DirectoryInfo(@"E:\backup\db\snciis"); //Assuming Test is your Folder
+
+            FileInfo[] Files = d.GetFiles("*.bak"); //Getting Text files
+
+            foreach (FileInfo file in Files)
+            {
+                 if(file.Name.Contains(DateTime.Now.Year+"_"+ ((Convert.ToString(DateTime.Now.Month).Length)==1?"0"+ DateTime.Now.Month.ToString(): DateTime.Now.Month.ToString()) +"_"+ DateTime.Now.Day))
+                {
+                    putRequest.Key = file.Name.Trim();
+                    putRequest.FilePath = file.FullName;
+                    putRequest.BucketName = "shopnowchat.com/Database";
+                    PutObjectResponse putResponse = s3.PutObject(putRequest);
+                }
+            }
+            return Json(new { message = "Success" }, JsonRequestBehavior.AllowGet);
+        }
+            public JsonResult ApiUpdate()
         {
             sncEntities db = new sncEntities();
             try
@@ -5080,6 +5103,9 @@ namespace ShopNow.Controllers
             if (model.Distance > 0)
             {
                 var locationDetails = _mapper.Map<LocationDetailsCreateViewModel, LocationDetail>(model);
+                locationDetails.SourceLongitude = model.SourceLontitude;
+                locationDetails.DestinationLongitude = model.DestinationLontitude;
+                locationDetails.DateEncoded = DateTime.Now;
                 db.LocationDetails.Add(locationDetails);
                 db.SaveChanges();
             }
@@ -5087,14 +5113,13 @@ namespace ShopNow.Controllers
         }
 
         [HttpGet]
-        public JsonResult GetAllOrders(int customerId, int page = 1, int pageSize = 5, int type = 0) //1-Live,2-Past
+        public JsonResult GetAllOrders(int customerId, int page = 1, int pageSize = 5, int type = 0,bool isBuyAgain=false) //1-Live,2-Past
         {
             db.Configuration.ProxyCreationEnabled = false;
             var model = new GetAllOrderListViewModel();
-            model.OrderLists = db.Orders.Where(i => i.CustomerId == customerId && (type == 1 ? (i.Status >= 2 && i.Status <= 5) || i.Status == 8 : (i.Status == 6 || i.Status == 7 || i.Status == 9 || i.Status == 10)))
+            model.OrderLists = db.Orders.Where(i => i.CustomerId == customerId && (type == 1 ? (i.Status >= 2 && i.Status <= 5) || i.Status == 8 : isBuyAgain == true ? i.Status == 6 : (i.Status == 6 || i.Status == 7 || i.Status == 9 || i.Status == 10)))
                  .Join(db.Payments, o => o.OrderNumber, p => p.OrderNumber, (o, p) => new { o, p })
                  .GroupJoin(db.OrderItems, o => o.o.Id, oi => oi.OrderId, (o, oi) => new { o, oi })
-                 //.AsEnumerable()
                  .Select(i => new GetAllOrderListViewModel.OrderList
                  {
                      Convinenientcharge = i.o.o.Convinenientcharge,
@@ -5130,7 +5155,6 @@ namespace ShopNow.Controllers
                      PaymentMode = i.o.p.PaymentMode,
                      WalletAmount = i.o.o.WalletAmount,
                      TipsAmount = i.o.o.TipsAmount,
-                     //Otp = GetOtp(i.o.o.OrderNumber),
                      Otp = db.OtpVerifications.FirstOrDefault(a => a.OrderNo == i.o.o.OrderNumber).Otp,
                      OrderItemLists = i.oi.Select(a => new GetAllOrderListViewModel.OrderList.OrderItemList
                      {
@@ -5151,7 +5175,6 @@ namespace ShopNow.Controllers
                          ShopId = i.o.o.ShopId,
                          ShopName = i.o.o.ShopName,
                          OutletId = a.ProductId != 0 ? db.Products.FirstOrDefault(b => b.Id == a.ProductId).OutletId : 0,
-                         //OfferQuantityLimit = db.Products.FirstOrDefault(b=>b.Id == a.ProductId).OfferQuantityLimit,
                          OrderItemAddonLists = db.OrderItemAddons.Where(b => b.OrderItemId == a.Id).Select(b => new GetAllOrderListViewModel.OrderList.OrderItemList.OrderItemAddonList
                          {
                              AddonName = b.AddonName,
@@ -5748,9 +5771,24 @@ namespace ShopNow.Controllers
                 db.Entry(order).State = EntityState.Modified;
                 db.SaveChanges();
 
+                var payment = db.Payments.FirstOrDefault(i => i.OrderNumber == order.OrderNumber);
+                if (payment != null && payment.PaymentModeType == 1)
+                {
+                    payment.RefundAmount = payment.Amount;
+                    payment.RefundRemark = "Cancelled By Customer";
+                    payment.UpdatedBy = order.CustomerName;
+                    payment.DateUpdated = DateTime.Now;
+                    db.Entry(payment).State = System.Data.Entity.EntityState.Modified;
+                    db.SaveChanges();
 
-
-
+                    if (order.CustomerId != 0)
+                    {
+                        var fcmToken = (from c in db.Customers
+                                        where c.Id == order.CustomerId
+                                        select c.FcmTocken ?? "").FirstOrDefault().ToString();
+                        Helpers.PushNotification.SendbydeviceId($"Your refund of amount {payment.RefundAmount} for order no {payment.OrderNumber} is initiated and will get credited with in 7 working days.", "ShopNowChat", "a.mp3", fcmToken.ToString());
+                    }
+                }
                 return Json(true, JsonRequestBehavior.AllowGet);
             }
             return Json(false, JsonRequestBehavior.AllowGet);
@@ -7319,10 +7357,25 @@ namespace ShopNow.Controllers
                 return false;
         }
 
+        public JsonResult GetShopStaffList(int customerId)
+        {
+            int[] shop = db.Shops.Where(i => i.CustomerId == customerId && i.Status == 0).Select(s => s.Id).ToArray();
+
+            var list = db.Staffs.Where(i => i.Status == 0)
+              .Join(db.ShopStaffs.Where(i => shop.Contains(i.ShopId)), s => s.Id, stf => stf.StaffId, (s, stf) => new { s, stf })
+              .Select(i => new 
+              {
+                  ImagePath = ((!string.IsNullOrEmpty(i.s.ImagePath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.s.ImagePath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/notavailable.png"),
+                  Name = i.s.Name,
+                  PhoneNumber = i.s.PhoneNumber
+              }).ToList();
+            return Json(list, JsonRequestBehavior.AllowGet);
+        }
+
         //test apis
         public JsonResult SendTestNotification(string deviceId = "", string title = "", string body = "")
         {
-            Helpers.PushNotification.SendbydeviceId(body, title, "", deviceId);
+            Helpers.PushNotification.SendbydeviceId(body, title, "test", deviceId);
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 

@@ -21,5 +21,6 @@ namespace ShopNow.Models
         public double DestinationLongitude { get; set; }
         public double Distance { get; set; }
         public double Duration { get; set; }
+        public Nullable<System.DateTime> DateEncoded { get; set; }
     }
 }

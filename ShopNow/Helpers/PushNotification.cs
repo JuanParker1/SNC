@@ -56,7 +56,7 @@ namespace ShopNow.Helpers
                         body = body,
 
                         title = title,
-                        sound = sound
+                        soundname = sound
                     }
                 };
 
