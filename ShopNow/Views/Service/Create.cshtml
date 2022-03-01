@@ -1,0 +1,316 @@
+﻿@model ShopNow.ViewModels.ServiceCreateViewModel
+@{
+    ViewBag.Title = "ParcelDrop Entry";
+}
+<title>ShopNow | @ViewBag.Title</title>
+<style>
+    #map {
+        height: 100%;
+        position: inherit;
+    }
+</style>
+<div class="container-fluid my-3">
+    <div class="row">
+        <div class="col-md-6">
+            <h5 class="text-theme_SemiDark">Parcel Drop Entry</h5>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 mx-auto">
+            @using (Html.BeginForm("Create", "Service", FormMethod.Post, new { id = "ServiceForm", enctype = "multipart/form-data" }))
+            {
+                <div class="card shadow mt-2">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-9">
+                                <div class="form-group row">
+                                    <div class="col-md-3 text-md-left">
+                                        <label class="col-form-label text-secondary font-weight-bold">Pickup Shop Name</label>
+                                    </div>
+                                    <div class="col-md-9">
+                                        <select id="ShopId" name="ShopId" class="form-control" required></select>
+                                        <input type="hidden" name="ShopName" id="ShopName" />
+                                        <label class="font-weight-bold" id="shopAddress"></label>
+                                        <input type="hidden" name="PickupAddress" id="PickupAddress" />
+                                        <input type="hidden" name="PickupLatitude" id="PickupLatitude" />
+                                        <input type="hidden" name="PickupLongitude" id="PickupLongitude" />
+                                        <input type="hidden" name="CustomerId" />
+                                        <input type="hidden" name="OrderNumber" />
+                                        <input type="hidden" name="DeliveryLatitude" id="DeliveryLatitude" />
+                                        <input type="hidden" name="DeliveryLongitude" id="DeliveryLongitude" />
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-md-3 text-md-left">
+                                        <label class="col-form-label text-secondary font-weight-bold">Customer Phone Number</label>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <input type="text" class="form-control" name="PhoneNumber" id="PhoneNumber" required />
+                                    </div>
+                                </div>
+                                <div class="row form-group">
+                                    <div class="col-md-3 text-md-left">
+                                        <label class="col-form-label text-secondary font-weight-bold">Customer Address</label>
+                                    </div>
+                                    <div class="col-md-4 d-none" id="section-addressdropdown">
+                                        <select id="select-deliveryaddress" class="form-control"></select>
+                                    </div>
+                                    <div class="col-md-5" id="section-addresstext">
+                                        <input class="form-control mb-2" id="DeliveryAddress" type="text" name="DeliveryAddress" placeholder="Enter/Paste Drop Location" />
+
+                                    </div>
+                                </div>
+                                <div class="row form-group">
+                                    <div class="col-md-3"></div>
+                                    <div class="col-md-9">
+                                        <div id="location-error"></div>
+                                        <div class="mb-4" id="map" style="width: 100%; height: 250px;"></div>
+                                    </div>
+                                </div>
+                                @*<div class="row form-group">
+                                        <div class="col-md-3 text-md-left">
+                                            <label class="col-form-label text-secondary font-weight-bold">Customer Address</label>
+                                        </div>
+                                        <div class="col-md-4 d-none" id="section-addressdropdown">
+                                            <select id="select-deliveryaddress" class="form-control"></select>
+                                        </div>
+                                        <div class="col-md-4" id="section-addresstext">
+                                            <input type="text" class="form-control" name="DeliveryAddress" id="DeliveryAddress" placeholder="Enter/Paste Drop Location" required />
+                                            <input type="hidden" name="DeliveryLatitude" id="DeliveryLatitude" />
+                                            <input type="hidden" name="DeliveryLongitude" id="DeliveryLongitude" />
+                                        </div>
+                                    </div>*@
+                                <div class="form-group row">
+                                    <div class="col-md-3 text-md-left">
+                                        <label class="col-form-label text-secondary font-weight-bold">Customer Name</label>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <input type="text" class="form-control" name="Name" id="Name" required />
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-md-3 text-md-left">
+                                        <label class="col-form-label text-secondary font-weight-bold">Amount to receive</label>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <input type="text" class="form-control" name="Amount" id="Amount" />
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-md-3 text-md-left">
+                                        <label class="col-form-label text-secondary font-weight-bold">Delivery Credits</label>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="font-weight-bold">Rs. <span id="dcharge"></span>(<span id="dist"> </span>Km)</label>
+                                        <input type="hidden" name="Distance" id="Distance" />
+                                        <input type="hidden" name="DeliveryCharge" id="DeliveryCharge" />
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-md-3 text-md-left">
+                                        <label class="col-form-label text-secondary font-weight-bold">Remarks</label>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <textarea class="form-control" name="Remarks" id="Remarks" placeholder="eg: Package content, Bill No." required></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-2 mx-auto mt-3">
+                                <input type="submit" class="btn btn-block btn-success" id="btnSubmit" value="Submit" disabled />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+    <!--Select2-->
+    <script src="~/Scripts/select2/js/select2.js"></script>
+    <link href="~/Scripts/select2/css/select2.css" rel="stylesheet" />
+    <link href="~/Content/select2/select2.custom.css" rel="stylesheet" />
+    <!--Select2 End-->
+    <script src="~/Scripts/sweetalert/sweetalert.min.js"></script>
+    <link href="~/Content/sweetalert/sweetalert.css" rel="stylesheet" />
+    @*<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCl_9yf43Z6hWLvVvwd68p7WXwq_oYcS_0&libraries=places"
+        async defer></script>*@
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCl_9yf43Z6hWLvVvwd68p7WXwq_oYcS_0&libraries=places&callback=initMap"
+            async defer></script>
+    <script>
+        $(document).ready(function () {
+            $('#ShopId').select2({
+                placeholder: "Search Shop",
+                ajax: {
+                    url: "/Service/GetShopSelect2",
+                    width: '100%',
+                    delay: 250,
+                    dataType: 'json'
+                }
+            }).on('select2:select', function (e) {
+                $('input[name="ShopName"]').val(e.params.data.text);
+                $('#shopAddress').text(e.params.data.address);
+                $('input[name="PickupAddress"]').val(e.params.data.address);
+                $('input[name="PickupLatitude"]').val(e.params.data.latitude);
+                $('input[name="PickupLongitude"]').val(e.params.data.longitude);
+                $('input[name="CustomerId"]').val(e.params.data.customerid);
+                $('input[name="OrderNumber"]').val(Math.floor(Math.random() * 1000000000));
+            });
+
+            $('#PhoneNumber').on('change', function () {
+                var $this = $(this).val();
+                clearFields();
+                $.getJSON('/Service/GetAddressCount', { phoneNumber: $this, shopId: $('#ShopId').val() }, function (data) {
+                    if (data > 0) {
+                        $('#section-addressdropdown').removeClass('d-none');
+                        $('#select-deliveryaddress').select2({
+                            placeholder: "Choose Address",
+                            ajax: {
+                                url: "/Service/GetDeliveryAddressSelect2?customerphonenumber=" + $this + "&shopId=" + $('#ShopId').val(),
+                                width: '100%',
+                                delay: 250,
+                                dataType: 'json'
+                            }
+                        }).on('select2:select', function (e) {
+                            $('input[name="DeliveryAddress"]').val(e.params.data.text);
+                            $('input[name="DeliveryLatitude"]').val(e.params.data.latitude);
+                            $('input[name="DeliveryLongitude"]').val(e.params.data.longitude);
+                            //GetLatLong();
+                            getDeliveryCharge();
+                        });
+                    }
+                    else {
+                        $('#section-addressdropdown').addClass('d-none');
+                    }
+                });
+            });
+
+        });
+
+        function getDeliveryCharge() {
+            var PickupLatitude = parseFloat($("#PickupLatitude").val());
+            var PickupLongitude = parseFloat($("#PickupLongitude").val());
+            var DeliveryLatitude = parseFloat($("#DeliveryLatitude").val());
+            var DeliveryLongitude = parseFloat($("#DeliveryLongitude").val());
+
+            $.getJSON("/Service/GetDeliveryCharge", { PickupLatitude: PickupLatitude, PickupLongitude: PickupLongitude, DeliveryLatitude: DeliveryLatitude, DeliveryLongitude: DeliveryLongitude }, function (data) {
+                $("#DeliveryCharge").val(data.DeliveryCharge.toFixed(2));
+                $("#dcharge").text(data.DeliveryCharge.toFixed(2));
+                $("#dist").text(data.Distance.toFixed(2));
+                $("#Distance").val(data.Distance.toFixed(2));
+                var dcharge = parseFloat(data.DeliveryCharge);
+                if (dcharge >= 50 && dcharge <= 300) {
+                    $("#btnSubmit").removeAttr("disabled");
+
+                } else {
+                    swal("Warning!", "Delivery Address is not within Limit. Kindly Update the address.", "warning");
+                    clearFields();
+                }
+            });
+
+        }
+
+        function clearFields() {
+            $('input[name="DeliveryAddress"]').val('');
+            $('input[name="DeliveryLatitude"]').val('');
+            $('input[name="DeliveryLongitude"]').val('');
+            $('#select-deliveryaddress').val('').trigger('Change');
+            $("#DeliveryCharge").val(0);
+            $("#dcharge").text('0');
+            $("#dist").text('0');
+            $("#Distance").val(0);
+            $("#btnSubmit").attr("disabled", true);
+        }
+
+        var map, infoWindow, markers = [];
+        function initMap() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function (position) {
+                    var input = document.getElementById('DeliveryAddress');
+                    var autocomplete = new google.maps.places.Autocomplete(input);
+                    map = new google.maps.Map(document.getElementById('map'), {
+                        center: { lat: position.coords.latitude, lng: position.coords.longitude },
+                        zoom: 6
+                    });
+
+                    infoWindow = new google.maps.InfoWindow;
+
+                    if (navigator.geolocation) {
+                        navigator.geolocation.getCurrentPosition(function (position) {
+                            var pos = {
+                                lat: position.coords.latitude,
+                                lng: position.coords.longitude
+                            };
+
+                            var marker = new google.maps.Marker({
+                                position: pos,
+                                map: map,
+                                title: "your place",
+                                draggable: false
+                            });
+                            google.maps.event.addListener(marker, 'click', function () {
+                                infowindow.open(map, marker);
+                            });
+                            markers.push(marker);
+
+
+                            autocomplete.addListener('place_changed', function () {
+                                document.getElementById("location-error").style.display = 'none';
+                                markers.forEach(function (marker) {
+                                    marker.setMap(null);
+                                });
+
+                                var place = autocomplete.getPlace();
+                                if (!place.geometry) {
+                                    document.getElementById("location-error").style.display = 'inline-block';
+                                    document.getElementById("location-error").innerHTML = "Cannot Locate '" + input.value + "' on map";
+                                    return;
+                                }
+                                var marker = new google.maps.Marker({
+                                    position: pos,
+                                    map: map,
+                                    title: "your place",
+                                    draggable: false
+                                });
+
+                                google.maps.event.addListener(marker, 'click', function () {
+                                    infowindow.open(map, marker);
+                                });
+                                markers.push(marker);
+
+                                map.fitBounds(place.geometry.viewport);
+                                marker.setPosition(place.geometry.location);
+                                marker.setVisible(true);
+                                console.log(place);
+                                $('#DeliveryAddress').val(place.formatted_address);
+                                $('#DeliveryLatitude').val(place.geometry.location.lat);
+                                $('#DeliveryLongitude').val(place.geometry.location.lng);
+                                getDeliveryCharge();
+                            });
+                        }, function () {
+                            handleLocationError(true, infoWindow, map.getCenter());
+                        });
+                    } else {
+
+                        handleLocationError(false, infoWindow, map.getCenter());
+                    }
+                });
+            } else {
+                x.innerHTML = "Geolocation is not supported by this browser.";
+            }
+        }
+
+        function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+            infoWindow.setPosition(pos);
+            infoWindow.setContent(browserHasGeolocation ?
+                'Error: The Geolocation service failed.' :
+                'Error: Your browser doesn\'t support geolocation.');
+            infoWindow.open(map);
+        }
+
+    </script>
+}
