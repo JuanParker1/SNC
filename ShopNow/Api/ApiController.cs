@@ -7352,7 +7352,7 @@ namespace ShopNow.Controllers
         //test apis
         public JsonResult SendTestNotification(string deviceId = "", string title = "", string body = "")
         {
-            Helpers.PushNotification.SendbydeviceId(body, title, "", deviceId);
+            Helpers.PushNotification.SendbydeviceId(body, title, "test", deviceId);
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
