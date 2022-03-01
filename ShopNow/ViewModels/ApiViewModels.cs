@@ -1011,4 +1011,14 @@ namespace ShopNow.ViewModels
             }
         }
     }
+
+    public class AddShopStaffViewModel
+    {
+        public string ShopOwnerName { get; set; }
+        public string Name { get; set; }
+        public string PhoneNumber { get; set; }
+        public string ImagePath { get; set; }
+        public string Password { get; set; }
+        public int ShopId { get; set; }
+    }
 }
