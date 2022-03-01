@@ -1,7 +1,7 @@
 ﻿@model ShopNow.ViewModels.ServiceListViewModel
 @using GridMvc.Html
 @{
-    ViewBag.Title = "Service List";
+    ViewBag.Title = "Parcel Drop List";
 }
 
 <title>ShopNow | @ViewBag.Title</title>
@@ -10,9 +10,43 @@
 
 
 <div class="container-fluid mb-3">
-    <div class="d-flex justify-content-between">
-        <h5 class="text-success" style="letter-spacing:1px">@ViewBag.Title</h5>
-        @*<a href="/Offer/Create"><u>Add New Offer</u></a>*@
+    <div class="row my-2">
+        <div class="col-md-2">
+            <h5 class="text-success" style="letter-spacing:1px">Parcel Drop LIST</h5>
+        </div>
+        <div class="col-md-8">
+            <form method="get" action="/Service/List" id="filter-form">
+                <div class="row">
+                    <div class="col-md-4">
+                        <select name="ShopId" id="ShopId" class="form-control">
+                            @if (Model.ShopId != 0)
+                            {
+                                <option value="@Model.ShopId">@Model.ShopName</option>
+                            }
+                        </select>
+                        <input type="hidden" name="ShopName" id="ShopName" value="@Model.ShopName" />
+                    </div>
+                    <div class="col-md-2">
+                        <select id="select-status" class="form-control" name="Status">
+                            <option value="0">All</option>
+                            <option value="2">Pending</option>
+                            <option value="3">Order Accepted</option>
+                            <option value="4">Order Assigned</option>
+                            <option value="5">Order Pickedup</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <input type="submit" class="btn btn-success btn-block" value="Filter" />
+                    </div>
+                    <div class="col-md-2">
+                        <a href="/Service/List" class="btn btn-warning btn-block">Clear</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="col-md-2 text-right">
+            <a class="btn btn-outline-primary" href="/Service/Create">Create parcel Drop</a>
+        </div>
     </div>
     <div class="row">
         <div class="col-md-12">
@@ -20,13 +54,15 @@
                 <div class="card-body">
                     @Html.Grid(Model.ListItems).Columns(columns =>
                {
-               columns.Add(s => s.PickupAddress).Titled("Pickup Address").Filterable(true).SetWidth(30);
-               columns.Add(s => s.DeliveryAddress).Titled("Delivery Address").Filterable(true).SetWidth(30);
-               columns.Add(s => s.Name).Titled("Name").Filterable(true).SetWidth(15);
-               columns.Add(s => s.PhoneNumber).Titled("Phone Number").Filterable(true).SetWidth(15);
-               columns.Add(s => s.Distance).Titled("Distance").Filterable(true).SetWidth(10);
-               columns.Add(s => s.Remarks).Titled("Remarks").Filterable(true).SetWidth(10);
-           }).WithPaging(20).Sortable(true)
+                   columns.Add(s => s.OrderNumber).Titled("Order Number").Filterable(true).SetWidth(10);
+                   columns.Add(s => s.ShopName).Titled("Shop").Filterable(true).SetWidth(30);
+                   columns.Add(s => s.DeliveryAddress).Titled("Delivery Address").Filterable(true).SetWidth(30);
+                   columns.Add(s => s.Name).Titled("Name").Filterable(true).SetWidth(15);
+                   columns.Add(s => s.PhoneNumber).Titled("Phone Number").Filterable(true).SetWidth(15);
+                   columns.Add(s => s.Distance).Titled("Distance").Filterable(true).SetWidth(5);
+                   columns.Add(s => s.Remarks).Titled("Remarks").Filterable(true).SetWidth(20);
+                   columns.Add(s => s.StatusText).Css("font-weight-bold").Titled("Status").Filterable(true).SetWidth(5);
+               }).WithPaging(20).Sortable(true)
                 </div>
             </div>
         </div>
@@ -35,13 +71,23 @@
 
 @section Scripts
 {
-    <script src="~/Scripts/sweetalert/sweetalert.min.js"></script>
-    <link href="~/Content/sweetalert/sweetalert.css" rel="stylesheet" />
+    <script src="~/Scripts/select2/js/select2.js"></script>
+    <link href="~/Scripts/select2/css/select2.css" rel="stylesheet" />
+    <link href="~/Content/select2/select2.custom.css" rel="stylesheet" />
 
     <script>
         $(document).ready(function () {
-
-      
+            $('#ShopId').select2({
+                placeholder: "Search Shop",
+                ajax: {
+                    url: "/Product/GetActiveShopSelect2",
+                    width: '100%',
+                    delay: 250,
+                    dataType: 'json'
+                }
+            }).on('select2:select', function (e) {
+                $('input[name="ShopName"]').val(e.params.data.text);
+            });
 
         });
     </script>

@@ -106,7 +106,7 @@
                    columns.Add().Encoded(false).Sanitized(false)
                 .RenderValueAs(o => (o.RefundAmount == 0 || o.RefundAmount == null) ? "<a href='#modal-refund' data-id='" + o.Id + "' data-toggle='modal' data-target='#modal-refund' class='btn btn-sm btn-primary btn-modal-refund btn-block mt-3'>Refund</a>" : o.RefundAmount.Value > 0 ? "<span>" + o.RefundAmount + "(" + o.RefundRemark + ")" + "</span>" : "N/A").Titled("Refund").SetWidth(5);
                    columns.Add().Encoded(false).Sanitized(false)
-               .RenderValueAs(o => (o.Status == 3) ? "<input class='assign-checkbox' type='checkbox' data-id='" + o.Id + "' />" : "").Titled("").Css("vertical-middle").SetWidth(1);
+               .RenderValueAs(o => (o.Status == 3) ? "<input class='assign-checkbox' type='checkbox' data-id='" + o.Id + "' data-district='"+o.ShopDistrict+"' />" : "").Titled("").Css("vertical-middle").SetWidth(1);
                }).WithPaging(20).Sortable(true)
                 </div>
             </div>
@@ -176,7 +176,7 @@
             if ('@Model.IsPickupDrop' == "True")
                 $('#pickup-check').prop('checked', true);
             var orderIdArray = [];
-
+          
             $('#ShopId').select2({
                 placeholder: "Search Shop",
                 width: '100%',
@@ -220,20 +220,30 @@
                         OrderId: $this.data('id')
                     };
                     orderIdArray.push(item);
+                   
+                    $('#select-deliveryboy').select2({
+                        placeholder: "Select Delivery Boy",
+                        width: '100%',
+                        ajax: {
+                            url: "/DeliveryBoy/GetDeliveryBoyWithinLimitSelect2?district=" + $this.data('district'),
+                            delay: 250,
+                            dataType: 'json'
+                        }
+                    });
                 } else {
                     removeFromArray($this.data('id'));
                 }
             });
-
-            $('#select-deliveryboy').select2({
-                placeholder: "Select Delivery Boy",
-                width: '100%',
-                ajax: {
-                    url: "/DeliveryBoy/GetDeliveryBoyWithinLimitSelect2",
-                    delay: 250,
-                    dataType: 'json'
-                }
-            });
+            
+            //$('#select-deliveryboy').select2({
+            //    placeholder: "Select Delivery Boy",
+            //    width: '100%',
+            //    ajax: {
+            //        url: "/DeliveryBoy/GetDeliveryBoyWithinLimitSelect2?district=" + district,
+            //        delay: 250,
+            //        dataType: 'json'
+            //    }
+            //});
 
             $('#btn-assign-deliveryboy').on('click', function () {
                 var model = {

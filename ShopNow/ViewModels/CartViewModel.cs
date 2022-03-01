@@ -1026,6 +1026,7 @@ namespace ShopNow.ViewModels
             public double? RefundAmount { get; set; }
             public string RefundRemark { get; set; }
             public bool IsPickupDrop { get; set; }
+            public string ShopDistrict { get; set; }
             public string OrderStatusText
             {
                 get
