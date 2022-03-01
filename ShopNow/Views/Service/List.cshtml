@@ -12,7 +12,7 @@
 <div class="container-fluid mb-3">
     <div class="row my-2">
         <div class="col-md-2">
-            <h5 class="text-success" style="letter-spacing:1px">Parcel Drop LIST</h5>
+            <h5 class="text-success" style="letter-spacing:1px">Parcel Drop List</h5>
         </div>
         <div class="col-md-8">
             <form method="get" action="/Service/List" id="filter-form">
@@ -45,7 +45,7 @@
             </form>
         </div>
         <div class="col-md-2 text-right">
-            <a class="btn btn-outline-primary" href="/Service/Create">Create parcel Drop</a>
+            <a class="btn btn-outline-primary" href="/Service/Create">Create Parcel Drop</a>
         </div>
     </div>
     <div class="row">
@@ -80,7 +80,7 @@
             $('#ShopId').select2({
                 placeholder: "Search Shop",
                 ajax: {
-                    url: "/Product/GetActiveShopSelect2",
+                    url: "/Product/GetActiveAndInActiveShopSelect2",
                     width: '100%',
                     delay: 250,
                     dataType: 'json'

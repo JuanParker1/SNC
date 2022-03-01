@@ -35,7 +35,7 @@ namespace ShopNow.Controllers
                     Status = i.Status,
                     OrderNumber = i.OrderNumber,
                     ShopName = i.ShopName
-                }).ToList();
+                }).OrderByDescending(i=> i.DateEncoded).ToList();
             return View(model);
         }
 
@@ -162,8 +162,10 @@ namespace ShopNow.Controllers
             return RedirectToAction("List");
         }
 
-        public JsonResult GetDeliveryCharge(double PickupLatitude, double PickupLongitude, double DeliveryLatitude, double DeliveryLongitude)
+        public JsonResult GetDeliveryCharge(int ShopId, double PickupLatitude, double PickupLongitude, double DeliveryLatitude, double DeliveryLongitude)
         {
+            var shop = db.Shops.FirstOrDefault(i => i.Id == ShopId);
+            var DeliveryCredit = db.ShopCredits.FirstOrDefault(i => i.CustomerId == shop.CustomerId).DeliveryCredit;
             double DeliveryCharge = 0;
             var Distance = (((Math.Acos(Math.Sin((PickupLatitude * Math.PI / 180)) * Math.Sin(((DeliveryLatitude) * Math.PI / 180)) + Math.Cos((PickupLatitude * Math.PI / 180)) * Math.Cos((DeliveryLatitude * Math.PI / 180))
                  * Math.Cos(((PickupLongitude - DeliveryLongitude) * Math.PI / 180)))) * 180 / Math.PI) * 60 * 1.1515 * 1609.344) / 1000;
@@ -178,7 +180,7 @@ namespace ShopNow.Controllers
                 var amount = dist * 6;
                 DeliveryCharge = 50 + amount;
             }
-            return Json(new { DeliveryCharge, Distance }, JsonRequestBehavior.AllowGet);
+            return Json(new { DeliveryCharge, Distance, DeliveryCredit }, JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult GetAddressCount(string phoneNumber = "", int shopId = 0)
@@ -193,7 +195,7 @@ namespace ShopNow.Controllers
 
         public async Task<JsonResult> GetShopSelect2(string q = "")
         {
-            var model = await db.Shops.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0).Select(i => new
+            var model = await db.Shops.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && (a.Status == 0 || a.Status == 1)).Select(i => new
             {
                 id = i.Id,
                 text = i.Name,
@@ -204,6 +206,21 @@ namespace ShopNow.Controllers
                 customerid = i.CustomerId
             }).ToListAsync();
             
+            return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
+        }
+
+        public async Task<JsonResult> GetDeliveryAddressSelect2(string customerPhoneNumber = "", int shopId = 0, string q = "")
+        {
+            var model = await db.Orders
+                .Where(a => a.DeliveryAddress.Contains(q) && a.CustomerPhoneNumber == customerPhoneNumber && a.IsPickupDrop == true && a.ShopId == shopId)
+                .Select(i => new
+                {
+                    id = i.DeliveryAddress,
+                    text = i.DeliveryAddress,
+                    latitude = i.Latitude,
+                    longitude = i.Longitude
+                }).Distinct().OrderBy(i => i.text).ToListAsync();
+
             return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
         }
     }

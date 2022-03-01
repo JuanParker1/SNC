@@ -13,7 +13,7 @@
 
     <style>
         .material-charts-box-chart-vertical-tick-label {
-        left:-10px;
+            left: -10px;
         }
     </style>
 </head>
@@ -23,133 +23,175 @@
             <div class="col-xl-12 col-sm">
                 <section class="hk-sec-wrapper">
                     @*<div class="row">*@
-                        @*<div class="col-sm">*@
-                            <div class="row">
-                                <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12 mb-30">
-                                    <div class="relative flex flex-col min-w-0 break-words bg-white rounded mb-6 xl:mb-0 shadow-sm">
-                                        <div class="flex-auto p-4">
-                                            <div class="flex flex-wrap">
-                                                <div class="relative w-full pr-4 max-w-full flex-grow flex-1">
-                                                    <h5 class="text-gray-500 uppercase font-bold text-xs">
-                                                        Customer
-                                                    </h5>
-                                                    <span class="font-semibold text-xl text-gray-800">
-                                                        @ViewBag.Customer
-                                                    </span>
-                                                </div>
-                                                <div class="relative w-auto pl-4 flex-initial">
-                                                    <div class="text-white p-3 text-center inline-flex items-center justify-center w-12 h-12 shadow-lg rounded-full bg-green-500">
-                                                        <i class="fa fa-users"></i>
-                                                    </div>
-                                                </div>
+                    @*<div class="col-sm">*@
+                    <div class="row">
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12 mb-30">
+                            <div class="relative flex flex-col min-w-0 break-words bg-white rounded mb-6 xl:mb-0 shadow-sm">
+                                <div class="flex-auto p-4">
+                                    <div class="flex flex-wrap">
+                                        <div class="relative w-full pr-4 max-w-full flex-grow flex-1">
+                                            <h5 class="text-gray-500 uppercase font-bold text-xs">
+                                                Customer
+                                            </h5>
+                                            <span class="font-semibold text-xl text-gray-800">
+                                                @ViewBag.Customer
+                                            </span>
+                                        </div>
+                                        <div class="relative w-auto pl-4 flex-initial">
+                                            <div class="text-white p-3 text-center inline-flex items-center justify-center w-12 h-12 shadow-lg rounded-full bg-green-500">
+                                                <i class="fa fa-users"></i>
                                             </div>
-                                            <p class="text-sm text-gray-500 mt-4">
-                                                <span class="text-green-500 mr-2">
-                                                    <i class="fa fa-arrow-up"></i> 3.48%
-                                                </span>
-                                                <span class="whitespace-no-wrap">
-                                                    Available
-                                                </span>
-                                            </p>
                                         </div>
                                     </div>
+                                    <p class="text-sm text-gray-500 mt-4">
+                                        <span class="text-green-500 mr-2">
+                                            <i class="fa fa-arrow-up"></i> 3.48%
+                                        </span>
+                                        <span class="whitespace-no-wrap">
+                                            Available
+                                        </span>
+                                    </p>
                                 </div>
-                                <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12 mb-30">
-                                    <div class="relative flex flex-col min-w-0 break-words bg-white rounded mb-6 xl:mb-0 shadow-sm">
-                                        <div class="flex-auto p-4">
-                                            <div class="flex flex-wrap">
-                                                <div class="relative w-full pr-4 max-w-full flex-grow flex-1">
-                                                    <h5 class="text-gray-500 uppercase font-bold text-xs">
-                                                        Shops
-                                                    </h5>
-                                                    <span class="font-semibold text-xl text-gray-800">
-                                                        @ViewBag.Shops
-                                                    </span>
-                                                </div>
-                                                <div class="relative w-auto pl-4 flex-initial">
-                                                    <div class="text-white p-3 text-center inline-flex items-center justify-center w-12 h-12 shadow-lg rounded-full bg-orange-500">
-                                                        <i class="fa fa-shopping-bag"></i>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <p class="text-sm text-gray-500 mt-4">
-                                                <span class="text-red-500 mr-2">
-                                                    <i class="fa fa-arrow-down"></i> 3.48%
-                                                </span>
-                                                <span class="whitespace-no-wrap">
-                                                    Available
-                                                </span>
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12 mb-30">
-                                    <div class="relative flex flex-col min-w-0 break-words bg-white rounded mb-6 xl:mb-0 shadow-sm">
-                                        <div class="flex-auto p-4">
-                                            <div class="flex flex-wrap">
-                                                <div class="relative w-full pr-4 max-w-full flex-grow flex-1">
-                                                    <h5 class="text-gray-500 uppercase font-bold text-xs">
-                                                        Delivery Boys
-                                                    </h5>
-                                                    <span class="font-semibold text-xl text-gray-800">
-                                                        @ViewBag.Delivery
-                                                    </span>
-                                                </div>
-                                                <div class="relative w-auto pl-4 flex-initial">
-                                                    <div class="text-white p-3 text-center inline-flex items-center justify-center w-12 h-12 shadow-lg rounded-full bg-pink-500">
-                                                        <i class="fa fa-truck"></i>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <p class="text-sm text-gray-500 mt-4">
-                                                <span class="text-orange-500 mr-2">
-                                                    <i class="fa fa-arrow-down"></i> 1.10%
-                                                </span>
-                                                <span class="whitespace-no-wrap">
-                                                    Available
-                                                </span>
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12 mb-30">
-                                    <div class="relative flex flex-col min-w-0 break-words bg-white rounded mb-6 xl:mb-0 shadow-sm">
-                                        <div class="flex-auto p-4">
-                                            <div class="flex flex-wrap">
-                                                <div class="relative w-full pr-4 max-w-full flex-grow flex-1">
-                                                    <h5 class="text-gray-500 uppercase font-bold text-xs">
-                                                        Order
-                                                    </h5>
-                                                    <span class="font-semibold text-xl text-gray-800">
-                                                        @ViewBag.Order
-                                                    </span>
-                                                </div>
-                                                <div class="relative w-auto pl-4 flex-initial">
-                                                    <div class="text-white p-3 text-center inline-flex items-center justify-center w-12 h-12 shadow-lg rounded-full bg-blue-500">
-                                                        <i class="fa fa-shopping-cart"></i>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <p class="text-sm text-gray-500 mt-4">
-                                                <span class="text-green-500 mr-2">
-                                                    <i class="fa fa-arrow-up"></i> 12%
-                                                </span>
-                                                <span class="whitespace-no-wrap">
-                                                    Available
-                                                </span>
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                            @*</div>*@
+                            </div>
                         </div>
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12 mb-30">
+                            <div class="relative flex flex-col min-w-0 break-words bg-white rounded mb-6 xl:mb-0 shadow-sm">
+                                <div class="flex-auto p-4">
+                                    <div class="flex flex-wrap">
+                                        <div class="relative w-full pr-4 max-w-full flex-grow flex-1">
+                                            <h5 class="text-gray-500 uppercase font-bold text-xs">
+                                                Shops
+                                            </h5>
+                                            <span class="font-semibold text-xl text-gray-800">
+                                                @ViewBag.Shops
+                                            </span>
+                                        </div>
+                                        <div class="relative w-auto pl-4 flex-initial">
+                                            <div class="text-white p-3 text-center inline-flex items-center justify-center w-12 h-12 shadow-lg rounded-full bg-orange-500">
+                                                <i class="fa fa-shopping-bag"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <p class="text-sm text-gray-500 mt-4">
+                                        <span class="text-red-500 mr-2">
+                                            <i class="fa fa-arrow-down"></i> 3.48%
+                                        </span>
+                                        <span class="whitespace-no-wrap">
+                                            Available
+                                        </span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12 mb-30">
+                            <div class="relative flex flex-col min-w-0 break-words bg-white rounded mb-6 xl:mb-0 shadow-sm">
+                                <div class="flex-auto p-4">
+                                    <div class="flex flex-wrap">
+                                        <div class="relative w-full pr-4 max-w-full flex-grow flex-1">
+                                            <h5 class="text-gray-500 uppercase font-bold text-xs">
+                                                Delivery Boys
+                                            </h5>
+                                            <span class="font-semibold text-xl text-gray-800">
+                                                @ViewBag.Delivery
+                                            </span>
+                                        </div>
+                                        <div class="relative w-auto pl-4 flex-initial">
+                                            <div class="text-white p-3 text-center inline-flex items-center justify-center w-12 h-12 shadow-lg rounded-full bg-pink-500">
+                                                <i class="fa fa-truck"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <p class="text-sm text-gray-500 mt-4">
+                                        <span class="text-orange-500 mr-2">
+                                            <i class="fa fa-arrow-down"></i> 1.10%
+                                        </span>
+                                        <span class="whitespace-no-wrap">
+                                            Available
+                                        </span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12 mb-30">
+                            <div class="relative flex flex-col min-w-0 break-words bg-white rounded mb-6 xl:mb-0 shadow-sm">
+                                <div class="flex-auto p-4">
+                                    <div class="flex flex-wrap">
+                                        <div class="relative w-full pr-4 max-w-full flex-grow flex-1">
+                                            <h5 class="text-gray-500 uppercase font-bold text-xs">
+                                                Order
+                                            </h5>
+                                            <span class="font-semibold text-xl text-gray-800">
+                                                @ViewBag.Order
+                                            </span>
+                                        </div>
+                                        <div class="relative w-auto pl-4 flex-initial">
+                                            <div class="text-white p-3 text-center inline-flex items-center justify-center w-12 h-12 shadow-lg rounded-full bg-blue-500">
+                                                <i class="fa fa-shopping-cart"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <p class="text-sm text-gray-500 mt-4">
+                                        <span class="text-green-500 mr-2">
+                                            <i class="fa fa-arrow-up"></i> 12%
+                                        </span>
+                                        <span class="whitespace-no-wrap">
+                                            Available
+                                        </span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        @*</div>*@
+                    </div>
                     @*</div>*@
                 </section>
                 <div class="col-xl-12 mt-5 px-1">
                     <div class="card shadow-sm">
                         <div class="card-body">
-                            <h3 class="text-center"><b>@DateTime.Now.ToString("yyyy") Order Summary</b></h3>
+                            <h3 class="text-center"><b>@Model.YearFilter Order Summary</b></h3>
+                            <form action="/Dashboard/Index" method="get">
+                                <div class="d-flex">
+                                    <select id="select-year-filter" class="form-control mr-3" name="YearFilter" style="width:10%;">
+                                        @for (int year = 2021; year <= DateTime.Now.Year; year++)
+                                        {
+                                            <option value="@year">@year</option>
+                                        }
+                                    </select>
+                                    <input type="hidden" name="MonthFilter" value="@Model.MonthFilter" />
+                                    <input type="submit" class="btn btn-info mr-3" value="Filter" />
+                                    <a href="/Dashboard/Index" class="btn btn-warning">Clear</a>
+                                </div>
+                            </form>
                             <div id="bar-chart-example" class="w-100"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-12 mt-5 px-1">
+                    <div class="card shadow-sm">
+                        <div class="card-body">
+                            <h3 class="text-center"><b>@DateTime.Now.ToString("MMMM")-@Model.YearFilter Shop Category wise Order Summary</b></h3>
+                            <form action="/Dashboard/Index" method="get">
+                                <div class="d-flex">
+                                    <select id="select-month-filter" class="form-control mr-3" name="MonthFilter" style="width:10%;">
+                                        <option value="1">January</option>
+                                        <option value="2">February</option>
+                                        <option value="3">March</option>
+                                        <option value="4">April</option>
+                                        <option value="5">May</option>
+                                        <option value="6">June</option>
+                                        <option value="7">July</option>
+                                        <option value="8">August</option>
+                                        <option value="9">September</option>
+                                        <option value="10">October</option>
+                                        <option value="11">November</option>
+                                        <option value="12">December</option>
+                                    </select>
+                                    <input type="hidden" name="YearFilter" value="@Model.YearFilter" />
+                                    <input type="submit" class="btn btn-info mr-3" value="Filter" />
+                                    <a href="/Dashboard/Index" class="btn btn-warning">Clear</a>
+                                </div>
+                            </form>
+                            <div id="bar-chart-shop-category" class="w-100"></div>
                         </div>
                     </div>
                 </div>
@@ -161,41 +203,67 @@
             </div>
         </div>
         <div class="row mt-5">
-            
+
         </div>
     </div>
     <script>
         $(document).ready(function () {
+              $('select[name="MonthFilter"] option[value=@Model.MonthFilter]').prop('selected', true);
+            $('select[name="YearFilter"] option[value=@Model.YearFilter]').prop('selected', true);
+
             var exampleBarChartData = {
                 "datasets": {
                     "values":[@Model.OrderJanCount,@Model.OrderFebCount,@Model.OrderMarCount,@Model.OrderAprCount,@Model.OrderMayCount,@Model.OrderJunCount,@Model.OrderJulCount,@Model.OrderAugCount,@Model.OrderSepCount,@Model.OrderOctCount,@Model.OrderNovCount,@Model.OrderDecCount], /*[100, 200, 150, 300, 450, 500, 350, 600, 400, 250, 300, 650],*/
                     "labels": [
-                        "January",
-                        "February",
-                        "March",
-                        "April",
-                        "May",
-                        "June",
-                        "July",
-                        "August",
-                        "September",
-                        "October",
-                        "November",
-                        "December"
+                        "January- @Model.OrderJanCount",
+                        "February- @Model.OrderFebCount",
+                        "March- @Model.OrderMarCount",
+                        "April- @Model.OrderAprCount",
+                        "May- @Model.OrderMayCount",
+                        "June- @Model.OrderJunCount",
+                        "July- @Model.OrderJulCount",
+                        "August- @Model.OrderAugCount",
+                        "September- @Model.OrderSepCount",
+                        "October- @Model.OrderOctCount",
+                        "November- @Model.OrderNovCount",
+                        "December- @Model.OrderDecCount"
                     ],
                         "color": "green"
         },
             "height": "400px",
-            "width": "1300px",
+            "width": "1500px",
             //"background": "#FFFFFF",
             "shadowDepth": "0",
 
             };
         MaterialCharts.bar("#bar-chart-example", exampleBarChartData);
-        $('.material-charts-box-chart-vertical-tick-label').each(function () {
-            var value = Math.ceil($(this).html());
-            $(this).html(value);
-        });
+            $('#bar-chart-example .material-charts-box-chart-vertical-tick-label').each(function () {
+                var value = Math.ceil($(this).html());
+                $(this).html(value);
+            });
+
+            var shopcategoryBarChartData = {
+                "datasets": {
+                    "values":[@Model.OrderMedicalCount,@Model.OrderRestaurantCount,@Model.OrderMeatAndVegCount,@Model.OrderSupermarketCount],
+                    "labels": [
+                        "Medical- @Model.OrderMedicalCount",
+                        "Restaurant- @Model.OrderRestaurantCount",
+                        "Meat & Vegetables- @Model.OrderMeatAndVegCount",
+                        "Supermarket- @Model.OrderSupermarketCount"
+                    ],
+                        "color": "green"
+        },
+            "height": "400px",
+            "width": "1000px",
+            //"background": "#FFFFFF",
+            "shadowDepth": "0",
+
+            };
+            MaterialCharts.bar("#bar-chart-shop-category", shopcategoryBarChartData);
+            $('#bar-chart-shop-category .material-charts-box-chart-vertical-tick-label').each(function () {
+                var value = Math.ceil($(this).html());
+                $(this).html(value);
+            });
     });
     </script>
 </body>
