@@ -169,9 +169,9 @@
                         $('#section-addressdropdown').removeClass('d-none');
                         $('#select-deliveryaddress').select2({
                             placeholder: "Choose Address",
+                            width: '100%',
                             ajax: {
-                                url: "/Service/GetDeliveryAddressSelect2?customerphonenumber=" + $this + "&shopId=" + $('#ShopId').val(),
-                                width: '100%',
+                                url: "/Service/GetDeliveryAddressSelect2?customerPhoneNumber=" + $this + "&shopId=" + $('#ShopId').val(),
                                 delay: 250,
                                 dataType: 'json'
                             }
@@ -196,19 +196,23 @@
             var PickupLongitude = parseFloat($("#PickupLongitude").val());
             var DeliveryLatitude = parseFloat($("#DeliveryLatitude").val());
             var DeliveryLongitude = parseFloat($("#DeliveryLongitude").val());
-
-            $.getJSON("/Service/GetDeliveryCharge", { PickupLatitude: PickupLatitude, PickupLongitude: PickupLongitude, DeliveryLatitude: DeliveryLatitude, DeliveryLongitude: DeliveryLongitude }, function (data) {
+            var ShopId = $("#ShopId").val();
+            $.getJSON("/Service/GetDeliveryCharge", { ShopId: ShopId, PickupLatitude: PickupLatitude, PickupLongitude: PickupLongitude, DeliveryLatitude: DeliveryLatitude, DeliveryLongitude: DeliveryLongitude }, function (data) {
                 $("#DeliveryCharge").val(data.DeliveryCharge.toFixed(2));
                 $("#dcharge").text(data.DeliveryCharge.toFixed(2));
                 $("#dist").text(data.Distance.toFixed(2));
                 $("#Distance").val(data.Distance.toFixed(2));
                 var dcharge = parseFloat(data.DeliveryCharge);
-                if (dcharge >= 50 && dcharge <= 300) {
-                    $("#btnSubmit").removeAttr("disabled");
-
-                } else {
-                    swal("Warning!", "Delivery Address is not within Limit. Kindly Update the address.", "warning");
-                    clearFields();
+                if (data.DeliveryCredit < 50) {
+                    swal("Low Delivery Credit!", "Kindly Update Delivery Credits.", "warning");
+                }
+                else {
+                    if (dcharge >= 50 && dcharge <= 300) {
+                        $("#btnSubmit").removeAttr("disabled");
+                    } else {
+                        swal("Warning!", "Delivery Address is not within Limit. Kindly Update the address.", "warning");
+                        clearFields();
+                    }
                 }
             });
 
@@ -256,7 +260,6 @@
                                 infowindow.open(map, marker);
                             });
                             markers.push(marker);
-
 
                             autocomplete.addListener('place_changed', function () {
                                 document.getElementById("location-error").style.display = 'none';
