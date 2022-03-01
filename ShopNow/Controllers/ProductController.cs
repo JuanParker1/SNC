@@ -1279,6 +1279,17 @@ namespace ShopNow.Controllers
                 text = i.Name + " -- " + i.DistrictName,
                 shopname = i.Name
             }).ToListAsync();
+            return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
+        }
+
+        public async Task<JsonResult> GetActiveAndInActiveShopSelect2(string q = "")
+        {
+            var model = await db.Shops.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && (a.Status == 0 || a.Status == 1)).Select(i => new
+            {
+                id = i.Id,
+                text = i.Name + " -- " + i.DistrictName,
+                shopname = i.Name
+            }).ToListAsync();
 
             return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
         }
