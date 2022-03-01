@@ -352,7 +352,7 @@
                                                 </div>
                                             </div>
                                             <div class="row mb-2">
-                                                <div class="col-md-12 ml-4">
+                                                <div class="col-md-12 ml-5">
                                                     <button type="button" class="btn btn-sm btn-danger" id="btnAadharRemove">Remove</button>
                                                 </div>
                                             </div>
@@ -1404,6 +1404,18 @@
             var resAccount = strAccount.match(regExp);
             var resAadhar = strAadhar.match(regExp);
 
+            // Shop Image
+            var defaultimg = $('#img-upload').attr("src");
+            if (defaultimg == '/Images/noimage.png' || defaultimg == 'https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/') {
+                $("#btnShopRemove").addClass("d-none");
+            }
+
+            // Shop Logo
+            var defaultimg = $('#img-logo').attr("src");
+            if (defaultimg == '/Images/noimage.png' || defaultimg == 'https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/') {
+                $("#btnLogoRemove").addClass("d-none");
+            }
+
             if (resAadhar == ".pdf") {
                 $("#AadharDocumentPDF").prop("checked", true);
                 $('.AadharDocumentImg').addClass('d-none');
@@ -2268,33 +2280,6 @@
                 readURLAccount(this);
                 $("#btnAccountRemove").removeClass("d-none");
                 $(".divAccountLabels").addClass("d-none");
-            });
-
-            //
-            function readURLBanner(input) {
-                if (input.files && input.files[0]) {
-                    var reader = new FileReader();
-                    reader.onload = function (e) {
-                        $('#img-banner').attr('src', e.target.result);
-                    }
-                    reader.readAsDataURL(input.files[0]);
-                }
-            }
-            $("#BannerImage").change(function () {
-                readURLBanner(this);
-            });
-
-            function readURLLicence(input) {
-                if (input.files && input.files[0]) {
-                    var reader = new FileReader();
-                    reader.onload = function (e) {
-                        $('#img-license').attr('src', e.target.result);
-                    }
-                    reader.readAsDataURL(input.files[0]);
-                }
-            }
-            $("#LicenseImage").change(function () {
-                readURLLicence(this);
             });
 
         });
