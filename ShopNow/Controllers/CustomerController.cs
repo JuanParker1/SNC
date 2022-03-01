@@ -115,8 +115,8 @@ namespace ShopNow.Controllers
             var customer = db.Customers.Where(m => m.Id == dId).FirstOrDefault();
             var model = _mapper.Map<Customer, CustomerEditViewModel>(customer);
             model.DOB = customer.DOB != null ? customer.DOB.Value.ToString("dd-MM-yyyy") : "N/A";
-            model.ImageAadharPath = model.ImageAadharPath.Contains("https://s3.ap-south-1.amazonaws.com/shopnowchat.com/") ? model.ImageAadharPath : "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/" +model.ImageAadharPath;
-            model.ImagePath = model.ImagePath.Contains("https://s3.ap-south-1.amazonaws.com/shopnowchat.com/") ? model.ImagePath : "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/" +model.ImagePath;
+            model.ImageAadharPath = model.ImageAadharPath != null ? (model.ImageAadharPath.Contains("https://s3.ap-south-1.amazonaws.com/shopnowchat.com/") ? model.ImageAadharPath : "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/" +model.ImageAadharPath) : "";
+            model.ImagePath = model.ImagePath != null ? (model.ImagePath.Contains("https://s3.ap-south-1.amazonaws.com/shopnowchat.com/") ? model.ImagePath : "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/" +model.ImagePath) : "";
             return View(model);
         }
 
