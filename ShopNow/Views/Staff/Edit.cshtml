@@ -30,7 +30,7 @@
                         <input type="hidden" name="IpAddress" value="@Model.IpAddress" />
                         <input type="hidden" name="CustomerId" value="@Model.CustomerId" />
                         <input type="hidden" name="CustomerName" value="@Model.CustomerName" />
-                        <input type="hidden" name="ImagePath" value="@Model.ImagePath" />
+                        <input type="hidden" name="ImagePath" id="ImagePath" value="@Model.ImagePath" />
                         <div class="form-group row">
                             <div class="col-md-3">
                                 <label class="col-form-label"><strong class="text-secondary">Staff Name</strong></label>
@@ -46,25 +46,16 @@
                                 </select>
                             </div>
                             <div class="col-md-3 text-center">
-                                <div class="row">
+                                <div class="row mt-4">
                                     <div class="col-md-5 text-right">
                                         <div class="img-upload-container">
-                                            @if (Model.ImagePath != null)
-                                            {
-                                                <img id='img-upload' class="img-container w-100 h-100" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePath" onerror="this.src='/Images/noimage.png'" />
-                                                <input type="button" class="btn btn-danger btn-sm btnRemove" value="Remove" />
-                                            }
-                                            else
-                                            {
-                                                <img id='img-upload' class="img-container w-100 h-100" onerror="this.src='/Images/noimage.png'" />
-                                            }
+                                            <img id='img-upload' class="img-container w-100 h-100" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePath" onerror="this.src='/Images/noimage.png'" />
                                             <input type="file" id="StaffImage" name="StaffImage" class="d-none" />
                                             <label for="StaffImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
-                                            <input type="hidden" name="ImagePath" id="ImagePath" value="@Model.ImagePath" />
                                         </div>
                                     </div>
                                     <div class="col-md-7 mt-5 text-left">
-                                        <input type="button" class="btn btn-danger mr-5 d-none btn-sm mt-4" id="btnRemove" value="Remove" />
+                                        <button type="button" class="btn btn-danger mr-5 btn-sm mt-4" id="btnStaffRemove">Remove</button>
                                     </div>
                                 </div>
                             </div>
@@ -158,6 +149,11 @@
             }).on('select2:select', function (e) {
             });
 
+            var defaultimg = $('#img-upload').attr("src");
+            if (defaultimg == '/Images/noimage.png' || defaultimg == 'https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/') {
+                $("#btnStaffRemove").addClass("d-none");
+            }
+
             function readURL(input) {
                 if (input.files && input.files[0]) {
                     var reader = new FileReader();
@@ -169,21 +165,15 @@
             }
             $("#StaffImage").change(function () {
                 readURL(this);
-                $("#btnRemove").removeClass("d-none");
-                $(".btnRemove").addClass("d-none");
+                $("#btnStaffRemove").removeClass("d-none");
             });
-            $("#btnRemove").on('click', function () {
-                $('#img-upload').attr('src', '');
-                $('#StaffImage').val('');
-                $('#ImagePath').val('');
+            $('#btnStaffRemove').click(function () {
+                $("#img-upload").attr('src', "");
+                $("#StaffImage").val("");
+                $("#ImagePath").val("");
                 $(this).addClass("d-none");
             });
-            $(".btnRemove").on('click', function () {
-                $('#img-upload').attr('src', '');
-                $('#StaffImage').val('');
-                $('#ImagePath').val('');
-                $(this).addClass("d-none");
-            });
+
         });
     </script>
 }
