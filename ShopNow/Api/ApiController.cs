@@ -2185,7 +2185,7 @@ namespace ShopNow.Controllers
             if (shop.IsTrail == false || order.IsPickupDrop == true) //Only Reduce DeliveryCredits When Shop is not trail and for all Pickupdrop order
             {
                 var shopCredits = db.ShopCredits.FirstOrDefault(i => i.CustomerId == shop.CustomerId);
-                shopCredits.DeliveryCredit -= payment.DeliveryCharge;
+                shopCredits.DeliveryCredit -= order.DeliveryCharge;
                 db.Entry(shopCredits).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
             }
@@ -6392,6 +6392,7 @@ namespace ShopNow.Controllers
             var productList = searchList.Where(i => i.Type==1)
                 .Join(db.Shops.Where(i=>i.Status ==0),sh=>sh.ShopId,s=>s.Id,(sh,s)=>new { sh,s})
                 .Select(i=>new {
+                    ID = i.sh.SearchId,
                     Id = i.sh.Id,
                     ProductId = i.sh.SearchId,
                     ProductName = i.sh.SearchText,
@@ -6414,6 +6415,7 @@ namespace ShopNow.Controllers
             var shopList = searchList.Where(i => i.Type == 2)
                 .Join(db.Shops.Where(i => i.Status == 0), sh => sh.SearchId, s => s.Id, (sh, s) => new { sh, s })
                 .Select(i => new {
+                    ID = i.sh.Id,
                     Id = i.sh.Id,
                     ProductId = 0,
                     ProductName = "",
@@ -7112,7 +7114,7 @@ namespace ShopNow.Controllers
                     payment.CreditType = 2;
                     payment.ConvenientCharge = 0;
                     payment.PackingCharge = 0;
-                    payment.DeliveryCharge = 0;
+                    payment.DeliveryCharge = model.DeliveryCharge;
                     payment.RatePerOrder = order.RatePerOrder;
                     payment.RefundStatus = 1;
                     payment.Status = 0;
