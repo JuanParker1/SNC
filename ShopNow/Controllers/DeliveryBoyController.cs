@@ -58,7 +58,7 @@ namespace ShopNow.Controllers
                             Name = m.Name,
                             PhoneNumber = m.PhoneNumber,
                             Active = m.Active,
-                            ImagePath = m.ImagePath,
+                            ImagePath = m.ImagePath != null ? m.ImagePath : "",
                             Email = m.Email
                         }).ToList();
             return View(list);
