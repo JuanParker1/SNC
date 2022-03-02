@@ -504,7 +504,7 @@ namespace ShopNow.Controllers
         public ActionResult Create(PaymentCreditsViewModel model)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
-            var shop = db.Shops.Where(i => i.Id == model.ShopId && i.Status == 0).FirstOrDefault();
+            var shop = db.Shops.Where(i => i.Id == model.ShopId).FirstOrDefault();
             if (shop != null)
             {
                 Payment pay = new Payment();
@@ -657,7 +657,7 @@ namespace ShopNow.Controllers
 
         public async Task<JsonResult> GetShopSelect2(string q = "")
         {
-            var model = await db.Shops.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0).Select(i => new
+            var model = await db.Shops.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && (a.Status == 0 || a.Status == 1)).Select(i => new
             {
                 id = i.Id,
                 text = i.Name
@@ -668,7 +668,7 @@ namespace ShopNow.Controllers
 
         public async Task<JsonResult> GetShopOwnerSelect2(string q = "")
         {
-            var model = await db.Shops.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0).Select(i => new
+            var model = await db.Shops.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && (a.Status == 0 || a.Status == 1)).Select(i => new
             {
                 id = i.Id,
                 text = i.Name

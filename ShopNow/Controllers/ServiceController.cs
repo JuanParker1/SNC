@@ -133,7 +133,7 @@ namespace ShopNow.Controllers
                 payment.CreditType = 2;
                 payment.ConvenientCharge = 0;
                 payment.PackingCharge = 0;
-                payment.DeliveryCharge = 0;
+                payment.DeliveryCharge = order.NetDeliveryCharge;
                 payment.RatePerOrder = order.RatePerOrder;
                 payment.RefundStatus = 1;
                 payment.Status = 0;

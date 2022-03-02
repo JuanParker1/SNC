@@ -1737,7 +1737,7 @@ namespace ShopNow.Controllers
 
         public async Task<JsonResult> GetShopSelect2(string q = "")
         {
-            var model = await db.Shops.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0).Select(i => new
+            var model = await db.Shops.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && (a.Status == 0 || a.Status==1)).Select(i => new
             {
                 id = i.Id,
                 text = i.Name,

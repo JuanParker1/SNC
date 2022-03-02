@@ -7,6 +7,9 @@ namespace ShopNow.ViewModels
 {
     public class DashboardIndexViewModel
     {
+        public int MonthFilter { get; set; }
+        public int YearFilter { get; set; }
+
         public int OrderJanCount { get; set; }
         public int OrderFebCount { get; set; }
         public int OrderMarCount { get; set; }
@@ -19,5 +22,10 @@ namespace ShopNow.ViewModels
         public int OrderOctCount { get; set; }
         public int OrderNovCount { get; set; }
         public int OrderDecCount { get; set; }
+
+        public int OrderRestaurantCount { get; set; }
+        public int OrderMedicalCount { get; set; }
+        public int OrderMeatAndVegCount { get; set; }
+        public int OrderSupermarketCount { get; set; }
     }
 }
