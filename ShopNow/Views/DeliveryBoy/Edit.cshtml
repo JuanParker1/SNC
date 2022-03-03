@@ -117,23 +117,15 @@
                                         <label class="col-md-12 text-center text-secondary font-weight-bold">Image</label>
                                         <label class="col-md-12 small font-italic">* Upload recent photo</label>
                                         <div class="row">
-                                            <div class="img-upload-container mx-auto text-center">
-                                                @if (Model.ImagePath != null)
-                                                {
-                                                    <img class="img-container w-100 h-100" id="img-upload" src="@Model.ImagePath" onerror="this.src='/Images/noimage.png'" />
-                                                    <input type="button" class="btn btn-sm btn-danger DeliveryBoyImage" value="Remove" />
-                                                }
-                                                else
-                                                {
-                                                    <img class="img-container w-100 h-100" id="img-upload" onerror="this.src='/Images/noimage.png'" />
-                                                }
+                                            <div class="img-upload-container  mx-auto text-center">
+                                                <img class="img-container w-100 h-100" id="img-upload" src="@Model.ImagePath" onerror="this.src='/Images/noimage.png'" />
                                                 <input type="file" id="DeliveryBoyImage" name="DeliveryBoyImage" class="d-none" />
                                                 <label for="DeliveryBoyImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
                                             </div>
                                         </div>
                                         <div class="row">
                                             <div class="col-md-12">
-                                                <input type="button" class="btn btn-sm btn-danger" id="DeliveryBoyImage" value="Remove" />
+                                                <button type="button" class="btn btn-sm btn-danger" id="btnDeliveryRemove">Remove</button>
                                             </div>
                                         </div>
                                     </div>
@@ -143,17 +135,13 @@
                                         <label class="col-md-12 text-center"><strong class="text-secondary">Resume</strong></label>
                                         <div class="row">
                                             <div class="col-md-12 my-3 text-center">
-                                                @if (Model.CVPath != null)
-                                                {
-                                                    <a href="@Model.CVPath" target="_blank"> Click here for Pdf view</a>
-                                                    <input type="button" class="btn btn-sm btn-danger btnCVPathRemove" value="Remove" />
-                                                }
+                                                <a href="@Model.CVPath" target="_blank"> Click here for Pdf view</a>
                                                 <input type="file" id="CVPdf" class="my-3" name="CVPdf" />
                                             </div>
                                         </div>
                                         <div class="row">
                                             <div class="col-md-12">
-                                                <input type="button" class="btn btn-sm btn-danger" id="btnCVPathRemove" value="Remove" />
+                                                <input type="button" class="btn btn-sm btn-danger d-none" id="btnCVPathRemove" value="Remove" />
                                             </div>
                                         </div>
                                     </div>
@@ -172,49 +160,48 @@
                                         </div>
                                         <div class="row DrivingPdf d-none">
                                             <div class="col-md-12 my-3 text-center">
-                                                <a href="@Model.DrivingLicenseImagePath" target="_blank" class="license-pdf"> Click here for Pdf view</a>
+                                                @if (Model.DrivingLicenseImagePath != null)
+                                                {
+                                                    <a href="@Model.DrivingLicenseImagePath" target="_blank" class="LicensePdflink"> Click here for Pdf view</a>
+                                                }
                                                 <input type="file" id="DrivingLicensePdf" class="my-3" name="DrivingLicensePdf" />
                                             </div>
                                         </div>
                                         <div class="row DrivingImg">
                                             <div class="img-upload-container mx-auto">
-                                                @if (Model.DrivingLicenseImagePath != null)
-                                                {
-                                                    <img class="img-container w-100 h-100" id="img-license" src="@Model.DrivingLicenseImagePath" onerror="this.src='/Images/noimage.png'" />
-                                                    <input type="button" class="btn btn-sm btn-danger btnLicenseRemove" value="Remove" />
-                                                }
-                                                else
-                                                {
-                                                    <img class="img-container w-100 h-100" id="img-license" onerror="this.src='/Images/noimage.png'" />
-                                                }
+                                                <img class="img-container w-100 h-100" id="img-license" src="@Model.DrivingLicenseImagePath" onerror="this.src='/Images/noimage.png'" />
                                                 <input type="file" id="DrivingLicenseImage" name="DrivingLicenseImage" class="d-none" />
                                                 <label for="DrivingLicenseImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="col-md-12">
-                                                <input type="button" class="btn btn-sm btn-danger" id="btnLicenseRemove" value="Remove" />
+                                            <div class="col-md-12 text-center">
+                                                <button type="button" class="btn btn-danger btn-sm" id="btnLicenseRemove">Remove</button>
+                                                @if (Model.DrivingLicenseImagePath != null)
+                                                {
+                                                    <div class="col-md-12 text-center">
+                                                        <button type="button" class="btn btn-sm btn-warning mb-2" id="btnLicenseExpand" data-toggle="modal" data-target="#LicenseModal"><i class="fa fa-search-plus"></i> Expand</button>
+                                                    </div>
+                                                    <input type="hidden" id="LicenseApprove" name="LicenseApprove" />
+                                                }
                                             </div>
                                         </div>
                                         @if (Model.DrivingLicenseImagePath != null && Model.Status == 1)
                                         {
-                                            <div class="alert alert-success LicenseApprovedlbl font-weight-bold d-none p-2">Approved</div>
-                                            <div class="alert alert-danger LicenseRejectedlbl font-weight-bold d-none p-2">Rejected</div>
-                                            if (Model.LicenseNumber == "Rejected")
-                                            {
-                                                <div class="alert alert-danger License font-weight-bold p-2 d-none">Rejected</div>
-                                            }
-                                            else
-                                            {
-                                                <div class="alert alert-danger License font-weight-bold p-2 text-center">Verification Pending</div>
-                                            }
-                                        }
-                                        @if (Model.DrivingLicenseImagePath != null)
-                                        {
-                                            <div class="col-md-12 text-center">
-                                                <button type="button" class="btn btn-sm btn-warning mb-2" data-toggle="modal" data-target="#LicenseModal"><i class="fa fa-search-plus"></i> Expand</button>
+                                            <div class="row divLicenseLabels">
+                                                <div class="col-md-12">
+                                                    <div class="alert alert-success LicenseApprovedlbl font-weight-bold d-none p-2">Approved</div>
+                                                    <div class="alert alert-danger LicenseRejectedlbl font-weight-bold d-none p-2">Rejected</div>
+                                                    @if (Model.LicenseNumber == "Rejected")
+                                                    {
+                                                        <div class="alert alert-danger License font-weight-bold p-2 d-none">Rejected</div>
+                                                    }
+                                                    else
+                                                    {
+                                                        <div class="alert alert-danger License font-weight-bold p-2 text-center">Verification Pending</div>
+                                                    }
+                                                </div>
                                             </div>
-                                            <input type="hidden" id="LicenseApprove" name="LicenseApprove" />
                                         }
                                     </div>
                                 </div>
@@ -253,49 +240,48 @@
                                             </span>
                                             <div class="row AccountDocumentPdf d-none">
                                                 <div class="col-md-12 my-3 text-center">
-                                                    <a href="@Model.BankPassbookPath" target="_blank" class="account-pdf"> Click here for Pdf view</a>
+                                                    @if (Model.BankPassbookPath != null)
+                                                    {
+                                                        <a href="@Model.BankPassbookPath" target="_blank" class="BankPdflink"> Click here for Pdf view</a>
+                                                    }
                                                     <input type="file" id="BankPassbookPdf" class="my-3" name="BankPassbookPdf" />
                                                 </div>
                                             </div>
                                             <div class="row AccountDocumentImg">
                                                 <div class="img-upload-container mx-auto">
-                                                    @if (Model.BankPassbookPath != null)
-                                                    {
-                                                        <img class="img-container w-100 h-100 mb-2" id="img-account" src="@Model.BankPassbookPath" onerror="this.src='/Images/noimage.png'" />
-                                                        <input type="button" class="btn btn-sm btn-danger btnBankAccountRemove" value="Remove" />
-                                                    }
-                                                    else
-                                                    {
-                                                        <img class="img-container w-100 h-100 mb-2" id="img-account" onerror="this.src='/Images/noimage.png'" />
-                                                    }
+                                                    <img class="img-container w-100 h-100 mb-2" id="img-account" src="@Model.BankPassbookPath" onerror="this.src='/Images/noimage.png'" />
                                                     <input type="file" id="BankPassbookImage" name="BankPassbookImage" class="d-none" />
                                                     <label for="BankPassbookImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
                                                 </div>
                                             </div>
                                             <div class="row">
                                                 <div class="col-md-12">
-                                                    <input type="button" class="btn btn-sm btn-danger" id="btnBankAccountRemove" value="Remove" />
+                                                    <button type="button" class="btn btn-sm btn-danger" id="btnBankAccountRemove">Remove</button>
+                                                    @if (Model.BankPassbookPath != null)
+                                                    {
+                                                        <div class="col-md-12 text-center">
+                                                            <button type="button" class="btn btn-sm btn-warning mb-2" id="btnBankAccountExpand" data-toggle="modal" data-target="#AccountModal"><i class="fa fa-search-plus"></i> Expand</button>
+                                                        </div>
+                                                        <input type="hidden" id="AccountApprove" name="AccountApprove" />
+                                                    }
                                                 </div>
                                             </div>
                                             @if (Model.BankPassbookPath != null && Model.Status == 1)
                                             {
-                                                <div class="alert alert-success AccountApprovedlbl font-weight-bold d-none p-2">Approved</div>
-                                                <div class="alert alert-danger AccountRejectedlbl font-weight-bold d-none p-2">Rejected</div>
-                                                if (Model.AccountNumber == "Rejected")
-                                                {
-                                                    <div class="alert alert-danger Account font-weight-bold p-2 d-none">Rejected. Please upload New One</div>
-                                                }
-                                                else
-                                                {
-                                                    <div class="alert alert-danger Account font-weight-bold p-2 text-center">Verification Pending</div>
-                                                }
-                                            }
-                                            @if (Model.BankPassbookPath != null)
-                                            {
-                                                <div class="col-md-12 text-center">
-                                                    <button type="button" class="btn btn-sm btn-warning mb-2" data-toggle="modal" data-target="#AccountModal"><i class="fa fa-search-plus"></i> Expand</button>
+                                                <div class="row divBankLabels">
+                                                    <div class="col-md-12">
+                                                        <div class="alert alert-success AccountApprovedlbl font-weight-bold d-none p-2">Approved</div>
+                                                        <div class="alert alert-danger AccountRejectedlbl font-weight-bold d-none p-2">Rejected</div>
+                                                        @if (Model.AccountNumber == "Rejected")
+                                                        {
+                                                        <div class="alert alert-danger Account font-weight-bold p-2 d-none">Rejected. Please upload New One</div>
+                                                        }
+                                                        else
+                                                        {
+                                                        <div class="alert alert-danger Account font-weight-bold p-2 text-center">Verification Pending</div>
+                                                        }
+                                                    </div>
                                                 </div>
-                                                <input type="hidden" id="AccountApprove" name="AccountApprove" />
                                             }
                                         </div>
                                     </div>
@@ -475,7 +461,9 @@
                 $("#DrivingLicenseImage").val("");
                 $("#img-license").attr('src', '');
                 $('.license-pdf').removeClass('d-none');
+                $('.LicensePdflink').removeClass('d-none');
                 $('.license-img').addClass('d-none');
+                $("#btnLicenseRemove").addClass("d-none");
             } else {
                 $("#LicenseImage").prop("checked", true);
                 $('.DrivingImg').removeClass('d-none');
@@ -483,6 +471,11 @@
                 $("#DrivingLicensePdf").val("");
                 $('.license-pdf').addClass('d-none');
                 $('.license-img').removeClass('d-none');
+                $('.LicensePdflink').removeClass('d-none');
+                var defaultimg = $('#img-license').attr("src");
+                if (defaultimg == '/Images/noimage.png') {
+                    $("#btnLicenseRemove").addClass("d-none");
+                }
             }
             if (resAccount == ".pdf") {
                 $("#AccountPDF").prop("checked", true);
@@ -492,6 +485,7 @@
                 $("#img-account").attr('src', '');
                 $('.account-pdf').removeClass('d-none');
                 $('.account-img').addClass('d-none');
+                $("#btnBankAccountRemove").addClass("d-none");
             } else {
                 $("#AccountImage").prop("checked", true);
                 $('.AccountDocumentImg').removeClass('d-none');
@@ -499,6 +493,10 @@
                 $("#BankPassbookPdf").val("");
                 $('.account-pdf').addClass('d-none');
                 $('.account-img').removeClass('d-none');
+                var defaultimg = $('#img-account').attr("src");
+                if (defaultimg == '/Images/noimage.png') {
+                    $("#btnBankAccountRemove").addClass("d-none");
+                }
             }
 
             if (imgcount != 0) {
@@ -510,6 +508,7 @@
                     $('#btnAccountApprove').focus();
                 }
             }
+
             $("#btnLicenseApprove").click(function () {
                 $('#LicenseApprove').val("true");
                 $(".LicenseApprovedlbl").removeClass("d-none");
@@ -534,6 +533,16 @@
                 $('.License').addClass("d-none");
                 $("#btnLicenseReject").hide();
                 $("#btnLicenseApprove").hide();
+            });
+
+            $('#btnLicenseRemove').click(function () {
+                $("#img-license").attr('src', '');
+                $("#DrivingLicenseImage").val("");
+                $('.LicensePdflink').addClass('d-none');
+                $('#btnLicenseExpand').addClass('d-none');
+                $('.divLicenseLabels').addClass('d-none');
+                $("#DrivingLicenseImagePath").val("");
+                $(this).addClass("d-none");
             });
 
             $("#btnAccountApprove").click(function () {
@@ -562,6 +571,30 @@
                 $("#btnAccountApprove").hide();
             });
 
+            $('#btnBankAccountRemove').click(function () {
+                $("#img-account").attr('src', '');
+                $("#BankPassbookImage").val("");
+                $('.BankPdflink').addClass('d-none');
+                $('#btnBankAccountExpand').addClass('d-none');
+                $('.divBankLabels').addClass('d-none');
+                $("#BankPassbookPath").val("");
+                $(this).addClass("d-none");
+            });
+
+            $("#CVPdf").change(function () {
+                $("#btnCVPathRemove").removeClass("d-none");
+            });
+            $("#btnCVPathRemove").on('click', function () {
+                $("#CVPdf").val('');
+                $("#CVPath").val('');
+                $(this).addClass("d-none");
+            });
+
+            // DeliveryBoy Image
+            var defaultimg = $('#img-upload').attr("src");
+            if (defaultimg == '/Images/noimage.png' || defaultimg == "") {
+                $("#btnDeliveryRemove").addClass("d-none");
+            }
             function readURL(input) {
                 if (input.files && input.files[0]) {
                     var reader = new FileReader();
@@ -571,41 +604,45 @@
                     reader.readAsDataURL(input.files[0]);
                 }
             }
+            $("#DeliveryBoyImage").change(function () {
+                readURL(this);
+                $("#btnDeliveryRemove").removeClass("d-none");
+            });
+            $('#btnDeliveryRemove').click(function () {
+                $("#img-upload").attr('src', '');
+                $("#DeliveryBoyImage").val("");
+                $("#ImagePath").val("");
+                $(this).addClass("d-none");
+            });
 
             function readURLlicense(input) {
                 if (input.files && input.files[0]) {
                     var reader = new FileReader();
-
                     reader.onload = function (e) {
                         $('#img-license').attr('src', e.target.result);
                     }
-
                     reader.readAsDataURL(input.files[0]);
                 }
             }
+            $("#DrivingLicenseImage").change(function () {
+                readURLlicense(this);
+                $("#btnLicenseRemove").removeClass("d-none");
+                $(".divLicenseLabels").addClass("d-none");
+            });
 
             function readURLaccount(input) {
                 if (input.files && input.files[0]) {
                     var reader = new FileReader();
-
                     reader.onload = function (e) {
                         $('#img-account').attr('src', e.target.result);
                     }
-
                     reader.readAsDataURL(input.files[0]);
                 }
             }
-
-            $("#DeliveryBoyImage").change(function () {
-                readURL(this);
-            });
-
-            $("#DrivingLicenseImage").change(function () {
-                readURLlicense(this);
-            });
-
             $("#BankPassbookImage").change(function () {
                 readURLaccount(this);
+                $("#btnBankAccountRemove").removeClass("d-none");
+                $(".divBankLabels").addClass("d-none");
             });
 
         });

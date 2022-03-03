@@ -44,6 +44,9 @@
                 <input type="hidden" name="Id" value="@Model.Id" />
                 <input type="hidden" name="CustomerId" id="CustomerId" value="@Model.CustomerId" />
                 <input type="hidden" name="Status" value="@Model.Status" />
+                <input type="hidden" name="ImagePath" id="ImagePath" value="@Model.ImagePath" />
+                <input type="hidden" name="ImagePanPath" id="ImagePanPath" value="@Model.ImagePanPath" />
+                <input type="hidden" name="BankPassbookPath" id="BankPassbookPath" value="@Model.BankPassbookPath" />
                 <div class="card shadow mb-4">
                     <div class="card-body">
                         <div class="row">
@@ -127,24 +130,15 @@
                                                 <div class="row ml-5 mt-2">
                                                     <div class="col-md-12">
                                                         <div class="img-upload-container mb-1">
-                                                            @if (Model.ImagePath != null)
-                                                            {
-                                                                <img class="img-container w-100 h-100 mb-2" id="img-upload" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePath" onerror="this.src='/Images/noimage.png'" />
-                                                                <input type="button" class="btn btn-danger btn-sm mt-1 btnAgencyRemove" value="Remove" />
-                                                            }
-                                                            else
-                                                            {
-                                                                <img id='img-upload' class="img-container w-100 h-100" onerror="this.src='/Images/noimage.png'" />
-                                                            }
+                                                            <img class="img-container w-100 h-100 mb-2" id="img-upload" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePath" onerror="this.src='/Images/noimage.png'" />
                                                             <input type="file" id="AgencyImage" name="AgencyImage" class="d-none" />
                                                             <label for="AgencyImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
-                                                            <input type="hidden" name="ImagePath" id="ImagePath" value="@Model.ImagePath" />
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div class="row">
                                                     <div class="col-md-12 text-center">
-                                                        <input type="button" class="btn btn-danger btn-sm d-none mt-1" id="btnAgencyRemove" value="Remove" />
+                                                        <button type="button" class="btn btn-danger btn-sm mt-1" id="btnAgencyRemove">Remove</button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -158,24 +152,15 @@
                                                 <div class="row ml-5 PanImg mt-2">
                                                     <div class="col-md-12 mb-1">
                                                         <div class="img-upload-container mb-2">
-                                                            @if (Model.ImagePanPath != null)
-                                                            {
-                                                                <img class="img-container w-100 h-100 mb-2" id="img-pan" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePanPath" onerror="this.src='/Images/noimage.png'" />
-                                                                <input type="button" class="btn btn-danger btn-sm ml-3 text-center mt-1 btnPanRemove" value="Remove" />
-                                                            }
-                                                            else
-                                                            {
-                                                                <img id='img-pan' class="img-container w-100 h-100" onerror="this.src='/Images/noimage.png'" />
-                                                            }
+                                                            <img class="img-container w-100 h-100 mb-2" id="img-pan" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePanPath" onerror="this.src='/Images/noimage.png'" />
                                                             <input type="file" id="PanImage" name="PanImage" class="d-none" />
                                                             <label for="PanImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
-                                                            <input type="hidden" name="ImagePanPath" id="ImagePanPath" value="@Model.ImagePanPath" />
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div class="row mb-3">
                                                     <div class="col-md-12 text-center">
-                                                        <input type="button" class="btn btn-danger btn-sm d-none ml-3 mt-1" id="btnPanRemove" value="Remove" />
+                                                        <button type="button" class="btn btn-danger btn-sm ml-3 mt-1" id="btnPanRemove">Remove</button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -186,23 +171,14 @@
                                                 <label class="col-md-12"><small class="text-secondary"><i>Bank Passbook Image</i></small></label>
                                                 <div class="row">
                                                     <div class="img-upload-container mx-auto mb-1 AccountDocumentImg">
-                                                        @if (Model.BankPassbookPath != null)
-                                                        {
-                                                            <img class="img-container w-100 h-100 mb-2" id="img-account" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.BankPassbookPath" onerror="this.src='/Images/noimage.png'" />
-                                                            <input type="button" class="btn btn-danger btn-sm mr-3 mt-1 btnBankPassRemove" value="Remove" />
-                                                        }
-                                                        else
-                                                        {
-                                                            <img id='img-account' class="img-container w-100 h-100" onerror="this.src='/Images/noimage.png'" />
-                                                        }
+                                                        <img class="img-container w-100 h-100 mb-2" id="img-account" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.BankPassbookPath" onerror="this.src='/Images/noimage.png'" />
                                                         <input type="file" id="BankPassbookImage" name="BankPassbookImage" class="d-none" />
                                                         <label for="BankPassbookImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
-                                                        <input type="hidden" name="BankPassbookPath" id="BankPassbookPath" value="@Model.BankPassbookPath" />
                                                     </div>
                                                 </div>
                                                 <div class="row">
                                                     <div class="col-md-12 text-center">
-                                                        <input type="button" class="btn btn-danger btn-sm d-none mr-3 mt-1" id="btnBankPassRemove" value="Remove" />
+                                                        <button type="button" class="btn btn-danger btn-sm mr-3 mt-1" id="btnBankPassRemove">Remove</button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -344,37 +320,14 @@
                 $(".btnHide").addClass("d-none");
             });
 
-            $('input:radio[name="DrivingLicense"]').change(
-                function () {
-                    if (this.checked && this.value == 'Image') {
-                        $('.DrivingImg').removeClass('d-none');
-                        $('.DrivingPdf').addClass('d-none');
-                        $("#DrivingLicensePdf").val("");
-                    } else {
-                        $('.DrivingImg').addClass('d-none');
-                        $('.DrivingPdf').removeClass('d-none');
-                        $("#DrivingLicenseImage").val("");
-                        $("#img-license").attr('src', '');
-                    }
-                });
-
-            $('input:radio[name="AccountDocument"]').change(function () {
-                if (this.checked && this.value == 'Image') {
-                    $('.AccountDocumentImg').removeClass('d-none');
-                    $('.AccountDocumentPdf').addClass('d-none');
-                    $("#BankPassbookPdf").val("");
-                } else {
-                    $('.AccountDocumentImg').addClass('d-none');
-                    $('.AccountDocumentPdf').removeClass('d-none');
-                    $("#BankPassbookImage").val("");
-                    $("#img-account").attr('src', '');
-                }
-            });
+            var defaultimg = $('#img-upload').attr("src");
+            if (defaultimg == '/Images/noimage.png' || defaultimg == 'https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/') {
+                $("#btnAgencyRemove").addClass("d-none");
+            }
 
             function readURL(input) {
                 if (input.files && input.files[0]) {
                     var reader = new FileReader();
-
                     reader.onload = function (e) {
                         $('#img-upload').attr('src', e.target.result);
                     }
@@ -384,7 +337,6 @@
             $("#AgencyImage").change(function () {
                 readURL(this);
                 $("#btnAgencyRemove").removeClass("d-none");
-                $(".btnAgencyRemove").addClass("d-none");
             });
             $("#btnAgencyRemove").on('click', function () {
                 $('#img-upload').attr('src', '');
@@ -392,12 +344,11 @@
                 $("#ImagePath").val('');
                 $(this).addClass("d-none");
             });
-            $(".btnAgencyRemove").on('click', function () {
-                $('#img-upload').attr('src', '');
-                $("#AgencyImage").val('');
-                $("#ImagePath").val('');
-                $(this).addClass("d-none");
-            });
+
+            var defaultimg = $('#img-pan').attr("src");
+            if (defaultimg == '/Images/noimage.png' || defaultimg == 'https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/') {
+                $("#btnPanRemove").addClass("d-none");
+            }
 
             function readURLlicense(input) {
                 if (input.files && input.files[0]) {
@@ -411,7 +362,6 @@
             $("#PanImage").change(function () {
                 readURLlicense(this);
                 $("#btnPanRemove").removeClass("d-none");
-                $(".btnPanRemove").addClass("d-none");
             });
             $("#btnPanRemove").on('click', function () {
                 $('#img-pan').attr('src', '');
@@ -419,12 +369,11 @@
                 $("#ImagePanPath").val('');
                 $(this).addClass("d-none");
             });
-            $(".btnPanRemove").on('click', function () {
-                $('#img-pan').attr('src', '');
-                $("#PanImage").val('');
-                $("#ImagePanPath").val('');
-                $(this).addClass("d-none");
-            });
+
+            var defaultimg = $('#img-account').attr("src");
+            if (defaultimg == '/Images/noimage.png' || defaultimg == 'https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/') {
+                $("#btnBankPassRemove").addClass("d-none");
+            }
 
             function readURLaccount(input) {
                 if (input.files && input.files[0]) {
@@ -438,15 +387,8 @@
             $("#BankPassbookImage").change(function () {
                 readURLaccount(this);
                 $("#btnBankPassRemove").removeClass("d-none");
-                $(".btnBankPassRemove").addClass("d-none");
             });
             $("#btnBankPassRemove").on('click', function () {
-                $('#img-account').attr('src', '');
-                $("#BankPassbookImage").val('');
-                $("#BankPassbookPath").val('');
-                $(this).addClass("d-none");
-            });
-            $(".btnBankPassRemove").on('click', function () {
                 $('#img-account').attr('src', '');
                 $("#BankPassbookImage").val('');
                 $("#BankPassbookPath").val('');
