@@ -3364,6 +3364,8 @@
     <Content Include="Views\FAQCategory\List.cshtml" />
     <Content Include="Views\Cart\PickUpDropReport.cshtml" />
     <Content Include="Views\Service\Create.cshtml" />
+    <Content Include="Views\SearchData\ZeroCountList.cshtml" />
+    <Content Include="Views\SearchData\MappedList.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
