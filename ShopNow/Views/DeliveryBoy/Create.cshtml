@@ -127,7 +127,7 @@
                                             </div>
                                             <div class="row my-2">
                                                 <div class="col-md-12 ml-4">
-                                                    <input type="button" class="btn btn-sm btn-danger ml-5 d-none" id="btnRemove1" value="Remove" />
+                                                    <input type="button" class="btn btn-sm btn-danger ml-5 d-none" id="btnDeliveryRemove" value="Remove" />
                                                 </div>
                                             </div>
                                         </div>
@@ -140,7 +140,7 @@
                                                 <input type="file" id="CVPdf" name="CVPdf" />
                                             </div>
                                             <div class="col-md-12">
-                                                <input type="button" class="btn btn-sm btn-danger d-none ml-3 mt-1" id="btnRemove2" value="Remove" />
+                                                <input type="button" class="btn btn-sm btn-danger d-none ml-3 mt-1" id="btnCVPRemove" value="Remove" />
                                             </div>
                                         </div>
                                     </div>
@@ -165,7 +165,7 @@
                                                 </div>
                                             </div>
                                             <div class="col-md-12 text-center">
-                                                <input type="button" class="btn btn-sm btn-danger ml-4 d-none mt-1" id="btnRemove3" value="Remove" />
+                                                <input type="button" class="btn btn-sm btn-danger ml-4 d-none mt-1" id="btnLicenseRemove" value="Remove" />
                                             </div>
                                         </div>
                                     </div>
@@ -215,7 +215,7 @@
                                             <label for="BankPassbookImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
                                         </div>
                                         <div class="col-md-12">
-                                            <input type="button" class="btn btn-sm btn-danger d-none ml-3 mt-1" id="btnRemove4" value="Remove" />
+                                            <input type="button" class="btn btn-sm btn-danger d-none ml-3 mt-1" id="btnBankRemove" value="Remove" />
                                         </div>
                                     </div>
                                 </div>
@@ -306,13 +306,13 @@
                         $('.DrivingImg').removeClass('d-none');
                         $('.DrivingPdf').addClass('d-none');
                         $("#DrivingLicensePdf").val("");
-                        $("#btnRemove3").addClass("d-none");
+                        $("#btnLicenseRemove").addClass("d-none");
                     } else {
                         $('.DrivingImg').addClass('d-none');
                         $('.DrivingPdf').removeClass('d-none');
                         $("#DrivingLicenseImage").val("");
                         $("#img-license").attr('src', '');
-                        $("#btnRemove3").addClass("d-none");
+                        $("#btnLicenseRemove").addClass("d-none");
                     }
             });
 
@@ -321,13 +321,13 @@
                     $('.AccountDocumentImg').removeClass('d-none');
                     $('.AccountDocumentPdf').addClass('d-none');
                     $("#BankPassbookPdf").val("");
-                    $("#btnRemove4").addClass("d-none");
+                    $("#btnBankRemove").addClass("d-none");
                 } else {
                     $('.AccountDocumentImg').addClass('d-none');
                     $('.AccountDocumentPdf').removeClass('d-none');
                     $("#BankPassbookImage").val("");
                     $("#img-account").attr('src', '');
-                    $("#btnRemove4").addClass("d-none");
+                    $("#btnBankRemove").addClass("d-none");
                 }
             });
             function readURL(input) {
@@ -343,18 +343,18 @@
             }
             $("#DeliveryBoyImage").change(function () {
                 readURL(this);
-                $("#btnRemove1").removeClass("d-none");
+                $("#btnDeliveryRemove").removeClass("d-none");
             });
-            $("#btnRemove1").on('click', function () {
+            $("#btnDeliveryRemove").on('click', function () {
                 $('#img-upload').attr('src', '');
                 $("#DeliveryBoyImage").val('');
                 $(this).addClass("d-none");
             });
 
             $("#CVPdf").change(function () {
-                $("#btnRemove2").removeClass("d-none");
+                $("#btnCVPRemove").removeClass("d-none");
             });
-            $("#btnRemove2").on('click', function () {
+            $("#btnCVPRemove").on('click', function () {
                 $("#CVPdf").val('');
                 $(this).addClass("d-none");
             });
@@ -372,17 +372,17 @@
             }
             $("#DrivingLicenseImage").change(function () {
                 readURLlicense(this);
-                $("#btnRemove3").removeClass("d-none");
+                $("#btnLicenseRemove").removeClass("d-none");
             });
-            $("#btnRemove3").on('click', function () {
+            $("#btnLicenseRemove").on('click', function () {
                 $('#img-license').attr('src', '');
                 $("#DrivingLicenseImage").val('');
                 $(this).addClass("d-none");
             });
             $("#DrivingLicensePdf").change(function () {
-                $("#btnRemove3").removeClass("d-none");
+                $("#btnLicenseRemove").removeClass("d-none");
             });
-            $("#btnRemove3").on('click', function () {
+            $("#btnLicenseRemove").on('click', function () {
                 $("#DrivingLicensePdf").val('');
                 $(this).addClass("d-none");
             });
@@ -400,17 +400,17 @@
             }
             $("#BankPassbookImage").change(function () {
                 readURLaccount(this);
-                $("#btnRemove4").removeClass("d-none");
+                $("#btnBankRemove").removeClass("d-none");
             });
-            $("#btnRemove4").on('click', function () {
+            $("#btnBankRemove").on('click', function () {
                 $('#img-account').attr('src', '');
                 $("#BankPassbookImage").val('');
                 $(this).addClass("d-none");
             });
             $("#BankPassbookPdf").change(function () {
-                $("#btnRemove4").removeClass("d-none");
+                $("#btnBankRemove").removeClass("d-none");
             });
-            $("#btnRemove4").on('click', function () {
+            $("#btnBankRemove").on('click', function () {
                 $("#BankPassbookPdf").val('');
                 $(this).addClass("d-none");
             });
