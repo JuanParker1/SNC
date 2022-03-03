@@ -45,7 +45,7 @@
                                         </div>
                                     </div>
                                     <div class="col-md-6 mt-5">
-                                        <input type="button" class="btn btn-danger ml-4 d-none btn-sm mt-4" id="btnRemove" value="Remove" />
+                                        <input type="button" class="btn btn-danger ml-4 d-none btn-sm mt-4" id="btnStaffRemove" value="Remove" />
                                     </div>
                                 </div>
                             </div>
@@ -112,9 +112,9 @@
             }
             $("#StaffImage").change(function () {
                 readURL(this);
-                $("#btnRemove").removeClass("d-none");
+                $("#btnStaffRemove").removeClass("d-none");
             });
-            $("#btnRemove").on('click', function () {
+            $("#btnStaffRemove").on('click', function () {
                 $('#img-upload').attr('src', '');
                 $('#StaffImage').val('');
                 $(this).addClass("d-none");
