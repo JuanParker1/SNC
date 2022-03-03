@@ -643,6 +643,7 @@ namespace ShopNow.ViewModels
         public int CustomerReview { get; set; }
         public double Rating { get; set; }
         public string PhoneNumber { get; set; }
+        public string OwnerPhoneNumber { get; set; }
         public string Address { get; set; }
         public bool? IsOnline { get; set; }
         public TimeSpan? NextOnTime { get; set; }
