@@ -3664,15 +3664,17 @@ namespace ShopNow.Controllers
                              Date = i.DateUpdated
                          }).ToList();
             model.ReviewlLists = db.CustomerReviews
-                             .Where(i => i.Status == 0 && i.ShopId == shopId && i.CustomerId != customerId)
+                             .Where(i => i.Status == 0 && i.ShopId == shopId /*&& i.CustomerId != customerId*/)
+                             .GroupJoin(db.CustomerReviewReplies, cr => cr.Id, crr => crr.CustomerReviewId, (cr, crr) => new { cr, crr })
                          .Select(i => new ReviewListViewModel.ReviewlList
                          {
-                             Id = i.Id,
-                             ShopName = i.ShopName,
-                             CustomerName = i.CustomerName,
-                             CustomerRemark = i.CustomerRemark,
-                             Rating = i.Rating,
-                             Date = i.DateUpdated
+                             Id = i.cr.Id,
+                             ShopName = i.cr.ShopName,
+                             CustomerName = i.cr.CustomerName,
+                             CustomerRemark = i.cr.CustomerRemark,
+                             Rating = i.cr.Rating,
+                             Date = i.cr.DateUpdated,
+                             ReplyText = i.crr.Any() ? i.crr.FirstOrDefault().ReplyText : ""
                          }).OrderByDescending(i => i.Id).ToList();
             int count = model.ReviewlLists.Count();
             int CurrentPage = page;
@@ -6373,16 +6375,19 @@ namespace ShopNow.Controllers
 
         public JsonResult SaveReviewReply(int reviewId,string reply,string repliedBy)
         {
-            var customerReviewReply = new CustomerReviewReply
+            if (!db.CustomerReviewReplies.Any(i => i.CustomerReviewId == reviewId))
             {
-                CreatedBy = repliedBy,
-                CustomerReviewId = reviewId,
-                DateEncoded = DateTime.Now,
-                ReplyText = reply,
-                Status = 0
-            };
-            db.CustomerReviewReplies.Add(customerReviewReply);
-            db.SaveChanges();
+                var customerReviewReply = new CustomerReviewReply
+                {
+                    CreatedBy = repliedBy,
+                    CustomerReviewId = reviewId,
+                    DateEncoded = DateTime.Now,
+                    ReplyText = reply,
+                    Status = 0
+                };
+                db.CustomerReviewReplies.Add(customerReviewReply);
+                db.SaveChanges();
+            }
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
