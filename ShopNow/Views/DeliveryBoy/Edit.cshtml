@@ -465,6 +465,23 @@
                 $("#btnLicenseRemove").addClass("d-none");
             }
 
+            // DeliveryBoy Image
+            var defaultDeliveryBoyimg = $('#img-upload').attr("src");
+            if (defaultDeliveryBoyimg == '/Images/noimage.png' || defaultDeliveryBoyimg == "" || defaultDeliveryBoyimg == null) {
+                $("#btnDeliveryRemove").addClass("d-none");
+            }
+
+            // Driving License Image
+            var defaultLicenseimg = $('#img-license').attr("src");
+            if (defaultLicenseimg == '/Images/noimage.png' || defaultLicenseimg == "" || defaultLicenseimg == null) {
+                $("#btnLicenseRemove").addClass("d-none");
+            }
+
+            // Bank Account Image
+            var defaultAccountimg = $('#img-account').attr("src");
+            if (defaultAccountimg == '/Images/noimage.png' || defaultAccountimg == "" || defaultAccountimg == null) {
+                $("#btnBankAccountRemove").addClass("d-none");
+            }
             
             if (resLicense == ".pdf") {
                 $("#LicensePDF").prop("checked", true);
@@ -602,11 +619,7 @@
                 $(this).addClass("d-none");
             });
 
-            // DeliveryBoy Image
-            var defaultimg = $('#img-upload').attr("src");
-            if (defaultimg == '/Images/noimage.png' || defaultimg == "") {
-                $("#btnDeliveryRemove").addClass("d-none");
-            }
+           
             function readURL(input) {
                 if (input.files && input.files[0]) {
                     var reader = new FileReader();
