@@ -36,6 +36,7 @@ namespace ShopNow.ViewModels
             public string CustomerRemark { get; set; }
             public int ? Rating { get; set; }
             public DateTime Date { get; set; }
+            public string ReplyText { get; set; }
         }
     }
 }

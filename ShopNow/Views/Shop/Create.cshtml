@@ -182,7 +182,7 @@
                                             </div>
                                             <div class="row">
                                                 <div class="col-md-12">
-                                                    <input type="button" class="btn btn-sm btn-danger ml-4 d-none" id="btnRemove1" value="Remove" />
+                                                    <input type="button" class="btn btn-sm btn-danger ml-4 d-none" id="btnShopRemove" value="Remove" />
                                                 </div>
                                             </div>
                                         </div>
@@ -199,7 +199,7 @@
                                             </div>
                                             <div class="row">
                                                 <div class="col-md-12">
-                                                    <input type="button" class="btn btn-sm btn-danger ml-4 d-none" id="btnRemove2" value="Remove" />
+                                                    <input type="button" class="btn btn-sm btn-danger ml-4 d-none" id="btnLogoRemove" value="Remove" />
                                                 </div>
                                             </div>
                                         </div>
@@ -304,7 +304,7 @@
                                             </div>
                                             <div class="row">
                                                 <div class="col-md-12">
-                                                    <input type="button" class="btn btn-danger btn-sm ml-5 d-none" id="btnRemove3" value="Remove" />
+                                                    <input type="button" class="btn btn-danger btn-sm ml-5 d-none" id="btnAadharRemove" value="Remove" />
                                                 </div>
                                             </div>
                                         </div>
@@ -346,7 +346,7 @@
                                                     </div>
                                                     <div class="row mb-2">
                                                         <div class="col-md-12 text-center">
-                                                            <input type="button" class="btn btn-danger btn-sm d-none" id="btnRemove4" value="Remove" />
+                                                            <input type="button" class="btn btn-danger btn-sm d-none" id="btnFssaiRemove" value="Remove" />
                                                         </div>
                                                     </div>
                                                     <div class="alert alert-danger d-none penFssi p-2 text-center">
@@ -386,7 +386,7 @@
                                                     </div>
                                                     <div class="row mb-2">
                                                         <div class="col-md-12 text-center">
-                                                            <input type="button" class="btn btn-danger btn-sm d-none" id="btnRemove5" value="Remove" />
+                                                            <input type="button" class="btn btn-danger btn-sm d-none" id="btnDrugRemove" value="Remove" />
                                                         </div>
                                                     </div>
                                                     <div class="alert alert-danger d-none penDrug p-2 text-center">
@@ -422,7 +422,7 @@
                                                     </div>
                                                     <div class="row mb-2">
                                                         <div class="col-md-12 text-center">
-                                                            <input type="button" class="btn btn-danger btn-sm d-none" id="btnRemove6" value="Remove" />
+                                                            <input type="button" class="btn btn-danger btn-sm d-none" id="btnEstaRemove" value="Remove" />
                                                         </div>
                                                     </div>
                                                     <div class="alert alert-danger d-none penEsta p-2 text-center">
@@ -460,7 +460,7 @@
                                                     </div>
                                                     <div class="row mb-2">
                                                         <div class="col-md-12 text-center">
-                                                            <input type="button" class="btn btn-danger btn-sm d-none" id="btnRemove7" value="Remove" />
+                                                            <input type="button" class="btn btn-danger btn-sm d-none" id="btnOtherRemove" value="Remove" />
                                                         </div>
                                                     </div>
                                                     <div class="alert alert-danger d-none penOther p-2 text-center">
@@ -512,7 +512,7 @@
                                             </div>
                                             <div class="row mb-2">
                                                 <div class="col-md-12">
-                                                    <input type="button" class="btn btn-danger btn-sm ml-3 d-none" id="btnRemove8" value="Remove" />
+                                                    <input type="button" class="btn btn-danger btn-sm ml-3 d-none" id="btnAuthRemove" value="Remove" />
                                                 </div>
                                             </div>
                                             <div class="alert alert-danger d-none penAuth p-2">
@@ -564,7 +564,7 @@
                                             </div>
                                             <div class="row mb-2">
                                                 <div class="col-md-12">
-                                                    <input type="button" class="btn btn-danger btn-sm d-none" id="btnRemove9" value="Remove" />
+                                                    <input type="button" class="btn btn-danger btn-sm d-none" id="btnGstnRemove" value="Remove" />
                                                 </div>
                                             </div>
                                             <div class="alert alert-danger d-none penGstn p-2">
@@ -593,7 +593,7 @@
                                             </div>
                                             <div class="row mb-2">
                                                 <div class="col-md-12">
-                                                    <input type="button" class="btn btn-danger btn-sm d-none" id="btnRemove10" value="Remove" />
+                                                    <input type="button" class="btn btn-danger btn-sm d-none" id="btnPanRemove" value="Remove" />
                                                 </div>
                                             </div>
                                             <div class="alert alert-danger d-none penPan p-2">
@@ -668,7 +668,7 @@
                                                 </div>
                                                 <div class="row">
                                                     <div class="col-md-12">
-                                                        <input type="button" class="btn btn-danger btn-sm d-none" id="btnRemove11" value="Remove" />
+                                                        <input type="button" class="btn btn-danger btn-sm d-none" id="btnBankRemove" value="Remove" />
                                                     </div>
                                                 </div>
                                             </div>
@@ -912,14 +912,14 @@
                         $('.FssaiPdf').addClass('d-none');
                         $("#FSSAIPdf").val("");
                         $('.penFssi').addClass('d-none');
-                        $("#btnRemove4").addClass("d-none");
+                        $("#btnFssaiRemove").addClass("d-none");
                     } else {
                         $('.FssaiImg').addClass('d-none');
                         $('.FssaiPdf').removeClass('d-none');
                         $("#FSSAIImage").val("");
                         $("#img-fssai").attr('src', '');
                         $('.penFssi').addClass('d-none');
-                        $("#btnRemove4").addClass("d-none");
+                        $("#btnFssaiRemove").addClass("d-none");
                     }
                 });
 
@@ -930,14 +930,14 @@
                         $('.DrugPdf').addClass('d-none');
                         $("#DrugPdf").val("");
                         $('.penDrug').addClass('d-none');
-                        $("#btnRemove5").addClass("d-none");
+                        $("#btnDrugRemove").addClass("d-none");
                     } else {
                         $('.DrugImg').addClass('d-none');
                         $('.DrugPdf').removeClass('d-none');
                         $("#DrugImage").val("");
                         $("#img-drug").attr('src', '');
                         $('.penDrug').addClass('d-none');
-                        $("#btnRemove5").addClass("d-none");
+                        $("#btnDrugRemove").addClass("d-none");
                     }
                 });
 
@@ -948,14 +948,14 @@
                         $('.EstPdf').addClass('d-none');
                         $("#EstablishPdf").val("");
                         $('.penEsta').addClass('d-none');
-                        $('#btnRemove6').addClass('d-none');
+                        $('#btnEstaRemove').addClass('d-none');
                     } else {
                         $('.EstImg').addClass('d-none');
                         $('.EstPdf').removeClass('d-none');
                         $("#EstablishImage").val("");
                         $("#img-establish").attr('src', '');
                         $('.penEsta').addClass('d-none');
-                        $('#btnRemove6').addClass('d-none');
+                        $('#btnEstaRemove').addClass('d-none');
                     }
                 });
 
@@ -966,14 +966,14 @@
                         $('.OtherPdf').addClass('d-none');
                         $("#OtherLicensePdf").val("");
                         $('.penOther').addClass('d-none');
-                        $("#btnRemove7").addClass('d-none');
+                        $("#btnOtherRemove").addClass('d-none');
                     } else {
                         $('.OtherImg').addClass('d-none');
                         $('.OtherPdf').removeClass('d-none');
                         $("#OtherLicenseImage").val("");
                         $("#img-other").attr('src', '');
                         $('.penOther').addClass('d-none');
-                        $("#btnRemove7").addClass('d-none');
+                        $("#btnOtherRemove").addClass('d-none');
                     }
                 });
 
@@ -984,14 +984,14 @@
                         $('.AuthLicensePdf').addClass('d-none');
                         $("#AuthorisedDistributorPdf").val("");
                         $('.penAuth').addClass('d-none');
-                        $("#btnRemove8").addClass('d-none');
+                        $("#btnAuthRemove").addClass('d-none');
                     } else {
                         $('.AuthLicenseImg').addClass('d-none');
                         $('.AuthLicensePdf').removeClass('d-none');
                         $("#AuthorisedDistributorImage").val("");
                         $("#img-authorise").attr('src', '');
                         $('.penAuth').addClass('d-none');
-                        $("#btnRemove8").addClass('d-none');
+                        $("#btnAuthRemove").addClass('d-none');
                     }
                 });
 
@@ -1002,14 +1002,14 @@
                         $('.GstinLicensePdf').addClass('d-none');
                         $("#GSTINPdf").val("");
                         $('.penGstn').addClass('d-none');
-                        $('#btnRemove9').addClass('d-none');
+                        $('#btnGstnRemove').addClass('d-none');
                     } else {
                         $('.GstinLicenseImg').addClass('d-none');
                         $('.GstinLicensePdf').removeClass('d-none');
                         $("#GSTINImage").val("");
                         $("#img-gstin").attr('src', '');
                         $('.penGstn').addClass('d-none');
-                        $('#btnRemove9').addClass('d-none');
+                        $('#btnGstnRemove').addClass('d-none');
                     }
                 });
 
@@ -1020,14 +1020,14 @@
                         $('.PanLicensePdf').addClass('d-none');
                         $("#PanPdf").val("");
                         $('.penPan').addClass('d-none');
-                        $("#btnRemove10").addClass('d-none');
+                        $("#btnPanRemove").addClass('d-none');
                     } else {
                         $('.PanLicenseImg').addClass('d-none');
                         $('.PanLicensePdf').removeClass('d-none');
                         $("#PanImage").val("");
                         $("#img-pan").attr('src', '');
                         $('.penPan').addClass('d-none');
-                        $("#btnRemove10").addClass('d-none');
+                        $("#btnPanRemove").addClass('d-none');
                     }
                 });
 
@@ -1037,13 +1037,13 @@
                         $('.AadharDocumentImg').removeClass('d-none');
                         $('.AadharDocumentPdf').addClass('d-none');
                         $("#AadharPdf").val("");
-                        $("#btnRemove3").addClass("d-none");
+                        $("#btnAadharRemove").addClass("d-none");
                     } else {
                         $('.AadharDocumentImg').addClass('d-none');
                         $('.AadharDocumentPdf').removeClass('d-none');
                         $("#AadharImage").val("");
                         $("#img-aadhar").attr('src', '');
-                        $("#btnRemove3").addClass("d-none");
+                        $("#btnAadharRemove").addClass("d-none");
                     }
                 });
 
@@ -1053,13 +1053,13 @@
                         $('.AccountDocumentImg').removeClass('d-none');
                         $('.AccountDocumentPdf').addClass('d-none');
                         $("#AccountPdf").val("");
-                        $("#btnRemove11").addClass('d-none');
+                        $("#btnBankRemove").addClass('d-none');
                     } else {
                         $('.AccountDocumentImg').addClass('d-none');
                         $('.AccountDocumentPdf').removeClass('d-none');
                         $("#AccountImage").val("");
                         $("#img-account").attr('src', '');
-                        $("#btnRemove11").addClass('d-none');
+                        $("#btnBankRemove").addClass('d-none');
                     }
                 });
 
@@ -1137,19 +1137,19 @@
             $("#AuthorisedDistributorImage").change(function () {
                 readAuthoriseURL(this);
                 $('.penAuth').removeClass('d-none');
-                $("#btnRemove8").removeClass('d-none');
+                $("#btnAuthRemove").removeClass('d-none');
             });
             $("#AuthorisedDistributorPdf").change(function () {
                 $('.penAuth').removeClass('d-none');
-                $("#btnRemove8").removeClass('d-none');
+                $("#btnAuthRemove").removeClass('d-none');
             });
-            $("#btnRemove8").on('click', function () {
+            $("#btnAuthRemove").on('click', function () {
                 $('#img-authorise').attr('src', '');
                 $("#AuthorisedDistributorImage").val('');
                 $('.penAuth').addClass('d-none');
                 $(this).addClass("d-none");
             });
-            $("#btnRemove8").on('click', function () {
+            $("#btnAuthRemove").on('click', function () {
                 $("#AuthorisedDistributorPdf").val('');
                 $('.penAuth').addClass('d-none');
                 $(this).addClass("d-none");
@@ -1168,19 +1168,19 @@
             $("#OtherLicenseImage").change(function () {
                 readOtherLicenseURL(this);
                 $('.penOther').removeClass('d-none');
-                $("#btnRemove7").removeClass("d-none");
+                $("#btnOtherRemove").removeClass("d-none");
             });
             $("#OtherLicensePdf").change(function () {
                 $('.penOther').removeClass('d-none');
-                $("#btnRemove7").removeClass("d-none");
+                $("#btnOtherRemove").removeClass("d-none");
             });
-            $("#btnRemove7").on('click', function () {
+            $("#btnOtherRemove").on('click', function () {
                 $('#img-other').attr('src', '');
                 $("#OtherLicenseImage").val('');
                 $('.penOther').addClass('d-none');
                 $(this).addClass("d-none");
             });
-            $("#btnRemove7").on('click', function () {
+            $("#btnOtherRemove").on('click', function () {
                 $("#OtherLicensePdf").val('');
                 $('.penOther').addClass('d-none');
                 $(this).addClass("d-none");
@@ -1200,19 +1200,19 @@
             $("#EstablishImage").change(function () {
                 readEstablishURL(this);
                 $('.penEsta').removeClass('d-none');
-                $("#btnRemove6").removeClass("d-none");
+                $("#btnEstaRemove").removeClass("d-none");
             });
             $("#EstablishPdf").change(function () {
                 $('.penEsta').removeClass('d-none');
-                $("#btnRemove6").removeClass("d-none");
+                $("#btnEstaRemove").removeClass("d-none");
             });
-            $("#btnRemove6").on('click', function () {
+            $("#btnEstaRemove").on('click', function () {
                 $('#img-establish').attr('src', '');
                 $("#EstablishImage").val('');
                 $('.penEsta').addClass('d-none');
                 $(this).addClass("d-none");
             });
-            $("#btnRemove6").on('click', function () {
+            $("#btnEstaRemove").on('click', function () {
                 $("#EstablishPdf").val('');
                 $('.penEsta').addClass('d-none');
                 $(this).addClass("d-none");
@@ -1234,22 +1234,22 @@
                 document.getElementById("Save").disabled = false;
                 $('.drug').addClass('d-none');
                 $('.penDrug').removeClass('d-none');
-                $("#btnRemove5").removeClass("d-none");
+                $("#btnDrugRemove").removeClass("d-none");
             });
             $("#DrugPdf").change(function () {
                 document.getElementById("SaveR").disabled = false;
                 document.getElementById("Save").disabled = false;
                 $('.drug').addClass('d-none');
                 $('.penDrug').removeClass('d-none');
-                $("#btnRemove5").removeClass("d-none");
+                $("#btnDrugRemove").removeClass("d-none");
             });
-            $("#btnRemove5").on('click', function () {
+            $("#btnDrugRemove").on('click', function () {
                 $('#img-drug').attr('src', '');
                 $("#DrugImage").val('');
                 $('.penDrug').addClass('d-none');
                 $(this).addClass("d-none");
             });
-            $("#btnRemove5").on('click', function () {
+            $("#btnDrugRemove").on('click', function () {
                 $("#DrugPdf").val('');
                 $('.penDrug').addClass('d-none');
                 $(this).addClass("d-none");
@@ -1271,22 +1271,22 @@
                 document.getElementById("Save").disabled = false;
                 $('.fssi').addClass('d-none');
                 $('.penFssi').removeClass('d-none');
-                $("#btnRemove4").removeClass("d-none");
+                $("#btnFssaiRemove").removeClass("d-none");
             });
             $("#FSSAIPdf").change(function () {
                 document.getElementById("SaveR").disabled = false;
                 document.getElementById("Save").disabled = false;
                 $('.fssi').addClass('d-none');
                 $('.penFssi').removeClass('d-none');
-                $("#btnRemove4").removeClass("d-none");
+                $("#btnFssaiRemove").removeClass("d-none");
             });
-            $("#btnRemove4").on('click', function () {
+            $("#btnFssaiRemove").on('click', function () {
                 $('#img-fssai').attr('src', '');
                 $("#FSSAIImage").val('');
                 $('.penFssi').addClass('d-none');
                 $(this).addClass("d-none");
             });
-            $("#btnRemove4").on('click', function () {
+            $("#btnFssaiRemove").on('click', function () {
                 $("#FSSAIPdf").val('');
                 $('.penFssi').addClass('d-none');
                 $(this).addClass("d-none");
@@ -1305,19 +1305,19 @@
             $("#PanImage").change(function () {
                 readURLPan(this);
                 $('.penPan').removeClass('d-none');
-                $("#btnRemove10").removeClass("d-none");
+                $("#btnPanRemove").removeClass("d-none");
             });
             $("#PanPdf").change(function () {
                 $('.penPan').removeClass('d-none');
-                $("#btnRemove10").removeClass("d-none");
+                $("#btnPanRemove").removeClass("d-none");
             });
-            $("#btnRemove10").on('click', function () {
+            $("#btnPanRemove").on('click', function () {
                 $('#img-pan').attr('src', '');
                 $("#PanImage").val('');
                 $('.penPan').addClass('d-none');
                 $(this).addClass("d-none");
             });
-            $("#btnRemove10").on('click', function () {
+            $("#btnPanRemove").on('click', function () {
                 $("#PanPdf").val('');
                 $('.penPan').addClass('d-none');
                 $(this).addClass("d-none");
@@ -1336,19 +1336,19 @@
             $("#GSTINImage").change(function () {
                 readURLGstin(this);
                 $('.penGstn').removeClass('d-none');
-                $("#btnRemove9").removeClass('d-none');
+                $("#btnGstnRemove").removeClass('d-none');
             });
             $("#GSTINPdf").change(function () {
                 $('.penGstn').removeClass('d-none');
-                $("#btnRemove9").removeClass('d-none');
+                $("#btnGstnRemove").removeClass('d-none');
             });
-            $("#btnRemove9").on('click', function () {
+            $("#btnGstnRemove").on('click', function () {
                 $('#img-gstin').attr('src', '');
                 $("#GSTINImage").val('');
                 $('.penGstn').addClass('d-none');
                 $(this).addClass("d-none");
             });
-            $("#btnRemove9").on('click', function () {
+            $("#btnGstnRemove").on('click', function () {
                 $("#GSTINPdf").val('');
                 $('.penGstn').addClass('d-none');
                 $(this).addClass("d-none");
@@ -1366,17 +1366,17 @@
             }
             $("#AccountImage").change(function () {
                 readURLAccount(this);
-                $("#btnRemove11").removeClass('d-none');
+                $("#btnBankRemove").removeClass('d-none');
             });
-            $("#btnRemove11").on('click', function () {
+            $("#btnBankRemove").on('click', function () {
                 $('#img-account').attr('src', '');
                 $("#AccountImage").val('');
                 $(this).addClass("d-none");
             });
             $("#AccountPdf").change(function () {
-                $("#btnRemove11").removeClass('d-none');
+                $("#btnBankRemove").removeClass('d-none');
             });
-            $("#btnRemove11").on('click', function () {
+            $("#btnBankRemove").on('click', function () {
                 $("#AccountPdf").val('');
                 $(this).addClass("d-none");
             });
@@ -1393,9 +1393,9 @@
             }
             $("#ShopImage").change(function () {
                 readURL(this);
-                $("#btnRemove1").removeClass("d-none");
+                $("#btnShopRemove").removeClass("d-none");
             });
-            $("#btnRemove1").on('click', function () {
+            $("#btnShopRemove").on('click', function () {
                 $('#img-upload').attr('src', '');
                 $("#ShopImage").val('');
                 $(this).addClass("d-none");
@@ -1414,9 +1414,9 @@
             }
             $("#LogoImage").change(function () {
                 readURLLogo(this);
-                $("#btnRemove2").removeClass("d-none");
+                $("#btnLogoRemove").removeClass("d-none");
             });
-            $("#btnRemove2").on('click', function () {
+            $("#btnLogoRemove").on('click', function () {
                 $('#img-logo').attr('src', '');
                 $("#LogoImage").val('');
                 $(this).addClass("d-none");
@@ -1449,17 +1449,17 @@
             }
             $("#AadharImage").change(function () {
                 readURLAadhar(this);
-                $("#btnRemove3").removeClass("d-none");
+                $("#btnAadharRemove").removeClass("d-none");
             });
-            $("#btnRemove3").on('click', function () {
+            $("#btnAadharRemove").on('click', function () {
                 $('#img-aadhar').attr('src', '');
                 $("#AadharImage").val("");
                 $(this).addClass("d-none");
             });
             $("#AadharPdf").change(function () {
-                $("#btnRemove3").removeClass("d-none");
+                $("#btnAadharRemove").removeClass("d-none");
             });
-            $("#btnRemove3").on('click', function () {
+            $("#btnAadharRemove").on('click', function () {
                 $("#AadharPdf").val("");
                 $(this).addClass("d-none");
             });
