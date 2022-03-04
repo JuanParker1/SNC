@@ -122,43 +122,43 @@ namespace ShopNow.Controllers
                     // DeliveryBoy Image
                     if (model.DeliveryBoyImage != null)
                     {
-                        uc.UploadFiles(model.DeliveryBoyImage.InputStream, deliveryboy.Id + "_" + model.DeliveryBoyImage.FileName, accesskey, secretkey, "image");
-                        deliveryboy.ImagePath = "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/" + deliveryboy.Id + "_" + model.DeliveryBoyImage.FileName.Replace(" ", "");
+                        uc.UploadFiles(model.DeliveryBoyImage.InputStream, deliveryboy.Id + model.DeliveryBoyImage.FileName, accesskey, secretkey, "image");
+                        deliveryboy.ImagePath = "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/" + deliveryboy.Id + model.DeliveryBoyImage.FileName.Replace(" ", "");
                     }
 
                     // DrivingLicense Image
                     if (model.DrivingLicenseImage != null)
                     {
-                        uc.UploadFiles(model.DrivingLicenseImage.InputStream, deliveryboy.Id + "_" + model.DrivingLicenseImage.FileName, accesskey, secretkey, "image");
-                        deliveryboy.DrivingLicenseImagePath = "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/" + deliveryboy.Id + "_" + model.DrivingLicenseImage.FileName.Replace(" ", "");
+                        uc.UploadFiles(model.DrivingLicenseImage.InputStream, deliveryboy.Id + model.DrivingLicenseImage.FileName, accesskey, secretkey, "image");
+                        deliveryboy.DrivingLicenseImagePath = "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/" + deliveryboy.Id + model.DrivingLicenseImage.FileName.Replace(" ", "");
                     }
 
                     // DrivingLicense Pdf
                     if (model.DrivingLicensePdf != null)
                     {
-                        uc.UploadFiles(model.DrivingLicensePdf.InputStream, deliveryboy.Id + "_" + model.DrivingLicensePdf.FileName, accesskey, secretkey, "pdf");
-                        deliveryboy.DrivingLicenseImagePath = "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Uploads/" + deliveryboy.Id + "_" + model.DrivingLicensePdf.FileName.Replace(" ", "");
+                        uc.UploadFiles(model.DrivingLicensePdf.InputStream, deliveryboy.Id + model.DrivingLicensePdf.FileName, accesskey, secretkey, "pdf");
+                        deliveryboy.DrivingLicenseImagePath = "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Uploads/" + deliveryboy.Id + model.DrivingLicensePdf.FileName.Replace(" ", "");
                     }
 
                     // BankPassbook Image
                     if (model.BankPassbookImage != null)
                     {
-                        uc.UploadFiles(model.BankPassbookImage.InputStream, deliveryboy.Id + "_" + model.BankPassbookImage.FileName, accesskey, secretkey, "image");
-                        deliveryboy.BankPassbookPath = "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/" + deliveryboy.Id + "_" + model.BankPassbookImage.FileName.Replace(" ", "");
+                        uc.UploadFiles(model.BankPassbookImage.InputStream, deliveryboy.Id + model.BankPassbookImage.FileName, accesskey, secretkey, "image");
+                        deliveryboy.BankPassbookPath = "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/" + deliveryboy.Id + model.BankPassbookImage.FileName.Replace(" ", "");
                     }
 
                     // BankPassbook Pdf
                     if (model.BankPassbookPdf != null)
                     {
-                        uc.UploadFiles(model.BankPassbookPdf.InputStream, deliveryboy.Id + "_" + model.BankPassbookPdf.FileName, accesskey, secretkey, "pdf");
-                        deliveryboy.BankPassbookPath = "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Uploads/" + deliveryboy.Id + "_" + model.BankPassbookPdf.FileName.Replace(" ", "");
+                        uc.UploadFiles(model.BankPassbookPdf.InputStream, deliveryboy.Id + model.BankPassbookPdf.FileName, accesskey, secretkey, "pdf");
+                        deliveryboy.BankPassbookPath = "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Uploads/" + deliveryboy.Id + model.BankPassbookPdf.FileName.Replace(" ", "");
                     }
 
                     // CV Pdf
                     if (model.CVPdf != null)
                     {
-                        uc.UploadFiles(model.CVPdf.InputStream, deliveryboy.Id + "_" + model.CVPdf.FileName, accesskey, secretkey, "pdf");
-                        deliveryboy.CVPath = "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Uploads/" + deliveryboy.Id + "_" + model.CVPdf.FileName.Replace(" ", "");
+                        uc.UploadFiles(model.CVPdf.InputStream, deliveryboy.Id + model.CVPdf.FileName, accesskey, secretkey, "pdf");
+                        deliveryboy.CVPath = "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Uploads/" + deliveryboy.Id + model.CVPdf.FileName.Replace(" ", "");
                     }
                     db.Entry(deliveryboy).State = System.Data.Entity.EntityState.Modified;
                     db.SaveChanges();
@@ -200,43 +200,43 @@ namespace ShopNow.Controllers
                     // DeliveryBoy Image
                     if (model.DeliveryBoyImage != null)
                     {
-                        uc.UploadFiles(model.DeliveryBoyImage.InputStream, deliveryBoy.Id + "_" + model.DeliveryBoyImage.FileName, accesskey, secretkey, "image");
-                        deliveryBoy.ImagePath = "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/" + deliveryBoy.Id + "_" + model.DeliveryBoyImage.FileName.Replace(" ", "");
+                        uc.UploadFiles(model.DeliveryBoyImage.InputStream, deliveryBoy.Id + model.DeliveryBoyImage.FileName, accesskey, secretkey, "image");
+                        deliveryBoy.ImagePath = "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/" + deliveryBoy.Id + model.DeliveryBoyImage.FileName.Replace(" ", "");
                     }
 
                     // DrivingLicense Image
                     if (model.DrivingLicenseImage != null)
                     {
-                        uc.UploadFiles(model.DrivingLicenseImage.InputStream, deliveryBoy.Id + "_" + model.DrivingLicenseImage.FileName, accesskey, secretkey, "image");
-                        deliveryBoy.DrivingLicenseImagePath = "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/" + deliveryBoy.Id + "_" + model.DrivingLicenseImage.FileName.Replace(" ", "");
+                        uc.UploadFiles(model.DrivingLicenseImage.InputStream, deliveryBoy.Id + model.DrivingLicenseImage.FileName, accesskey, secretkey, "image");
+                        deliveryBoy.DrivingLicenseImagePath = "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/" + deliveryBoy.Id + model.DrivingLicenseImage.FileName.Replace(" ", "");
                     }
 
                     // DrivingLicense Pdf
                     if (model.DrivingLicensePdf != null)
                     {
-                        uc.UploadFiles(model.DrivingLicensePdf.InputStream, deliveryBoy.Id + "_" + model.DrivingLicensePdf.FileName, accesskey, secretkey, "pdf");
-                        deliveryBoy.DrivingLicenseImagePath = "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Uploads/" + deliveryBoy.Id + "_" + model.DrivingLicensePdf.FileName.Replace(" ", "");
+                        uc.UploadFiles(model.DrivingLicensePdf.InputStream, deliveryBoy.Id + model.DrivingLicensePdf.FileName, accesskey, secretkey, "pdf");
+                        deliveryBoy.DrivingLicenseImagePath = "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Uploads/" + deliveryBoy.Id + model.DrivingLicensePdf.FileName.Replace(" ", "");
                     }
 
                     // BankPassbook Image
                     if (model.BankPassbookImage != null)
                     {
-                        uc.UploadFiles(model.BankPassbookImage.InputStream, deliveryBoy.Id + "_" + model.BankPassbookImage.FileName, accesskey, secretkey, "image");
-                        deliveryBoy.BankPassbookPath = "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/" + deliveryBoy.Id + "_" + model.BankPassbookImage.FileName.Replace(" ", "");
+                        uc.UploadFiles(model.BankPassbookImage.InputStream, deliveryBoy.Id + model.BankPassbookImage.FileName, accesskey, secretkey, "image");
+                        deliveryBoy.BankPassbookPath = "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/" + deliveryBoy.Id + model.BankPassbookImage.FileName.Replace(" ", "");
                     }
 
                     // BankPassbook Pdf
                     if (model.BankPassbookPdf != null)
                     {
-                        uc.UploadFiles(model.BankPassbookPdf.InputStream, deliveryBoy.Id + "_" + model.BankPassbookPdf.FileName, accesskey, secretkey, "pdf");
-                        deliveryBoy.BankPassbookPath = "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Uploads/" + deliveryBoy.Id + "_" + model.BankPassbookPdf.FileName.Replace(" ", "");
+                        uc.UploadFiles(model.BankPassbookPdf.InputStream, deliveryBoy.Id + model.BankPassbookPdf.FileName, accesskey, secretkey, "pdf");
+                        deliveryBoy.BankPassbookPath = "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Uploads/" + deliveryBoy.Id + model.BankPassbookPdf.FileName.Replace(" ", "");
                     }
 
                     // CV Pdf
                     if (model.CVPdf != null)
                     {
-                        uc.UploadFiles(model.CVPdf.InputStream, deliveryBoy.Id + "_" + model.CVPdf.FileName, accesskey, secretkey, "pdf");
-                        deliveryBoy.CVPath = "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Uploads/" + deliveryBoy.Id + "_" + model.CVPdf.FileName.Replace(" ", "");
+                        uc.UploadFiles(model.CVPdf.InputStream, deliveryBoy.Id + model.CVPdf.FileName, accesskey, secretkey, "pdf");
+                        deliveryBoy.CVPath = "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Uploads/" + deliveryBoy.Id + model.CVPdf.FileName.Replace(" ", "");
                     }
                     db.Entry(deliveryBoy).State = System.Data.Entity.EntityState.Modified;
                     db.SaveChanges();
@@ -269,6 +269,9 @@ namespace ShopNow.Controllers
                 return HttpNotFound();
             var deliveryBoy = db.DeliveryBoys.FirstOrDefault(i => i.Id == dCode);
             var model = _mapper.Map<DeliveryBoy, DeliveryBoyEditViewModel>(deliveryBoy);
+            model.DrivingLicenseImagePath = model.DrivingLicenseImagePath.Contains("https://s3.ap-south-1.amazonaws.com/shopnowchat.com") ? model.DrivingLicenseImagePath : "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/"+model.DrivingLicenseImagePath;
+            model.BankPassbookPath = model.BankPassbookPath.Contains("https://s3.ap-south-1.amazonaws.com/shopnowchat.com") ? model.BankPassbookPath : "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/"+model.BankPassbookPath;
+            model.ImagePath = model.ImagePath.Contains("https://s3.ap-south-1.amazonaws.com/shopnowchat.com") ? model.ImagePath : "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/"+model.ImagePath;
             if (model.Status == 1)
             {
                 int count = 0;
@@ -294,43 +297,43 @@ namespace ShopNow.Controllers
                 // DeliveryBoy Image
                 if (model.DeliveryBoyImage != null)
                 {
-                    uc.UploadFiles(model.DeliveryBoyImage.InputStream, deliveryboy.Id + "_" + model.DeliveryBoyImage.FileName, accesskey, secretkey, "image");
-                    deliveryboy.ImagePath = "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/" + deliveryboy.Id + "_" + model.DeliveryBoyImage.FileName.Replace(" ", "");
+                    uc.UploadFiles(model.DeliveryBoyImage.InputStream, deliveryboy.Id + model.DeliveryBoyImage.FileName, accesskey, secretkey, "image");
+                    deliveryboy.ImagePath = "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/" + deliveryboy.Id +  model.DeliveryBoyImage.FileName.Replace(" ", "");
                 }
 
                 // DrivingLicense Image
                 if (model.DrivingLicenseImage != null)
                 {
-                    uc.UploadFiles(model.DrivingLicenseImage.InputStream, deliveryboy.Id + "_" + model.DrivingLicenseImage.FileName, accesskey, secretkey, "image");
-                    deliveryboy.DrivingLicenseImagePath = "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/" + deliveryboy.Id + "_" + model.DrivingLicenseImage.FileName.Replace(" ", "");
+                    uc.UploadFiles(model.DrivingLicenseImage.InputStream, deliveryboy.Id + model.DrivingLicenseImage.FileName, accesskey, secretkey, "image");
+                    deliveryboy.DrivingLicenseImagePath = "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/" + deliveryboy.Id + model.DrivingLicenseImage.FileName.Replace(" ", "");
                 }
 
                 // DrivingLicense Pdf
                 if (model.DrivingLicensePdf != null)
                 {
-                    uc.UploadFiles(model.DrivingLicensePdf.InputStream, deliveryboy.Id + "_" + model.DrivingLicensePdf.FileName, accesskey, secretkey, "pdf");
-                    deliveryboy.DrivingLicenseImagePath = "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Uploads/" + deliveryboy.Id + "_" + model.DrivingLicensePdf.FileName.Replace(" ", "");
+                    uc.UploadFiles(model.DrivingLicensePdf.InputStream, deliveryboy.Id + model.DrivingLicensePdf.FileName, accesskey, secretkey, "pdf");
+                    deliveryboy.DrivingLicenseImagePath = "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Uploads/" + deliveryboy.Id + model.DrivingLicensePdf.FileName.Replace(" ", "");
                 }
 
                 // BankPassbook Image
                 if (model.BankPassbookImage != null)
                 {
-                    uc.UploadFiles(model.BankPassbookImage.InputStream, deliveryboy.Id + "_" + model.BankPassbookImage.FileName, accesskey, secretkey, "image");
-                    deliveryboy.BankPassbookPath = "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/" + deliveryboy.Id + "_" + model.BankPassbookImage.FileName.Replace(" ", "");
+                    uc.UploadFiles(model.BankPassbookImage.InputStream, deliveryboy.Id + model.BankPassbookImage.FileName, accesskey, secretkey, "image");
+                    deliveryboy.BankPassbookPath = "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/" + deliveryboy.Id + model.BankPassbookImage.FileName.Replace(" ", "");
                 }
 
                 // BankPassbook Pdf
                 if (model.BankPassbookPdf != null)
                 {
-                    uc.UploadFiles(model.BankPassbookPdf.InputStream, deliveryboy.Id + "_" + model.BankPassbookPdf.FileName, accesskey, secretkey, "pdf");
-                    deliveryboy.BankPassbookPath = "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Uploads/" + deliveryboy.Id + "_" + model.BankPassbookPdf.FileName.Replace(" ", "");
+                    uc.UploadFiles(model.BankPassbookPdf.InputStream, deliveryboy.Id + model.BankPassbookPdf.FileName, accesskey, secretkey, "pdf");
+                    deliveryboy.BankPassbookPath = "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Uploads/" + deliveryboy.Id + model.BankPassbookPdf.FileName.Replace(" ", "");
                 }
 
                 // CV Pdf
                 if (model.CVPdf != null)
                 {
-                    uc.UploadFiles(model.CVPdf.InputStream, deliveryboy.Id + "_" + model.CVPdf.FileName, accesskey, secretkey, "pdf");
-                    deliveryboy.CVPath = "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Uploads/" + deliveryboy.Id + "_" + model.CVPdf.FileName.Replace(" ", "");
+                    uc.UploadFiles(model.CVPdf.InputStream, deliveryboy.Id + model.CVPdf.FileName, accesskey, secretkey, "pdf");
+                    deliveryboy.CVPath = "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Uploads/" + deliveryboy.Id + model.CVPdf.FileName.Replace(" ", "");
                 }
                 db.Entry(deliveryboy).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();

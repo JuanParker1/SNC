@@ -3675,7 +3675,8 @@ namespace ShopNow.Controllers
                              CustomerRemark = i.cr.CustomerRemark,
                              Rating = i.cr.Rating,
                              Date = i.cr.DateUpdated,
-                             ReplyText = i.crr.Any() ? i.crr.FirstOrDefault().ReplyText : ""
+                             ReplyText = i.crr.Any() ? i.crr.FirstOrDefault().ReplyText : "",
+                             ReplyDate = i.crr.Any() ? i.crr.FirstOrDefault().DateEncoded : DateTime.MinValue
                          }).OrderByDescending(i => i.Id).ToList();
             int count = model.ReviewlLists.Count();
             int CurrentPage = page;
