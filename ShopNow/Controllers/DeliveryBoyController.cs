@@ -269,9 +269,12 @@ namespace ShopNow.Controllers
                 return HttpNotFound();
             var deliveryBoy = db.DeliveryBoys.FirstOrDefault(i => i.Id == dCode);
             var model = _mapper.Map<DeliveryBoy, DeliveryBoyEditViewModel>(deliveryBoy);
-            model.DrivingLicenseImagePath = model.DrivingLicenseImagePath.Contains("https://s3.ap-south-1.amazonaws.com/shopnowchat.com") ? model.DrivingLicenseImagePath : "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/"+model.DrivingLicenseImagePath;
-            model.BankPassbookPath = model.BankPassbookPath.Contains("https://s3.ap-south-1.amazonaws.com/shopnowchat.com") ? model.BankPassbookPath : "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/"+model.BankPassbookPath;
-            model.ImagePath = model.ImagePath.Contains("https://s3.ap-south-1.amazonaws.com/shopnowchat.com") ? model.ImagePath : "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/"+model.ImagePath;
+            if(model.DrivingLicenseImagePath != null)
+                model.DrivingLicenseImagePath = model.DrivingLicenseImagePath.Contains("https://s3.ap-south-1.amazonaws.com/shopnowchat.com") ? model.DrivingLicenseImagePath : "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/"+model.DrivingLicenseImagePath;
+            if (model.BankPassbookPath != null)
+                model.BankPassbookPath = model.BankPassbookPath.Contains("https://s3.ap-south-1.amazonaws.com/shopnowchat.com") ? model.BankPassbookPath : "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/"+model.BankPassbookPath;
+            if (model.ImagePath != null)
+                model.ImagePath = model.ImagePath.Contains("https://s3.ap-south-1.amazonaws.com/shopnowchat.com") ? model.ImagePath : "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/"+model.ImagePath;
             if (model.Status == 1)
             {
                 int count = 0;

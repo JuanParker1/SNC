@@ -7759,7 +7759,7 @@ namespace ShopNow.Controllers
 
         public JsonResult UpdateTagCategory()
         {
-            var list = db.MasterProducts.Where(i => i.Status == 0)
+            var list = db.MasterProducts.Where(i => i.Status == 0 && i.Id > 62284)
                 .Select(i=> new {
                     Id = i.Id,
                     CategoryId = i.CategoryId,
@@ -7773,7 +7773,7 @@ namespace ShopNow.Controllers
                     var tagcategory = new TagCategory
                     {
                         CategoryId = item.CategoryId,
-                        CategoryName = db.Categories.FirstOrDefault(i=>i.Id == item.CategoryId).Name,
+                        CategoryName = db.Categories.FirstOrDefault(i=>i.Id == item.CategoryId)?.Name,
                         CreatedBy = "Admin",
                         UpdatedBy = "Admin",
                         DateUpdated = DateTime.Now,
@@ -7789,7 +7789,7 @@ namespace ShopNow.Controllers
                     var tagcategory = new TagCategory
                     {
                         CategoryId = item.SubCategoryId,
-                        CategoryName = db.SubCategories.FirstOrDefault(i => i.Id == item.SubCategoryId).Name,
+                        CategoryName = db.SubCategories.FirstOrDefault(i => i.Id == item.SubCategoryId)?.Name,
                         CreatedBy = "Admin",
                         UpdatedBy = "Admin",
                         DateUpdated = DateTime.Now,
@@ -7804,7 +7804,7 @@ namespace ShopNow.Controllers
                     var tagcategory = new TagCategory
                     {
                         CategoryId = item.NextSubCategoryId,
-                        CategoryName = db.NextSubCategories.FirstOrDefault(i => i.Id == item.NextSubCategoryId).Name,
+                        CategoryName = db.NextSubCategories.FirstOrDefault(i => i.Id == item.NextSubCategoryId)?.Name,
                         CreatedBy = "Admin",
                         UpdatedBy = "Admin",
                         DateUpdated = DateTime.Now,
