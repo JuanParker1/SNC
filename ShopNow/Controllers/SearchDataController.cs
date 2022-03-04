@@ -20,7 +20,6 @@ namespace ShopNow.Controllers
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
-            //var model = new SearchDataListViewModel();
             model.EndDate = model.EndDate == null ? DateTime.Now : model.EndDate;
             model.StartDate = model.StartDate == null ? DateTime.Now : model.StartDate;
 
@@ -32,6 +31,47 @@ namespace ShopNow.Controllers
                     Date = i.FirstOrDefault().DateEncoded,
                     Key = i.Key,
                 }).OrderByDescending(i => i.Date).ToList();
+
+            //model.ZeroCountListItems = db.CustomerSearchDatas
+            //    .Where(i => i.Status == 0 && ((model.StartDate != null && model.EndDate != null) ? (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(model.StartDate) && DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(model.EndDate)) : true) && string.IsNullOrEmpty(i.LinkedMasterProductIds))
+            //    .AsEnumerable()
+            //     .GroupBy(i => i.SearchKeyword, StringComparer.InvariantCultureIgnoreCase).Where(i => i.Sum(a => a.ResultCount) == 0)
+            //     .GroupJoin(db.SearchDatas, k => k.Key?.ToLower(), sd => sd.KeyValue?.ToLower(), (k, sd) => new { k, sd })
+            //    .Select(i => new SearchDataListViewModel.ListItem
+            //    {
+            //        Id = i.k.FirstOrDefault().Id,
+            //        Count = i.k.Max(a => a.ResultCount),
+            //        Date = i.k.FirstOrDefault().DateEncoded,
+            //        Key = i.k.Key,
+            //        OldCommonWord = string.Join(",", i.sd.Select(a => a.Source).ToList()).ToString(),
+            //        IsLinked = i.k.Any(a => a.LinkedMasterProductIds != null)
+            //    }).Where(i => string.IsNullOrEmpty(i.OldCommonWord) && i.IsLinked != true).OrderByDescending(i => i.Date).ToList();
+
+            //model.ListWithLinkedKeywords = db.CustomerSearchDatas
+            //  .Where(i => i.Status == 0 && ((model.StartDate != null && model.EndDate != null) ? (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(model.StartDate) && DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(model.EndDate)) : false))
+            //  .AsEnumerable()
+            //   .GroupBy(i => i.SearchKeyword, StringComparer.InvariantCultureIgnoreCase).Where(i => i.Sum(a => a.ResultCount) == 0)
+            //   .GroupJoin(db.SearchDatas, k => k.Key?.ToLower(), sd => sd.KeyValue?.ToLower(), (k, sd) => new { k, sd })
+            //  .Select(i => new SearchDataListViewModel.ListItem
+            //  {
+            //      Id = i.k.FirstOrDefault().Id,
+            //      Count = i.k.Max(a => a.ResultCount),
+            //      Date = i.k.FirstOrDefault().DateEncoded,
+            //      Key = i.k.Key,
+            //      OldCommonWord = string.Join(",", i.sd.Select(a => a.Source).ToList()).ToString(),
+            //      LinkedMasterProduct = i.k.FirstOrDefault().LinkedMasterProductName
+            //  }).Where(i => !string.IsNullOrEmpty(i.OldCommonWord) || !string.IsNullOrEmpty(i.LinkedMasterProduct)).OrderByDescending(i => i.Date).ToList();
+
+            model.AllCount = model.AllListItems.Count();
+            return View(model);
+        }
+
+        public ActionResult ZeroCountList(SearchDataListViewModel model)
+        {
+            var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
+            ViewBag.Name = user.Name;
+            model.EndDate = model.EndDate == null ? DateTime.Now : model.EndDate;
+            model.StartDate = model.StartDate == null ? DateTime.Now : model.StartDate;
 
             model.ZeroCountListItems = db.CustomerSearchDatas
                 .Where(i => i.Status == 0 && ((model.StartDate != null && model.EndDate != null) ? (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(model.StartDate) && DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(model.EndDate)) : true) && string.IsNullOrEmpty(i.LinkedMasterProductIds))
@@ -47,6 +87,17 @@ namespace ShopNow.Controllers
                     OldCommonWord = string.Join(",", i.sd.Select(a => a.Source).ToList()).ToString(),
                     IsLinked = i.k.Any(a => a.LinkedMasterProductIds != null)
                 }).Where(i => string.IsNullOrEmpty(i.OldCommonWord) && i.IsLinked != true).OrderByDescending(i => i.Date).ToList();
+            
+            model.ZeroCount = model.ZeroCountListItems.Count();
+            return View(model);
+        }
+
+        public ActionResult MappedList(SearchDataListViewModel model)
+        {
+            var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
+            ViewBag.Name = user.Name;
+            model.EndDate = model.EndDate == null ? DateTime.Now : model.EndDate;
+            model.StartDate = model.StartDate == null ? DateTime.Now : model.StartDate;
 
             model.ListWithLinkedKeywords = db.CustomerSearchDatas
               .Where(i => i.Status == 0 && ((model.StartDate != null && model.EndDate != null) ? (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(model.StartDate) && DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(model.EndDate)) : false))
@@ -62,9 +113,7 @@ namespace ShopNow.Controllers
                   OldCommonWord = string.Join(",", i.sd.Select(a => a.Source).ToList()).ToString(),
                   LinkedMasterProduct = i.k.FirstOrDefault().LinkedMasterProductName
               }).Where(i => !string.IsNullOrEmpty(i.OldCommonWord) || !string.IsNullOrEmpty(i.LinkedMasterProduct)).OrderByDescending(i => i.Date).ToList();
-
-            model.AllCount = model.AllListItems.Count();
-            model.ZeroCount = model.ZeroCountListItems.Count();
+            
             model.LinkedKeywordCount = model.ListWithLinkedKeywords.Count();
             return View(model);
         }

@@ -8,11 +8,11 @@
 <script src="~/Scripts/gridmvc.js"></script>
 <style>
     .select2-search__field {
-    width:100% !important;
+        width: 100% !important;
     }
 </style>
 <div class="container-fluid">
-    <form method="get" action="/SearchData/List" class="my-3">
+    <form method="get" action="/SearchData/ZeroCountList" class="my-3">
         <div class="row my-2">
             <div class="col-md-4">
                 <h5 class="text-success" style="letter-spacing:1px">@ViewBag.Title</h5>
@@ -41,65 +41,65 @@
         <div class="card-body">
             <ul class="nav nav-tabs mb-3">
                 <li class="nav-item">
-                    <a class="nav-link active" href="/SearchData/List?startdate=@Model.StartDate&enddate=@Model.EndDate">All <b>(@Model.AllCount)</b></a>
+                    <a class="nav-link" href="/SearchData/List?startdate=@Model.StartDate&enddate=@Model.EndDate">All @*<b>(@Model.AllCount)</b>*@</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/SearchData/ZeroCountList?startdate=@Model.StartDate&enddate=@Model.EndDate">Zero Count @*<b>(@Model.ZeroCount)</b>*@</a>
+                    <a class="nav-link active" href="/SearchData/ZeroList?startdate=@Model.StartDate&enddate=@Model.EndDate">Zero Count <b>(@Model.ZeroCount)</b></a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/SearchData/MappedList?startdate=@Model.StartDate&enddate=@Model.EndDate">Mapped List @*<b>(@Model.LinkedKeywordCount)</b>*@</a>
                 </li>
             </ul>
             <div class="tab-content">
-                <div class="tab-pane active" id="all">
+                @*<div class="tab-pane active" id="all">
                     @Html.Grid(Model.AllListItems).Columns(columns =>
                {
                    columns.Add(b => b.Date).Titled("Date/Time").Filterable(true).SetWidth(20).Format("{0:dd-MMM-yyyy}");
                    columns.Add(b => b.Key).Titled("Cust Search Word").Filterable(true).SetWidth(20);
                    columns.Add(b => b.Count).Titled("Result Count").Filterable(true).SetWidth(20);
                }).WithPaging(20).Sortable(true)
-                </div>
-                @*<div class="tab-pane fade" id="zero">
-                    @Html.Grid(Model.ZeroCountListItems).Columns(columns =>
-               {
-                   columns.Add(b => b.Date).Titled("Date").Filterable(true).SetWidth(10).Format("{0:dd-MMM-yyyy}");
-                   columns.Add(b => b.Key).Titled("Cust Search Word-0").Filterable(true).SetWidth(10);
-                   columns.Add(b => b.OldCommonWord).Titled("Old Common Word").Filterable(true).SetWidth(10);
-                   columns.Add().Encoded(false).Sanitized(false)
-                .RenderValueAs(b => new HtmlString
-                       ("<input class='form-control input-keyword' />")).Titled("Keyword").SetWidth(30);
-                   columns.Add().Encoded(false).Sanitized(false)
-                .RenderValueAs(b => new HtmlString
-                       ("<select class='form-control select-source' multiple></select>")).Titled("Correct Word").SetWidth(30);
-                   columns.Add().Encoded(false).Sanitized(false)
-                .RenderValueAs(b => new HtmlString
-                       ("<select class='form-control select-masterproduct' multiple></select>")).Titled("Nickname").SetWidth(30);
-                   columns.Add().Encoded(false).Sanitized(false)
-                .RenderValueAs(b => new HtmlString
-                       ("<input type='button' class='btn btn-sm btn-success btn-save-keyword' data-id=" + b.Id + " value='Save' /><a href='/SearchData/RemoveCustomerSearch?id=" + b.Id + "&startDate=" + Model.StartDate + "&endDate=" + Model.EndDate + "' class='ml-3 btn btn-sm btn-danger'>Remove</a>")).Titled("Action").Css("text-center").SetWidth(5);
-               }).WithPaging(20).Sortable(true)
-                </div>
-                <div class="tab-pane fade" id="mapped">
-                    @Html.Grid(Model.ListWithLinkedKeywords).Columns(columns =>
-                 {
-                   columns.Add(b => b.Date).Titled("Date").Filterable(true).SetWidth(10).Format("{0:dd-MMM-yyyy}");
-                   columns.Add(b => b.Key).Titled("Cust Search Word-0").Filterable(true).SetWidth(10);
-                   columns.Add(b => b.OldCommonWord).Titled("Old Common Word").Filterable(true).SetWidth(10);
-                   columns.Add(b => b.LinkedMasterProduct).Titled("Mapped Products").Filterable(true).SetWidth(10);
-                   columns.Add().Encoded(false).Sanitized(false)
-                .RenderValueAs(b => new HtmlString
-                       ("<input class='form-control input-keyword' />")).Titled("Keyword").SetWidth(30);
-                   columns.Add().Encoded(false).Sanitized(false)
-                .RenderValueAs(b => new HtmlString
-                       ("<select class='form-control select-source' multiple></select>")).Titled("Correct Word").SetWidth(30);
-                   columns.Add().Encoded(false).Sanitized(false)
-                .RenderValueAs(b => new HtmlString
-                       ("<select class='form-control select-masterproduct' multiple></select>")).Titled("Nickname").SetWidth(30);
-                   columns.Add().Encoded(false).Sanitized(false)
-                .RenderValueAs(b => new HtmlString
-                       ("<input type='button' class='btn btn-sm btn-success btn-save-keyword'  data-id=" + b.Id + " value='Save' />")).Titled("Action").Css("text-center").SetWidth(5);
-                }).WithPaging(20).Sortable(true)
                 </div>*@
+                <div class="tab-pane active" id="zero">
+                         @Html.Grid(Model.ZeroCountListItems).Columns(columns =>
+                    {
+                        columns.Add(b => b.Date).Titled("Date").Filterable(true).SetWidth(10).Format("{0:dd-MMM-yyyy}");
+                        columns.Add(b => b.Key).Titled("Cust Search Word-0").Filterable(true).SetWidth(10);
+                        columns.Add(b => b.OldCommonWord).Titled("Old Common Word").Filterable(true).SetWidth(10);
+                        columns.Add().Encoded(false).Sanitized(false)
+                     .RenderValueAs(b => new HtmlString
+                            ("<input class='form-control input-keyword' />")).Titled("Keyword").SetWidth(30);
+                        columns.Add().Encoded(false).Sanitized(false)
+                     .RenderValueAs(b => new HtmlString
+                            ("<select class='form-control select-source' multiple></select>")).Titled("Correct Word").SetWidth(30);
+                        columns.Add().Encoded(false).Sanitized(false)
+                     .RenderValueAs(b => new HtmlString
+                            ("<select class='form-control select-masterproduct' multiple></select>")).Titled("Nickname").SetWidth(30);
+                        columns.Add().Encoded(false).Sanitized(false)
+                     .RenderValueAs(b => new HtmlString
+                            ("<input type='button' class='btn btn-sm btn-success btn-save-keyword' data-id=" + b.Id + " value='Save' /><a href='/SearchData/RemoveCustomerSearch?id=" + b.Id + "&startDate=" + Model.StartDate + "&endDate=" + Model.EndDate + "' class='ml-3 btn btn-sm btn-danger'>Remove</a>")).Titled("Action").Css("text-center").SetWidth(5);
+                    }).WithPaging(20).Sortable(true)
+                     </div>
+                     @*<div class="tab-pane fade" id="mapped">
+                         @Html.Grid(Model.ListWithLinkedKeywords).Columns(columns =>
+                      {
+                        columns.Add(b => b.Date).Titled("Date").Filterable(true).SetWidth(10).Format("{0:dd-MMM-yyyy}");
+                        columns.Add(b => b.Key).Titled("Cust Search Word-0").Filterable(true).SetWidth(10);
+                        columns.Add(b => b.OldCommonWord).Titled("Old Common Word").Filterable(true).SetWidth(10);
+                        columns.Add(b => b.LinkedMasterProduct).Titled("Mapped Products").Filterable(true).SetWidth(10);
+                        columns.Add().Encoded(false).Sanitized(false)
+                     .RenderValueAs(b => new HtmlString
+                            ("<input class='form-control input-keyword' />")).Titled("Keyword").SetWidth(30);
+                        columns.Add().Encoded(false).Sanitized(false)
+                     .RenderValueAs(b => new HtmlString
+                            ("<select class='form-control select-source' multiple></select>")).Titled("Correct Word").SetWidth(30);
+                        columns.Add().Encoded(false).Sanitized(false)
+                     .RenderValueAs(b => new HtmlString
+                            ("<select class='form-control select-masterproduct' multiple></select>")).Titled("Nickname").SetWidth(30);
+                        columns.Add().Encoded(false).Sanitized(false)
+                     .RenderValueAs(b => new HtmlString
+                            ("<input type='button' class='btn btn-sm btn-success btn-save-keyword'  data-id=" + b.Id + " value='Save' />")).Titled("Action").Css("text-center").SetWidth(5);
+                     }).WithPaging(20).Sortable(true)
+                     </div>*@
             </div>
         </div>
     </div>

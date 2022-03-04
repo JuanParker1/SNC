@@ -1,0 +1,143 @@
+﻿@model ShopNow.ViewModels.SearchDataListViewModel
+@using GridMvc.Html
+@{
+    ViewBag.Title = "Customer Search Data List";
+}
+<title>ShopNow | @ViewBag.Title</title>
+<link href="~/Content/Gridmvc.css" rel="stylesheet" />
+<script src="~/Scripts/gridmvc.js"></script>
+<style>
+    .select2-search__field {
+        width: 100% !important;
+    }
+</style>
+<div class="container-fluid">
+    <form method="get" action="/SearchData/MappedList" class="my-3">
+        <div class="row my-2">
+            <div class="col-md-4">
+                <h5 class="text-success" style="letter-spacing:1px">@ViewBag.Title</h5>
+            </div>
+            <div class="col-md-8">
+                <div class="row">
+                    <div class="col-md-3">
+                        <label class="font-weight-bold">Start Date</label>
+                        <input type="date" id="StartDate" name="StartDate" class="form-control" @if (Model.StartDate != null) { <text> value="@Model.StartDate.Value.ToString("yyyy-MM-dd")" </text> } />
+                    </div>
+                    <div class="col-md-3">
+                        <label class="font-weight-bold">End Date</label>
+                        <input type="date" id="EndDate" name="EndDate" class="form-control" @if (Model.EndDate != null) { <text> value="@Model.EndDate.Value.ToString("yyyy-MM-dd")" </text> } />
+                    </div>
+                    <div class="col-md-2 mt-2">
+                        <input type="submit" class="btn btn-info mt-4" value="Apply Filter" />
+                    </div>
+                    <div class="col-md-3 mt-2">
+                        <a href="/SearchData/MappedList" class="btn btn-warning mt-4">Clear Filter</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    <div class="card shadow">
+        <div class="card-body">
+            <ul class="nav nav-tabs mb-3">
+                <li class="nav-item">
+                    <a class="nav-link" href="/SearchData/List?startdate=@Model.StartDate&enddate=@Model.EndDate">All @*<b>(@Model.AllCount)</b>*@</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/SearchData/ZeroCountList?startdate=@Model.StartDate&enddate=@Model.EndDate">Zero Count @*<b>(@Model.ZeroCount)</b>*@</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="/SearchData/MappedList?startdate=@Model.StartDate&enddate=@Model.EndDate">Mapped List <b>(@Model.LinkedKeywordCount)</b></a>
+                </li>
+            </ul>
+            <div class="tab-content">
+                     <div class="tab-pane active" id="mapped">
+                         @Html.Grid(Model.ListWithLinkedKeywords).Columns(columns =>
+                      {
+                        columns.Add(b => b.Date).Titled("Date").Filterable(true).SetWidth(10).Format("{0:dd-MMM-yyyy}");
+                        columns.Add(b => b.Key).Titled("Cust Search Word-0").Filterable(true).SetWidth(10);
+                        columns.Add(b => b.OldCommonWord).Titled("Old Common Word").Filterable(true).SetWidth(10);
+                        columns.Add(b => b.LinkedMasterProduct).Titled("Mapped Products").Filterable(true).SetWidth(10);
+                        columns.Add().Encoded(false).Sanitized(false)
+                     .RenderValueAs(b => new HtmlString
+                            ("<input class='form-control input-keyword' />")).Titled("Keyword").SetWidth(30);
+                        columns.Add().Encoded(false).Sanitized(false)
+                     .RenderValueAs(b => new HtmlString
+                            ("<select class='form-control select-source' multiple></select>")).Titled("Correct Word").SetWidth(30);
+                        columns.Add().Encoded(false).Sanitized(false)
+                     .RenderValueAs(b => new HtmlString
+                            ("<select class='form-control select-masterproduct' multiple></select>")).Titled("Nickname").SetWidth(30);
+                        columns.Add().Encoded(false).Sanitized(false)
+                     .RenderValueAs(b => new HtmlString
+                            ("<input type='button' class='btn btn-sm btn-success btn-save-keyword'  data-id=" + b.Id + " value='Save' />")).Titled("Action").Css("text-center").SetWidth(5);
+                     }).WithPaging(20).Sortable(true)
+                     </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+    <script src="~/Scripts/select2/js/select2.js"></script>
+    <link href="~/Scripts/select2/css/select2.css" rel="stylesheet" />
+    <link href="~/Content/select2/select2.custom.css" rel="stylesheet" />
+    <script src="~/Scripts/sweetalert/sweetalert.min.js"></script>
+    <link href="~/Content/sweetalert/sweetalert.css" rel="stylesheet" />
+    <script>
+        $(document).ready(function () {
+            $('.select-source').select2({
+                placeholder: "Search Keyword",
+                //minimumInputLength: 3,
+                closeOnSelect: false,
+                width: "100%",
+                ajax: {
+                    url: "/SearchData/GetKeywordSelect2",
+                    delay: 250,
+                    dataType: 'json'
+                }
+            });
+
+            $('.select-masterproduct').select2({
+                placeholder: "Search Product",
+                //minimumInputLength: 3,
+                closeOnSelect: false,
+                width: "100%",
+                ajax: {
+                    url: "/MasterProduct/GetAllSelect2",
+                    delay: 250,
+                    dataType: 'json'
+                }
+            });
+
+            $('.btn-save-keyword').on('click', function () {
+                var tr = $(this).closest('tr');
+                var searchWord = tr.find('.input-keyword').val();
+                var searchSource = tr.find('.select-source').val();
+                var masterIds = tr.find('.select-masterproduct').val();
+                var id = $(this).data('id');
+                if (searchWord) {
+                    $.post('/SearchData/AddToSourceAndNickname', { id: id, searchWord: searchWord, searchSource: searchSource, masterIds: masterIds }, function (data) {
+                        if (data) {
+                            swal('Success!', 'Save Successfully', 'success');
+                            tr.find('.select-source').val('').trigger('change');
+                            tr.find('.select-masterproduct').val('').trigger('change');
+                            tr.find('.input-keyword').val('');
+                            tr.remove();
+                           // window.location.reload();
+                        }
+                        else
+                            swal('Warning!', 'Select Correct word or Nickname!', 'warning');
+                    });
+                } else
+                    swal('Warning!', 'Enter Keyword', 'warning');
+            });
+            
+        });
+    </script>
+}
+
+
+
+
+

@@ -3664,15 +3664,17 @@ namespace ShopNow.Controllers
                              Date = i.DateUpdated
                          }).ToList();
             model.ReviewlLists = db.CustomerReviews
-                             .Where(i => i.Status == 0 && i.ShopId == shopId && i.CustomerId != customerId)
+                             .Where(i => i.Status == 0 && i.ShopId == shopId /*&& i.CustomerId != customerId*/)
+                             .GroupJoin(db.CustomerReviewReplies, cr => cr.Id, crr => crr.CustomerReviewId, (cr, crr) => new { cr, crr })
                          .Select(i => new ReviewListViewModel.ReviewlList
                          {
-                             Id = i.Id,
-                             ShopName = i.ShopName,
-                             CustomerName = i.CustomerName,
-                             CustomerRemark = i.CustomerRemark,
-                             Rating = i.Rating,
-                             Date = i.DateUpdated
+                             Id = i.cr.Id,
+                             ShopName = i.cr.ShopName,
+                             CustomerName = i.cr.CustomerName,
+                             CustomerRemark = i.cr.CustomerRemark,
+                             Rating = i.cr.Rating,
+                             Date = i.cr.DateUpdated,
+                             ReplyText = i.crr.Any() ? i.crr.FirstOrDefault().ReplyText : ""
                          }).OrderByDescending(i => i.Id).ToList();
             int count = model.ReviewlLists.Count();
             int CurrentPage = page;
@@ -4429,7 +4431,7 @@ namespace ShopNow.Controllers
                  .Join(db.Payments.Where(i => i.PaymentMode != "Online Payment"), c => c.OrderNumber, p => p.OrderNumber, (c, p) => new { c, p })
                 .Select(i => new DelivaryCreditAmountApiViewModel.CartList
                 {
-                    Amount = i.c.IsPickupDrop == false? (i.p.Amount - (i.p.RefundAmount ?? 0)) : (i.c.TotalPrice - (i.p.RefundAmount ?? 0))
+                    Amount = i.c.IsPickupDrop == false? (i.p.Amount - (i.p.RefundAmount ?? 0)) : (i.p.RefundAmount != null && i.p.RefundAmount != 0) ? i.c.NetTotal - (i.p.RefundAmount ?? 0) : i.c.TotalPrice
 
                 }).ToList();
             if (model.List.Count() != 0)
@@ -6373,16 +6375,19 @@ namespace ShopNow.Controllers
 
         public JsonResult SaveReviewReply(int reviewId,string reply,string repliedBy)
         {
-            var customerReviewReply = new CustomerReviewReply
+            if (!db.CustomerReviewReplies.Any(i => i.CustomerReviewId == reviewId))
             {
-                CreatedBy = repliedBy,
-                CustomerReviewId = reviewId,
-                DateEncoded = DateTime.Now,
-                ReplyText = reply,
-                Status = 0
-            };
-            db.CustomerReviewReplies.Add(customerReviewReply);
-            db.SaveChanges();
+                var customerReviewReply = new CustomerReviewReply
+                {
+                    CreatedBy = repliedBy,
+                    CustomerReviewId = reviewId,
+                    DateEncoded = DateTime.Now,
+                    ReplyText = reply,
+                    Status = 0
+                };
+                db.CustomerReviewReplies.Add(customerReviewReply);
+                db.SaveChanges();
+            }
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
@@ -7004,7 +7009,7 @@ namespace ShopNow.Controllers
                    {
                        Id = i.c.Id,
                        OrderNumber = i.p.OrderNumber,
-                       Amount = i.c.IsPickupDrop == true ? i.c.TotalPrice : i.p.Amount - (i.p.RefundAmount ?? 0),
+                       Amount = i.c.IsPickupDrop == true ? i.c.TotalPrice - (i.p.RefundAmount ?? 0) : (i.p.RefundAmount != null && i.p.RefundAmount != 0) ? i.c.NetTotal - (i.p.RefundAmount ?? 0) : i.c.TotalPrice,
                        DateEncoded = i.p.DateEncoded,
                        DeliveryOrderPaymentStatus = i.c.DeliveryOrderPaymentStatus,
                        DeliveryBoyName = i.c.DeliveryBoyName,
@@ -7168,97 +7173,102 @@ namespace ShopNow.Controllers
             if (type == 0)
             {
                 model.ListItems = db.Orders.Where(i => i.ShopId == shopid && i.IsPickupDrop == true).OrderByDescending(i => i.Id)
+                    .Join(db.Payments,o=>o.OrderNumber,p=>p.OrderNumber,(o,p)=>new { o,p})
                     .Select(i => new ShopParcelDropListViewModel.ListItem
                     {
-                        ShopName = i.ShopName,
-                        Amount = i.TotalPrice,
-                        DateEncoded = i.DateEncoded,
-                        DeliveryAddress = i.DeliveryAddress,
-                        DeliveryCharge = i.DeliveryCharge,
-                        Distance = i.Distance + "Kms",
-                        CustomerName = i.CustomerName,
-                        CustomerPhoneNumber = i.CustomerPhoneNumber,
-                        PickupAddress = i.PickupAddress,
-                        Remarks = i.Remarks,
-                        Status = i.Status,
-                        OrderNumber = i.OrderNumber
+                        ShopName = i.o.ShopName,
+                        Amount = (i.p.RefundAmount != null && i.p.RefundAmount != 0)? i.o.NetTotal - (i.p.RefundAmount ?? 0) : i.o.TotalPrice,
+                        DateEncoded = i.o.DateEncoded,
+                        DeliveryAddress = i.o.DeliveryAddress,
+                        DeliveryCharge = i.o.DeliveryCharge,
+                        Distance = i.o.Distance + "Kms",
+                        CustomerName = i.o.CustomerName,
+                        CustomerPhoneNumber = i.o.CustomerPhoneNumber,
+                        PickupAddress = i.o.PickupAddress,
+                        Remarks = i.o.Remarks,
+                        Status = i.o.Status,
+                        OrderNumber = i.o.OrderNumber
                     }).ToList();
             }
             else if (type == 1)
             {
                 model.ListItems = db.Orders.Where(i => i.ShopId == shopid && i.IsPickupDrop == true && i.Status ==2).OrderByDescending(i => i.Id)
+                   .Join(db.Payments, o => o.OrderNumber, p => p.OrderNumber, (o, p) => new { o, p })
                     .Select(i => new ShopParcelDropListViewModel.ListItem
                     {
-                        ShopName = i.ShopName,
-                        Amount = i.TotalPrice,
-                        DateEncoded = i.DateEncoded,
-                        DeliveryAddress = i.DeliveryAddress,
-                        DeliveryCharge = i.DeliveryCharge,
-                        Distance = i.Distance + "Kms",
-                        CustomerName = i.CustomerName,
-                        CustomerPhoneNumber = i.CustomerPhoneNumber,
-                        PickupAddress = i.PickupAddress,
-                        Remarks = i.Remarks,
-                        Status = i.Status,
-                        OrderNumber = i.OrderNumber
+                        ShopName = i.o.ShopName,
+                        Amount = (i.p.RefundAmount != null && i.p.RefundAmount != 0) ? i.o.NetTotal - (i.p.RefundAmount ?? 0) : i.o.TotalPrice,
+                        DateEncoded = i.o.DateEncoded,
+                        DeliveryAddress = i.o.DeliveryAddress,
+                        DeliveryCharge = i.o.DeliveryCharge,
+                        Distance = i.o.Distance + "Kms",
+                        CustomerName = i.o.CustomerName,
+                        CustomerPhoneNumber = i.o.CustomerPhoneNumber,
+                        PickupAddress = i.o.PickupAddress,
+                        Remarks = i.o.Remarks,
+                        Status = i.o.Status,
+                        OrderNumber = i.o.OrderNumber
                     }).ToList();
             }
             else if (type == 2)
             {
                 model.ListItems = db.Orders.Where(i => i.ShopId == shopid && i.IsPickupDrop == true && (i.Status == 3 || i.Status == 4 || i.Status == 5 || i.Status == 8)).OrderByDescending(i => i.Id)
+                    .Join(db.Payments, o => o.OrderNumber, p => p.OrderNumber, (o, p) => new { o, p })
                     .Select(i => new ShopParcelDropListViewModel.ListItem
                     {
-                        ShopName = i.ShopName,
-                        Amount = i.TotalPrice,
-                        DateEncoded = i.DateEncoded,
-                        DeliveryAddress = i.DeliveryAddress,
-                        DeliveryCharge = i.DeliveryCharge,
-                        Distance = i.Distance + "Kms",
-                        CustomerName = i.CustomerName,
-                        CustomerPhoneNumber = i.CustomerPhoneNumber,
-                        PickupAddress = i.PickupAddress,
-                        Remarks = i.Remarks,
-                        Status = i.Status,
-                        OrderNumber = i.OrderNumber
+                        ShopName = i.o.ShopName,
+                        Amount = (i.p.RefundAmount != null && i.p.RefundAmount != 0) ? i.o.NetTotal - (i.p.RefundAmount ?? 0) : i.o.TotalPrice,
+                        DateEncoded = i.o.DateEncoded,
+                        DeliveryAddress = i.o.DeliveryAddress,
+                        DeliveryCharge = i.o.DeliveryCharge,
+                        Distance = i.o.Distance + "Kms",
+                        CustomerName = i.o.CustomerName,
+                        CustomerPhoneNumber = i.o.CustomerPhoneNumber,
+                        PickupAddress = i.o.PickupAddress,
+                        Remarks = i.o.Remarks,
+                        Status = i.o.Status,
+                        OrderNumber = i.o.OrderNumber
                     }).ToList();
             }
             else if (type == 3)
             {
                 model.ListItems = db.Orders.Where(i => i.ShopId == shopid && i.IsPickupDrop == true && i.Status == 6).OrderByDescending(i => i.Id)
-                   .Select(i => new ShopParcelDropListViewModel.ListItem
-                   {
-                       ShopName = i.ShopName,
-                       Amount = i.TotalPrice,
-                       DateEncoded = i.DateEncoded,
-                       DeliveryAddress = i.DeliveryAddress,
-                       DeliveryCharge = i.DeliveryCharge,
-                       Distance = i.Distance + "Kms",
-                       CustomerName = i.CustomerName,
-                       CustomerPhoneNumber = i.CustomerPhoneNumber,
-                       PickupAddress = i.PickupAddress,
-                       Remarks = i.Remarks,
-                       Status = i.Status,
-                       OrderNumber = i.OrderNumber
-                   }).ToList();
+                   .Join(db.Payments, o => o.OrderNumber, p => p.OrderNumber, (o, p) => new { o, p })
+                    .Select(i => new ShopParcelDropListViewModel.ListItem
+                    {
+                        ShopName = i.o.ShopName,
+                        Amount = (i.p.RefundAmount != null && i.p.RefundAmount != 0) ? i.o.NetTotal - (i.p.RefundAmount ?? 0) : i.o.TotalPrice,
+                        DateEncoded = i.o.DateEncoded,
+                        DeliveryAddress = i.o.DeliveryAddress,
+                        DeliveryCharge = i.o.DeliveryCharge,
+                        Distance = i.o.Distance + "Kms",
+                        CustomerName = i.o.CustomerName,
+                        CustomerPhoneNumber = i.o.CustomerPhoneNumber,
+                        PickupAddress = i.o.PickupAddress,
+                        Remarks = i.o.Remarks,
+                        Status = i.o.Status,
+                        OrderNumber = i.o.OrderNumber
+                    }).ToList();
             }
             else
             {
                 model.ListItems = db.Orders.Where(i => i.ShopId == shopid && i.IsPickupDrop == true && (i.Status == 7 || i.Status == 9 || i.Status == 10)).OrderByDescending(i => i.Id)
-                   .Select(i => new ShopParcelDropListViewModel.ListItem
-                   {
-                       ShopName = i.ShopName,
-                       Amount = i.TotalPrice,
-                       DateEncoded = i.DateEncoded,
-                       DeliveryAddress = i.DeliveryAddress,
-                       DeliveryCharge = i.DeliveryCharge,
-                       Distance = i.Distance + "Kms",
-                       CustomerName = i.CustomerName,
-                       CustomerPhoneNumber = i.CustomerPhoneNumber,
-                       PickupAddress = i.PickupAddress,
-                       Remarks = i.Remarks,
-                       Status = i.Status,
-                       OrderNumber = i.OrderNumber
-                   }).ToList();
+                  .Join(db.Payments, o => o.OrderNumber, p => p.OrderNumber, (o, p) => new { o, p })
+                    .Select(i => new ShopParcelDropListViewModel.ListItem
+                    {
+                        ShopName = i.o.ShopName,
+                        Amount = (i.p.RefundAmount != null && i.p.RefundAmount != 0) ? i.o.NetTotal - (i.p.RefundAmount ?? 0) : i.o.TotalPrice,
+                        DateEncoded = i.o.DateEncoded,
+                        DeliveryAddress = i.o.DeliveryAddress,
+                        DeliveryCharge = i.o.DeliveryCharge,
+                        Distance = i.o.Distance + "Kms",
+                        CustomerName = i.o.CustomerName,
+                        CustomerPhoneNumber = i.o.CustomerPhoneNumber,
+                        PickupAddress = i.o.PickupAddress,
+                        Remarks = i.o.Remarks,
+                        Status = i.o.Status,
+                        OrderNumber = i.o.OrderNumber
+                    }).ToList();
             }
             int count = model.ListItems.Count();
             int CurrentPage = page;
@@ -7743,6 +7753,68 @@ namespace ShopNow.Controllers
             }
             return Json(true, JsonRequestBehavior.AllowGet);
         }
-        
+
+
+        public JsonResult UpdateTagCategory()
+        {
+            var list = db.MasterProducts.Where(i => i.Status == 0)
+                .Select(i=> new {
+                    Id = i.Id,
+                    CategoryId = i.CategoryId,
+                    SubCategoryId = i.SubCategoryId,
+                    NextSubCategoryId = i.NextSubCategoryId
+                }).ToList();
+            foreach (var item in list)
+            {
+                if (item.CategoryId != 0)
+                {
+                    var tagcategory = new TagCategory
+                    {
+                        CategoryId = item.CategoryId,
+                        CategoryName = db.Categories.FirstOrDefault(i=>i.Id == item.CategoryId).Name,
+                        CreatedBy = "Admin",
+                        UpdatedBy = "Admin",
+                        DateUpdated = DateTime.Now,
+                        DateEncoded = DateTime.Now,
+                        MasterProductId = item.Id
+                    };
+                    db.TagCategories.Add(tagcategory);
+                    db.SaveChanges();
+                }
+
+                if (item.SubCategoryId != 0)
+                {
+                    var tagcategory = new TagCategory
+                    {
+                        CategoryId = item.SubCategoryId,
+                        CategoryName = db.SubCategories.FirstOrDefault(i => i.Id == item.SubCategoryId).Name,
+                        CreatedBy = "Admin",
+                        UpdatedBy = "Admin",
+                        DateUpdated = DateTime.Now,
+                        DateEncoded = DateTime.Now,
+                        MasterProductId = item.Id
+                    };
+                    db.TagCategories.Add(tagcategory);
+                    db.SaveChanges();
+                }
+                if (item.NextSubCategoryId != 0)
+                {
+                    var tagcategory = new TagCategory
+                    {
+                        CategoryId = item.NextSubCategoryId,
+                        CategoryName = db.NextSubCategories.FirstOrDefault(i => i.Id == item.NextSubCategoryId).Name,
+                        CreatedBy = "Admin",
+                        UpdatedBy = "Admin",
+                        DateUpdated = DateTime.Now,
+                        DateEncoded = DateTime.Now,
+                        MasterProductId = item.Id
+                    };
+                    db.TagCategories.Add(tagcategory);
+                    db.SaveChanges();
+                }
+
+            }
+            return Json(true, JsonRequestBehavior.AllowGet);
+        }
     }
 }
