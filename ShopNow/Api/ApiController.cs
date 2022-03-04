@@ -3497,9 +3497,9 @@ namespace ShopNow.Controllers
                 myData.Headers[HttpRequestHeader.ContentType] = "application/x-www-form-urlencoded";
                 string getList = "";
                 if (outletid == 0)
-                    getList = myData.DownloadString("http://joyrahq.gofrugal.com/RayMedi_HQ/api/v1/items?q=status==R,outletId==2,location==1,itemId==" + code);
+                    getList = myData.DownloadString("http://joyrahq.gofrugal.com/RayMedi_HQ/api/v1/items?q=status==R,outletId==2,locationId==1,itemId==" + code);
                 else
-                    getList = myData.DownloadString("http://joyrahq.gofrugal.com/RayMedi_HQ/api/v1/items?q=status==R,location==1,outletId==" + outletid + ",itemId==" + code);
+                    getList = myData.DownloadString("http://joyrahq.gofrugal.com/RayMedi_HQ/api/v1/items?q=status==R,locationId==1,outletId==" + outletid + ",itemId==" + code);
 
                 var result = JsonConvert.DeserializeObject<RootObject>(getList);
                 foreach (var pro in result.items)
