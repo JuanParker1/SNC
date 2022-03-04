@@ -7778,6 +7778,8 @@ namespace ShopNow.Controllers
                         DateEncoded = DateTime.Now,
                         MasterProductId = item.Id
                     };
+                    db.TagCategories.Add(tagcategory);
+                    db.SaveChanges();
                 }
 
                 if (item.SubCategoryId != 0)
@@ -7792,6 +7794,8 @@ namespace ShopNow.Controllers
                         DateEncoded = DateTime.Now,
                         MasterProductId = item.Id
                     };
+                    db.TagCategories.Add(tagcategory);
+                    db.SaveChanges();
                 }
                 if (item.NextSubCategoryId != 0)
                 {
@@ -7805,6 +7809,8 @@ namespace ShopNow.Controllers
                         DateEncoded = DateTime.Now,
                         MasterProductId = item.Id
                     };
+                    db.TagCategories.Add(tagcategory);
+                    db.SaveChanges();
                 }
 
             }
