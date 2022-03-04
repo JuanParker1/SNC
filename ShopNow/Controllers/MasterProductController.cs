@@ -2463,5 +2463,35 @@ namespace ShopNow.Controllers
                 }
             }
         }
+
+        public async Task<JsonResult> GetDishTagCategorySelect2(string q = "")
+        {
+            var cat = await _db.Categories.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0 && a.ProductTypeId == 1)
+                .Select(i => new
+            {
+                id = i.Id,
+                text = i.Name
+            }).ToListAsync();
+            var catArray = cat.Select(i => i.id).ToArray();
+            var subcat = await _db.SubCategories.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0 && catArray.Contains(a.CategoryId))
+                .Select(i => new
+                {
+                    id = i.Id,
+                    text = i.Name
+                }).ToListAsync();
+
+            var subcatArray = subcat.Select(i => i.id).ToArray();
+            var nextSubCat = await _db.NextSubCategories.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0 && subcatArray.Contains(a.SubCategoryId))
+               .Select(i => new
+               {
+                   id = i.Id,
+                   text = i.Name
+               }).ToListAsync();
+
+            var catSubList = cat.Union(subcat).ToList();
+            var catSubNextList = catSubList.Union(nextSubCat);
+
+            return Json(new { results = catSubNextList, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
+        }
     }
 }
