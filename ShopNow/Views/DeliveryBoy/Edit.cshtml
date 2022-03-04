@@ -449,11 +449,23 @@
 
             var strLicense = $("#DrivingLicenseImagePath").val();
             var strAccount = $("#BankPassbookPath").val();
+            var imagepath = $("#ImagePath").val();
 
             var regExp = /.pdf/g;
             var resLicense = strLicense.match(regExp);
             var resAccount = strAccount.match(regExp);
 
+            if (imagepath === null) {
+                $("#btnLicenseRemove").addClass("d-none");
+            }
+            if (strLicense === null) {
+                $("#btnLicenseRemove").addClass("d-none");
+            }
+            if (strAccount === null) {
+                $("#btnLicenseRemove").addClass("d-none");
+            }
+
+            
             if (resLicense == ".pdf") {
                 $("#LicensePDF").prop("checked", true);
                 $('.DrivingImg').addClass('d-none');
@@ -473,7 +485,7 @@
                 $('.license-img').removeClass('d-none');
                 $('.LicensePdflink').removeClass('d-none');
                 var defaultimg = $('#img-license').attr("src");
-                if (defaultimg == '/Images/noimage.png') {
+                if (defaultimg == '/Images/noimage.png' || defaultimg == 'https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/' || defaultimg == 'https://s3.ap-south-1.amazonaws.com/shopnowchat.com/public/_yourIMG_IMG20210619095938.jpg') {
                     $("#btnLicenseRemove").addClass("d-none");
                 }
             }
@@ -494,7 +506,7 @@
                 $('.account-pdf').addClass('d-none');
                 $('.account-img').removeClass('d-none');
                 var defaultimg = $('#img-account').attr("src");
-                if (defaultimg == '/Images/noimage.png') {
+                if (defaultimg == '/Images/noimage.png' || defaultimg == 'https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/' || defaultimg == 'https://s3.ap-south-1.amazonaws.com/shopnowchat.com/public/_yourIMG_IMG20210619095938.jpg') {
                     $("#btnBankAccountRemove").addClass("d-none");
                 }
             }
