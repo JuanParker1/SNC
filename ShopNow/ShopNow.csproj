@@ -739,6 +739,9 @@
     <Compile Include="Models\SubCategory.cs">
       <DependentUpon>ApplicationDbContext.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\TagCategory.cs">
+      <DependentUpon>ApplicationDbContext.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\tbl.cs">
       <DependentUpon>ApplicationDbContext.tt</DependentUpon>
     </Compile>

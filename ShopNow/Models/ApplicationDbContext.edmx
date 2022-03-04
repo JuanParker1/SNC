@@ -1595,6 +1595,19 @@
           <Property Name="DateEncoded" Type="datetime" Nullable="false" />
           <Property Name="DateUpdated" Type="datetime" Nullable="false" />
         </EntityType>
+        <EntityType Name="TagCategories">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="MasterProductId" Type="bigint" Nullable="false" />
+          <Property Name="CategoryId" Type="int" Nullable="false" />
+          <Property Name="CategoryName" Type="nvarchar(max)" />
+          <Property Name="CreatedBy" Type="nvarchar(max)" />
+          <Property Name="UpdatedBy" Type="nvarchar(max)" />
+          <Property Name="DateEncoded" Type="datetime" Nullable="false" />
+          <Property Name="DateUpdated" Type="datetime" Nullable="false" />
+        </EntityType>
         <EntityType Name="tbl">
           <Key>
             <PropertyRef Name="Id" />
@@ -1805,6 +1818,7 @@
           <EntitySet Name="Specifications" EntityType="Self.Specifications" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Staffs" EntityType="Self.Staffs" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SubCategories" EntityType="Self.SubCategories" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TagCategories" EntityType="Self.TagCategories" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tbl" EntityType="Self.tbl" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UserEnquiries" EntityType="Self.UserEnquiries" Schema="dbo" store:Type="Tables" />
         </EntityContainer>
@@ -3045,6 +3059,7 @@
           <EntitySet Name="Payments" EntityType="sncModel.Payment" />
           <EntitySet Name="ShopStaffs" EntityType="sncModel.ShopStaff" />
           <EntitySet Name="LocationDetails" EntityType="sncModel.LocationDetail" />
+          <EntitySet Name="TagCategories" EntityType="sncModel.TagCategory" />
         </EntityContainer>
         <ComplexType Name="GetDEliveryBoyList_Result">
           <Property Type="Int32" Name="Id" Nullable="false" />
@@ -3744,6 +3759,19 @@
           <Property Name="Distance" Type="Double" Nullable="false" />
           <Property Name="Duration" Type="Double" Nullable="false" />
           <Property Name="DateEncoded" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="TagCategory">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="MasterProductId" Type="Int64" Nullable="false" />
+          <Property Name="CategoryId" Type="Int32" Nullable="false" />
+          <Property Name="CategoryName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="UpdatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="DateEncoded" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="DateUpdated" Type="DateTime" Nullable="false" Precision="3" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -5603,6 +5631,20 @@
                 <ScalarProperty Name="DestinationLatitude" ColumnName="DestinationLatitude" />
                 <ScalarProperty Name="SourceLongitude" ColumnName="SourceLongitude" />
                 <ScalarProperty Name="SourceLatitude" ColumnName="SourceLatitude" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TagCategories">
+            <EntityTypeMapping TypeName="sncModel.TagCategory">
+              <MappingFragment StoreEntitySet="TagCategories">
+                <ScalarProperty Name="DateUpdated" ColumnName="DateUpdated" />
+                <ScalarProperty Name="DateEncoded" ColumnName="DateEncoded" />
+                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="CategoryName" ColumnName="CategoryName" />
+                <ScalarProperty Name="CategoryId" ColumnName="CategoryId" />
+                <ScalarProperty Name="MasterProductId" ColumnName="MasterProductId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

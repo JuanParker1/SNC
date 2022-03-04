@@ -7753,6 +7753,62 @@ namespace ShopNow.Controllers
             }
             return Json(true, JsonRequestBehavior.AllowGet);
         }
-        
+
+
+        public JsonResult UpdateTagCategory()
+        {
+            var list = db.MasterProducts.Where(i => i.Status == 0)
+                .Select(i=> new {
+                    Id = i.Id,
+                    CategoryId = i.CategoryId,
+                    SubCategoryId = i.SubCategoryId,
+                    NextSubCategoryId = i.NextSubCategoryId
+                }).ToList();
+            foreach (var item in list)
+            {
+                if (item.CategoryId != 0)
+                {
+                    var tagcategory = new TagCategory
+                    {
+                        CategoryId = item.CategoryId,
+                        CategoryName = db.Categories.FirstOrDefault(i=>i.Id == item.CategoryId).Name,
+                        CreatedBy = "Admin",
+                        UpdatedBy = "Admin",
+                        DateUpdated = DateTime.Now,
+                        DateEncoded = DateTime.Now,
+                        MasterProductId = item.Id
+                    };
+                }
+
+                if (item.SubCategoryId != 0)
+                {
+                    var tagcategory = new TagCategory
+                    {
+                        CategoryId = item.SubCategoryId,
+                        CategoryName = db.SubCategories.FirstOrDefault(i => i.Id == item.SubCategoryId).Name,
+                        CreatedBy = "Admin",
+                        UpdatedBy = "Admin",
+                        DateUpdated = DateTime.Now,
+                        DateEncoded = DateTime.Now,
+                        MasterProductId = item.Id
+                    };
+                }
+                if (item.NextSubCategoryId != 0)
+                {
+                    var tagcategory = new TagCategory
+                    {
+                        CategoryId = item.NextSubCategoryId,
+                        CategoryName = db.NextSubCategories.FirstOrDefault(i => i.Id == item.NextSubCategoryId).Name,
+                        CreatedBy = "Admin",
+                        UpdatedBy = "Admin",
+                        DateUpdated = DateTime.Now,
+                        DateEncoded = DateTime.Now,
+                        MasterProductId = item.Id
+                    };
+                }
+
+            }
+            return Json(true, JsonRequestBehavior.AllowGet);
+        }
     }
 }
