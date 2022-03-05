@@ -258,8 +258,9 @@ namespace ShopNow.ViewModels
         public string Name { get; set; }
         public int CategoryId { get; set; }
         public string CategoryName { get; set; }
+        public string TagCategory { get; set; }
         public int[] TagCategoryId { get; set; }
-        public string[] TagCategoryName { get; set; }
+        public string TagCategoryName { get; set; }
         public double Price { get; set; }
         public bool Customisation { get; set; }
         public string ColorCode { get; set; }
@@ -267,7 +268,12 @@ namespace ShopNow.ViewModels
         public string ImagePath1 { get; set; }
         public int Adscore { get; set; }
         public string NickName { get; set; }
-
+        public List<TagCategoryList> TagCategoryLists { get; set; }
+        public class TagCategoryList
+        {
+            public int TagCategoryId { get; set; }
+            public string TagCategoryName { get; set; }
+        }
         public List<AddonList> AddonLists { get; set; }
         public class AddonList
         {

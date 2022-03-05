@@ -448,7 +448,7 @@
         $(document).ready(function () {
 
            var tagCategorySelect = $('#TagCategoryId');
-            var TagCategoryId = "@Model.TagCategoryId";
+            var TagCategoryId = "@Model.TagCategory";
             var TagCategoryName = "@Model.TagCategoryName";
             if (TagCategoryId) {
                 var array_code = TagCategoryId.split(',');
@@ -460,6 +460,15 @@
                 });
             }
 
+            $('#TagCategoryId').select2({
+                placeholder: "Search Category",
+                width: '100%',
+                ajax: {
+                    url: "/MasterProduct/GetDishTagCategorySelect2",
+                    delay: 250,
+                    dataType: 'json'
+                }
+            });
 
             jQuery(document).ready(function ($) {
                 $('select').find('option[value="@Model.ColorCode"]').attr('selected', 'selected');

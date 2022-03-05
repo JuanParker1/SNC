@@ -257,8 +257,9 @@ namespace ShopNow.Controllers
             var model = _mapper.Map<MasterProduct, MasterFoodEditViewModel>(master);
             if(model.CategoryId !=0)
             model.CategoryName = _db.Categories.FirstOrDefault(i => i.Id == master.CategoryId).Name;
-            model.TagCategoryId = _db.TagCategories.Where(i => i.MasterProductId == master.Id).Select(i => i.CategoryId).ToArray();
-            model.TagCategoryName = _db.TagCategories.Where(i => i.MasterProductId == master.Id).Select(i => i.CategoryName).ToArray();
+            model.TagCategory = string.Join(",", _db.TagCategories.Where(i => i.MasterProductId == master.Id).Select(i => i.CategoryId));
+            model.TagCategoryName = string.Join(",", _db.TagCategories.Where(i => i.MasterProductId == master.Id).Select(i => i.CategoryName));
+
             model.AddonLists = _db.ProductDishAddOns.Where(i => i.MasterProductId == master.Id && i.Status == 0).Select(i => new MasterFoodEditViewModel.AddonList
             {
                 Id = i.Id,
@@ -361,10 +362,13 @@ namespace ShopNow.Controllers
             SaveKeywordData(master.Name);
 
             // Tag Category 
+            var tcat = _db.TagCategories.Where(i => i.MasterProductId == master.Id).Select(i => i.CategoryId).ToArray();
+            IEnumerable<int> both = model.TagCategoryId.Intersect(tcat);
+
             if (model.CategoryId != 0)
             {
-                var mp = _db.TagCategories.Where(i => i.CategoryId == model.CategoryId && i.MasterProductId == master.Id);
-                if (mp == null)
+                var mp = _db.TagCategories.Any(i => i.CategoryId == model.CategoryId && i.MasterProductId == master.Id);
+                if (!mp)
                 {
                     var tagcategory = new TagCategory
                     {
@@ -384,8 +388,8 @@ namespace ShopNow.Controllers
             {
                 foreach (var catId in model.TagCategoryId)
                 {
-                    var mp = _db.TagCategories.Where(i => i.CategoryId == catId && i.MasterProductId == master.Id);
-                    if (mp == null)
+                    var mp = _db.TagCategories.Any(i => i.CategoryId == catId && i.MasterProductId == master.Id);
+                    if (!mp)
                     {
                         var tagcategory = new TagCategory
                         {
@@ -402,6 +406,7 @@ namespace ShopNow.Controllers
                     }
                 }
             }
+           
             return RedirectToAction("FoodEdit", new { id = AdminHelpers.ECodeLong(model.Id) });
         }
 
