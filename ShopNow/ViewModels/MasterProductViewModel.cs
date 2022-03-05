@@ -241,6 +241,7 @@ namespace ShopNow.ViewModels
         public string Name { get; set; }
         public int CategoryId { get; set; }
         public string CategoryName { get; set; }
+        public int[] TagCategoryId { get; set; }
         public double Price { get; set; }
         public bool Customisation { get; set; }
         public string ColorCode { get; set; }
@@ -257,6 +258,8 @@ namespace ShopNow.ViewModels
         public string Name { get; set; }
         public int CategoryId { get; set; }
         public string CategoryName { get; set; }
+        public int[] TagCategoryId { get; set; }
+        public string[] TagCategoryName { get; set; }
         public double Price { get; set; }
         public bool Customisation { get; set; }
         public string ColorCode { get; set; }

@@ -195,8 +195,50 @@ namespace ShopNow.Controllers
                 }
             }
             Session["AddOns"] = null;
-
             SaveKeywordData(master.Name);
+
+            // Tag Category 
+            if (model.CategoryId != 0)
+            {
+                var mp = _db.TagCategories.Any(i => i.CategoryId == model.CategoryId && i.MasterProductId == master.Id);
+                if (!mp)
+                {
+                    var tagcategory = new TagCategory
+                    {
+                        CategoryId = model.CategoryId,
+                        CategoryName = _db.Categories.FirstOrDefault(i => i.Id == model.CategoryId)?.Name,
+                        CreatedBy = "Admin",
+                        UpdatedBy = "Admin",
+                        DateUpdated = DateTime.Now,
+                        DateEncoded = DateTime.Now,
+                        MasterProductId = master.Id
+                    };
+                    _db.TagCategories.Add(tagcategory);
+                    _db.SaveChanges();
+                }
+            }
+            if (model.TagCategoryId != null)
+            {
+                foreach (var catId in model.TagCategoryId)
+                {
+                    var mp = _db.TagCategories.Any(i => i.CategoryId == catId && i.MasterProductId == master.Id);
+                    if(!mp)
+                    {
+                        var tagcategory = new TagCategory
+                        {
+                            CategoryId = catId,
+                            CategoryName = _db.Categories.FirstOrDefault(i => i.Id == catId)?.Name,
+                            CreatedBy = "Admin",
+                            UpdatedBy = "Admin",
+                            DateUpdated = DateTime.Now,
+                            DateEncoded = DateTime.Now,
+                            MasterProductId = master.Id
+                        };
+                        _db.TagCategories.Add(tagcategory);
+                        _db.SaveChanges();
+                    }
+                }
+            }
             return View();
         }
 
@@ -215,6 +257,8 @@ namespace ShopNow.Controllers
             var model = _mapper.Map<MasterProduct, MasterFoodEditViewModel>(master);
             if(model.CategoryId !=0)
             model.CategoryName = _db.Categories.FirstOrDefault(i => i.Id == master.CategoryId).Name;
+            model.TagCategoryId = _db.TagCategories.Where(i => i.MasterProductId == master.Id).Select(i => i.CategoryId).ToArray();
+            model.TagCategoryName = _db.TagCategories.Where(i => i.MasterProductId == master.Id).Select(i => i.CategoryName).ToArray();
             model.AddonLists = _db.ProductDishAddOns.Where(i => i.MasterProductId == master.Id && i.Status == 0).Select(i => new MasterFoodEditViewModel.AddonList
             {
                 Id = i.Id,
@@ -315,6 +359,49 @@ namespace ShopNow.Controllers
             }
             Session["EditAddOns"] = null;
             SaveKeywordData(master.Name);
+
+            // Tag Category 
+            if (model.CategoryId != 0)
+            {
+                var mp = _db.TagCategories.Where(i => i.CategoryId == model.CategoryId && i.MasterProductId == master.Id);
+                if (mp == null)
+                {
+                    var tagcategory = new TagCategory
+                    {
+                        CategoryId = model.CategoryId,
+                        CategoryName = _db.Categories.FirstOrDefault(i => i.Id == model.CategoryId)?.Name,
+                        CreatedBy = "Admin",
+                        UpdatedBy = "Admin",
+                        DateUpdated = DateTime.Now,
+                        DateEncoded = DateTime.Now,
+                        MasterProductId = master.Id
+                    };
+                    _db.TagCategories.Add(tagcategory);
+                    _db.SaveChanges();
+                }
+            }
+            if (model.TagCategoryId != null)
+            {
+                foreach (var catId in model.TagCategoryId)
+                {
+                    var mp = _db.TagCategories.Where(i => i.CategoryId == catId && i.MasterProductId == master.Id);
+                    if (mp == null)
+                    {
+                        var tagcategory = new TagCategory
+                        {
+                            CategoryId = catId,
+                            CategoryName = _db.Categories.FirstOrDefault(i => i.Id == catId)?.Name,
+                            CreatedBy = "Admin",
+                            UpdatedBy = "Admin",
+                            DateUpdated = DateTime.Now,
+                            DateEncoded = DateTime.Now,
+                            MasterProductId = master.Id
+                        };
+                        _db.TagCategories.Add(tagcategory);
+                        _db.SaveChanges();
+                    }
+                }
+            }
             return RedirectToAction("FoodEdit", new { id = AdminHelpers.ECodeLong(model.Id) });
         }
 
@@ -2472,6 +2559,66 @@ namespace ShopNow.Controllers
                 id = i.Id,
                 text = i.Name
             }).ToListAsync();
+            var catArray = cat.Select(i => i.id).ToArray();
+            var subcat = await _db.SubCategories.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0 && catArray.Contains(a.CategoryId))
+                .Select(i => new
+                {
+                    id = i.Id,
+                    text = i.Name
+                }).ToListAsync();
+
+            var subcatArray = subcat.Select(i => i.id).ToArray();
+            var nextSubCat = await _db.NextSubCategories.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0 && subcatArray.Contains(a.SubCategoryId))
+               .Select(i => new
+               {
+                   id = i.Id,
+                   text = i.Name
+               }).ToListAsync();
+
+            var catSubList = cat.Union(subcat).ToList();
+            var catSubNextList = catSubList.Union(nextSubCat);
+
+            return Json(new { results = catSubNextList, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
+        }
+
+        public async Task<JsonResult> GetFMCGTagCategorySelect2(string q = "")
+        {
+            var cat = await _db.Categories.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0 && a.ProductTypeId == 2)
+                .Select(i => new
+                {
+                    id = i.Id,
+                    text = i.Name
+                }).ToListAsync();
+            var catArray = cat.Select(i => i.id).ToArray();
+            var subcat = await _db.SubCategories.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0 && catArray.Contains(a.CategoryId))
+                .Select(i => new
+                {
+                    id = i.Id,
+                    text = i.Name
+                }).ToListAsync();
+
+            var subcatArray = subcat.Select(i => i.id).ToArray();
+            var nextSubCat = await _db.NextSubCategories.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0 && subcatArray.Contains(a.SubCategoryId))
+               .Select(i => new
+               {
+                   id = i.Id,
+                   text = i.Name
+               }).ToListAsync();
+
+            var catSubList = cat.Union(subcat).ToList();
+            var catSubNextList = catSubList.Union(nextSubCat);
+
+            return Json(new { results = catSubNextList, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
+        }
+
+        public async Task<JsonResult> GetMedicalTagCategorySelect2(string q = "")
+        {
+            var cat = await _db.Categories.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0 && a.ProductTypeId == 3)
+                .Select(i => new
+                {
+                    id = i.Id,
+                    text = i.Name
+                }).ToListAsync();
             var catArray = cat.Select(i => i.id).ToArray();
             var subcat = await _db.SubCategories.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0 && catArray.Contains(a.CategoryId))
                 .Select(i => new
