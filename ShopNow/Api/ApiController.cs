@@ -3676,7 +3676,8 @@ namespace ShopNow.Controllers
                              Rating = i.cr.Rating,
                              Date = i.cr.DateUpdated,
                              ReplyText = i.crr.Any() ? i.crr.FirstOrDefault().ReplyText : "",
-                             ReplyDate = i.crr.Any() ? i.crr.FirstOrDefault().DateEncoded : DateTime.MinValue
+                             ReplyDate = i.crr.Any() ? i.crr.FirstOrDefault().DateEncoded : DateTime.MinValue,
+                             ReplyId = i.crr.Any()?i.crr.FirstOrDefault().Id:0
                          }).OrderByDescending(i => i.Id).ToList();
             int count = model.ReviewlLists.Count();
             int CurrentPage = page;
@@ -6393,6 +6394,16 @@ namespace ShopNow.Controllers
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
+        public JsonResult UpdateReviewReply(int replyId,string reply)
+        {
+            var reviewReply = db.CustomerReviewReplies.FirstOrDefault(i => i.Id == replyId);
+            reviewReply.ReplyText = reply;
+            reviewReply.DateEncoded = DateTime.Now;
+            db.Entry(reviewReply).State = EntityState.Modified;
+            db.SaveChanges();
+            return Json(true, JsonRequestBehavior.AllowGet);
+        }
+
         public JsonResult GetCustomerSearchHistory(int customerid)
         {
             var searchList = db.CustomerSearchHistories.Where(i => i.Status == 0 && i.CustomerId == customerid).OrderByDescending(i => i.DateEncoded).Take(5).ToList();
@@ -7011,7 +7022,7 @@ namespace ShopNow.Controllers
                    {
                        Id = i.c.Id,
                        OrderNumber = i.p.OrderNumber,
-                       Amount = i.c.IsPickupDrop == true ? i.c.TotalPrice - (i.p.RefundAmount ?? 0) : (i.p.RefundAmount != null && i.p.RefundAmount != 0) ? i.c.NetTotal - (i.p.RefundAmount ?? 0) : i.c.TotalPrice,
+                       Amount = i.c.IsPickupDrop == true ? i.c.TotalPrice - (i.p.RefundAmount ?? 0) : (i.p.RefundAmount != null && i.p.RefundAmount != 0) ? i.c.NetTotal - (i.p.RefundAmount ?? 0) : i.c.NetTotal,
                        DateEncoded = i.p.DateEncoded,
                        DeliveryOrderPaymentStatus = i.c.DeliveryOrderPaymentStatus,
                        DeliveryBoyName = i.c.DeliveryBoyName,

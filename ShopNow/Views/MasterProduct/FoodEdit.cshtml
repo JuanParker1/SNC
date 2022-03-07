@@ -55,6 +55,16 @@
                                 </div>
                             </div>
                             <div class="col-md-3">
+                                <label class="control-label">
+                                    <strong class="text-secondary">Tag Category</strong>
+                                </label>
+                                <div class="form-group">
+                                    <select class="form-control" name="TagCategoryId" id="TagCategoryId" multiple>
+                                    </select>
+                                    <input type="hidden" name="TagCategoryName" />
+                                </div>
+                            </div>
+                            <div class="col-md-3">
                                 <label class="control-label col-sm-12"><strong class="text-secondary">Food Type</strong></label>
                                 <select class="form-control" name="ColorCode" id="ColorCode">
                                     <option value="Select">Select Type</option>
@@ -436,6 +446,30 @@
     <script>
 
         $(document).ready(function () {
+
+           var tagCategorySelect = $('#TagCategoryId');
+            var TagCategoryId = "@Model.TagCategory";
+            var TagCategoryName = "@Model.TagCategoryName";
+            if (TagCategoryId) {
+                var array_code = TagCategoryId.split(',');
+                var array_name = TagCategoryName.split(',');
+                $.each(array_code, function (i) {
+                    $('select[name="TagCategoryId"] option[value=' + array_code[i] + ']').attr('selected', 'selected');
+                    var option = new Option(array_name[i], array_code[i], true, true);
+                    tagCategorySelect.append(option).trigger('change');
+                });
+            }
+
+            $('#TagCategoryId').select2({
+                placeholder: "Search Category",
+                width: '100%',
+                ajax: {
+                    url: "/MasterProduct/GetDishTagCategorySelect2",
+                    delay: 250,
+                    dataType: 'json'
+                }
+            });
+
             jQuery(document).ready(function ($) {
                 $('select').find('option[value="@Model.ColorCode"]').attr('selected', 'selected');
                  $("#Customisation").find('option[value="@Model.Customisation"]').attr('selected', 'selected');
