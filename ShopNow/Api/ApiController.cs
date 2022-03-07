@@ -3676,7 +3676,8 @@ namespace ShopNow.Controllers
                              Rating = i.cr.Rating,
                              Date = i.cr.DateUpdated,
                              ReplyText = i.crr.Any() ? i.crr.FirstOrDefault().ReplyText : "",
-                             ReplyDate = i.crr.Any() ? i.crr.FirstOrDefault().DateEncoded : DateTime.MinValue
+                             ReplyDate = i.crr.Any() ? i.crr.FirstOrDefault().DateEncoded : DateTime.MinValue,
+                             ReplyId = i.crr.Any()?i.crr.FirstOrDefault().Id:0
                          }).OrderByDescending(i => i.Id).ToList();
             int count = model.ReviewlLists.Count();
             int CurrentPage = page;
@@ -6390,6 +6391,16 @@ namespace ShopNow.Controllers
                 db.CustomerReviewReplies.Add(customerReviewReply);
                 db.SaveChanges();
             }
+            return Json(true, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult UpdateReviewReply(int replyId,string reply)
+        {
+            var reviewReply = db.CustomerReviewReplies.FirstOrDefault(i => i.Id == replyId);
+            reviewReply.ReplyText = reply;
+            reviewReply.DateEncoded = DateTime.Now;
+            db.Entry(reviewReply).State = EntityState.Modified;
+            db.SaveChanges();
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 

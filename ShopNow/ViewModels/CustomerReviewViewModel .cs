@@ -38,6 +38,7 @@ namespace ShopNow.ViewModels
             public DateTime Date { get; set; }
             public string ReplyText { get; set; }
             public DateTime ReplyDate { get; set; }
+            public int ReplyId { get; set; }
         }
     }
 }
