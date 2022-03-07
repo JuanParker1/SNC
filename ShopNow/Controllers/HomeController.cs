@@ -78,6 +78,7 @@ namespace ShopNow.Controllers
                         Response.Cookies["Password"].Expires = DateTime.Now.AddDays(-1);
                     }
                     TempData["googleMApkey"] = ConfigurationManager.AppSettings.Get("googleApiKey").ToString();
+                    Session["googleMApkey"] =ConfigurationManager.AppSettings.Get("googleApiKey").ToString();
                     return RedirectToAction(returnUrl != null ? returnUrl : "Index", "Dashboard");
                     
                 }
@@ -101,6 +102,7 @@ namespace ShopNow.Controllers
                             Response.Cookies["Password"].Expires = DateTime.Now.AddDays(-1);
                         }
                         TempData["googleMApkey"] = ConfigurationManager.AppSettings.Get("googleApiKey").ToString();
+                        Session["googleMApkey"] = ConfigurationManager.AppSettings.Get("googleApiKey").ToString();
                         return RedirectToAction(returnUrl != null ? returnUrl : "Index", "Dashboard");
                     }
                     else
