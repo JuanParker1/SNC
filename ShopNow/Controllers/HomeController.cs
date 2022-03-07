@@ -7,6 +7,7 @@ using System.Linq;
 using System.Web.Mvc;
 using System.Net;
 using ShopNow.Base;
+using System.Configuration;
 
 namespace ShopNow.Controllers
 {
@@ -15,7 +16,7 @@ namespace ShopNow.Controllers
     {
         private sncEntities _db = new sncEntities();
         UploadContent uc = new UploadContent();
-
+      
         [AllowAnonymous]
         public ActionResult Index(string returnUrl)
         {           
@@ -76,6 +77,7 @@ namespace ShopNow.Controllers
                         Response.Cookies["PhoneNumber"].Expires = DateTime.Now.AddDays(-1);
                         Response.Cookies["Password"].Expires = DateTime.Now.AddDays(-1);
                     }
+                    TempData["googleMApkey"] = ConfigurationManager.AppSettings.Get("googleApiKey").ToString();
                     return RedirectToAction(returnUrl != null ? returnUrl : "Index", "Dashboard");
                     
                 }
@@ -98,7 +100,7 @@ namespace ShopNow.Controllers
                             Response.Cookies["PhoneNumber"].Expires = DateTime.Now.AddDays(-1);
                             Response.Cookies["Password"].Expires = DateTime.Now.AddDays(-1);
                         }
-
+                        TempData["googleMApkey"] = ConfigurationManager.AppSettings.Get("googleApiKey").ToString();
                         return RedirectToAction(returnUrl != null ? returnUrl : "Index", "Dashboard");
                     }
                     else
