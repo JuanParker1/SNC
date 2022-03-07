@@ -1,6 +1,7 @@
 ﻿@model ShopNow.ViewModels.ShopRegisterViewModel
 @{
     ViewBag.Title = "Shop Entry";
+    var mapkey = Session["googleMApkey"];
 }
 <title>ShopNow | Shop Entry</title>
 <style>
@@ -756,8 +757,7 @@
     <link href="~/Content/multiple-image-upload.css" rel="stylesheet" />
     <script src="~/Scripts/sweetalert/sweetalert.min.js"></script>
     <link href="~/Content/sweetalert/sweetalert.css" rel="stylesheet" />
-    <script src="https://maps.googleapis.com/maps/api/js?key=@TempData["googleMApkey"]&libraries=places&callback=initMap"
-            async defer></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=@mapkey&libraries=places&callback=initMap" async defer></script>
     <script>
         //$('#AuthorisedBrandId').select2();
 

@@ -1,5 +1,6 @@
 ﻿@{
     ViewBag.Title = "Delivery Locations";
+    var mapkey = Session["googleMApkey"];
 }
 <title>ShopNow | Delivery Locations</title>
 
@@ -33,8 +34,7 @@
 </div>
 @section Scripts
 {
-    <script src="https://maps.googleapis.com/maps/api/js?key=@TempData["googleMApkey"]&callback=initMap"
-            async defer></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=@mapkey&callback=initMap" async defer></script>
     <script>
         $(document).ready(function () {
             initMap();
