@@ -140,7 +140,7 @@
     <link href="~/Content/sweetalert/sweetalert.css" rel="stylesheet" />
     @*<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCl_9yf43Z6hWLvVvwd68p7WXwq_oYcS_0&libraries=places"
         async defer></script>*@
-    <script src="https://maps.googleapis.com/maps/api/js?key=@mapkey&libraries=places&callback=initMap" async defer></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDPJqXovjcQFLSfFSAH768QgyN5mniDjas&libraries=places&callback=initMap" async defer></script>
     <script>
         $(document).ready(function () {
             $('#ShopId').select2({
@@ -197,11 +197,12 @@
             var DeliveryLatitude = parseFloat($("#DeliveryLatitude").val());
             var DeliveryLongitude = parseFloat($("#DeliveryLongitude").val());
             var ShopId = $("#ShopId").val();
-            $.getJSON("/Service/GetDeliveryCharge", { ShopId: ShopId, PickupLatitude: PickupLatitude, PickupLongitude: PickupLongitude, DeliveryLatitude: DeliveryLatitude, DeliveryLongitude: DeliveryLongitude }, function (data) {
+            var distance = parseFloat($("#Distance").val());
+            $.getJSON("/Service/GetDeliveryCharge", { ShopId: ShopId, PickupLatitude: PickupLatitude, PickupLongitude: PickupLongitude, DeliveryLatitude: DeliveryLatitude, DeliveryLongitude: DeliveryLongitude, Distance: distance }, function (data) {
                 $("#DeliveryCharge").val(data.DeliveryCharge.toFixed(2));
                 $("#dcharge").text(data.DeliveryCharge.toFixed(2));
                 $("#dist").text(data.Distance.toFixed(2));
-                $("#Distance").val(data.Distance.toFixed(2));
+               // $("#Distance").val(data.Distance.toFixed(2));
                 var dcharge = parseFloat(data.DeliveryCharge);
                 if (data.DeliveryCredit < 50) {
                     swal("Low Delivery Credit!", "Kindly Update Delivery Credits.", "warning");
@@ -288,10 +289,11 @@
                                 map.fitBounds(place.geometry.viewport);
                                 marker.setPosition(place.geometry.location);
                                 marker.setVisible(true);
-                                console.log(place);
                                 $('#DeliveryAddress').val(place.formatted_address);
                                 $('#DeliveryLatitude').val(place.geometry.location.lat);
                                 $('#DeliveryLongitude').val(place.geometry.location.lng);
+                                //alert(place.geometry.location.lat);
+                                checkLocation();
                                 getDeliveryCharge();
                             });
                         }, function () {
@@ -314,6 +316,63 @@
                 'Error: Your browser doesn\'t support geolocation.');
             infoWindow.open(map);
         }
+
+        function checkLocation() {
+            $.ajax({
+                url: '/api/GetLocationDetails?sourceLatitude=' + $('[name="PickupLatitude"]').val() + '&sourceLongitude=' + $('[name="PickupLongitude"]').val() + '&destinationLatitude=' + $('#DeliveryLatitude').val() + '&destinationLongitude=' + $('#DeliveryLongitude').val() + '',
+                type: 'GET',
+                dataType: 'json',
+                success: function (data) {
+                    if (data) {
+                        $('#Distance').val(data.Distance);
+                    } else {
+                        var service = new google.maps.DistanceMatrixService();
+                        const origin = { lat: parseFloat($('[name="PickupLatitude"]').val()), lng: parseFloat($('[name="PickupLongitude"]').val()) };
+                        const dest = { lat: parseFloat($('#DeliveryLatitude').val()), lng: parseFloat($('#DeliveryLongitude').val()) };
+                        const request = {
+                            origins: [origin],
+                            destinations: [dest],
+                            travelMode: google.maps.TravelMode.DRIVING,
+                        };
+                        service.getDistanceMatrix(request).then((response) => {
+                            var distance = (response.rows[0].elements[0].distance.value / 1000).toFixed(2);
+                            var duration = (response.rows[0].elements[0].duration.value / 60).toFixed(2);
+                            $('#Distance').val(distance);
+                            saveLocation(origin.lat, origin.lng, dest.lat, dest.lng, distance, duration);
+                        });
+                    }
+                },
+                error: function () { alert('Something went wrong, try again later!'); },
+                beforeSend: setHeader
+            });
+        }
+
+        function setHeader(xhr) {
+            xhr.setRequestHeader('X-ApiKey', 'Tx9ANC5RqngpTOM9VJ0JP2+1LbZvo1LI');
+        }
+
+        function saveLocation(srclat, srclng, deslat, deslng, dist, dur) {
+            var locationValues = {
+                SourceLatitude: srclat,
+                SourceLontitude: srclng,
+                DestinationLatitude: deslat,
+                DestinationLontitude: deslng,
+                Distance: dist,
+                Duration: dur
+            };
+            $.ajax({
+                url: '/api/SaveLocationDetails',
+                type: 'POST',
+                dataType: 'json',
+                data: locationValues,
+                success: function (data) {
+                    alert(data.message);
+                },
+                error: function () { alert('Something went wrong, try again later!'); },
+                beforeSend: setHeader
+            });
+        }
+        
 
     </script>
 }

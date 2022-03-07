@@ -162,25 +162,25 @@ namespace ShopNow.Controllers
             return RedirectToAction("List");
         }
 
-        public JsonResult GetDeliveryCharge(int ShopId, double PickupLatitude, double PickupLongitude, double DeliveryLatitude, double DeliveryLongitude)
+        public JsonResult GetDeliveryCharge(int ShopId, double PickupLatitude, double PickupLongitude, double DeliveryLatitude, double DeliveryLongitude,double distance)
         {
             var shop = db.Shops.FirstOrDefault(i => i.Id == ShopId);
             var DeliveryCredit = db.ShopCredits.FirstOrDefault(i => i.CustomerId == shop.CustomerId).DeliveryCredit;
             double DeliveryCharge = 0;
-            var Distance = (((Math.Acos(Math.Sin((PickupLatitude * Math.PI / 180)) * Math.Sin(((DeliveryLatitude) * Math.PI / 180)) + Math.Cos((PickupLatitude * Math.PI / 180)) * Math.Cos((DeliveryLatitude * Math.PI / 180))
-                 * Math.Cos(((PickupLongitude - DeliveryLongitude) * Math.PI / 180)))) * 180 / Math.PI) * 60 * 1.1515 * 1609.344) / 1000;
+            //var Distance = (((Math.Acos(Math.Sin((PickupLatitude * Math.PI / 180)) * Math.Sin(((DeliveryLatitude) * Math.PI / 180)) + Math.Cos((PickupLatitude * Math.PI / 180)) * Math.Cos((DeliveryLatitude * Math.PI / 180))
+            //     * Math.Cos(((PickupLongitude - DeliveryLongitude) * Math.PI / 180)))) * 180 / Math.PI) * 60 * 1.1515 * 1609.344) / 1000;
 
-            if (Distance < 5)
+            if (distance < 5)
             {
                 DeliveryCharge = 50;
             }
             else
             {
-                var dist = Distance - 5;
+                var dist = distance - 5;
                 var amount = dist * 6;
                 DeliveryCharge = 50 + amount;
             }
-            return Json(new { DeliveryCharge, Distance, DeliveryCredit }, JsonRequestBehavior.AllowGet);
+            return Json(new { DeliveryCharge, distance, DeliveryCredit }, JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult GetAddressCount(string phoneNumber = "", int shopId = 0)
