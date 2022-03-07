@@ -130,6 +130,8 @@ namespace ShopNow.ViewModels
             public List<OrderItem> OrderItemList { get; set; }
             public double TipAmount { get; set; }
            public bool IsPickupDrop { get; set; }
+           public int CustomerAddressId { get; set; }
+           public string RouteAudioPath { get; set; }
         }
     }
 

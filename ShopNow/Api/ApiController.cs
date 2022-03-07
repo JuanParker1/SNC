@@ -1805,8 +1805,8 @@ namespace ShopNow.Controllers
                     CustomerPhoneNumber = i.o.o.o.o.CustomerPhoneNumber,
                     DateEncoded = i.o.o.o.o.DateEncoded,
                     DeliveryAddress = i.o.o.o.o.DeliveryAddress,
-                   // OnWork = i.o.d.OnWork, 
-                   OnWork = i.o.o.o.o.DeliveryBoyOnWork,
+                    // OnWork = i.o.d.OnWork, 
+                    OnWork = i.o.o.o.o.DeliveryBoyOnWork,
                     OrderNumber = i.o.o.o.o.OrderNumber,
                     PaymentMode = i.o.o.p.PaymentMode,
                     RefundAmount = i.o.o.p.RefundAmount,
@@ -1829,6 +1829,8 @@ namespace ShopNow.Controllers
                     WalletAmount = i.o.o.o.o.WalletAmount,
                     TipAmount = i.o.o.o.o.TipsAmount,
                     IsPickupDrop = i.o.o.o.o.IsPickupDrop,
+                    CustomerAddressId = i.o.o.o.o.CustomerAddressId,
+                    RouteAudioPath = i.o.o.o.o.CustomerAddressId != 0 ? db.CustomerAddresses.FirstOrDefault(a => a.Id == i.o.o.o.o.CustomerAddressId).RouteAudioPath : "",
                     OrderItemList = i.oi.ToList(),
                 }).ToList();
 
@@ -1870,6 +1872,8 @@ namespace ShopNow.Controllers
                    WalletAmount = i.o.o.o.o.WalletAmount,
                    TipAmount = i.o.o.o.o.TipsAmount,
                    IsPickupDrop = i.o.o.o.o.IsPickupDrop,
+                    CustomerAddressId = i.o.o.o.o.CustomerAddressId,
+                   RouteAudioPath = i.o.o.o.o.CustomerAddressId != 0 ? db.CustomerAddresses.FirstOrDefault(a => a.Id == i.o.o.o.o.CustomerAddressId).RouteAudioPath : "",
                    OrderItemList = i.oi.ToList()
                }).ToList();
 
@@ -1910,6 +1914,8 @@ namespace ShopNow.Controllers
                    WalletAmount = i.o.o.o.WalletAmount,
                    TipAmount = i.o.o.o.TipsAmount,
                    IsPickupDrop = i.o.o.o.IsPickupDrop,
+                    CustomerAddressId = i.o.o.o.CustomerAddressId,
+                   RouteAudioPath = i.o.o.o.CustomerAddressId != 0 ? db.CustomerAddresses.FirstOrDefault(a => a.Id == i.o.o.o.CustomerAddressId).RouteAudioPath : "",
                    OrderItemList = i.oi.ToList()
                }).ToList();
 
@@ -6370,14 +6376,17 @@ namespace ShopNow.Controllers
             return Json(model, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult SaveRouteAudioPath(int addressId,string deliveryBoyName, string audiopath)
+        public JsonResult SaveRouteAudioPath(int addressId, string deliveryBoyName, string audiopath)
         {
             var customerAddress = db.CustomerAddresses.FirstOrDefault(i => i.Id == addressId);
-            customerAddress.RouteAudioPath = audiopath;
-            customerAddress.RouteAudioUploadedBy = deliveryBoyName;
-            customerAddress.RouteAudioUploadedDateTime = DateTime.Now;
-            db.Entry(customerAddress).State = EntityState.Modified;
-            db.SaveChanges();
+            if (customerAddress != null)
+            {
+                customerAddress.RouteAudioPath = audiopath;
+                customerAddress.RouteAudioUploadedBy = deliveryBoyName;
+                customerAddress.RouteAudioUploadedDateTime = DateTime.Now;
+                db.Entry(customerAddress).State = EntityState.Modified;
+                db.SaveChanges();
+            }
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
@@ -7837,7 +7846,7 @@ namespace ShopNow.Controllers
 
         public JsonResult UpdateCustomerAddressIdInOrders()
         {
-            var orders = db.Orders.Where(i=>i.CustomerAddressId != 0).Select(i => new { Id = i.Id, Address = i.DeliveryAddress }).ToList();
+            var orders = db.Orders.Where(i=>i.CustomerAddressId == 0).Select(i => new { Id = i.Id, Address = i.DeliveryAddress }).ToList();
             foreach (var item in orders)
             {
                 if (!string.IsNullOrEmpty(item.Address))
