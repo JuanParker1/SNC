@@ -82,6 +82,7 @@ namespace ShopNow.Models
         public int DeliveryBoyOnWork { get; set; }
         public int UploadType { get; set; }
         public int UploadId { get; set; }
+        public int CustomerAddressId { get; set; }
         public int Status { get; set; }
         public System.DateTime DateEncoded { get; set; }
         public System.DateTime DateUpdated { get; set; }

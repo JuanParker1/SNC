@@ -1331,7 +1331,12 @@ namespace ShopNow.Controllers
                     order.DateUpdated = DateTime.Now;
                     order.Status = 0;
                     order.PaymentModeType = model.PaymentMode == "Online Payment" ? 1 : 2;
-                    db.Orders.Add(order);
+                    var custAddress = db.CustomerAddresses.FirstOrDefault(i => i.Address == order.DeliveryAddress);
+                    if (custAddress != null)
+                    {
+                        order.CustomerAddressId = custAddress.Id;
+                    }
+                        db.Orders.Add(order);
                     db.SaveChanges();
                     foreach (var item in model.ListItems)
                     {
@@ -7827,6 +7832,27 @@ namespace ShopNow.Controllers
                 }
 
             }
+            return Json(true, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult UpdateCustomerAddressIdInOrders()
+        {
+            var orders = db.Orders.Where(i=>i.CustomerAddressId != 0).Select(i => new { Id = i.Id, Address = i.DeliveryAddress }).ToList();
+            foreach (var item in orders)
+            {
+                if (!string.IsNullOrEmpty(item.Address))
+                {
+                    var order = db.Orders.FirstOrDefault(i => i.Id == item.Id);
+                    var cust = db.CustomerAddresses.FirstOrDefault(i => i.Address == item.Address);
+                    if (cust != null)
+                    {
+                        order.CustomerAddressId = cust.Id;
+                        db.Entry(order).State = System.Data.Entity.EntityState.Modified;
+                        db.SaveChanges();
+                    }
+                }
+            }
+
             return Json(true, JsonRequestBehavior.AllowGet);
         }
     }
