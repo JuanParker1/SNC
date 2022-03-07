@@ -7022,7 +7022,7 @@ namespace ShopNow.Controllers
                    {
                        Id = i.c.Id,
                        OrderNumber = i.p.OrderNumber,
-                       Amount = i.c.IsPickupDrop == true ? i.c.TotalPrice - (i.p.RefundAmount ?? 0) : (i.p.RefundAmount != null && i.p.RefundAmount != 0) ? i.c.NetTotal - (i.p.RefundAmount ?? 0) : i.c.TotalPrice,
+                       Amount = i.c.IsPickupDrop == true ? i.c.TotalPrice - (i.p.RefundAmount ?? 0) : (i.p.RefundAmount != null && i.p.RefundAmount != 0) ? i.c.NetTotal - (i.p.RefundAmount ?? 0) : i.c.NetTotal,
                        DateEncoded = i.p.DateEncoded,
                        DeliveryOrderPaymentStatus = i.c.DeliveryOrderPaymentStatus,
                        DeliveryBoyName = i.c.DeliveryBoyName,
