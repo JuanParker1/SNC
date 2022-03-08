@@ -223,5 +223,37 @@ namespace ShopNow.Controllers
 
             return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
         }
+
+        public JsonResult GetLocationDetails(double sourceLatitude, double sourceLongitude, double destinationLatitude, double destinationLongitude)
+        {
+            bool isAvailable = db.LocationDetails.Any(i => i.SourceLatitude == sourceLatitude && i.SourceLongitude == sourceLongitude && i.DestinationLatitude == destinationLatitude && i.DestinationLongitude == destinationLongitude);
+            if (isAvailable)
+            {
+                var location = db.LocationDetails.FirstOrDefault(i => i.SourceLatitude == sourceLatitude && i.SourceLongitude == sourceLongitude && i.DestinationLatitude == destinationLatitude && i.DestinationLongitude == destinationLongitude);
+                return Json(location, JsonRequestBehavior.AllowGet);
+            }
+            return Json(isAvailable, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public JsonResult SaveLocationDetails(LocationDetailsCreateViewModel model)
+        {
+            if (model.Distance > 0)
+            {
+                var locationDetails = new LocationDetail
+                {
+                    DateEncoded = DateTime.Now,
+                    DestinationLatitude = model.DestinationLatitude,
+                    DestinationLongitude = model.DestinationLontitude,
+                    Distance = model.Distance,
+                    Duration = model.Duration,
+                    SourceLatitude = model.SourceLatitude,
+                    SourceLongitude = model.SourceLontitude
+                };
+                db.LocationDetails.Add(locationDetails);
+                db.SaveChanges();
+            }
+            return Json(new { message = "Saved Successfully" }, JsonRequestBehavior.AllowGet);
+        }
     }
 }

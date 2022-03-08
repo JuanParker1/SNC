@@ -140,7 +140,7 @@
     <link href="~/Content/sweetalert/sweetalert.css" rel="stylesheet" />
     @*<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCl_9yf43Z6hWLvVvwd68p7WXwq_oYcS_0&libraries=places"
         async defer></script>*@
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDPJqXovjcQFLSfFSAH768QgyN5mniDjas&libraries=places&callback=initMap" async defer></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=@mapkey&libraries=places&callback=initMap" async defer></script>
     <script>
         $(document).ready(function () {
             $('#ShopId').select2({
@@ -179,8 +179,9 @@
                             $('input[name="DeliveryAddress"]').val(e.params.data.text);
                             $('input[name="DeliveryLatitude"]').val(e.params.data.latitude);
                             $('input[name="DeliveryLongitude"]').val(e.params.data.longitude);
-                            //GetLatLong();
-                            getDeliveryCharge();
+                            
+                           // getDeliveryCharge();
+                            checkLocation();
                         });
                     }
                     else {
@@ -201,7 +202,7 @@
             $.getJSON("/Service/GetDeliveryCharge", { ShopId: ShopId, PickupLatitude: PickupLatitude, PickupLongitude: PickupLongitude, DeliveryLatitude: DeliveryLatitude, DeliveryLongitude: DeliveryLongitude, Distance: distance }, function (data) {
                 $("#DeliveryCharge").val(data.DeliveryCharge.toFixed(2));
                 $("#dcharge").text(data.DeliveryCharge.toFixed(2));
-                $("#dist").text(data.Distance.toFixed(2));
+                $("#dist").text(data.distance.toFixed(2));
                // $("#Distance").val(data.Distance.toFixed(2));
                 var dcharge = parseFloat(data.DeliveryCharge);
                 if (data.DeliveryCredit < 50) {
@@ -294,7 +295,7 @@
                                 $('#DeliveryLongitude').val(place.geometry.location.lng);
                                 //alert(place.geometry.location.lat);
                                 checkLocation();
-                                getDeliveryCharge();
+                                //getDeliveryCharge();
                             });
                         }, function () {
                             handleLocationError(true, infoWindow, map.getCenter());
@@ -319,12 +320,13 @@
 
         function checkLocation() {
             $.ajax({
-                url: '/api/GetLocationDetails?sourceLatitude=' + $('[name="PickupLatitude"]').val() + '&sourceLongitude=' + $('[name="PickupLongitude"]').val() + '&destinationLatitude=' + $('#DeliveryLatitude').val() + '&destinationLongitude=' + $('#DeliveryLongitude').val() + '',
+                url: '/Service/GetLocationDetails?sourceLatitude=' + $('[name="PickupLatitude"]').val() + '&sourceLongitude=' + $('[name="PickupLongitude"]').val() + '&destinationLatitude=' + $('#DeliveryLatitude').val() + '&destinationLongitude=' + $('#DeliveryLongitude').val() + '',
                 type: 'GET',
                 dataType: 'json',
                 success: function (data) {
                     if (data) {
                         $('#Distance').val(data.Distance);
+                        getDeliveryCharge();
                     } else {
                         var service = new google.maps.DistanceMatrixService();
                         const origin = { lat: parseFloat($('[name="PickupLatitude"]').val()), lng: parseFloat($('[name="PickupLongitude"]').val()) };
@@ -339,16 +341,12 @@
                             var duration = (response.rows[0].elements[0].duration.value / 60).toFixed(2);
                             $('#Distance').val(distance);
                             saveLocation(origin.lat, origin.lng, dest.lat, dest.lng, distance, duration);
+                            getDeliveryCharge();
                         });
                     }
                 },
                 error: function () { alert('Something went wrong, try again later!'); },
-                beforeSend: setHeader
             });
-        }
-
-        function setHeader(xhr) {
-            xhr.setRequestHeader('X-ApiKey', 'Tx9ANC5RqngpTOM9VJ0JP2+1LbZvo1LI');
         }
 
         function saveLocation(srclat, srclng, deslat, deslng, dist, dur) {
@@ -361,15 +359,12 @@
                 Duration: dur
             };
             $.ajax({
-                url: '/api/SaveLocationDetails',
+                url: '/Service/SaveLocationDetails',
                 type: 'POST',
                 dataType: 'json',
                 data: locationValues,
-                success: function (data) {
-                    alert(data.message);
-                },
+                success: function () {},
                 error: function () { alert('Something went wrong, try again later!'); },
-                beforeSend: setHeader
             });
         }
         
