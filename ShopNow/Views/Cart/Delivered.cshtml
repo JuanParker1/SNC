@@ -28,7 +28,7 @@
     }*/
 </style>
 <div class="container-fluid">
-    <form method="get" action="~/Cart/Delivered">
+    <form method="get" action="~/Cart/Delivered" id="filter-form">
         <div class="row my-2">
             <div class="col-md-4">
                 <h5 class="text-success" style="letter-spacing:1px">DELIVERED ORDER</h5>
@@ -43,6 +43,7 @@
                 <input type="hidden" name="ShopName" id="ShopName" value="@Model.ShopName" />
             </div>
             <div class="col-md-1">
+                <input name="IsPickupDrop" type="hidden" />
                 <input type="submit" class="form-control btn btn-sm btn-success" value="Filter" />
             </div>
             <div class="col-md-4 text-right">
@@ -54,6 +55,7 @@
         <div class="col-md-12">
             <div class="card shadow mt-3">
                 <div class="card-body">
+                    <label> <input type="checkbox" id="pickup-check" value="@Model.IsPickupDrop" /> Pickup Drop</label>
                     @Html.Grid(Model.DeliveredLists).Columns(columns =>
                {
                   //columns.Add(c => c.No).Titled("Sl.No").Filterable(false).SetWidth(1);
@@ -132,6 +134,17 @@
                 var id = $(this).data('id');
                 $('[name="Id"]').val(id);
                 $('#modal-refund').modal('show');
+            });
+
+            if ('@Model.IsPickupDrop' == "True")
+                $('#pickup-check').prop('checked', true);
+
+            $('#pickup-check').on('change', function () {
+                if ($(this).prop('checked') == true)
+                    $('[name="IsPickupDrop"]').val(true);
+                else
+                    $('[name="IsPickupDrop"]').val(false);
+                $('#filter-form').submit();
             });
         });
     </script>

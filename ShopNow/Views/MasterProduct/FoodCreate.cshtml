@@ -419,6 +419,7 @@
     $(document).ready(function () {
         var errormsg = "@ViewBag.ErrorMessage";
         var msg = "@ViewBag.Message";
+        var tagcategory = [];
         if (errormsg != "") {
             swal("Notice!", errormsg, "warning")
         }
@@ -438,13 +439,17 @@
             });
 
         $('#TagCategoryId').select2({
-            placeholder: "Search Category",
+            placeholder: "Search Tag Category",
             width: '100%',
             ajax: {
                 url: "/MasterProduct/GetDishTagCategorySelect2",
                 delay: 250,
                 dataType: 'json'
             }
+        }).on('select2:select', function (e) {
+            $.getJSON('/MasterProduct/AddFoodCreateTagCategory', { id: e.params.data.id, type: e.params.data.type }, function () { });
+        }).on('select2:unselect', function (e) {
+            $.getJSON('/MasterProduct/RemoveFoodCreateTagCategory', { id: e.params.data.id }, function () { });
         });
 
         //$(".Save").click(function () {

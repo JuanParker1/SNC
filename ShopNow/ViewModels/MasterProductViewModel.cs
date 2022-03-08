@@ -625,4 +625,10 @@ namespace ShopNow.ViewModels
         public string button { get; set; }
         public string Filename { get; set; }
     }
+
+    public class TagCategorySessionList
+    {
+        public int Id { get; set; }
+        public int Type { get; set; }
+    }
 }
