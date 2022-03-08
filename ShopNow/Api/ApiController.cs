@@ -116,7 +116,7 @@ namespace ShopNow.Controllers
             _mapper = _mapperConfiguration.CreateMapper();
         }
 
-        public JsonResult GetShop(string placeid)
+        public JsonResult GetShop(string placeid) // To get lat and lng from placeid - App(Manage address)
         {
             using (WebClient myData = new WebClient())
             {
