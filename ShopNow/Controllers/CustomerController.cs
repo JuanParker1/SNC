@@ -48,11 +48,11 @@ namespace ShopNow.Controllers
                     No = index + 1,
                     Id = i.c.Id,
                     Name = i.c.Name,
-                    PhoneNumber = i.c.PhoneNumber,
+                    PhoneNumber = i.c.PhoneNumber + " " + i.c.AlternateNumber,
                     Address = i.c.Address,
                     DistrictName = i.c.DistrictName,
                     DateEncoded = i.c.DateEncoded,
-                    AppInfo = i.ca.FirstOrDefault()?.Version??"N/A"
+                    AppInfo = i.ca.FirstOrDefault()?.Version ?? "N/A"
                 }).ToList();
             return View(model.List);
         }
