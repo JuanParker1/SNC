@@ -14,5 +14,6 @@ namespace ShopNow.Base
         public static string razorpaySecretkey = WebConfigurationManager.AppSettings["razorSecretKey"];
         public static string timeNow = DateTime.Now.ToString(CultureInfo.InvariantCulture);
         public static DateTime timeNowDAte = DateTime.Now;
+        public static string googleMapApiKey = WebConfigurationManager.AppSettings["googleApiKey"];
     }
 }
