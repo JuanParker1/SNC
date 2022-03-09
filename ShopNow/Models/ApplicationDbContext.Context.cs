@@ -111,8 +111,6 @@ namespace ShopNow.Models
         public virtual DbSet<Payment> Payments { get; set; }
         public virtual DbSet<ShopStaff> ShopStaffs { get; set; }
         public virtual DbSet<LocationDetail> LocationDetails { get; set; }
-        public virtual DbSet<TagCategory> TagCategories { get; set; }
-        public virtual DbSet<Order> Orders { get; set; }
     
         [DbFunction("sncEntities", "GetTableVAlueString")]
         public virtual IQueryable<GetTableVAlueString_Result> GetTableVAlueString(string key)

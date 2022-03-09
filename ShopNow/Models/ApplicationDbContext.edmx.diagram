@@ -89,8 +89,6 @@
         <EntityTypeShape EntityType="sncModel.Payment" Width="1.5" PointX="33.375" PointY="7.75" />
         <EntityTypeShape EntityType="sncModel.ShopStaff" Width="1.5" PointX="5.375" PointY="26.75" />
         <EntityTypeShape EntityType="sncModel.LocationDetail" Width="1.5" PointX="7.375" PointY="27.75" />
-        <EntityTypeShape EntityType="sncModel.TagCategory" Width="1.5" PointX="33.375" PointY="17.75" />
-        <EntityTypeShape EntityType="sncModel.Order" Width="1.5" PointX="31.375" PointY="21.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
