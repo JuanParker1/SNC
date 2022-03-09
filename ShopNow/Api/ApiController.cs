@@ -3762,14 +3762,30 @@ namespace ShopNow.Controllers
             if (model.CustomerId != 0)
             {
                 var customer = db.Customers.FirstOrDefault(i => i.Id == model.CustomerId);
-
                 product.UpdatedBy = customer.Name;
             }
             product.DateUpdated = DateTime.Now;
+            product.ShopPrice = CalculateShopPrice(model.MenuPrice,model.Price,product.ShopId);
             db.Entry(product).State = System.Data.Entity.EntityState.Modified;
             db.SaveChanges();
 
             return Json(new { message = "Successfully Updated Your Shop Image!", Details = product });
+        }
+
+        public double CalculateShopPrice(double menuprice, double sellingprice, int shopid)
+        {
+            double shopprice = 0;
+            var shopPricePercentage = db.Shops.FirstOrDefault(i => i.Id == shopid).ShopPricePercentage;
+            var percentage = ((menuprice - sellingprice) / menuprice) * 100;
+            if (shopPricePercentage != 0 && percentage == 0)
+                shopprice = (menuprice - (menuprice * (shopPricePercentage / 100)));
+            else if (shopPricePercentage != 0 && percentage != 0)
+                shopprice = (sellingprice - (sellingprice * (shopPricePercentage / 100)));
+            else if (shopPricePercentage == 0 && percentage == 0)
+                shopprice = menuprice;
+            else
+                shopprice = sellingprice;
+            return shopprice;
         }
 
         public JsonResult GetCustomerProfile(int customerId)
