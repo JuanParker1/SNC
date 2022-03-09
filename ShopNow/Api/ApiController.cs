@@ -7881,5 +7881,42 @@ namespace ShopNow.Controllers
 
             return Json(true, JsonRequestBehavior.AllowGet);
         }
+
+        public JsonResult UpdateTagCategoryType()
+        {
+            var tageCategoryList = db.TagCategories.Where(i=>i.Type != 0).ToList();
+            foreach (var item in tageCategoryList)
+            {
+                var category = db.Categories.FirstOrDefault(i => i.Id == item.CategoryId && i.Name == item.CategoryName);
+                if (category != null)
+                {
+                    var tagcategory = db.TagCategories.FirstOrDefault(i => i.Id == item.Id);
+                    tagcategory.Type = 1;
+                    db.Entry(tagcategory).State = System.Data.Entity.EntityState.Modified;
+                    db.SaveChanges();
+                }
+
+                var subcategory = db.SubCategories.FirstOrDefault(i => i.Id == item.CategoryId && i.Name == item.CategoryName);
+                if (subcategory != null)
+                {
+                    var tagcategory = db.TagCategories.FirstOrDefault(i => i.Id == item.Id);
+                    tagcategory.Type = 2;
+                    db.Entry(tagcategory).State = System.Data.Entity.EntityState.Modified;
+                    db.SaveChanges();
+                }
+
+                var subcategory2 = db.NextSubCategories.FirstOrDefault(i => i.Id == item.CategoryId && i.Name == item.CategoryName);
+                if (subcategory2 != null)
+                {
+                    var tagcategory = db.TagCategories.FirstOrDefault(i => i.Id == item.Id);
+                    tagcategory.Type = 3;
+                    db.Entry(tagcategory).State = System.Data.Entity.EntityState.Modified;
+                    db.SaveChanges();
+                }
+
+            }
+
+            return Json(true, JsonRequestBehavior.AllowGet);
+        }
     }
 }
