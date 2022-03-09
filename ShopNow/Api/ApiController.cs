@@ -7064,17 +7064,17 @@ namespace ShopNow.Controllers
             return Json(list, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult UpdateDeliveryBoyCashHandOverPayment(int orderid)
-        {
-            var order = db.Orders.FirstOrDefault(i => i.Id == orderid);
-            if (order != null)
-            {
-                order.DeliveryOrderPaymentStatus = 1;
-                db.Entry(order).State = System.Data.Entity.EntityState.Modified;
-                db.SaveChanges();
-            }
-            return Json(true, JsonRequestBehavior.AllowGet);
-        }
+        //public JsonResult UpdateDeliveryBoyCashHandOverPayment(int orderid)
+        //{
+        //    var order = db.Orders.FirstOrDefault(i => i.Id == orderid);
+        //    if (order != null)
+        //    {
+        //        order.DeliveryOrderPaymentStatus = 1;
+        //        db.Entry(order).State = System.Data.Entity.EntityState.Modified;
+        //        db.SaveChanges();
+        //    }
+        //    return Json(true, JsonRequestBehavior.AllowGet);
+        //}
 
         [HttpPost]
         public JsonResult SaveShopParcelDrop(ShopCreateParcelDropViewModel model)
