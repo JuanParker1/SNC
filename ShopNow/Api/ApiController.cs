@@ -7884,7 +7884,7 @@ namespace ShopNow.Controllers
 
         public JsonResult UpdateTagCategoryType()
         {
-            var tageCategoryList = db.TagCategories.Where(i=>i.Type != 0).ToList();
+            var tageCategoryList = db.TagCategories.Where(i=>i.Type == 0).ToList();
             foreach (var item in tageCategoryList)
             {
                 var category = db.Categories.FirstOrDefault(i => i.Id == item.CategoryId && i.Name == item.CategoryName);
