@@ -3604,26 +3604,27 @@ namespace ShopNow.Controllers
             {
                 if (shopCredits.PlatformCredit <= 100)
                 {
-                    return Json(new { message = "Recharge Immediately" }, JsonRequestBehavior.AllowGet);
+                    return Json(new { message = "Recharge Immediately",deliverycredit = shopCredits.DeliveryCredit }, JsonRequestBehavior.AllowGet);
                 }
                 else if (shopCredits.DeliveryCredit <= 150)
                 {
-                    return Json(new { message = "Recharge Immediately" }, JsonRequestBehavior.AllowGet);
+                    return Json(new { message = "Recharge Immediately", deliverycredit = shopCredits.DeliveryCredit }, JsonRequestBehavior.AllowGet);
                 }
                 else if (shopCredits.PlatformCredit <= 200 && shopCredits.PlatformCredit > 100)
                 {
-                    return Json(new { message = "Your Credit are Low !" }, JsonRequestBehavior.AllowGet);
+                    return Json(new { message = "Your Credit are Low !", deliverycredit = shopCredits.DeliveryCredit }, JsonRequestBehavior.AllowGet);
                 }
                 else if (shopCredits.DeliveryCredit >= 150 && shopCredits.DeliveryCredit <= 250)
                 {
-                    return Json(new { message = "Your Credits are Low !" }, JsonRequestBehavior.AllowGet);
+                    return Json(new { message = "Your Credits are Low !", deliverycredit = shopCredits.DeliveryCredit }, JsonRequestBehavior.AllowGet);
                 }
+                else
+                    return Json(new { message = "", deliverycredit = shopCredits.DeliveryCredit }, JsonRequestBehavior.AllowGet);
             }
             else
             {
-                return Json(new { message = "" }, JsonRequestBehavior.AllowGet);
+                return Json(new { message = "", deliverycredit = 0 }, JsonRequestBehavior.AllowGet);
             }
-            return Json(new { message = "" }, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
@@ -7876,6 +7877,43 @@ namespace ShopNow.Controllers
                         db.SaveChanges();
                     }
                 }
+            }
+
+            return Json(true, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult UpdateTagCategoryType()
+        {
+            var tageCategoryList = db.TagCategories.Where(i=>i.Type != 0).ToList();
+            foreach (var item in tageCategoryList)
+            {
+                var category = db.Categories.FirstOrDefault(i => i.Id == item.CategoryId && i.Name == item.CategoryName);
+                if (category != null)
+                {
+                    var tagcategory = db.TagCategories.FirstOrDefault(i => i.Id == item.Id);
+                    tagcategory.Type = 1;
+                    db.Entry(tagcategory).State = System.Data.Entity.EntityState.Modified;
+                    db.SaveChanges();
+                }
+
+                var subcategory = db.SubCategories.FirstOrDefault(i => i.Id == item.CategoryId && i.Name == item.CategoryName);
+                if (subcategory != null)
+                {
+                    var tagcategory = db.TagCategories.FirstOrDefault(i => i.Id == item.Id);
+                    tagcategory.Type = 2;
+                    db.Entry(tagcategory).State = System.Data.Entity.EntityState.Modified;
+                    db.SaveChanges();
+                }
+
+                var subcategory2 = db.NextSubCategories.FirstOrDefault(i => i.Id == item.CategoryId && i.Name == item.CategoryName);
+                if (subcategory2 != null)
+                {
+                    var tagcategory = db.TagCategories.FirstOrDefault(i => i.Id == item.Id);
+                    tagcategory.Type = 3;
+                    db.Entry(tagcategory).State = System.Data.Entity.EntityState.Modified;
+                    db.SaveChanges();
+                }
+
             }
 
             return Json(true, JsonRequestBehavior.AllowGet);
