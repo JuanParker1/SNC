@@ -3604,26 +3604,27 @@ namespace ShopNow.Controllers
             {
                 if (shopCredits.PlatformCredit <= 100)
                 {
-                    return Json(new { message = "Recharge Immediately" }, JsonRequestBehavior.AllowGet);
+                    return Json(new { message = "Recharge Immediately",deliverycredit = shopCredits.DeliveryCredit }, JsonRequestBehavior.AllowGet);
                 }
                 else if (shopCredits.DeliveryCredit <= 150)
                 {
-                    return Json(new { message = "Recharge Immediately" }, JsonRequestBehavior.AllowGet);
+                    return Json(new { message = "Recharge Immediately", deliverycredit = shopCredits.DeliveryCredit }, JsonRequestBehavior.AllowGet);
                 }
                 else if (shopCredits.PlatformCredit <= 200 && shopCredits.PlatformCredit > 100)
                 {
-                    return Json(new { message = "Your Credit are Low !" }, JsonRequestBehavior.AllowGet);
+                    return Json(new { message = "Your Credit are Low !", deliverycredit = shopCredits.DeliveryCredit }, JsonRequestBehavior.AllowGet);
                 }
                 else if (shopCredits.DeliveryCredit >= 150 && shopCredits.DeliveryCredit <= 250)
                 {
-                    return Json(new { message = "Your Credits are Low !" }, JsonRequestBehavior.AllowGet);
+                    return Json(new { message = "Your Credits are Low !", deliverycredit = shopCredits.DeliveryCredit }, JsonRequestBehavior.AllowGet);
                 }
+                else
+                    return Json(new { message = "", deliverycredit = shopCredits.DeliveryCredit }, JsonRequestBehavior.AllowGet);
             }
             else
             {
-                return Json(new { message = "" }, JsonRequestBehavior.AllowGet);
+                return Json(new { message = "", deliverycredit = 0 }, JsonRequestBehavior.AllowGet);
             }
-            return Json(new { message = "" }, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
