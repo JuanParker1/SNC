@@ -62,7 +62,7 @@ namespace ShopNow.Controllers
             db.CustomerGiftCards.Add(giftCard);
             db.SaveChanges();
 
-            var customer = db.Customers.FirstOrDefault(i => i.PhoneNumber == model.CustomerPhoneNumber);
+            var customer = db.Customers.FirstOrDefault(i => i.PhoneNumber == giftCard.CustomerPhoneNumber);
             string msg = "";
             if (!string.IsNullOrEmpty(customer.Name) || customer.Name.ToLower() != "null")
                 msg = $"Hi Dear {customer.Name}, your Snowch E-Gift Card details,Reference {giftCard.GiftCardCode}, Gift Card Code: {giftCard.CustomerPhoneNumber}, Expiry Date: {giftCard.ExpiryDate.ToString("dd-MMM-yyyy")}, Amount: {giftCard.Amount.ToString()}. T&C apply. Link <a href='http://playstore.snowch.in'>http://playstore.snowch.in</a> - Joyra";
@@ -72,7 +72,7 @@ namespace ShopNow.Controllers
             //Send exotel Message
             //Customer
             string from = "04448134440";
-            SendSMS.execute(from, model.CustomerPhoneNumber, msg);
+            SendSMS.execute(from, giftCard.CustomerPhoneNumber, msg);
             //Channel Partner
             if (!string.IsNullOrEmpty(giftCard.ChannelPartnerNumber))
                 SendSMS.execute(from, model.ChannelPartnerNumber, msg);
