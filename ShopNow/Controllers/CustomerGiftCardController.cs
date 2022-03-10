@@ -13,6 +13,15 @@ namespace ShopNow.Controllers
     {
         private sncEntities db = new sncEntities();
 
+        private const string _prefix = "";
+        private static string _referenceCode
+        {
+            get
+            {
+                return ShopNow.Helpers.DRC.Generate(_prefix);
+            }
+        }
+
         [AccessPolicy(PageCode = "SNCCGL306")]
         public ActionResult List()
         {
@@ -46,26 +55,27 @@ namespace ShopNow.Controllers
                 ChannelPartnerNumber = model.ChannelPartnerNumber,
                 DateEncoded = DateTime.Now,
                 GiftCardCode = Helpers.DRC.GenerateGiftCard("SNC-"),
+                ReferenceCode = _referenceCode,
                 ExpiryDate = model.ExpiryDate,
                 Status = 0
             };
             db.CustomerGiftCards.Add(giftCard);
             db.SaveChanges();
 
-            //var customer = db.Customers.FirstOrDefault(i => i.PhoneNumber == model.CustomerPhoneNumber);
-            //string msg = "";
-            //if (!string.IsNullOrEmpty(customer.Name) || customer.Name.ToLower() != "null")
-            //    msg = $"Hi Dear {customer.Name}, your Snowch Gift Card details, Code: {giftCard.GiftCardCode} only for your phone number {giftCard.CustomerPhoneNumber}, Expiry date : {giftCard.ExpiryDate.ToString("dd-MMM-yyyy")}, Amount: INR{giftCard.Amount}. T&C apply install now. <a href='http://playstore.snowch.in'>http://playstore.snowch.in</a> Thankyou - Joyra";
-            //else
-            //    msg = $"Hi Dear, your Snowch Gift Card details, Code: {giftCard.GiftCardCode} only for your phone number {giftCard.CustomerPhoneNumber}, Expiry date : {giftCard.ExpiryDate.ToString("dd-MMM-yyyy")}, Amount: INR{giftCard.Amount}. T&C apply install now. <a href='http://playstore.snowch.in'>http://playstore.snowch.in</a> Thankyou - Joyra";
+            var customer = db.Customers.FirstOrDefault(i => i.PhoneNumber == giftCard.CustomerPhoneNumber);
+            string msg = "";
+            if (!string.IsNullOrEmpty(customer.Name) || customer.Name.ToLower() != "null")
+                msg = $"Hi Dear {customer.Name}, your Snowch E-Gift Card details,Reference {giftCard.GiftCardCode}, Gift Card Code: {giftCard.CustomerPhoneNumber}, Expiry Date: {giftCard.ExpiryDate.ToString("dd-MMM-yyyy")}, Amount: {giftCard.Amount.ToString()}. T&C apply. Link <a href='http://playstore.snowch.in'>http://playstore.snowch.in</a> - Joyra";
+            else
+                msg = $"Hi Dear, your Snowch E-Gift Card details,Reference {giftCard.GiftCardCode}, Gift Card Code: {giftCard.CustomerPhoneNumber}, Expiry Date: {giftCard.ExpiryDate.ToString("dd-MMM-yyyy")}, Amount: {giftCard.Amount.ToString()}. T&C apply. Link <a href='http://playstore.snowch.in'>http://playstore.snowch.in</a> - Joyra";
 
-            ////Send exotel Message
-            ////Customer
-            //string from = "04448134440";
-            //SendSMS.execute(from, model.CustomerPhoneNumber, msg);
-            ////Channel Partner
-            //if (!string.IsNullOrEmpty(giftCard.ChannelPartnerNumber))
-            //    SendSMS.execute(from, model.ChannelPartnerNumber, msg);
+            //Send exotel Message
+            //Customer
+            string from = "04448134440";
+            SendSMS.execute(from, giftCard.CustomerPhoneNumber, msg);
+            //Channel Partner
+            if (!string.IsNullOrEmpty(giftCard.ChannelPartnerNumber))
+                SendSMS.execute(from, model.ChannelPartnerNumber, msg);
 
             return RedirectToAction("List");
         }

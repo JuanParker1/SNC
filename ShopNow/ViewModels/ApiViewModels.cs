@@ -109,6 +109,7 @@ namespace ShopNow.ViewModels
             public int OrderNumber { get; set; }
             // public double Amount { get; set; }
             public string CustomerPhoneNumber { get; set; }
+            public string CustomerAlternatePhoneNumber { get; set; }
             public string CustomerName { get; set; }
             public string DeliveryAddress { get; set; }
             public int Status { get; set; }
@@ -898,6 +899,9 @@ namespace ShopNow.ViewModels
         public double Distance { get; set; }
         public string Remarks { get; set; }
         public int OrderNumber { get; set; }
+        public DateTime? PickupDateTime { get; set; }
+        public DateTime? DeliveryDate { get; set; }
+        public int DeliverySlotType { get; set; }
     }
 
     public class RequestUpiPaymentLink
