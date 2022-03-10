@@ -10,6 +10,9 @@
     table > thead > tr > th:first-child {
         padding: 12px 6px;
     }
+    table > thead > tr > th:last-child {
+        padding: 12px 6px;
+    }
 </style>
 <div class="container-fluid">
     <div class="row">
@@ -27,6 +30,7 @@
                        columns.Add(b => b.Name).RenderValueAs(o => Html.ActionLink(o.Name, "Details", new { id = @ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id) }).ToHtmlString()).Titled("Name").Encoded(false).Sanitized(false).Filterable(true).SetWidth(15);
                      //columns.Add(b => b.Name).Titled("Name").RenderValueAs(o=> Html.ActionLink(o.Name, "Details", new { id = @ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id)}).ToHtmlString()).Encoded(false).Sanitized(false).Filterable(true).SetWidth(15);
                        columns.Add(b => b.PhoneNumber).Titled("Phone No").Filterable(true).SetWidth(10);
+                       columns.Add(b => b.AlternateNumber).Titled("Alternate No").Filterable(true).SetWidth(10);
                        columns.Add(b => b.Address).Titled("Address").Filterable(true).SetWidth(20);
                        columns.Add(b => b.DistrictName).Titled("District Name").Filterable(true).SetWidth(10);
                        columns.Add(b => b.AppInfo).Titled("App Info").Filterable(true).SetWidth(10);

@@ -25,7 +25,7 @@
                         <div class="row">
                             <div class="col-md-9">
                                 <div class="form-group row">
-                                    <div class="col-md-3 text-md-left">
+                                    <div class="col-md-3">
                                         <label class="col-form-label text-secondary font-weight-bold">Pickup Shop Name</label>
                                     </div>
                                     <div class="col-md-9">
@@ -42,7 +42,75 @@
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <div class="col-md-3 text-md-left">
+                                    <div class="col-md-3">
+                                        <label class="col-form-label text-secondary font-weight-bold">Pickup Date/Time</label>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div id="section-pickup-default">
+                                            <span style="vertical-align:-webkit-baseline-middle;">Immediate</span>
+                                            <a href="#" class="ml-2 pickup-change" style="vertical-align:-webkit-baseline-middle;"><small><u>Change</u></small></a>
+                                        </div>
+                                        <div id="section-pickup-change" class="d-none">
+                                            <input type="datetime-local" class="form-control d-inline w-75" name="PickupDateTime" id="PickupDateTime" />
+                                            <a href="#" class="ml-2 pickup-change"><small><u>Change</u></small></a>
+                                        </div>
+                                       
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-md-3">
+                                        <label class="col-form-label text-secondary font-weight-bold">Delivery Date</label>
+                                        @*<a href="#" id="delivery-change" class="ml-2"><small><u>Change</u></small></a>*@
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div id="section-delivery-default">
+                                            <span style="vertical-align:-webkit-baseline-middle;">Immediate</span>
+                                            <a href="#" class="ml-2 delivery-change" style="vertical-align:-webkit-baseline-middle;"><small><u>Change</u></small></a>
+                                        </div>
+                                        <div id="section-delivery-change" class="d-none">
+                                            <input type="date" class="form-control d-inline w-75" name="DeliveryDate" id="DeliveryDate" />
+                                            <a href="#" class="ml-2 delivery-change"><small><u>Change</u></small></a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="section-delivery-slot" class="form-group row d-none">
+                                    <div class="col-md-3">
+                                        <label class="col-form-label text-secondary font-weight-bold">Delivery Slot</label>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="custom-control custom-radio mb-2" id="deliveryslot-1">
+                                            <input type="radio" class="custom-control-input" id="radio-1" name="DeliverySlotType" value="1">
+                                            <label class="custom-control-label" for="radio-1">08:00 AM to 10:00 AM</label>
+                                        </div>
+                                        <div class="custom-control custom-radio mb-2" id="deliveryslot-2">
+                                            <input type="radio" class="custom-control-input" id="radio-2" name="DeliverySlotType" value="2">
+                                            <label class="custom-control-label" for="radio-2">10:00 AM to 12:00 PM</label>
+                                        </div>
+                                        <div class="custom-control custom-radio mb-2" id="deliveryslot-3">
+                                            <input type="radio" class="custom-control-input" id="radio-3" name="DeliverySlotType" value="3">
+                                            <label class="custom-control-label" for="radio-3">12:00 PM to 02:00 PM</label>
+                                        </div>
+                                        <div class="custom-control custom-radio mb-2" id="deliveryslot-4">
+                                            <input type="radio" class="custom-control-input" id="radio-4" name="DeliverySlotType" value="4">
+                                            <label class="custom-control-label" for="radio-4">02:00 PM to 04:00 PM</label>
+                                        </div>
+                                        <div class="custom-control custom-radio mb-2" id="deliveryslot-5">
+                                            <input type="radio" class="custom-control-input" id="radio-5" name="DeliverySlotType" value="5">
+                                            <label class="custom-control-label" for="radio-5">04:00 PM to 06:00 PM</label>
+                                        </div>
+                                        <div class="custom-control custom-radio mb-2" id="deliveryslot-6">
+                                            <input type="radio" class="custom-control-input" id="radio-6" name="DeliverySlotType" value="6">
+                                            <label class="custom-control-label" for="radio-6">06:00 PM to 08:00 PM</label>
+                                        </div>
+                                        <div class="custom-control custom-radio" id="deliveryslot-7">
+                                            <input type="radio" class="custom-control-input" id="radio-7" name="DeliverySlotType" value="7">
+                                            <label class="custom-control-label" for="radio-7">08:00 PM to 10:00 PM</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr />
+                                <div class="form-group row">
+                                    <div class="col-md-3">
                                         <label class="col-form-label text-secondary font-weight-bold">Customer Phone Number</label>
                                     </div>
                                     <div class="col-md-4">
@@ -50,7 +118,7 @@
                                     </div>
                                 </div>
                                 <div class="row form-group">
-                                    <div class="col-md-3 text-md-left">
+                                    <div class="col-md-3">
                                         <label class="col-form-label text-secondary font-weight-bold">Customer Address</label>
                                     </div>
                                     <div class="col-md-4 d-none" id="section-addressdropdown">
@@ -68,21 +136,8 @@
                                         <div class="mb-4" id="map" style="width: 100%; height: 250px;"></div>
                                     </div>
                                 </div>
-                                @*<div class="row form-group">
-                                        <div class="col-md-3 text-md-left">
-                                            <label class="col-form-label text-secondary font-weight-bold">Customer Address</label>
-                                        </div>
-                                        <div class="col-md-4 d-none" id="section-addressdropdown">
-                                            <select id="select-deliveryaddress" class="form-control"></select>
-                                        </div>
-                                        <div class="col-md-4" id="section-addresstext">
-                                            <input type="text" class="form-control" name="DeliveryAddress" id="DeliveryAddress" placeholder="Enter/Paste Drop Location" required />
-                                            <input type="hidden" name="DeliveryLatitude" id="DeliveryLatitude" />
-                                            <input type="hidden" name="DeliveryLongitude" id="DeliveryLongitude" />
-                                        </div>
-                                    </div>*@
                                 <div class="form-group row">
-                                    <div class="col-md-3 text-md-left">
+                                    <div class="col-md-3">
                                         <label class="col-form-label text-secondary font-weight-bold">Customer Name</label>
                                     </div>
                                     <div class="col-md-4">
@@ -90,7 +145,7 @@
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <div class="col-md-3 text-md-left">
+                                    <div class="col-md-3">
                                         <label class="col-form-label text-secondary font-weight-bold">Amount to receive</label>
                                     </div>
                                     <div class="col-md-4">
@@ -98,7 +153,7 @@
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <div class="col-md-3 text-md-left">
+                                    <div class="col-md-3">
                                         <label class="col-form-label text-secondary font-weight-bold">Delivery Credits</label>
                                     </div>
                                     <div class="col-md-4">
@@ -108,7 +163,7 @@
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <div class="col-md-3 text-md-left">
+                                    <div class="col-md-3">
                                         <label class="col-form-label text-secondary font-weight-bold">Remarks</label>
                                     </div>
                                     <div class="col-md-4">
@@ -143,6 +198,9 @@
     <script src="https://maps.googleapis.com/maps/api/js?key=@mapkey&libraries=places&callback=initMap" async defer></script>
     <script>
         $(document).ready(function () {
+            setMinAndMaxDeliveryDate();
+            setMinAndMaxPickupDate();
+
             $('#ShopId').select2({
                 placeholder: "Search Shop",
                 ajax: {
@@ -179,8 +237,8 @@
                             $('input[name="DeliveryAddress"]').val(e.params.data.text);
                             $('input[name="DeliveryLatitude"]').val(e.params.data.latitude);
                             $('input[name="DeliveryLongitude"]').val(e.params.data.longitude);
-                            
-                           // getDeliveryCharge();
+
+                            // getDeliveryCharge();
                             checkLocation();
                         });
                     }
@@ -190,7 +248,83 @@
                 });
             });
 
+            $('.pickup-change').on('click', function () {
+                $('#section-pickup-default').toggleClass('d-none');
+                $('#section-pickup-change').toggleClass('d-none');
+                $('#PickupDateTime').val('');
+            });
+
+            $('.delivery-change').on('click', function () {
+                $('#section-delivery-default').toggleClass('d-none');
+                $('#section-delivery-change').toggleClass('d-none');
+                $('#section-delivery-slot').addClass('d-none');
+                $('#DeliveryDate').val('');
+                //var dDate = $('#DeliveryDate').val();
+                //if (dDate)
+                //    $('#section-delivery-slot').toggleClass('d-none');
+            });
+
+            $('#DeliveryDate').on('change', function () {
+                var dDate = new Date(document.getElementById('DeliveryDate').value);
+                var today = new Date();
+                if (dDate) {
+                    if (dDate.getTime() > today.getTime()) {
+                        $('#section-delivery-slot').removeClass('d-none');
+                        $('#deliveryslot-1').removeClass('d-none');
+                        $('#deliveryslot-2').removeClass('d-none');
+                        $('#deliveryslot-3').removeClass('d-none');
+                        $('#deliveryslot-4').removeClass('d-none');
+                        $('#deliveryslot-5').removeClass('d-none');
+                        $('#deliveryslot-6').removeClass('d-none');
+                        $('#deliveryslot-7').removeClass('d-none');
+                    } else {
+                        var currentHour = today.getHours();
+                        $('#section-delivery-slot').removeClass('d-none');
+
+                        if (currentHour == 8 || currentHour ==9) {
+                            $('#deliveryslot-1').addClass('d-none');
+                        }
+                        else if (currentHour == 10 || currentHour == 11) {
+                            $('#deliveryslot-1').addClass('d-none');
+                            $('#deliveryslot-2').addClass('d-none');
+                        } else if (currentHour == 12 || currentHour == 13) {
+                            $('#deliveryslot-1').addClass('d-none');
+                            $('#deliveryslot-2').addClass('d-none');
+                            $('#deliveryslot-3').addClass('d-none');
+                        } else if (currentHour == 14 || currentHour == 15) {
+                            $('#deliveryslot-1').addClass('d-none');
+                            $('#deliveryslot-2').addClass('d-none');
+                            $('#deliveryslot-3').addClass('d-none');
+                            $('#deliveryslot-4').addClass('d-none');
+                        } else if (currentHour == 16 || currentHour == 17) {
+                            $('#deliveryslot-1').addClass('d-none');
+                            $('#deliveryslot-2').addClass('d-none');
+                            $('#deliveryslot-3').addClass('d-none');
+                            $('#deliveryslot-4').addClass('d-none');
+                            $('#deliveryslot-5').addClass('d-none');
+                        } else if (currentHour == 18 || currentHour == 19) {
+                            $('#deliveryslot-1').addClass('d-none');
+                            $('#deliveryslot-2').addClass('d-none');
+                            $('#deliveryslot-3').addClass('d-none');
+                            $('#deliveryslot-4').addClass('d-none');
+                            $('#deliveryslot-5').addClass('d-none');
+                            $('#deliveryslot-6').addClass('d-none');
+                        } else if (currentHour == 20 || currentHour == 21) {
+                            $('#deliveryslot-1').addClass('d-none');
+                            $('#deliveryslot-2').addClass('d-none');
+                            $('#deliveryslot-3').addClass('d-none');
+                            $('#deliveryslot-4').addClass('d-none');
+                            $('#deliveryslot-5').addClass('d-none');
+                            $('#deliveryslot-6').addClass('d-none');
+                            $('#deliveryslot-7').addClass('d-none');
+                        }
+                    }
+                }
+            });
+
         });
+
+      
 
         function getDeliveryCharge() {
             var PickupLatitude = parseFloat($("#PickupLatitude").val());
@@ -367,7 +501,35 @@
                 error: function () { alert('Something went wrong, try again later!'); },
             });
         }
-        
+
+        function setMinAndMaxPickupDate() {
+            var pickupDate = document.getElementById("PickupDateTime");
+            let minDate = new Date();
+            let maxDate = new Date();
+            maxDate.setDate(minDate.getDate() + 1);
+
+            pickupDate.min = minDate.toISOString().slice(0, 16);
+            pickupDate.max = maxDate.toISOString().slice(0, 16);
+            
+           
+        }
+
+        function setMinAndMaxDeliveryDate() {
+            var deliveryDate = document.getElementById("DeliveryDate");
+            let minDate = new Date();
+            let maxDate = new Date();
+            maxDate.setDate(minDate.getDate() + 1);
+
+            deliveryDate.min = formatDate(minDate);
+            deliveryDate.max = formatDate(maxDate);
+        }
+
+        function formatDate(date) {
+            let dd = String(date.getDate()).padStart(2, '0');
+            let mm = String(date.getMonth() + 1).padStart(2, '0');
+            let yyyy = date.getFullYear();
+            return `${yyyy}-${mm}-${dd}`;
+        }
 
     </script>
 }
