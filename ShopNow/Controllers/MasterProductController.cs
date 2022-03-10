@@ -200,43 +200,7 @@ namespace ShopNow.Controllers
 
             // Tag Category 
             SaveTagCategory(model.CategoryId, 0, 0, master.Id);
-            //if (model.CategoryId != 0)
-            //{
-            //    var mp = _db.TagCategories.Any(i => i.CategoryId == model.CategoryId && i.MasterProductId == master.Id);
-            //    if (!mp)
-            //    {
-            //        var tagcategory = new TagCategory
-            //        {
-            //            CategoryId = model.CategoryId,
-            //            CategoryName = _db.Categories.FirstOrDefault(i => i.Id == model.CategoryId)?.Name,
-            //            CreatedBy = "Admin",
-            //            UpdatedBy = "Admin",
-            //            DateUpdated = DateTime.Now,
-            //            DateEncoded = DateTime.Now,
-            //            MasterProductId = master.Id
-            //        };
-            //        _db.TagCategories.Add(tagcategory);
-            //        _db.SaveChanges();
-            //    }
-            //}
-            //if (model.TagCategoryId != null)
-            //{
-            //    foreach (var catId in model.TagCategoryId)
-            //    {
-            //        var tagcategory = new TagCategory
-            //        {
-            //            CategoryId = catId,
-            //            CategoryName = _db.Categories.FirstOrDefault(i => i.Id == catId)?.Name,
-            //            CreatedBy = "Admin",
-            //            UpdatedBy = "Admin",
-            //            DateUpdated = DateTime.Now,
-            //            DateEncoded = DateTime.Now,
-            //            MasterProductId = master.Id
-            //        };
-            //        _db.TagCategories.Add(tagcategory);
-            //        _db.SaveChanges();
-            //    }
-            //}
+           
             return View();
         }
 
@@ -609,6 +573,8 @@ namespace ShopNow.Controllers
                 return RedirectToAction("LogOut", "Home");
             }
             var user = ((Helpers.Sessions.User)Session["USER"]);
+            Session["AddTagCategory"] = null;
+            Session["AddTagCategory"] = new List<TagCategorySessionList>();
             ViewBag.Name = user.Name;
             return View();
         }
@@ -695,6 +661,9 @@ namespace ShopNow.Controllers
                 }
             }
             SaveKeywordData(master.Name);
+            // Tag Category 
+            SaveTagCategory(model.CategoryId, model.SubCategoryId, model.NextSubCategoryId, master.Id);
+
             return View();
         }
 
@@ -844,6 +813,8 @@ namespace ShopNow.Controllers
         public ActionResult MedicalCreate()
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
+            Session["AddTagCategory"] = null;
+            Session["AddTagCategory"] = new List<TagCategorySessionList>();
             ViewBag.Name = user.Name;
             return View();
         }
@@ -952,6 +923,8 @@ namespace ShopNow.Controllers
                 }
             }
             SaveKeywordDataWithCombination(master.Name,master.DrugCompoundDetailName);
+            // Tag Category 
+            SaveTagCategory(model.CategoryId, 0, 0, master.Id);
 
             return View();
         }
@@ -2593,14 +2566,16 @@ namespace ShopNow.Controllers
                 .Select(i => new
                 {
                     id = i.Id,
-                    text = i.Name
+                    text = i.Name,
+                    type=1
                 }).ToListAsync();
             var catArray = cat.Select(i => i.id).ToArray();
             var subcat = await _db.SubCategories.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0 && catArray.Contains(a.CategoryId))
                 .Select(i => new
                 {
                     id = i.Id,
-                    text = i.Name
+                    text = i.Name,
+                    type=2
                 }).ToListAsync();
 
             var subcatArray = subcat.Select(i => i.id).ToArray();
@@ -2608,7 +2583,8 @@ namespace ShopNow.Controllers
                .Select(i => new
                {
                    id = i.Id,
-                   text = i.Name
+                   text = i.Name,
+                   type=3
                }).ToListAsync();
 
             var catSubList = cat.Union(subcat).ToList();
@@ -2677,6 +2653,57 @@ namespace ShopNow.Controllers
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
+        public JsonResult AddFMCGCreateTagCategory(int id, int type)
+        {
+            List<TagCategorySessionList> tagCategoryList = Session["AddTagCategory"] as List<TagCategorySessionList> ?? new List<TagCategorySessionList>();
+            if (id != 0)
+            {
+                var tagCategory = new TagCategorySessionList
+                {
+                    Id = id,
+                    Type = type
+                };
+                tagCategoryList.Add(tagCategory);
+            }
+            Session["AddTagCategory"] = tagCategoryList;
+            return Json(true, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult RemoveFMCGCreateTagCategory(int id)
+        {
+            List<TagCategorySessionList> tagCategoryList = Session["AddTagCategory"] as List<TagCategorySessionList> ?? new List<TagCategorySessionList>();
+
+            if (tagCategoryList.Remove(tagCategoryList.SingleOrDefault(i => i.Id == id)))
+                Session["AddTagCategory"] = tagCategoryList;
+
+            return Json(true, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult AddMedicalCreateTagCategory(int id, int type)
+        {
+            List<TagCategorySessionList> tagCategoryList = Session["AddTagCategory"] as List<TagCategorySessionList> ?? new List<TagCategorySessionList>();
+            if (id != 0)
+            {
+                var tagCategory = new TagCategorySessionList
+                {
+                    Id = id,
+                    Type = type
+                };
+                tagCategoryList.Add(tagCategory);
+            }
+            Session["AddTagCategory"] = tagCategoryList;
+            return Json(true, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult RemoveMedicalCreateTagCategory(int id)
+        {
+            List<TagCategorySessionList> tagCategoryList = Session["AddTagCategory"] as List<TagCategorySessionList> ?? new List<TagCategorySessionList>();
+
+            if (tagCategoryList.Remove(tagCategoryList.SingleOrDefault(i => i.Id == id)))
+                Session["AddTagCategory"] = tagCategoryList;
+
+            return Json(true, JsonRequestBehavior.AllowGet);
+        }
         public void SaveTagCategory(int categoryId, int subCategoryId, int nextSubCategoryId, long masterId)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -2690,7 +2717,8 @@ namespace ShopNow.Controllers
                     UpdatedBy = user.Name,
                     DateUpdated = DateTime.Now,
                     DateEncoded = DateTime.Now,
-                    MasterProductId = masterId
+                    MasterProductId = masterId,
+                    Type = 1
                 };
                 _db.TagCategories.Add(tagcategory);
                 _db.SaveChanges();
@@ -2705,7 +2733,8 @@ namespace ShopNow.Controllers
                     UpdatedBy = user.Name,
                     DateUpdated = DateTime.Now,
                     DateEncoded = DateTime.Now,
-                    MasterProductId = masterId
+                    MasterProductId = masterId,
+                    Type = 2
                 };
                 _db.TagCategories.Add(tagcategory);
                 _db.SaveChanges();
@@ -2720,7 +2749,8 @@ namespace ShopNow.Controllers
                     UpdatedBy = user.Name,
                     DateUpdated = DateTime.Now,
                     DateEncoded = DateTime.Now,
-                    MasterProductId = masterId
+                    MasterProductId = masterId,
+                    Type = 3
                 };
                 _db.TagCategories.Add(tagcategory);
                 _db.SaveChanges();
@@ -2739,7 +2769,8 @@ namespace ShopNow.Controllers
                         UpdatedBy = user.Name,
                         DateUpdated = DateTime.Now,
                         DateEncoded = DateTime.Now,
-                        MasterProductId = masterId
+                        MasterProductId = masterId,
+                        Type = item.Type
                     };
                     _db.TagCategories.Add(tagcategory);
                     _db.SaveChanges();
