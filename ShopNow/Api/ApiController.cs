@@ -7119,7 +7119,10 @@ namespace ShopNow.Controllers
                         UpdatedBy = shop.Name,
                         PickupAddress = shop.Address,
                         PickupLatitude = shop.Latitude,
-                        PickupLongitude = shop.Longitude
+                        PickupLongitude = shop.Longitude,
+                        PickupDateTime = model.PickupDateTime,
+                        DeliveryDate = model.DeliveryDate,
+                        DeliverySlotType = model.DeliverySlotType
                     };
                     db.Orders.Add(order);
                     db.SaveChanges();
