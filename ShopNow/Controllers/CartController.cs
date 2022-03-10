@@ -43,7 +43,7 @@ namespace ShopNow.Controllers
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
-            model.ListItems = db.Orders.Where(i => (model.Status == 0 ? i.Status != 6 && i.Status != 7 && i.Status != 9 && i.Status != 10 && i.Status != 0 && i.Status != -1 : i.Status == model.Status) && (model.ShopId != 0 ? i.ShopId == model.ShopId : true) && (model.IsPickupDrop == true ? i.IsPickupDrop == true : true))
+            model.ListItems = db.Orders.Where(i => (model.Status == 0 ? i.Status != 6 && i.Status != 7 && i.Status != 9 && i.Status != 10 && i.Status != 0 && i.Status != -1 : i.Status == model.Status) && (model.ShopId != 0 ? i.ShopId == model.ShopId : true) && (model.IsPickupDrop == true ? i.IsPickupDrop == true : true) && (i.PickupDateTime != null ? SqlFunctions.DateDiff("minute", DateTime.Now, i.PickupDateTime) <= 30 : true))
                 .Join(db.Payments, c => c.OrderNumber, p => p.OrderNumber, (c, p) => new { c, p })
                 .Join(db.Shops.Where(i => (!string.IsNullOrEmpty(model.District) ? i.DistrictName == model.District : true)), c => c.c.ShopId, s => s.Id, (c, s) => new { c, s })
             .Select(i => new OrderListViewModel.ListItem
