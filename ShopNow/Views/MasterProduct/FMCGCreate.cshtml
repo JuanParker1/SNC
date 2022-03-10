@@ -55,6 +55,8 @@
                                         <label class="col-form-label"><strong class="text-secondary">ASIN / EAN</strong></label>
                                         <input id="ASIN" type="text" class="form-control" name="ASIN" />
                                     </div>
+                                </div>
+                                <div class="form-group row">
                                     <div class="col-md-3">
                                         <label class="col-form-label"><strong class="text-secondary">Category Name</strong></label>
                                         <select name="CategoryId" id="CategoryId" class="form-control"></select>
@@ -74,6 +76,8 @@
                                         <label class="col-form-label" for="GoogleTaxonomyCode"><strong class="text-secondary">Google Taxonomy Code</strong></label>
                                         <input id="GoogleTaxonomyCode" type="text" class="form-control" name="GoogleTaxonomyCode" />
                                     </div>
+                                </div>
+                                <div class="form-group row">
                                     <div class="col-md-3">
                                         <div class="form-group">
                                             <label class="col-form-label" for="Adscore"><strong class="text-secondary">Adscore</strong></label>
@@ -94,6 +98,8 @@
                                         <select name="PackageId" class="form-control" id="PackageId"></select>
                                         <input type="hidden" name="PackageName" id="PackageName" />
                                     </div>
+                                </div>
+                                <div class="form-group row">
                                     <div class="col-md-3">
                                         <label class="col-form-label" for="Weight"><strong class="text-secondary">Weight</strong></label>
                                         <input id="Weight" type="number" class="form-control" name="Weight" min="0" step="any" />
@@ -120,6 +126,15 @@
                                         <div class="form-group">
                                             <label class="col-form-label"><strong class="text-secondary">Size</strong></label>
                                             <input type="text" class="form-control" name="SizeLWH" id="SizeLWH" readonly />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label"><strong class="text-secondary">Tag Category</strong></label>
+                                            <select class="form-control" name="TagCategoryId" id="TagCategoryId" multiple></select>
+                                            <input type="hidden" name="TagCategoryName" />
                                         </div>
                                     </div>
                                 </div>
@@ -187,7 +202,7 @@
                                                     <input type="hidden" name="ImagePath3" id="ImagePath3" />
                                                 </div>
                                             </div>
-                                        </div> 
+                                        </div>
                                         <div class="row">
                                             <div class="col-md-12">
                                                 <input type="button" class="btn btn-danger btn-sm  d-none ml-4" id="btnRemove3" value="Remove" />
@@ -298,6 +313,20 @@
                 });
             $('#SubCategoryId').select2({});
             $('#NextSubCategoryId').select2({});
+
+            $('#TagCategoryId').select2({
+                placeholder: " Search Tag Category",
+                width: '100%',
+                ajax: {
+                    url: "/MasterProduct/GetFMCGTagCategorySelect2",
+                    delay: 250,
+                    dataType: 'json'
+                }
+            }).on('select2:select', function (e) {
+                $.getJSON('/MasterProduct/AddFMCGCreateTagCategory', { id: e.params.data.id, type: e.params.data.type }, function () { });
+            }).on('select2:unselect', function (e) {
+                $.getJSON('/MasterProduct/RemoveFMCGCreateTagCategory', { id: e.params.data.id }, function () { });
+            });
             //$('#SubCategoryIds').select2({
             //    placeholder: "Search I Sub Category",
             //    ajax: {

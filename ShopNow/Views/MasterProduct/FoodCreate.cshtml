@@ -419,7 +419,6 @@
     $(document).ready(function () {
         var errormsg = "@ViewBag.ErrorMessage";
         var msg = "@ViewBag.Message";
-        var tagcategory = [];
         if (errormsg != "") {
             swal("Notice!", errormsg, "warning")
         }
@@ -439,7 +438,7 @@
             });
 
         $('#TagCategoryId').select2({
-            placeholder: "Search Tag Category",
+            placeholder: " Search Tag Category",
             width: '100%',
             ajax: {
                 url: "/MasterProduct/GetDishTagCategorySelect2",
