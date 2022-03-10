@@ -115,6 +115,8 @@ namespace ShopNow.Controllers
                     model.ShopPhoneNumber = shop.PhoneNumber;
                     model.ShopImagePath = shop.ImagePath;
                     model.ShopAddress = shop.Address;
+                    model.ShopLatitude = shop.Latitude;
+                    model.ShopLongitude = shop.Longitude;
                 }
                 var customer = db.Customers.FirstOrDefault(i => i.Id == cp.CustomerId);
                 if (customer != null)
@@ -335,13 +337,10 @@ namespace ShopNow.Controllers
             return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult GetShopCharge(int prescriptionid,int shopid, double itemTotal, int customerid, double totalSize, double totalWeight)
+        public JsonResult GetShopCharge(int shopid, double itemTotal, int customerid, double totalSize, double totalWeight, double distance)
         {
-            var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             var model = new BillingDeliveryChargeViewModel();
             model = CommonHelpers.GetDeliveryCharge(shopid, totalSize, totalWeight);
-            var customerPrescription = db.CustomerPrescriptions.FirstOrDefault(i => i.Id == prescriptionid);
-
             var shop = db.Shops.Where(i => i.Id == shopid && i.Status == 0).FirstOrDefault();
             var ConvenientCharge = 0.0;
             var GrossDeliveryCharge = 0.0;
@@ -349,19 +348,13 @@ namespace ShopNow.Controllers
             var NetDeliveryCharge = 0.0;
             var PackingCharge = model.PackingCharge;
             if (itemTotal < model.ConvenientChargeRange)
-            {
                 ConvenientCharge = model.ConvenientCharge;
-            }
-            // Gross Delivery Charge
-            var Distance = (((Math.Acos(Math.Sin((shop.Latitude * Math.PI / 180)) * Math.Sin(((customerPrescription.Latitude ??0)* Math.PI / 180)) + Math.Cos((shop.Latitude * Math.PI / 180)) * Math.Cos(((customerPrescription.Latitude??0) * Math.PI / 180))
-                 * Math.Cos(((shop.Longitude - (customerPrescription.Longitude??0)) * Math.PI / 180)))) * 180 / Math.PI) * 60 * 1.1515 * 1609.344) / 1000;
-            if (Distance < 5)
-            {
+
+            if (distance < 5)
                 GrossDeliveryCharge = model.DeliveryChargeKM;
-            }
             else
             {
-                var dist = Distance - 5;
+                var dist = distance - 5;
                 var amount = dist * model.DeliveryChargeOneKM;
                 GrossDeliveryCharge = model.DeliveryChargeKM + amount;
             }
@@ -372,10 +365,8 @@ namespace ShopNow.Controllers
                 NetDeliveryCharge = 0;
             }
             else
-            {
                 NetDeliveryCharge = GrossDeliveryCharge - ShopDeliveryDiscount;
-            }
-            return Json(new { PackingCharge, ConvenientCharge, GrossDeliveryCharge, ShopDeliveryDiscount, NetDeliveryCharge, Distance }, JsonRequestBehavior.AllowGet);
+            return Json(new { PackingCharge, ConvenientCharge, GrossDeliveryCharge, ShopDeliveryDiscount, NetDeliveryCharge, distance }, JsonRequestBehavior.AllowGet);
         }
 
         //public JsonResult AddPrescriptionItem(PrescriptionItemAddViewModel model)

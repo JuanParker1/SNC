@@ -86,6 +86,8 @@ namespace ShopNow.ViewModels
         public string ShopPhoneNumber { get; set; }
         public string ShopImagePath { get; set; }
         public string ShopAddress { get; set; }
+        public double ShopLatitude { get; set; }
+        public double ShopLongitude { get; set; }
 
         // Order
         public int OrderNumber { get; set; }
