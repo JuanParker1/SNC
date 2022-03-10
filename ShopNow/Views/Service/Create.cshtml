@@ -44,28 +44,32 @@
                                 <div class="form-group row">
                                     <div class="col-md-3">
                                         <label class="col-form-label text-secondary font-weight-bold">Pickup Date/Time</label>
-                                        <a href="#" id="pickup-change" class="ml-2"><small><u>Change</u></small></a>
                                     </div>
                                     <div class="col-md-4">
                                         <div id="section-pickup-default">
                                             <span style="vertical-align:-webkit-baseline-middle;">Immediate</span>
+                                            <a href="#" class="ml-2 pickup-change" style="vertical-align:-webkit-baseline-middle;"><small><u>Change</u></small></a>
                                         </div>
                                         <div id="section-pickup-change" class="d-none">
-                                            <input type="datetime-local" class="form-control" name="PickupDateTime" id="PickupDateTime" />
+                                            <input type="datetime-local" class="form-control d-inline w-75" name="PickupDateTime" id="PickupDateTime" />
+                                            <a href="#" class="ml-2 pickup-change"><small><u>Change</u></small></a>
                                         </div>
+                                       
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <div class="col-md-3">
                                         <label class="col-form-label text-secondary font-weight-bold">Delivery Date</label>
-                                        <a href="#" id="delivery-change" class="ml-2"><small><u>Change</u></small></a>
+                                        @*<a href="#" id="delivery-change" class="ml-2"><small><u>Change</u></small></a>*@
                                     </div>
                                     <div class="col-md-4">
                                         <div id="section-delivery-default">
                                             <span style="vertical-align:-webkit-baseline-middle;">Immediate</span>
+                                            <a href="#" class="ml-2 delivery-change" style="vertical-align:-webkit-baseline-middle;"><small><u>Change</u></small></a>
                                         </div>
                                         <div id="section-delivery-change" class="d-none">
-                                            <input type="date" class="form-control" name="DeliveryDate" id="DeliveryDate" />
+                                            <input type="date" class="form-control d-inline w-75" name="DeliveryDate" id="DeliveryDate" />
+                                            <a href="#" class="ml-2 delivery-change"><small><u>Change</u></small></a>
                                         </div>
                                     </div>
                                 </div>
@@ -76,7 +80,7 @@
                                     <div class="col-md-4">
                                         <div class="custom-control custom-radio mb-2" id="deliveryslot-1">
                                             <input type="radio" class="custom-control-input" id="radio-1" name="DeliverySlotType" value="1">
-                                            <label class="custom-control-label" for="radio-1">8:00 AM to 10:00 AM</label>
+                                            <label class="custom-control-label" for="radio-1">08:00 AM to 10:00 AM</label>
                                         </div>
                                         <div class="custom-control custom-radio mb-2" id="deliveryslot-2">
                                             <input type="radio" class="custom-control-input" id="radio-2" name="DeliverySlotType" value="2">
@@ -84,23 +88,23 @@
                                         </div>
                                         <div class="custom-control custom-radio mb-2" id="deliveryslot-3">
                                             <input type="radio" class="custom-control-input" id="radio-3" name="DeliverySlotType" value="3">
-                                            <label class="custom-control-label" for="radio-3">12:00 PM to 2:00 PM</label>
+                                            <label class="custom-control-label" for="radio-3">12:00 PM to 02:00 PM</label>
                                         </div>
                                         <div class="custom-control custom-radio mb-2" id="deliveryslot-4">
                                             <input type="radio" class="custom-control-input" id="radio-4" name="DeliverySlotType" value="4">
-                                            <label class="custom-control-label" for="radio-4">2:00 PM to 4:00 PM</label>
+                                            <label class="custom-control-label" for="radio-4">02:00 PM to 04:00 PM</label>
                                         </div>
                                         <div class="custom-control custom-radio mb-2" id="deliveryslot-5">
                                             <input type="radio" class="custom-control-input" id="radio-5" name="DeliverySlotType" value="5">
-                                            <label class="custom-control-label" for="radio-5">4:00 PM to 6:00 PM</label>
+                                            <label class="custom-control-label" for="radio-5">04:00 PM to 06:00 PM</label>
                                         </div>
                                         <div class="custom-control custom-radio mb-2" id="deliveryslot-6">
                                             <input type="radio" class="custom-control-input" id="radio-6" name="DeliverySlotType" value="6">
-                                            <label class="custom-control-label" for="radio-6">6:00 PM to 8:00 PM</label>
+                                            <label class="custom-control-label" for="radio-6">06:00 PM to 08:00 PM</label>
                                         </div>
                                         <div class="custom-control custom-radio" id="deliveryslot-7">
                                             <input type="radio" class="custom-control-input" id="radio-7" name="DeliverySlotType" value="7">
-                                            <label class="custom-control-label" for="radio-7">8:00 PM to 10:00 PM</label>
+                                            <label class="custom-control-label" for="radio-7">08:00 PM to 10:00 PM</label>
                                         </div>
                                     </div>
                                 </div>
@@ -145,7 +149,7 @@
                                         <label class="col-form-label text-secondary font-weight-bold">Amount to receive</label>
                                     </div>
                                     <div class="col-md-4">
-                                        <input type="text" class="form-control" name="Amount" id="Amount" />
+                                        <input type="number" class="form-control" name="Amount" id="Amount" />
                                     </div>
                                 </div>
                                 <div class="form-group row">
@@ -244,13 +248,13 @@
                 });
             });
 
-            $('#pickup-change').on('click', function () {
+            $('.pickup-change').on('click', function () {
                 $('#section-pickup-default').toggleClass('d-none');
                 $('#section-pickup-change').toggleClass('d-none');
                 $('#PickupDateTime').val('');
             });
 
-            $('#delivery-change').on('click', function () {
+            $('.delivery-change').on('click', function () {
                 $('#section-delivery-default').toggleClass('d-none');
                 $('#section-delivery-change').toggleClass('d-none');
                 $('#section-delivery-slot').addClass('d-none');

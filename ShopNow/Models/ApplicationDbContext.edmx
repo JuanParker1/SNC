@@ -411,6 +411,7 @@
           <Property Name="CustomerId" Type="int" Nullable="false" />
           <Property Name="CustomerPhoneNumber" Type="nvarchar" MaxLength="50" />
           <Property Name="ChannelPartnerNumber" Type="nvarchar" MaxLength="50" />
+          <Property Name="ReferenceCode" Type="nvarchar" MaxLength="50" />
           <Property Name="GiftCardCode" Type="nvarchar" MaxLength="50" />
           <Property Name="Amount" Type="float" Nullable="false" />
           <Property Name="ExpiryDate" Type="datetime" Nullable="false" />
@@ -3019,7 +3020,6 @@
           <EntitySet Name="Products" EntityType="sncModel.Product" />
           <EntitySet Name="CustomerAppInfoes" EntityType="sncModel.CustomerAppInfo" />
           <EntitySet Name="CustomerDeviceInfoes" EntityType="sncModel.CustomerDeviceInfo" />
-          <EntitySet Name="CustomerGiftCards" EntityType="sncModel.CustomerGiftCard" />
           <FunctionImport Name="GetAllSearchResultCount" ReturnType="Collection(Int32)">
             <Parameter Name="Longitude" Mode="In" Type="Double" />
             <Parameter Name="Latitude" Mode="In" Type="Double" />
@@ -3066,6 +3066,7 @@
           <EntitySet Name="LocationDetails" EntityType="sncModel.LocationDetail" />
           <EntitySet Name="Orders" EntityType="sncModel.Order" />
           <EntitySet Name="TagCategories" EntityType="sncModel.TagCategory" />
+          <EntitySet Name="CustomerGiftCards" EntityType="sncModel.CustomerGiftCard" />
         </EntityContainer>
         <ComplexType Name="GetDEliveryBoyList_Result">
           <Property Type="Int32" Name="Id" Nullable="false" />
@@ -3255,21 +3256,6 @@
           <Property Name="Manufacturer" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
           <Property Name="DateEncoded" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="DateUpdated" Type="DateTime" Nullable="false" Precision="3" />
-        </EntityType>
-        <EntityType Name="CustomerGiftCard">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="CustomerId" Type="Int32" Nullable="false" />
-          <Property Name="CustomerPhoneNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="ChannelPartnerNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="GiftCardCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Amount" Type="Double" Nullable="false" />
-          <Property Name="ExpiryDate" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="Status" Type="Int32" Nullable="false" />
-          <Property Name="DateEncoded" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="CreatedBy" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="CustomerPrescription">
           <Key>
@@ -3784,6 +3770,22 @@
           <Property Name="UpdatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="DateEncoded" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="DateUpdated" Type="DateTime" Nullable="false" Precision="3" />
+        </EntityType>
+        <EntityType Name="CustomerGiftCard">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CustomerId" Type="Int32" Nullable="false" />
+          <Property Name="CustomerPhoneNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ChannelPartnerNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ReferenceCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="GiftCardCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Amount" Type="Double" Nullable="false" />
+          <Property Name="ExpiryDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Status" Type="Int32" Nullable="false" />
+          <Property Name="DateEncoded" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CreatedBy" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -5107,22 +5109,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="CustomerGiftCards">
-            <EntityTypeMapping TypeName="sncModel.CustomerGiftCard">
-              <MappingFragment StoreEntitySet="CustomerGiftCards">
-                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
-                <ScalarProperty Name="DateEncoded" ColumnName="DateEncoded" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="ExpiryDate" ColumnName="ExpiryDate" />
-                <ScalarProperty Name="Amount" ColumnName="Amount" />
-                <ScalarProperty Name="GiftCardCode" ColumnName="GiftCardCode" />
-                <ScalarProperty Name="ChannelPartnerNumber" ColumnName="ChannelPartnerNumber" />
-                <ScalarProperty Name="CustomerPhoneNumber" ColumnName="CustomerPhoneNumber" />
-                <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="GetAllSearchResultCount" FunctionName="sncModel.Store.GetAllSearchResultCount" />
           <FunctionImportMapping FunctionImportName="GetAllSearchResult" FunctionName="sncModel.Store.GetAllSearchResult" />
           <EntitySetMapping Name="CustomerPrescriptions">
@@ -5663,6 +5649,23 @@
                 <ScalarProperty Name="CategoryName" ColumnName="CategoryName" />
                 <ScalarProperty Name="CategoryId" ColumnName="CategoryId" />
                 <ScalarProperty Name="MasterProductId" ColumnName="MasterProductId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CustomerGiftCards">
+            <EntityTypeMapping TypeName="sncModel.CustomerGiftCard">
+              <MappingFragment StoreEntitySet="CustomerGiftCards">
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="DateEncoded" ColumnName="DateEncoded" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="ExpiryDate" ColumnName="ExpiryDate" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="GiftCardCode" ColumnName="GiftCardCode" />
+                <ScalarProperty Name="ReferenceCode" ColumnName="ReferenceCode" />
+                <ScalarProperty Name="ChannelPartnerNumber" ColumnName="ChannelPartnerNumber" />
+                <ScalarProperty Name="CustomerPhoneNumber" ColumnName="CustomerPhoneNumber" />
+                <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

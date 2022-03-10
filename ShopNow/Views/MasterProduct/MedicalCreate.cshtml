@@ -152,6 +152,11 @@
                                             <input id="GoogleTaxonomyCode" type="text" class="form-control" name="GoogleTaxonomyCode" />
                                         </div>
                                     </div>
+                                    <div class="col-md-4">
+                                            <label class="control-label"><strong class="text-secondary">Tag Category</strong></label>
+                                            <select class="form-control" name="TagCategoryId" id="TagCategoryId" multiple></select>
+                                            <input type="hidden" name="TagCategoryName" />
+                                    </div>
                                 </div>
                             </div>
                             <div class="col-md-12">
@@ -315,6 +320,20 @@
                 }
             }).on('select2:select', function (e) {
                 $('input[name="CategoryName"]').val(e.params.data.text);
+            });
+
+            $('#TagCategoryId').select2({
+                placeholder: " Search Tag Category",
+                width: '100%',
+                ajax: {
+                    url: "/MasterProduct/GetMedicalTagCategorySelect2",
+                    delay: 250,
+                    dataType: 'json'
+                }
+            }).on('select2:select', function (e) {
+                $.getJSON('/MasterProduct/AddMedicalCreateTagCategory', { id: e.params.data.id, type: e.params.data.type }, function () { });
+            }).on('select2:unselect', function (e) {
+                $.getJSON('/MasterProduct/RemoveMedicalCreateTagCategory', { id: e.params.data.id }, function () { });
             });
 
             $('#MeasurementUnitId').select2({

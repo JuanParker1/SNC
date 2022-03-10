@@ -78,6 +78,10 @@ namespace ShopNow.ViewModels
         public double PickupLatitude { get; set; }
         public double PickupLongitude { get; set; }
 
+        public DateTime? PickupDateTime { get; set; }
+        public DateTime? DeliveryDate { get; set; }
+        public int DeliverySlotType { get; set; }
+
         public List<ImagePathList> ImagePathLists { get; set; }
         public class ImagePathList
         {

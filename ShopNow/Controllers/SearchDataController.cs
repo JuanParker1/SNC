@@ -247,7 +247,7 @@ namespace ShopNow.Controllers
             searchData.Status = 2;
             db.Entry(searchData).State = EntityState.Modified;
             db.SaveChanges();
-            return RedirectToAction("List", new { StartDate = startDate, EndDate = endDate });
+            return RedirectToAction("ZeroCountList", new { StartDate = startDate, EndDate = endDate });
         }
 
         public async Task<JsonResult> GetKeywordSelect2(string q = "")

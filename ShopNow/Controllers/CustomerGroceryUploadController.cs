@@ -138,6 +138,8 @@ namespace ShopNow.Controllers
                     model.ShopPhoneNumber = shop.PhoneNumber;
                     model.ShopImagePath = shop.ImagePath;
                     model.ShopAddress = shop.Address;
+                    model.ShopLatitude = shop.Latitude;
+                    model.ShopLongitude = shop.Longitude;
                 }
                 var customer = db.Customers.FirstOrDefault(i => i.Id == cg.CustomerId);
                 if (customer != null)
@@ -331,12 +333,10 @@ namespace ShopNow.Controllers
             return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult GetShopCharge(int shopid, double itemTotal, int customerid, double totalSize, double totalWeight)
+        public JsonResult GetShopCharge(int shopid, double itemTotal, int customerid, double totalSize, double totalWeight, double distance)
         {
-            var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             var model = new BillingDeliveryChargeViewModel();
             model = CommonHelpers.GetDeliveryCharge(shopid, totalSize, totalWeight);
-            var customerGrocery = db.CustomerGroceryUploads.FirstOrDefault(i => i.CustomerId == customerid);
 
             var shop = db.Shops.Where(i => i.Id == shopid && i.Status == 0).FirstOrDefault();
             var ConvenientCharge = 0.0;
@@ -345,19 +345,12 @@ namespace ShopNow.Controllers
             var NetDeliveryCharge = 0.0;
             var PackingCharge = model.PackingCharge;
             if (itemTotal < model.ConvenientChargeRange)
-            {
                 ConvenientCharge = model.ConvenientCharge;
-            }
-            // Gross Delivery Charge
-            var Distance = (((Math.Acos(Math.Sin((shop.Latitude * Math.PI / 180)) * Math.Sin(((customerGrocery.Latitude ?? 0) * Math.PI / 180)) + Math.Cos((shop.Latitude * Math.PI / 180)) * Math.Cos(((customerGrocery.Latitude ?? 0) * Math.PI / 180))
-                 * Math.Cos(((shop.Longitude - (customerGrocery.Longitude ?? 0)) * Math.PI / 180)))) * 180 / Math.PI) * 60 * 1.1515 * 1609.344) / 1000;
-            if (Distance < 5)
-            {
+            if (distance < 5)
                 GrossDeliveryCharge = model.DeliveryChargeKM;
-            }
             else
             {
-                var dist = Distance - 5;
+                var dist = distance - 5;
                 var amount = dist * model.DeliveryChargeOneKM;
                 GrossDeliveryCharge = model.DeliveryChargeKM + amount;
             }
@@ -368,53 +361,10 @@ namespace ShopNow.Controllers
                 NetDeliveryCharge = 0;
             }
             else
-            {
                 NetDeliveryCharge = GrossDeliveryCharge - ShopDeliveryDiscount;
-            }
-            return Json(new { PackingCharge, ConvenientCharge, GrossDeliveryCharge, ShopDeliveryDiscount, NetDeliveryCharge, Distance }, JsonRequestBehavior.AllowGet);
+            return Json(new { PackingCharge, ConvenientCharge, GrossDeliveryCharge, ShopDeliveryDiscount, NetDeliveryCharge, distance }, JsonRequestBehavior.AllowGet);
         }
-
-        //public JsonResult AddPrescriptionItem(PrescriptionItemAddViewModel model)
-        //{
-        //    var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
-        //    foreach (var item in model.ListItems)
-        //    {
-        //        var prescriptionItem = new CustomerPrescriptionItem
-        //        {
-        //            CreatedBy = user.Name,
-        //            CustomerPrescriptionId = model.PrescriptionId,
-        //            DateEncoded = DateTime.Now,
-        //            ProductId = item.ProductId,
-        //            Quantity = item.Quantity,
-        //            Status = 0
-        //        };
-        //        db.CustomerPrescriptionItems.Add(prescriptionItem);
-        //        db.SaveChanges();
-        //    }
-
-        //    var prescription = db.CustomerPrescriptions.FirstOrDefault(i => i.Id == model.PrescriptionId);
-        //    if (prescription != null)
-        //    {
-        //        prescription.Status = 1;
-        //        db.Entry(prescription).State = System.Data.Entity.EntityState.Modified;
-        //        db.SaveChanges();
-        //    }
-        //    return Json(true, JsonRequestBehavior.AllowGet);
-        //}
-
-        //[HttpGet]
-        //public JsonResult GetItemList(int id)
-        //{
-        //    var list = db.CustomerPrescriptionItems.Where(i => i.CustomerPrescriptionId == id)
-        //        .Join(db.Products, cp => cp.ProductId, p => p.Id, (cp, p) => new { cp, p })
-        //        .Join(db.MasterProducts, cp => cp.p.MasterProductId, m => m.Id, (cp, m) => new { cp, m })
-        //        .Select(i => new
-        //        {
-        //            ProductName = i.m.Name,
-        //            Quantity = i.cp.cp.Quantity
-        //        }).ToList();
-        //    return Json(list, JsonRequestBehavior.AllowGet);
-        //}
+        
 
         public JsonResult Reject(int Id)
         {

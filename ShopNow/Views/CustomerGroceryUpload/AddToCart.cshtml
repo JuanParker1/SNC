@@ -1,6 +1,7 @@
 ﻿@model ShopNow.ViewModels.GroceryAddToCartViewModel
 @{
     ViewBag.Title = "AddToCart";
+    var mapkey = Session["googleMApkey"];
 }
 <title>ShopNow | @ViewBag.Title</title>
 <div class="container-fluid mb-5">
@@ -17,6 +18,8 @@
         <input type="hidden" name="CustomerName" id="CustomerName" value="@Model.CustomerName" />
         <input type="hidden" name="Latitude" id="Latitude" value="@Model.Latitude" />
         <input type="hidden" name="Longitude" id="Longitude" value="@Model.Longitude" />
+        <input type="hidden" name="ShopLatitude" id="ShopLatitude" value="@Model.ShopLatitude" />
+        <input type="hidden" name="ShopLongitude" id="ShopLongitude" value="@Model.ShopLongitude" />
         <input type="hidden" name="DeliveryAddress" id="DeliveryAddress" value="@Model.DeliveryAddress" />
         <div class="col-md-12 mt-1">
             <div class="card shadow">
@@ -202,6 +205,7 @@
     <link href="~/Content/select2/select2.custom.css" rel="stylesheet" />
     <script src="~/Scripts/sweetalert/sweetalert.min.js"></script>
     <link href="~/Content/sweetalert/sweetalert.css" rel="stylesheet" />
+    <script src="https://maps.googleapis.com/maps/api/js?key=@mapkey&libraries=places" async defer></script>
     <!--Select2 End-->
     <script>
         function printDiv(divName) {
@@ -212,6 +216,8 @@
             w.close();
         }
         $(document).ready(function () {
+            calculateRoadDistance();
+
             var shopid = $("#ShopId").val();
             var customerid = $("#CustomerId").val();
             $('#select-product').select2({
@@ -301,15 +307,15 @@
                         totalSize += parseFloat(size);
 
                         $(".ItemTotal").text(itemTotal.toFixed(2));
-                        $.getJSON("/CustomerGroceryUpload/GetShopCharge", { shopid: shopid, itemTotal: itemTotal, customerid: customerid, totalSize: totalSize, totalWeight: totalWeight }, function (data) {
+                        $.getJSON("/CustomerGroceryUpload/GetShopCharge", { shopid: shopid, itemTotal: itemTotal, customerid: customerid, totalSize: totalSize, totalWeight: totalWeight, distance: $('#Distance').val() }, function (data) {
                             $("#PackingCharge").val(data.PackingCharge);
                             $(".PackingCharge").text(data.PackingCharge);
                             $("#ConvenientCharge").val(data.ConvenientCharge);
                             $(".ConvenientCharge").text(data.ConvenientCharge);
                             $("#GrossDeliveryCharge").val(data.GrossDeliveryCharge);
                             $(".GrossDeliveryCharge").text(data.GrossDeliveryCharge.toFixed(2));
-                            $(".Distance").text(' (' + data.Distance.toFixed(2) + 'Km)');
-                            $("#Distance").val(data.Distance.toFixed(2));
+                            $(".Distance").text(' (' + data.distance.toFixed(2) + 'Km)');
+                            $("#Distance").val(data.distance.toFixed(2));
                             $("#ShopDeliveryDiscount").val(data.ShopDeliveryDiscount);
                             $(".ShopDeliveryDiscount").text(data.ShopDeliveryDiscount.toFixed(2));
                             $("#NetDeliveryCharge").val(data.NetDeliveryCharge);
@@ -343,15 +349,15 @@
                 totalWeight -= parseFloat(itemWeight);
                 totalSize -= parseFloat(itemSize);
                 $(".ItemTotal").text(itemTotal.toFixed(2));
-                $.getJSON("/CustomerGroceryUpload/GetShopCharge", { shopid: shopid, itemTotal: itemTotal, customerid: customerid, totalSize: totalSize, totalWeight: totalWeight }, function (data) {
+                $.getJSON("/CustomerGroceryUpload/GetShopCharge", { shopid: shopid, itemTotal: itemTotal, customerid: customerid, totalSize: totalSize, totalWeight: totalWeight, distance: $('#Distance').val() }, function (data) {
                     $("#PackingCharge").val(data.PackingCharge);
                     $(".PackingCharge").text(data.PackingCharge);
                     $("#ConvenientCharge").val(data.ConvenientCharge);
                     $(".ConvenientCharge").text(data.ConvenientCharge);
                     $("#GrossDeliveryCharge").val(data.GrossDeliveryCharge);
                     $(".GrossDeliveryCharge").text(data.GrossDeliveryCharge.toFixed(2));
-                    $(".Distance").text(' (' + data.Distance.toFixed(2) + 'Km)');
-                    $("#Distance").val(data.Distance.toFixed(2));
+                    $(".Distance").text(' (' + data.distance.toFixed(2) + 'Km)');
+                    $("#Distance").val(data.distance.toFixed(2));
                     $("#ShopDeliveryDiscount").val(data.ShopDeliveryDiscount);
                     $(".ShopDeliveryDiscount").text(data.ShopDeliveryDiscount.toFixed(2));
                     $("#NetDeliveryCharge").val(data.NetDeliveryCharge);
@@ -384,7 +390,7 @@
                         GroceryId: $('#GroceryId').val(),
                         ListItems: itemArray,
                     };
-                    $('#btn-save').attr("disabled",true);
+                    $('#btn-save').attr("disabled", true);
                     $.post('/CustomerGroceryUpload/AddToCart', model, function (data) {
                         if (data) {
                             // swal('Success', 'Order Placed successfully', 'success');
@@ -430,5 +436,53 @@
                 window.open($(this).attr('src'));
             });
         });
+
+        function calculateRoadDistance() {
+            $.ajax({
+                url: '/Service/GetLocationDetails?sourceLatitude=' + $('[name="ShopLatitude"]').val() + '&sourceLongitude=' + $('[name="ShopLongitude"]').val() + '&destinationLatitude=' + $('#Latitude').val() + '&destinationLongitude=' + $('#Longitude').val() + '',
+                type: 'GET',
+                dataType: 'json',
+                success: function (data) {
+                    if (data) {
+                        $('#Distance').val(data.Distance);
+                    } else {
+                        var service = new google.maps.DistanceMatrixService();
+                        const origin = { lat: parseFloat($('[name="ShopLatitude"]').val()), lng: parseFloat($('[name="ShopLongitude"]').val()) };
+                        const dest = { lat: parseFloat($('#Latitude').val()), lng: parseFloat($('#Longitude').val()) };
+                        const request = {
+                            origins: [origin],
+                            destinations: [dest],
+                            travelMode: google.maps.TravelMode.DRIVING,
+                        };
+                        service.getDistanceMatrix(request).then((response) => {
+                            var distance = (response.rows[0].elements[0].distance.value / 1000).toFixed(2);
+                            var duration = (response.rows[0].elements[0].duration.value / 60).toFixed(2);
+                            $('#Distance').val(distance);
+                            saveLocation(origin.lat, origin.lng, dest.lat, dest.lng, distance, duration);
+                        });
+                    }
+                },
+                error: function () { alert('Something went wrong, try again later!'); },
+            });
+        }
+
+        function saveLocation(srclat, srclng, deslat, deslng, dist, dur) {
+            var locationValues = {
+                SourceLatitude: srclat,
+                SourceLontitude: srclng,
+                DestinationLatitude: deslat,
+                DestinationLontitude: deslng,
+                Distance: dist,
+                Duration: dur
+            };
+            $.ajax({
+                url: '/Service/SaveLocationDetails',
+                type: 'POST',
+                dataType: 'json',
+                data: locationValues,
+                success: function () { },
+                error: function () { alert('Something went wrong, try again later!'); },
+            });
+        }
     </script>
 }

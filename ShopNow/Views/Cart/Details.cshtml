@@ -359,6 +359,52 @@
                         <label class="mr-3">Address:</label>
                         <b>@Model.ShopAddress</b>
                     </div>
+                    @if (Model.PickupDateTime != null)
+                    {
+                        <div class="d-flex">
+                            <label class="mr-3">Pickup Date/Time:</label>
+                            <b>@Model.PickupDateTime.Value.ToString("dd-MMM-yyyy HH:mm tt")</b>
+                        </div>
+                    }
+                    @if (Model.DeliveryDate != null)
+                    {
+                        <div class="d-flex">
+                            <label class="mr-3">Delivery Date:</label>
+                            <b>@Model.DeliveryDate.Value.ToString("dd-MMM-yyyy")</b>
+                            @if (Model.DeliverySlotType == 1)
+                            {
+                                <b class="ml-1">(08:00 AM to 10:00 AM)</b>
+                            }
+                            else if (Model.DeliverySlotType == 2)
+                            {
+                                <b class="ml-1">(10:00 AM to 12:00 PM)</b>
+                            }
+                            else if (Model.DeliverySlotType == 3)
+                            {
+                                <b class="ml-1">(12:00 PM to 02:00 PM)</b>
+                            }
+                            else if (Model.DeliverySlotType == 4)
+                            {
+                                <b class="ml-1">(02:00 PM to 04:00 PM)</b>
+                            }
+                            else if (Model.DeliverySlotType == 5)
+                            {
+                                <b class="ml-1">(04:00 PM to 06:00 PM)</b>
+                            }
+                            else if (Model.DeliverySlotType == 6)
+                            {
+                                <b class="ml-1">(06:00 PM to 08:00 PM)</b>
+                            }
+                            else if (Model.DeliverySlotType == 7)
+                            {
+                                <b class="ml-1">(08:00 PM to 10:00 PM)</b>
+                            }
+                            else
+                            {
+                                <b class="ml-1">N/A</b>
+                            }
+                        </div>
+                    }
                 </div>
             </div>
         </div>

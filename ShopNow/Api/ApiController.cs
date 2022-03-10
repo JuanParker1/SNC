@@ -1792,90 +1792,90 @@ namespace ShopNow.Controllers
         {
             db.Configuration.ProxyCreationEnabled = false;
             var model = new TodayDeliveryListViewModel();
-            model.ResturantList = db.Orders.Where(i => (i.Status == 4 || i.Status == 5) && i.DeliveryBoyPhoneNumber == phoneNumber /*&& DbFunctions.TruncateTime(i.DateEncoded) == DbFunctions.TruncateTime(DateTime.Now)*/)
-                .Join(db.Shops.Where(i => i.ShopCategoryId == 1), o => o.ShopId, s => s.Id, (o, s) => new { o, s })
-                .Join(db.Payments, o => o.o.OrderNumber, p => p.OrderNumber, (o, p) => new { o, p })
-                .Join(db.DeliveryBoys, o => o.o.o.DeliveryBoyId, d => d.Id, (o, d) => new { o, d })
-                .GroupJoin(db.OrderItems, o => o.o.o.o.Id, oi => oi.OrderId, (o, oi) => new { o, oi })
-                .Select(i => new TodayDeliveryListViewModel.OrderList
-                {
-                    CustomerLatitude = i.o.o.o.o.Latitude,
-                    CustomerLongitude = i.o.o.o.o.Longitude,
-                    CustomerName = i.o.o.o.o.CustomerName,
-                    CustomerPhoneNumber = i.o.o.o.o.CustomerPhoneNumber,
-                    DateEncoded = i.o.o.o.o.DateEncoded,
-                    DeliveryAddress = i.o.o.o.o.DeliveryAddress,
-                    // OnWork = i.o.d.OnWork, 
-                    OnWork = i.o.o.o.o.DeliveryBoyOnWork,
-                    OrderNumber = i.o.o.o.o.OrderNumber,
-                    PaymentMode = i.o.o.p.PaymentMode,
-                    RefundAmount = i.o.o.p.RefundAmount,
-                    RefundRemark = i.o.o.p.RefundRemark,
-                    ShopAddress = i.o.o.o.s.Address,
-                    ShopLatitude = i.o.o.o.s.Latitude,
-                    ShopLongitude = i.o.o.o.s.Longitude,
-                    ShopName = i.o.o.o.s.Name,
-                    ShopPhoneNumber = i.o.o.o.o.ShopPhoneNumber,
-                    Status = i.o.o.o.o.Status,
-                    Convinenientcharge = i.o.o.o.o.Convinenientcharge,
-                    DeliveryCharge = i.o.o.o.o.DeliveryCharge,
-                    NetDeliveryCharge = i.o.o.o.o.NetDeliveryCharge,
-                    Packingcharge = i.o.o.o.o.Packingcharge,
-                    ShopDeliveryDiscount = i.o.o.o.o.ShopDeliveryDiscount,
-                    TotalPrice = i.o.o.o.o.TotalPrice,
-                    TotalProduct = i.o.o.o.o.TotalProduct,
-                    TotalQuantity = i.o.o.o.o.TotalQuantity,
-                    NetTotal = i.o.o.o.o.IsPickupDrop == true ? i.o.o.o.o.TotalPrice : i.o.o.o.o.NetTotal, //for pickupdrop don't show delivery charge in total
-                    WalletAmount = i.o.o.o.o.WalletAmount,
-                    TipAmount = i.o.o.o.o.TipsAmount,
-                    IsPickupDrop = i.o.o.o.o.IsPickupDrop,
-                    CustomerAddressId = i.o.o.o.o.CustomerAddressId,
-                    RouteAudioPath = i.o.o.o.o.CustomerAddressId != 0 ? db.CustomerAddresses.FirstOrDefault(a => a.Id == i.o.o.o.o.CustomerAddressId).RouteAudioPath : "",
-                    OrderItemList = i.oi.ToList(),
-                }).ToList();
+            //model.ResturantList = db.Orders.Where(i => (i.Status == 4 || i.Status == 5) && i.DeliveryBoyPhoneNumber == phoneNumber /*&& DbFunctions.TruncateTime(i.DateEncoded) == DbFunctions.TruncateTime(DateTime.Now)*/)
+            //    .Join(db.Shops.Where(i => i.ShopCategoryId == 1), o => o.ShopId, s => s.Id, (o, s) => new { o, s })
+            //    .Join(db.Payments, o => o.o.OrderNumber, p => p.OrderNumber, (o, p) => new { o, p })
+            //    .Join(db.DeliveryBoys, o => o.o.o.DeliveryBoyId, d => d.Id, (o, d) => new { o, d })
+            //    .GroupJoin(db.OrderItems, o => o.o.o.o.Id, oi => oi.OrderId, (o, oi) => new { o, oi })
+            //    .Select(i => new TodayDeliveryListViewModel.OrderList
+            //    {
+            //        CustomerLatitude = i.o.o.o.o.Latitude,
+            //        CustomerLongitude = i.o.o.o.o.Longitude,
+            //        CustomerName = i.o.o.o.o.CustomerName,
+            //        CustomerPhoneNumber = i.o.o.o.o.CustomerPhoneNumber,
+            //        DateEncoded = i.o.o.o.o.DateEncoded,
+            //        DeliveryAddress = i.o.o.o.o.DeliveryAddress,
+            //        // OnWork = i.o.d.OnWork, 
+            //        OnWork = i.o.o.o.o.DeliveryBoyOnWork,
+            //        OrderNumber = i.o.o.o.o.OrderNumber,
+            //        PaymentMode = i.o.o.p.PaymentMode,
+            //        RefundAmount = i.o.o.p.RefundAmount,
+            //        RefundRemark = i.o.o.p.RefundRemark,
+            //        ShopAddress = i.o.o.o.s.Address,
+            //        ShopLatitude = i.o.o.o.s.Latitude,
+            //        ShopLongitude = i.o.o.o.s.Longitude,
+            //        ShopName = i.o.o.o.s.Name,
+            //        ShopPhoneNumber = i.o.o.o.o.ShopPhoneNumber,
+            //        Status = i.o.o.o.o.Status,
+            //        Convinenientcharge = i.o.o.o.o.Convinenientcharge,
+            //        DeliveryCharge = i.o.o.o.o.DeliveryCharge,
+            //        NetDeliveryCharge = i.o.o.o.o.NetDeliveryCharge,
+            //        Packingcharge = i.o.o.o.o.Packingcharge,
+            //        ShopDeliveryDiscount = i.o.o.o.o.ShopDeliveryDiscount,
+            //        TotalPrice = i.o.o.o.o.TotalPrice,
+            //        TotalProduct = i.o.o.o.o.TotalProduct,
+            //        TotalQuantity = i.o.o.o.o.TotalQuantity,
+            //        NetTotal = i.o.o.o.o.IsPickupDrop == true ? i.o.o.o.o.TotalPrice : i.o.o.o.o.NetTotal, //for pickupdrop don't show delivery charge in total
+            //        WalletAmount = i.o.o.o.o.WalletAmount,
+            //        TipAmount = i.o.o.o.o.TipsAmount,
+            //        IsPickupDrop = i.o.o.o.o.IsPickupDrop,
+            //        CustomerAddressId = i.o.o.o.o.CustomerAddressId,
+            //        RouteAudioPath = i.o.o.o.o.CustomerAddressId != 0 ? db.CustomerAddresses.FirstOrDefault(a => a.Id == i.o.o.o.o.CustomerAddressId).RouteAudioPath : "",
+            //        OrderItemList = i.oi.ToList(),
+            //    }).ToList();
 
-            model.OtherList = db.Orders.Where(i => (i.Status == 4 || i.Status == 5) && i.DeliveryBoyPhoneNumber == phoneNumber  /*&& DbFunctions.TruncateTime(i.DateEncoded) == DbFunctions.TruncateTime(DateTime.Now)*/)
-               .Join(db.Shops.Where(i => i.ShopCategoryId != 1), o => o.ShopId, s => s.Id, (o, s) => new { o, s })
-               .Join(db.Payments, o => o.o.OrderNumber, p => p.OrderNumber, (o, p) => new { o, p })
-               .Join(db.DeliveryBoys, o => o.o.o.DeliveryBoyId, d => d.Id, (o, d) => new { o, d })
-               .GroupJoin(db.OrderItems, o => o.o.o.o.Id, oi => oi.OrderId, (o, oi) => new { o, oi })
-               .Select(i => new TodayDeliveryListViewModel.OrderList
-               {
-                   CustomerLatitude = i.o.o.o.o.Latitude,
-                   CustomerLongitude = i.o.o.o.o.Longitude,
-                   CustomerName = i.o.o.o.o.CustomerName,
-                   CustomerPhoneNumber = i.o.o.o.o.CustomerPhoneNumber,
-                   DateEncoded = i.o.o.o.o.DateEncoded,
-                   DeliveryAddress = i.o.o.o.o.DeliveryAddress,
-                   OnWork = i.o.o.o.o.DeliveryBoyOnWork,
-                   //OnWork = i.o.d.OnWork,
-                   OrderNumber = i.o.o.o.o.OrderNumber,
-                   PaymentMode = i.o.o.p.PaymentMode,
-                   RefundAmount = i.o.o.p.RefundAmount,
-                   RefundRemark = i.o.o.p.RefundRemark,
-                   ShopAddress = i.o.o.o.s.Address,
-                   ShopLatitude = i.o.o.o.s.Latitude,
-                   ShopLongitude = i.o.o.o.s.Longitude,
-                   ShopName = i.o.o.o.s.Name,
-                   ShopPhoneNumber = i.o.o.o.o.ShopPhoneNumber,
-                   Status = i.o.o.o.o.Status,
-                   Convinenientcharge = i.o.o.o.o.Convinenientcharge,
-                   DeliveryCharge = i.o.o.o.o.DeliveryCharge,
-                   NetDeliveryCharge = i.o.o.o.o.NetDeliveryCharge,
-                   Packingcharge = i.o.o.o.o.Packingcharge,
-                   ShopDeliveryDiscount = i.o.o.o.o.ShopDeliveryDiscount,
-                   TotalPrice = i.o.o.o.o.TotalPrice,
-                   TotalProduct = i.o.o.o.o.TotalProduct,
-                   TotalQuantity = i.o.o.o.o.TotalQuantity,
-                   //NetTotal = i.o.o.o.o.NetTotal,
-                   NetTotal = i.o.o.o.o.IsPickupDrop == true ? i.o.o.o.o.TotalPrice : i.o.o.o.o.NetTotal,
-                   WalletAmount = i.o.o.o.o.WalletAmount,
-                   TipAmount = i.o.o.o.o.TipsAmount,
-                   IsPickupDrop = i.o.o.o.o.IsPickupDrop,
-                    CustomerAddressId = i.o.o.o.o.CustomerAddressId,
-                   RouteAudioPath = i.o.o.o.o.CustomerAddressId != 0 ? db.CustomerAddresses.FirstOrDefault(a => a.Id == i.o.o.o.o.CustomerAddressId).RouteAudioPath : "",
-                   OrderItemList = i.oi.ToList()
-               }).ToList();
+            //model.OtherList = db.Orders.Where(i => (i.Status == 4 || i.Status == 5) && i.DeliveryBoyPhoneNumber == phoneNumber  /*&& DbFunctions.TruncateTime(i.DateEncoded) == DbFunctions.TruncateTime(DateTime.Now)*/)
+            //   .Join(db.Shops.Where(i => i.ShopCategoryId != 1), o => o.ShopId, s => s.Id, (o, s) => new { o, s })
+            //   .Join(db.Payments, o => o.o.OrderNumber, p => p.OrderNumber, (o, p) => new { o, p })
+            //   .Join(db.DeliveryBoys, o => o.o.o.DeliveryBoyId, d => d.Id, (o, d) => new { o, d })
+            //   .GroupJoin(db.OrderItems, o => o.o.o.o.Id, oi => oi.OrderId, (o, oi) => new { o, oi })
+            //   .Select(i => new TodayDeliveryListViewModel.OrderList
+            //   {
+            //       CustomerLatitude = i.o.o.o.o.Latitude,
+            //       CustomerLongitude = i.o.o.o.o.Longitude,
+            //       CustomerName = i.o.o.o.o.CustomerName,
+            //       CustomerPhoneNumber = i.o.o.o.o.CustomerPhoneNumber,
+            //       DateEncoded = i.o.o.o.o.DateEncoded,
+            //       DeliveryAddress = i.o.o.o.o.DeliveryAddress,
+            //       OnWork = i.o.o.o.o.DeliveryBoyOnWork,
+            //       //OnWork = i.o.d.OnWork,
+            //       OrderNumber = i.o.o.o.o.OrderNumber,
+            //       PaymentMode = i.o.o.p.PaymentMode,
+            //       RefundAmount = i.o.o.p.RefundAmount,
+            //       RefundRemark = i.o.o.p.RefundRemark,
+            //       ShopAddress = i.o.o.o.s.Address,
+            //       ShopLatitude = i.o.o.o.s.Latitude,
+            //       ShopLongitude = i.o.o.o.s.Longitude,
+            //       ShopName = i.o.o.o.s.Name,
+            //       ShopPhoneNumber = i.o.o.o.o.ShopPhoneNumber,
+            //       Status = i.o.o.o.o.Status,
+            //       Convinenientcharge = i.o.o.o.o.Convinenientcharge,
+            //       DeliveryCharge = i.o.o.o.o.DeliveryCharge,
+            //       NetDeliveryCharge = i.o.o.o.o.NetDeliveryCharge,
+            //       Packingcharge = i.o.o.o.o.Packingcharge,
+            //       ShopDeliveryDiscount = i.o.o.o.o.ShopDeliveryDiscount,
+            //       TotalPrice = i.o.o.o.o.TotalPrice,
+            //       TotalProduct = i.o.o.o.o.TotalProduct,
+            //       TotalQuantity = i.o.o.o.o.TotalQuantity,
+            //       //NetTotal = i.o.o.o.o.NetTotal,
+            //       NetTotal = i.o.o.o.o.IsPickupDrop == true ? i.o.o.o.o.TotalPrice : i.o.o.o.o.NetTotal,
+            //       WalletAmount = i.o.o.o.o.WalletAmount,
+            //       TipAmount = i.o.o.o.o.TipsAmount,
+            //       IsPickupDrop = i.o.o.o.o.IsPickupDrop,
+            //        CustomerAddressId = i.o.o.o.o.CustomerAddressId,
+            //       RouteAudioPath = i.o.o.o.o.CustomerAddressId != 0 ? db.CustomerAddresses.FirstOrDefault(a => a.Id == i.o.o.o.o.CustomerAddressId).RouteAudioPath : "",
+            //       OrderItemList = i.oi.ToList()
+            //   }).ToList();
 
             model.List = db.Orders.Where(i => (i.Status == 4 || i.Status == 5) && i.DeliveryBoyPhoneNumber == phoneNumber  /*&& DbFunctions.TruncateTime(i.DateEncoded) == DbFunctions.TruncateTime(DateTime.Now)*/)
                .Join(db.Shops, o => o.ShopId, s => s.Id, (o, s) => new { o, s })
@@ -1887,6 +1887,7 @@ namespace ShopNow.Controllers
                    CustomerLongitude = i.o.o.o.Longitude,
                    CustomerName = i.o.o.o.CustomerName,
                    CustomerPhoneNumber = i.o.o.o.CustomerPhoneNumber,
+                   CustomerAlternatePhoneNumber = i.o.o.o.CustomerId != 0 ? db.Customers.FirstOrDefault(a => a.Id == i.o.o.o.CustomerId).AlternateNumber : "",
                    DateEncoded = i.o.o.o.DateEncoded,
                    DeliveryAddress = i.o.o.o.DeliveryAddress,
                    OnWork = i.o.o.o.DeliveryBoyOnWork,
@@ -1914,7 +1915,7 @@ namespace ShopNow.Controllers
                    WalletAmount = i.o.o.o.WalletAmount,
                    TipAmount = i.o.o.o.TipsAmount,
                    IsPickupDrop = i.o.o.o.IsPickupDrop,
-                    CustomerAddressId = i.o.o.o.CustomerAddressId,
+                   CustomerAddressId = i.o.o.o.CustomerAddressId,
                    RouteAudioPath = i.o.o.o.CustomerAddressId != 0 ? db.CustomerAddresses.FirstOrDefault(a => a.Id == i.o.o.o.CustomerAddressId).RouteAudioPath : "",
                    OrderItemList = i.oi.ToList()
                }).ToList();
@@ -7064,17 +7065,17 @@ namespace ShopNow.Controllers
             return Json(list, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult UpdateDeliveryBoyCashHandOverPayment(int orderid)
-        {
-            var order = db.Orders.FirstOrDefault(i => i.Id == orderid);
-            if (order != null)
-            {
-                order.DeliveryOrderPaymentStatus = 1;
-                db.Entry(order).State = System.Data.Entity.EntityState.Modified;
-                db.SaveChanges();
-            }
-            return Json(true, JsonRequestBehavior.AllowGet);
-        }
+        //public JsonResult UpdateDeliveryBoyCashHandOverPayment(int orderid)
+        //{
+        //    var order = db.Orders.FirstOrDefault(i => i.Id == orderid);
+        //    if (order != null)
+        //    {
+        //        order.DeliveryOrderPaymentStatus = 1;
+        //        db.Entry(order).State = System.Data.Entity.EntityState.Modified;
+        //        db.SaveChanges();
+        //    }
+        //    return Json(true, JsonRequestBehavior.AllowGet);
+        //}
 
         [HttpPost]
         public JsonResult SaveShopParcelDrop(ShopCreateParcelDropViewModel model)
@@ -7118,7 +7119,10 @@ namespace ShopNow.Controllers
                         UpdatedBy = shop.Name,
                         PickupAddress = shop.Address,
                         PickupLatitude = shop.Latitude,
-                        PickupLongitude = shop.Longitude
+                        PickupLongitude = shop.Longitude,
+                        PickupDateTime = model.PickupDateTime,
+                        DeliveryDate = model.DeliveryDate,
+                        DeliverySlotType = model.DeliverySlotType
                     };
                     db.Orders.Add(order);
                     db.SaveChanges();
@@ -7884,7 +7888,7 @@ namespace ShopNow.Controllers
 
         public JsonResult UpdateTagCategoryType()
         {
-            var tageCategoryList = db.TagCategories.Where(i=>i.Type != 0).ToList();
+            var tageCategoryList = db.TagCategories.Where(i=>i.Type == 0).ToList();
             foreach (var item in tageCategoryList)
             {
                 var category = db.Categories.FirstOrDefault(i => i.Id == item.CategoryId && i.Name == item.CategoryName);
