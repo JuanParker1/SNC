@@ -454,7 +454,7 @@
                 var array_name = TagCategoryName.split(',');
                 $.each(array_code, function (i) {
                     $('select[name="TagCategoryId"] option[value=' + array_code[i] + ']').attr('selected', 'selected');
-                    var option = new Option(array_name[i], array_code[i], true, true);
+                    var option = new Option(array_name[i], array_code[i] +','+ "TagCategory", true, true);
                     tagCategorySelect.append(option).trigger('change');
                 });
             }
@@ -467,10 +467,15 @@
                     delay: 250,
                     dataType: 'json'
                 }
-            //}).on('select2:select', function (e) {
-            //    $.getJSON('/MasterProduct/AddFoodUpdateTagCategory', { id: e.params.data.id, type: e.params.data.type }, function () { });
-            //}).on('select2:unselect', function (e) {
-            //    $.getJSON('/MasterProduct/RemoveFoodUpdateTagCategory', { id: e.params.data.id }, function () { });
+            }).on('select2:select', function (e) {
+                $.getJSON('/MasterProduct/AddTagCategory', { id: e.params.data.id, type: e.params.data.type }, function () { });
+            }).on('select2:unselect', function (e) {
+                var oldTagCategory = e.params.data.id.split(',');
+                if (oldTagCategory.length > 1) {
+                    $.getJSON('/MasterProduct/RemoveAlreadyAddedTagCategory', { tagCatId: oldTagCategory[0] }, function () { });
+                } else {
+                    $.getJSON('/MasterProduct/RemoveTagCategory', { id: e.params.data.id }, function () { });
+                }
             });
 
             jQuery(document).ready(function ($) {

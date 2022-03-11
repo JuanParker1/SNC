@@ -38,7 +38,6 @@
         <EntityTypeShape EntityType="sncModel.MarketingAgent" Width="1.5" PointX="12.75" PointY="18.75" IsExpanded="true" />
         <EntityTypeShape EntityType="sncModel.MasterProduct" Width="1.5" PointX="18.75" PointY="13.75" IsExpanded="true" />
         <EntityTypeShape EntityType="sncModel.MeasurementUnit" Width="1.5" PointX="20.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="sncModel.NextSubCategory" Width="1.5" PointX="0.75" PointY="20.75" IsExpanded="true" />
         <EntityTypeShape EntityType="sncModel.OfferProduct" Width="1.5" PointX="2.75" PointY="20.75" IsExpanded="true" />
         <EntityTypeShape EntityType="sncModel.Offer" Width="1.5" PointX="20.75" PointY="4.75" IsExpanded="true" />
         <EntityTypeShape EntityType="sncModel.OfferShop" Width="1.5" PointX="20.75" PointY="10.75" IsExpanded="true" />
@@ -91,6 +90,7 @@
         <EntityTypeShape EntityType="sncModel.TagCategory" Width="1.5" PointX="33.375" PointY="17.75" />
         <EntityTypeShape EntityType="sncModel.CustomerGiftCard" Width="1.5" PointX="9.375" PointY="13.75" />
         <EntityTypeShape EntityType="sncModel.Shop" Width="1.5" PointX="19.375" PointY="33.75" />
+        <EntityTypeShape EntityType="sncModel.NextSubCategory" Width="1.5" PointX="33.375" PointY="21.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
