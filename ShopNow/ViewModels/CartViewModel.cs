@@ -704,6 +704,8 @@ namespace ShopNow.ViewModels
         public string Remarks { get; set; }
         public string PrescriptionImagePath { get; set; }
         public string PaymentMode { get; set; }
+        public DateTime? DeliveryDate { get; set; }
+        public int DeliverySlotType { get; set; }
 
         public List<ListItem> ListItems { get; set; } 
         public class ListItem
