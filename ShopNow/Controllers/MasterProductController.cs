@@ -2749,23 +2749,26 @@ namespace ShopNow.Controllers
             }
 
             List<TagCategorySessionList> tagCategoryList = Session["AddTagCategory"] as List<TagCategorySessionList>;
-            if (tagCategoryList.Count() > 0)
+            if (tagCategoryList != null)
             {
-                foreach (var item in tagCategoryList)
+                if (tagCategoryList.Count() > 0)
                 {
-                    var tagcategory = new TagCategory
+                    foreach (var item in tagCategoryList)
                     {
-                        CategoryId = item.Id,
-                        CategoryName = item.Type == 1 ? _db.Categories.FirstOrDefault(i => i.Id == item.Id)?.Name : item.Type == 2 ? _db.SubCategories.FirstOrDefault(i => i.Id == item.Id)?.Name : _db.NextSubCategories.FirstOrDefault(i => i.Id == item.Id)?.Name,
-                        CreatedBy = user.Name,
-                        UpdatedBy = user.Name,
-                        DateUpdated = DateTime.Now,
-                        DateEncoded = DateTime.Now,
-                        MasterProductId = masterId,
-                        Type = item.Type
-                    };
-                    _db.TagCategories.Add(tagcategory);
-                    _db.SaveChanges();
+                        var tagcategory = new TagCategory
+                        {
+                            CategoryId = item.Id,
+                            CategoryName = item.Type == 1 ? _db.Categories.FirstOrDefault(i => i.Id == item.Id)?.Name : item.Type == 2 ? _db.SubCategories.FirstOrDefault(i => i.Id == item.Id)?.Name : _db.NextSubCategories.FirstOrDefault(i => i.Id == item.Id)?.Name,
+                            CreatedBy = user.Name,
+                            UpdatedBy = user.Name,
+                            DateUpdated = DateTime.Now,
+                            DateEncoded = DateTime.Now,
+                            MasterProductId = masterId,
+                            Type = item.Type
+                        };
+                        _db.TagCategories.Add(tagcategory);
+                        _db.SaveChanges();
+                    }
                 }
             }
             Session["AddTagCategory"] = null;
