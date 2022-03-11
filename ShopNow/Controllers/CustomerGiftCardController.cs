@@ -65,9 +65,9 @@ namespace ShopNow.Controllers
             var customer = db.Customers.FirstOrDefault(i => i.PhoneNumber == giftCard.CustomerPhoneNumber);
             string msg = "";
             if (!string.IsNullOrEmpty(customer.Name) || customer.Name.ToLower() != "null")
-                msg = $"Hi Dear {customer.Name}, your Snowch E-Gift Card details,Reference {giftCard.GiftCardCode}, Gift Card Code: {giftCard.CustomerPhoneNumber}, Expiry Date: {giftCard.ExpiryDate.ToString("dd-MMM-yyyy")}, Amount: {giftCard.Amount.ToString()}. T&C apply. Link <a href='http://playstore.snowch.in'>http://playstore.snowch.in</a> - Joyra";
+                msg = $"Hi Dear {customer.Name}, your Snowch E-Gift Card details,Reference {giftCard.ReferenceCode}, Gift Card Code: {giftCard.GiftCardCode}, Expiry Date: {giftCard.ExpiryDate.ToString("dd-MMM-yyyy")}, Amount: {giftCard.Amount.ToString()}. T&C apply. http://playstore.snowch.in - Joyra";
             else
-                msg = $"Hi Dear, your Snowch E-Gift Card details,Reference {giftCard.GiftCardCode}, Gift Card Code: {giftCard.CustomerPhoneNumber}, Expiry Date: {giftCard.ExpiryDate.ToString("dd-MMM-yyyy")}, Amount: {giftCard.Amount.ToString()}. T&C apply. Link <a href='http://playstore.snowch.in'>http://playstore.snowch.in</a> - Joyra";
+                msg = $"Hi Dear, your Snowch E-Gift Card details,Reference {giftCard.ReferenceCode}, Gift Card Code: {giftCard.GiftCardCode}, Expiry Date: {giftCard.ExpiryDate.ToString("dd-MMM-yyyy")}, Amount: {giftCard.Amount.ToString()}. T&C apply. Link <a href='http://playstore.snowch.in'>http://playstore.snowch.in</a> - Joyra";
 
             //Send exotel Message
             //Customer

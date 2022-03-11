@@ -2701,71 +2701,86 @@ namespace ShopNow.Controllers
             var user = ((Helpers.Sessions.User)Session["USER"]);
             if (categoryId != 0)
             {
-                var tagcategory = new TagCategory
-                {
-                    CategoryId = categoryId,
-                    CategoryName = _db.Categories.FirstOrDefault(i => i.Id == categoryId)?.Name,
-                    CreatedBy = user.Name,
-                    UpdatedBy = user.Name,
-                    DateUpdated = DateTime.Now,
-                    DateEncoded = DateTime.Now,
-                    MasterProductId = masterId,
-                    Type = 1
-                };
-                _db.TagCategories.Add(tagcategory);
-                _db.SaveChanges();
-            }
-            if (subCategoryId != 0)
-            {
-                var tagcategory = new TagCategory
-                {
-                    CategoryId = subCategoryId,
-                    CategoryName = _db.SubCategories.FirstOrDefault(i => i.Id == subCategoryId)?.Name,
-                    CreatedBy = user.Name,
-                    UpdatedBy = user.Name,
-                    DateUpdated = DateTime.Now,
-                    DateEncoded = DateTime.Now,
-                    MasterProductId = masterId,
-                    Type = 2
-                };
-                _db.TagCategories.Add(tagcategory);
-                _db.SaveChanges();
-            }
-            if (nextSubCategoryId != 0)
-            {
-                var tagcategory = new TagCategory
-                {
-                    CategoryId = nextSubCategoryId,
-                    CategoryName = _db.NextSubCategories.FirstOrDefault(i => i.Id == nextSubCategoryId)?.Name,
-                    CreatedBy = user.Name,
-                    UpdatedBy = user.Name,
-                    DateUpdated = DateTime.Now,
-                    DateEncoded = DateTime.Now,
-                    MasterProductId = masterId,
-                    Type = 3
-                };
-                _db.TagCategories.Add(tagcategory);
-                _db.SaveChanges();
-            }
-
-            List<TagCategorySessionList> tagCategoryList = Session["AddTagCategory"] as List<TagCategorySessionList>;
-            if (tagCategoryList.Count() > 0)
-            {
-                foreach (var item in tagCategoryList)
+                if (!_db.TagCategories.Any(i => i.MasterProductId == masterId && i.Type == 1 && i.CategoryId == categoryId))
                 {
                     var tagcategory = new TagCategory
                     {
-                        CategoryId = item.Id,
-                        CategoryName = item.Type == 1 ? _db.Categories.FirstOrDefault(i => i.Id == item.Id)?.Name : item.Type == 2 ? _db.SubCategories.FirstOrDefault(i => i.Id == item.Id)?.Name : _db.NextSubCategories.FirstOrDefault(i => i.Id == item.Id)?.Name,
+                        CategoryId = categoryId,
+                        CategoryName = _db.Categories.FirstOrDefault(i => i.Id == categoryId)?.Name,
                         CreatedBy = user.Name,
                         UpdatedBy = user.Name,
                         DateUpdated = DateTime.Now,
                         DateEncoded = DateTime.Now,
                         MasterProductId = masterId,
-                        Type = item.Type
+                        Type = 1
                     };
                     _db.TagCategories.Add(tagcategory);
                     _db.SaveChanges();
+                }
+            }
+            if (subCategoryId != 0)
+            {
+                if (!_db.TagCategories.Any(i => i.MasterProductId == masterId && i.Type == 2 && i.CategoryId == subCategoryId))
+                {
+                    var tagcategory = new TagCategory
+                    {
+                        CategoryId = subCategoryId,
+                        CategoryName = _db.SubCategories.FirstOrDefault(i => i.Id == subCategoryId)?.Name,
+                        CreatedBy = user.Name,
+                        UpdatedBy = user.Name,
+                        DateUpdated = DateTime.Now,
+                        DateEncoded = DateTime.Now,
+                        MasterProductId = masterId,
+                        Type = 2
+                    };
+                    _db.TagCategories.Add(tagcategory);
+                    _db.SaveChanges();
+                }
+            }
+            if (nextSubCategoryId != 0)
+            {
+                if (!_db.TagCategories.Any(i => i.MasterProductId == masterId && i.Type == 3 && i.CategoryId == nextSubCategoryId))
+                {
+                    var tagcategory = new TagCategory
+                    {
+                        CategoryId = nextSubCategoryId,
+                        CategoryName = _db.NextSubCategories.FirstOrDefault(i => i.Id == nextSubCategoryId)?.Name,
+                        CreatedBy = user.Name,
+                        UpdatedBy = user.Name,
+                        DateUpdated = DateTime.Now,
+                        DateEncoded = DateTime.Now,
+                        MasterProductId = masterId,
+                        Type = 3
+                    };
+                    _db.TagCategories.Add(tagcategory);
+                    _db.SaveChanges();
+                }
+            }
+
+            List<TagCategorySessionList> tagCategoryList = Session["AddTagCategory"] as List<TagCategorySessionList>;
+            if (tagCategoryList != null)
+            {
+                if (tagCategoryList.Count() > 0)
+                {
+                    foreach (var item in tagCategoryList)
+                    {
+                        if (!_db.TagCategories.Any(i => i.MasterProductId == masterId && i.Type == item.Type && i.CategoryId == item.Id))
+                        {
+                            var tagcategory = new TagCategory
+                            {
+                                CategoryId = item.Id,
+                                CategoryName = item.Type == 1 ? _db.Categories.FirstOrDefault(i => i.Id == item.Id)?.Name : item.Type == 2 ? _db.SubCategories.FirstOrDefault(i => i.Id == item.Id)?.Name : _db.NextSubCategories.FirstOrDefault(i => i.Id == item.Id)?.Name,
+                                CreatedBy = user.Name,
+                                UpdatedBy = user.Name,
+                                DateUpdated = DateTime.Now,
+                                DateEncoded = DateTime.Now,
+                                MasterProductId = masterId,
+                                Type = item.Type
+                            };
+                            _db.TagCategories.Add(tagcategory);
+                            _db.SaveChanges();
+                        }
+                    }
                 }
             }
             Session["AddTagCategory"] = null;

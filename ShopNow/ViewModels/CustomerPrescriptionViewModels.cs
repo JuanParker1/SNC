@@ -69,6 +69,7 @@ namespace ShopNow.ViewModels
         //Prescription
         public int PrescriptionId { get; set; }
         public string AudioPath { get; set; }
+        public string Remarks { get; set; }
         public List<ImagePathList> ImagePathLists { get; set; }
         public class ImagePathList
         {

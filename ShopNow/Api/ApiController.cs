@@ -2939,7 +2939,7 @@ namespace ShopNow.Controllers
                         IsLiked = i.cf.Any(a => a.CustomerId == customerId && a.IsFavorite == true && a.ProductId == i.p.p.p.Id),
                         LikeText = (i.cf.Any(a => a.CustomerId == customerId && a.IsFavorite == true && a.ProductId == i.p.p.p.Id) == true && i.cf.Where(a => a.ProductId == i.p.p.p.Id && a.IsFavorite == true).Count() == 1) ? "You Liked" : i.cf.Any(a => a.CustomerId == customerId && a.IsFavorite == true && a.ProductId == i.p.p.p.Id) == true ? "You & " + (i.cf.Where(a => a.ProductId == i.p.p.p.Id && a.IsFavorite == true).Count() - 1) + " more" : i.cf.Where(a => a.ProductId == i.p.p.p.Id && a.IsFavorite == true).Count() > 0 ? i.cf.Where(a => a.ProductId == i.p.p.p.Id && a.IsFavorite == true).Count() + " like" : "",
                         ShopPrice = i.p.p.p.ShopPrice
-                    }).ToList();
+                    }).OrderByDescending(i=>i.IsOnline).ToList();
 
                 if (!string.IsNullOrEmpty(str))
                 {
@@ -3011,7 +3011,7 @@ namespace ShopNow.Controllers
                         IsLiked = i.cf.Any(a => a.CustomerId == customerId && a.IsFavorite == true && a.ProductId == i.p.p.p.Id),
                         LikeText = (i.cf.Any(a => a.CustomerId == customerId && a.IsFavorite == true && a.ProductId == i.p.p.p.Id) == true && i.cf.Where(a => a.ProductId == i.p.p.p.Id && a.IsFavorite == true).Count() == 1) ? "You Liked" : i.cf.Any(a => a.CustomerId == customerId && a.IsFavorite == true && a.ProductId == i.p.p.p.Id) == true ? "You & " + (i.cf.Where(a => a.ProductId == i.p.p.p.Id && a.IsFavorite == true).Count() - 1) + " more" : i.cf.Where(a => a.ProductId == i.p.p.p.Id && a.IsFavorite == true).Count() > 0 ? i.cf.Where(a => a.ProductId == i.p.p.p.Id && a.IsFavorite == true).Count() + " like" : "",
                         ShopPrice = i.p.p.p.ShopPrice
-                    }).ToList();
+                    }).OrderByDescending(i => i.IsOnline).ToList();
 
                 if (!string.IsNullOrEmpty(str))
                 {
@@ -3643,6 +3643,7 @@ namespace ShopNow.Controllers
 
             if (review != null)
             {
+                UpdateShopRating(review.ShopId);
                 return Json(new { message = "Successfully Added to Rating!", Details = model });
             }
             else
@@ -3659,8 +3660,18 @@ namespace ShopNow.Controllers
             review.Rating = model.Rating;
             db.Entry(review).State = System.Data.Entity.EntityState.Modified;
             db.SaveChanges();
+            UpdateShopRating(review.ShopId);
             return Json(new { message = "Successfully Updated to Rating!", Details = model });
+        }
 
+        public void UpdateShopRating(int shopid)
+        {
+            var customerReview = db.CustomerReviews.Where(i => i.ShopId == shopid).ToList();
+            var shop = db.Shops.FirstOrDefault(i => i.Id == shopid);
+            shop.Rating = customerReview.Count() == 0 ? 0 : ((customerReview.Sum(b => b.Rating) * 5) / (customerReview.Count() * 5));
+            shop.CustomerReview = customerReview.Count();
+            db.Entry(shop).State = System.Data.Entity.EntityState.Modified;
+            db.SaveChanges();
         }
 
         public JsonResult GetAllReview(int shopId, int customerId, int page = 1, int pageSize = 9)
@@ -4051,70 +4062,77 @@ namespace ShopNow.Controllers
                      Id = i.Id,
                      Name = i.Name,
                      DistrictName = i.StreetName,
-                     Rating = RatingCalculation(i.Id),
+                     // Rating = RatingCalculation(i.s.Id),
+                     //Rating = i.cr.Any() ? (i.cr.Sum(b => b.Rating) * 5) / (i.cr.Count() == 0 ? 1 : i.cr.Count() * 5) : 0,
+                     Rating = i.Rating,
                      ImagePath = ((!string.IsNullOrEmpty(i.ImagePath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.ImagePath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/noimageres.svg"),
                      ShopCategoryId = i.ShopCategoryId,
                      ShopCategoryName = i.ShopCategoryName,
-                     List = GetBannerImageList(i.Id,i.Name),
+                     List = GetBannerImageList(i.Id, i.Name),
                      Latitude = i.Latitude,
                      Longitude = i.Longitude,
                      Status = i.Status,
                      isOnline = i.IsOnline,
-                     ReviewCount = db.CustomerReviews.Where(c => c.ShopId == i.Id).Count(),
+                     // ReviewCount = i.cr.Any() ? i.cr.Count() : 0,
+                     ReviewCount = i.CustomerReview,
                      Address = i.Address,
                      NextOnTime = i.NextOnTime,
-                     OfferPercentage = db.Products.Where(b => b.ShopId == i.Id && b.Status==0)?.Max(b => b.Percentage)??0
+                     //OfferPercentage = db.Products.Where(b => b.ShopId == i.s.Id && b.Status == 0).Select(b => b.Percentage)?.Max(b => b) ?? 0
+                     OfferPercentage = i.MaxOfferPercentage
                  }).ToList();
                 model.SuperMarketList = db.Shops.SqlQuery(querySuperMarketList,
                 new SqlParameter("Latitude", Latitude),
-                new SqlParameter("Longitude", Longitude)).Select(i => new PlacesListView.Places
-                {
-                    Id = i.Id,
-                    Name = i.Name,
-                    DistrictName = i.StreetName,
-                    Rating = RatingCalculation(i.Id),
-                    ImagePath = ((!string.IsNullOrEmpty(i.ImagePath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.ImagePath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/noimageres.svg"),
-                    ShopCategoryId = i.ShopCategoryId,
-                    ShopCategoryName = i.ShopCategoryName,
-                    List = GetBannerImageList(i.Id, i.Name),
-                    Latitude = i.Latitude,
-                    Longitude = i.Longitude,
-                    Status = i.Status,
-                    isOnline = i.IsOnline,
-                    ReviewCount = db.CustomerReviews.Where(c => c.ShopId == i.Id).Count(),
-                    Address = i.Address,
-                    NextOnTime = i.NextOnTime,
-                    OfferPercentage = db.Products.Where(b => b.ShopId == i.Id && b.Status == 0)?.Max(b => b.Percentage) ?? 0
-                }).ToList();
+                new SqlParameter("Longitude", Longitude))
+                 .Select(i => new PlacesListView.Places
+                 {
+                     Id = i.Id,
+                     Name = i.Name,
+                     DistrictName = i.StreetName,
+                     Rating = i.Rating,
+                     ImagePath = ((!string.IsNullOrEmpty(i.ImagePath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.ImagePath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/noimageres.svg"),
+                     ShopCategoryId = i.ShopCategoryId,
+                     ShopCategoryName = i.ShopCategoryName,
+                     List = GetBannerImageList(i.Id, i.Name),
+                     Latitude = i.Latitude,
+                     Longitude = i.Longitude,
+                     Status = i.Status,
+                     isOnline = i.IsOnline,
+                     ReviewCount = i.CustomerReview,
+                     Address = i.Address,
+                     NextOnTime = i.NextOnTime,
+                     OfferPercentage = i.MaxOfferPercentage
+                 }).ToList();
                 model.GroceriesList = db.Shops.SqlQuery(queryGroceriesList,
                 new SqlParameter("Latitude", Latitude),
-                new SqlParameter("Longitude", Longitude)).Select(i => new PlacesListView.Places
-                {
-                    Id = i.Id,
-                    Name = i.Name,
-                    DistrictName = i.StreetName,
-                    Rating = RatingCalculation(i.Id),
-                    ImagePath = ((!string.IsNullOrEmpty(i.ImagePath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.ImagePath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/noimageres.svg"),
-                    ShopCategoryId = i.ShopCategoryId,
-                    ShopCategoryName = i.ShopCategoryName,
-                    List = GetBannerImageList(i.Id, i.Name),
-                    Latitude = i.Latitude,
-                    Longitude = i.Longitude,
-                    Status = i.Status,
-                    isOnline = i.IsOnline,
-                    ReviewCount = db.CustomerReviews.Where(c => c.ShopId == i.Id).Count(),
-                    Address = i.Address,
-                    NextOnTime = i.NextOnTime,
-                    OfferPercentage = db.Products.Where(b => b.ShopId == i.Id && b.Status == 0)?.Max(b => b.Percentage) ?? 0
-                }).ToList();
+                new SqlParameter("Longitude", Longitude))
+                 .Select(i => new PlacesListView.Places
+                 {
+                     Id = i.Id,
+                     Name = i.Name,
+                     DistrictName = i.StreetName,
+                     Rating = i.Rating,
+                     ImagePath = ((!string.IsNullOrEmpty(i.ImagePath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.ImagePath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/noimageres.svg"),
+                     ShopCategoryId = i.ShopCategoryId,
+                     ShopCategoryName = i.ShopCategoryName,
+                     List = GetBannerImageList(i.Id, i.Name),
+                     Latitude = i.Latitude,
+                     Longitude = i.Longitude,
+                     Status = i.Status,
+                     isOnline = i.IsOnline,
+                     ReviewCount = i.CustomerReview,
+                     Address = i.Address,
+                     NextOnTime = i.NextOnTime,
+                     OfferPercentage = i.MaxOfferPercentage
+                 }).ToList();
                 model.HealthList = db.Shops.SqlQuery(queryHealthList,
                 new SqlParameter("Latitude", Latitude),
-                new SqlParameter("Longitude", Longitude)).Select(i => new PlacesListView.Places
+                new SqlParameter("Longitude", Longitude))
+                .Select(i => new PlacesListView.Places
                 {
                     Id = i.Id,
                     Name = i.Name,
                     DistrictName = i.StreetName,
-                    Rating = RatingCalculation(i.Id),
+                    Rating = i.Rating,
                     ImagePath = ((!string.IsNullOrEmpty(i.ImagePath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.ImagePath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/noimageres.svg"),
                     ShopCategoryId = i.ShopCategoryId,
                     ShopCategoryName = i.ShopCategoryName,
@@ -4123,41 +4141,43 @@ namespace ShopNow.Controllers
                     Longitude = i.Longitude,
                     Status = i.Status,
                     isOnline = i.IsOnline,
-                    ReviewCount = db.CustomerReviews.Where(c => c.ShopId == i.Id).Count(),
+                    ReviewCount = i.CustomerReview,
                     Address = i.Address,
                     NextOnTime = i.NextOnTime,
-                    OfferPercentage = db.Products.Where(b => b.ShopId == i.Id && b.Status == 0)?.Max(b => b.Percentage) ?? 0
+                    OfferPercentage = i.MaxOfferPercentage
                 }).ToList();
 
                 model.ElectronicsList = db.Shops.SqlQuery(queryElectronicsList,
                 new SqlParameter("Latitude", Latitude),
-                new SqlParameter("Longitude", Longitude)).Select(i => new PlacesListView.Places
-                {
-                    Id = i.Id,
-                    Name = i.Name,
-                    DistrictName = i.StreetName,
-                    Rating = RatingCalculation(i.Id),
-                    ImagePath = ((!string.IsNullOrEmpty(i.ImagePath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.ImagePath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/noimageres.svg"),
-                    ShopCategoryId = i.ShopCategoryId,
-                    ShopCategoryName = i.ShopCategoryName,
-                    List = GetBannerImageList(i.Id, i.Name),
-                    Latitude = i.Latitude,
-                    Longitude = i.Longitude,
-                    Status = i.Status,
-                    isOnline = i.IsOnline,
-                    ReviewCount = db.CustomerReviews.Where(c => c.ShopId == i.Id).Count(),
-                    Address = i.Address,
-                    NextOnTime = i.NextOnTime,
-                    OfferPercentage = db.Products.Where(b => b.ShopId == i.Id && b.Status == 0)?.Max(b => b.Percentage) ?? 0
-                }).ToList();
+                new SqlParameter("Longitude", Longitude))
+                 .Select(i => new PlacesListView.Places
+                 {
+                     Id = i.Id,
+                     Name = i.Name,
+                     DistrictName = i.StreetName,
+                     Rating = i.Rating,
+                     ImagePath = ((!string.IsNullOrEmpty(i.ImagePath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.ImagePath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/noimageres.svg"),
+                     ShopCategoryId = i.ShopCategoryId,
+                     ShopCategoryName = i.ShopCategoryName,
+                     List = GetBannerImageList(i.Id, i.Name),
+                     Latitude = i.Latitude,
+                     Longitude = i.Longitude,
+                     Status = i.Status,
+                     isOnline = i.IsOnline,
+                     ReviewCount = i.CustomerReview,
+                     Address = i.Address,
+                     NextOnTime = i.NextOnTime,
+                     OfferPercentage = i.MaxOfferPercentage
+                 }).ToList();
                 model.ServicesList = db.Shops.SqlQuery(qServicesList,
                 new SqlParameter("Latitude", Latitude),
-                new SqlParameter("Longitude", Longitude)).Select(i => new PlacesListView.Places
+                new SqlParameter("Longitude", Longitude))
+                .Select(i => new PlacesListView.Places
                 {
                     Id = i.Id,
                     Name = i.Name,
                     DistrictName = i.StreetName,
-                    Rating = RatingCalculation(i.Id),
+                    Rating = i.Rating,
                     ImagePath = ((!string.IsNullOrEmpty(i.ImagePath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.ImagePath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/noimageres.svg"),
                     ShopCategoryId = i.ShopCategoryId,
                     ShopCategoryName = i.ShopCategoryName,
@@ -4166,180 +4186,206 @@ namespace ShopNow.Controllers
                     Longitude = i.Longitude,
                     Status = i.Status,
                     isOnline = i.IsOnline,
-                    ReviewCount = db.CustomerReviews.Where(c => c.ShopId == i.Id).Count(),
+                    ReviewCount = i.CustomerReview,
                     Address = i.Address,
                     NextOnTime = i.NextOnTime,
-                    OfferPercentage = db.Products.Where(b => b.ShopId == i.Id && b.Status == 0)?.Max(b => b.Percentage) ?? 0
+                    OfferPercentage = i.MaxOfferPercentage
                 }).ToList();
                 model.OtherList = db.Shops.SqlQuery(queryOtherList,
                 new SqlParameter("Latitude", Latitude),
-                new SqlParameter("Longitude", Longitude)).Select(i => new PlacesListView.Places
-                {
-                    Id = i.Id,
-                    Name = i.Name,
-                    DistrictName = i.StreetName,
-                    Rating = RatingCalculation(i.Id),
-                    ImagePath = ((!string.IsNullOrEmpty(i.ImagePath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.ImagePath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/noimageres.svg"),
-                    ShopCategoryId = i.ShopCategoryId,
-                    ShopCategoryName = i.ShopCategoryName,
-                    Latitude = i.Latitude,
-                    Longitude = i.Longitude,
-                    List = GetBannerImageList(i.Id, i.Name),
-                    Status = i.Status,
-                    isOnline = i.IsOnline,
-                    ReviewCount = db.CustomerReviews.Where(c => c.ShopId == i.Id).Count(),
-                    Address = i.Address,
-                    NextOnTime = i.NextOnTime,
-                    OfferPercentage = db.Products.Where(b => b.ShopId == i.Id && b.Status == 0)?.Max(b => b.Percentage) ?? 0
-                }).ToList();
+                new SqlParameter("Longitude", Longitude))
+                 .Select(i => new PlacesListView.Places
+                 {
+                     Id = i.Id,
+                     Name = i.Name,
+                     DistrictName = i.StreetName,
+                     Rating = i.Rating,
+                     ImagePath = ((!string.IsNullOrEmpty(i.ImagePath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.ImagePath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/noimageres.svg"),
+                     ShopCategoryId = i.ShopCategoryId,
+                     ShopCategoryName = i.ShopCategoryName,
+                     List = GetBannerImageList(i.Id, i.Name),
+                     Latitude = i.Latitude,
+                     Longitude = i.Longitude,
+                     Status = i.Status,
+                     isOnline = i.IsOnline,
+                     ReviewCount = i.CustomerReview,
+                     Address = i.Address,
+                     NextOnTime = i.NextOnTime,
+                     OfferPercentage = i.MaxOfferPercentage
+                 }).ToList();
                 return Json(model, JsonRequestBehavior.AllowGet);
             }
             else if (a == "0")
             {
                 model.OtherList = db.Shops.SqlQuery(query,
                 new SqlParameter("Latitude", Latitude),
-                new SqlParameter("Longitude", Longitude)).Select(i => new PlacesListView.Places
-                {
-                    Id = i.Id,
-                    Name = i.Name,
-                    DistrictName = i.StreetName,
-                    Rating = RatingCalculation(i.Id),
-                    ImagePath = ((!string.IsNullOrEmpty(i.ImagePath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.ImagePath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/noimageres.svg"),
-                    ShopCategoryId = i.ShopCategoryId,
-                    ShopCategoryName = i.ShopCategoryName,
-                    List = GetBannerImageList(i.Id, i.Name),
-                    Latitude = i.Latitude,
-                    Longitude = i.Longitude,
-                    Status = i.Status,
-                    isOnline = i.IsOnline,
-                    ReviewCount = db.CustomerReviews.Where(c => c.ShopId == i.Id).Count(),
-                    Address = i.Address,
-                    NextOnTime = i.NextOnTime,
-                    OfferPercentage = db.Products.Where(b => b.ShopId == i.Id && b.Status == 0)?.Max(b => b.Percentage) ?? 0
-                }).ToList();
+                new SqlParameter("Longitude", Longitude))
+                 .Select(i => new PlacesListView.Places
+                 {
+                     Id = i.Id,
+                     Name = i.Name,
+                     DistrictName = i.StreetName,
+                     Rating = i.Rating,
+                     ImagePath = ((!string.IsNullOrEmpty(i.ImagePath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.ImagePath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/noimageres.svg"),
+                     ShopCategoryId = i.ShopCategoryId,
+                     ShopCategoryName = i.ShopCategoryName,
+                     List = GetBannerImageList(i.Id, i.Name),
+                     Latitude = i.Latitude,
+                     Longitude = i.Longitude,
+                     Status = i.Status,
+                     isOnline = i.IsOnline,
+                     ReviewCount = i.CustomerReview,
+                     Address = i.Address,
+                     NextOnTime = i.NextOnTime,
+                     OfferPercentage = i.MaxOfferPercentage
+                 }).ToList();
                 return Json(model, JsonRequestBehavior.AllowGet);
             }
             else if (a == "1")
             {
                 model.OtherList = db.Shops.SqlQuery(queryGroceriesList,
                 new SqlParameter("Latitude", Latitude),
-                new SqlParameter("Longitude", Longitude)).Select(i => new PlacesListView.Places
-                {
-                    Id = i.Id,
-                    Name = i.Name,
-                    DistrictName = i.StreetName,
-                    Rating = RatingCalculation(i.Id),
-                    ImagePath = ((!string.IsNullOrEmpty(i.ImagePath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.ImagePath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/noimageres.svg"),
-                    ShopCategoryId = i.ShopCategoryId,
-                    ShopCategoryName = i.ShopCategoryName,
-                    List = GetBannerImageList(i.Id, i.Name),// db.Banners.Where(j => j.Status == 0 && j.ShopCode == i.Code).ToList(),
-                    Latitude = i.Latitude,
-                    Longitude = i.Longitude,
-                    Status = i.Status,
-                    isOnline = i.IsOnline,
-                    ReviewCount = db.CustomerReviews.Where(c => c.ShopId == i.Id).Count(),
-                    Address = i.Address,
-                    NextOnTime = i.NextOnTime,
-                    OfferPercentage = db.Products.Where(b => b.ShopId == i.Id && b.Status == 0)?.Max(b => b.Percentage) ?? 0
-                }).ToList();
+                new SqlParameter("Longitude", Longitude))
+                 .Select(i => new PlacesListView.Places
+                 {
+                     Id = i.Id,
+                     Name = i.Name,
+                     DistrictName = i.StreetName,
+                     Rating = i.Rating,
+                     ImagePath = ((!string.IsNullOrEmpty(i.ImagePath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.ImagePath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/noimageres.svg"),
+                     ShopCategoryId = i.ShopCategoryId,
+                     ShopCategoryName = i.ShopCategoryName,
+                     List = GetBannerImageList(i.Id, i.Name),
+                     Latitude = i.Latitude,
+                     Longitude = i.Longitude,
+                     Status = i.Status,
+                     isOnline = i.IsOnline,
+                     ReviewCount = i.CustomerReview,
+                     Address = i.Address,
+                     NextOnTime = i.NextOnTime,
+                     OfferPercentage = i.MaxOfferPercentage
+                 }).ToList();
                 return Json(model, JsonRequestBehavior.AllowGet);
             }
             else if (a == "2")
             {
                 model.OtherList = db.Shops.SqlQuery(querySuperMarketList,
                 new SqlParameter("Latitude", Latitude),
-                new SqlParameter("Longitude", Longitude)).Select(i => new PlacesListView.Places
-                {
-                    Id = i.Id,
-                    Name = i.Name,
-                    DistrictName = i.StreetName,
-                    Rating = RatingCalculation(i.Id),
-                    ImagePath = ((!string.IsNullOrEmpty(i.ImagePath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.ImagePath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/noimageres.svg"),
-                    ShopCategoryId = i.ShopCategoryId,
-                    ShopCategoryName = i.ShopCategoryName,
-                    List = GetBannerImageList(i.Id, i.Name),
-                    Latitude = i.Latitude,
-                    Longitude = i.Longitude,
-                    Status = i.Status,
-                    isOnline = i.IsOnline,
-                    ReviewCount = db.CustomerReviews.Where(c => c.ShopId == i.Id).Count(),
-                    Address = i.Address,
-                    NextOnTime = i.NextOnTime,
-                    OfferPercentage = db.Products.Where(b => b.ShopId == i.Id && b.Status == 0)?.Max(b => b.Percentage) ?? 0
-                }).ToList();
+                new SqlParameter("Longitude", Longitude))
+                 .Select(i => new PlacesListView.Places
+                 {
+                     Id = i.Id,
+                     Name = i.Name,
+                     DistrictName = i.StreetName,
+                     Rating = i.Rating,
+                     ImagePath = ((!string.IsNullOrEmpty(i.ImagePath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.ImagePath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/noimageres.svg"),
+                     ShopCategoryId = i.ShopCategoryId,
+                     ShopCategoryName = i.ShopCategoryName,
+                     List = GetBannerImageList(i.Id, i.Name),
+                     Latitude = i.Latitude,
+                     Longitude = i.Longitude,
+                     Status = i.Status,
+                     isOnline = i.IsOnline,
+                     ReviewCount = i.CustomerReview,
+                     Address = i.Address,
+                     NextOnTime = i.NextOnTime,
+                     OfferPercentage = i.MaxOfferPercentage
+                 }).ToList();
                 return Json(model, JsonRequestBehavior.AllowGet);
             }
             else if (a == "3")
             {
                 model.OtherList = db.Shops.SqlQuery(queryHealthList,
                 new SqlParameter("Latitude", Latitude),
-                new SqlParameter("Longitude", Longitude)).Select(i => new PlacesListView.Places
-                {
-                    Id = i.Id,
-                    Name = i.Name,
-                    DistrictName = i.StreetName,
-                    Rating = RatingCalculation(i.Id),
-                    ImagePath = ((!string.IsNullOrEmpty(i.ImagePath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.ImagePath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/noimageres.svg"),
-                    ShopCategoryId = i.ShopCategoryId,
-                    ShopCategoryName = i.ShopCategoryName,
-                    List = GetBannerImageList(i.Id, i.Name),
-                    Latitude = i.Latitude,
-                    Longitude = i.Longitude,
-                    Status = i.Status,
-                    isOnline = i.IsOnline,
-                    ReviewCount = db.CustomerReviews.Where(c => c.ShopId == i.Id).Count(),
-                    Address = i.Address,
-                    NextOnTime = i.NextOnTime,
-                    OfferPercentage = db.Products.Where(b => b.ShopId == i.Id && b.Status == 0)?.Max(b => b.Percentage) ?? 0
-                }).ToList();
+                new SqlParameter("Longitude", Longitude))
+                  .Select(i => new PlacesListView.Places
+                  {
+                      Id = i.Id,
+                      Name = i.Name,
+                      DistrictName = i.StreetName,
+                      Rating = i.Rating,
+                      ImagePath = ((!string.IsNullOrEmpty(i.ImagePath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.ImagePath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/noimageres.svg"),
+                      ShopCategoryId = i.ShopCategoryId,
+                      ShopCategoryName = i.ShopCategoryName,
+                      List = GetBannerImageList(i.Id, i.Name),
+                      Latitude = i.Latitude,
+                      Longitude = i.Longitude,
+                      Status = i.Status,
+                      isOnline = i.IsOnline,
+                      ReviewCount = i.CustomerReview,
+                      Address = i.Address,
+                      NextOnTime = i.NextOnTime,
+                      OfferPercentage = i.MaxOfferPercentage
+                  }).ToList();
                 return Json(model, JsonRequestBehavior.AllowGet);
             }
             else if (a == "4")
             {
                 model.OtherList = db.Shops.SqlQuery(queryElectronicsList,
                 new SqlParameter("Latitude", Latitude),
-                new SqlParameter("Longitude", Longitude)).Select(i => new PlacesListView.Places
-                {
-                    Id = i.Id,
-                    Name = i.Name,
-                    DistrictName = i.StreetName,
-                    Rating = RatingCalculation(i.Id),
-                    ImagePath = ((!string.IsNullOrEmpty(i.ImagePath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.ImagePath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/noimageres.svg"),
-                    ShopCategoryId = i.ShopCategoryId,
-                    ShopCategoryName = i.ShopCategoryName,
-                    List = GetBannerImageList(i.Id, i.Name),
-                    Latitude = i.Latitude,
-                    Longitude = i.Longitude,
-                    Status = i.Status,
-                    isOnline = i.IsOnline,
-                    ReviewCount = db.CustomerReviews.Where(c => c.ShopId == i.Id).Count(),
-                    Address = i.Address,
-                    NextOnTime = i.NextOnTime,
-                    OfferPercentage = db.Products.Where(b => b.ShopId == i.Id && b.Status == 0)?.Max(b => b.Percentage) ?? 0
-                }).ToList();
+                new SqlParameter("Longitude", Longitude))
+                 .Select(i => new PlacesListView.Places
+                 {
+                     Id = i.Id,
+                     Name = i.Name,
+                     DistrictName = i.StreetName,
+                     Rating = i.Rating,
+                     ImagePath = ((!string.IsNullOrEmpty(i.ImagePath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.ImagePath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/noimageres.svg"),
+                     ShopCategoryId = i.ShopCategoryId,
+                     ShopCategoryName = i.ShopCategoryName,
+                     List = GetBannerImageList(i.Id, i.Name),
+                     Latitude = i.Latitude,
+                     Longitude = i.Longitude,
+                     Status = i.Status,
+                     isOnline = i.IsOnline,
+                     ReviewCount = i.CustomerReview,
+                     Address = i.Address,
+                     NextOnTime = i.NextOnTime,
+                     OfferPercentage = i.MaxOfferPercentage
+                 }).ToList();
                 return Json(model, JsonRequestBehavior.AllowGet);
             }
             else if (a == "5")
             {
                 model.OtherList = db.Shops.SqlQuery(qServicesList,
                 new SqlParameter("Latitude", Latitude),
-                new SqlParameter("Longitude", Longitude)).Select(i => new PlacesListView.Places
-                {
-                    Id = i.Id,
-                    Name = i.Name,
-                    DistrictName = i.StreetName,
-                    Rating = RatingCalculation(i.Id),
-                    ImagePath = ((!string.IsNullOrEmpty(i.ImagePath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.ImagePath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/noimageres.svg"),
-                    ShopCategoryId = i.ShopCategoryId,
-                    ShopCategoryName = i.ShopCategoryName,
-                    List = GetBannerImageList(i.Id, i.Name),
-                    Latitude = i.Latitude,
-                    Longitude = i.Longitude,
-                    Status = i.Status,
-                    isOnline = i.IsOnline,
-                    NextOnTime = i.NextOnTime,
-                    OfferPercentage = db.Products.Where(b => b.ShopId == i.Id && b.Status == 0)?.Max(b => b.Percentage) ?? 0
-                }).ToList();
+                new SqlParameter("Longitude", Longitude))
+                //.Select(i => new PlacesListView.Places
+                //{
+                //    Id = i.Id,
+                //    Name = i.Name,
+                //    DistrictName = i.StreetName,
+                //    Rating = RatingCalculation(i.Id),
+                //    ImagePath = ((!string.IsNullOrEmpty(i.ImagePath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.ImagePath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/noimageres.svg"),
+                //    ShopCategoryId = i.ShopCategoryId,
+                //    ShopCategoryName = i.ShopCategoryName,
+                //    List = GetBannerImageList(i.Id, i.Name),
+                //    Latitude = i.Latitude,
+                //    Longitude = i.Longitude,
+                //    Status = i.Status,
+                //    isOnline = i.IsOnline,
+                //    NextOnTime = i.NextOnTime,
+                //    OfferPercentage = db.Products.Where(b => b.ShopId == i.Id)?.Max(b => b.Percentage) ?? 0
+                //}).ToList();
+                 .Select(i => new PlacesListView.Places
+                 {
+                     Id = i.Id,
+                     Name = i.Name,
+                     DistrictName = i.StreetName,
+                     Rating = i.Rating,
+                     ImagePath = ((!string.IsNullOrEmpty(i.ImagePath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.ImagePath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/noimageres.svg"),
+                     ShopCategoryId = i.ShopCategoryId,
+                     ShopCategoryName = i.ShopCategoryName,
+                     List = GetBannerImageList(i.Id, i.Name),
+                     Latitude = i.Latitude,
+                     Longitude = i.Longitude,
+                     Status = i.Status,
+                     isOnline = i.IsOnline,
+                     ReviewCount = i.CustomerReview,
+                     Address = i.Address,
+                     NextOnTime = i.NextOnTime,
+                     OfferPercentage = i.MaxOfferPercentage
+                 }).ToList();
                 return Json(model, JsonRequestBehavior.AllowGet);
             }
             else
@@ -4349,25 +4395,26 @@ namespace ShopNow.Controllers
               " order by IsOnline desc,Adscore desc,Rating desc";
                 model.OtherList = db.Shops.SqlQuery(queryOtherList,
                 new SqlParameter("Latitude", Latitude),
-                new SqlParameter("Longitude", Longitude)).Select(i => new PlacesListView.Places
-                {
-                    Id = i.Id,
-                    Name = i.Name,
-                    DistrictName = i.StreetName,
-                    Rating = RatingCalculation(i.Id),
-                    ImagePath = ((!string.IsNullOrEmpty(i.ImagePath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.ImagePath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/noimageres.svg"),
-                    ShopCategoryId = i.ShopCategoryId,
-                    ShopCategoryName = i.ShopCategoryName,
-                    List = GetBannerImageList(i.Id, i.Name),
-                    Latitude = i.Latitude,
-                    Longitude = i.Longitude,
-                    Status = i.Status,
-                    isOnline = i.IsOnline,
-                    ReviewCount = db.CustomerReviews.Where(c => c.ShopId == i.Id).Count(),
-                    Address = i.Address,
-                    NextOnTime = i.NextOnTime,
-                    OfferPercentage = db.Products.Where(b => b.ShopId == i.Id && b.Status == 0)?.Max(b => b.Percentage) ?? 0
-                }).ToList();
+                new SqlParameter("Longitude", Longitude))
+                 .Select(i => new PlacesListView.Places
+                 {
+                     Id = i.Id,
+                     Name = i.Name,
+                     DistrictName = i.StreetName,
+                     Rating = i.Rating,
+                     ImagePath = ((!string.IsNullOrEmpty(i.ImagePath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.ImagePath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/noimageres.svg"),
+                     ShopCategoryId = i.ShopCategoryId,
+                     ShopCategoryName = i.ShopCategoryName,
+                     List = GetBannerImageList(i.Id, i.Name),
+                     Latitude = i.Latitude,
+                     Longitude = i.Longitude,
+                     Status = i.Status,
+                     isOnline = i.IsOnline,
+                     ReviewCount = i.CustomerReview,
+                     Address = i.Address,
+                     NextOnTime = i.NextOnTime,
+                     OfferPercentage = i.MaxOfferPercentage
+                 }).ToList();
                 return Json(model, JsonRequestBehavior.AllowGet);
             }
         }
@@ -4840,21 +4887,27 @@ namespace ShopNow.Controllers
         {
             try
             {
-                var d = DateTime.Now.Date.Date;
-                //var banners = (from s in db.Banners
-                //               where (s.Status == 0 || s.Status == 6) && s.ShopId == id && (DbFunctions.TruncateTime(s.FromDate) <= DbFunctions.TruncateTime(DateTime.Now) && DbFunctions.TruncateTime(s.Todate) >= DbFunctions.TruncateTime(DateTime.Now))
-                //               select new BannerImages { Bannerpath = (s.BannerPath != null) ? s.BannerPath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "", ShopId = s.ShopId, ProductId = s.MasterProductId }).ToList();
+                // var banners = db.Banners.Where(i => i.Status == 0 && i.ShopId == id && (DbFunctions.TruncateTime(i.FromDate) <= DbFunctions.TruncateTime(DateTime.Now) && DbFunctions.TruncateTime(i.Todate) >= DbFunctions.TruncateTime(DateTime.Now)))
+                //.GroupJoin(db.MasterProducts, b => b.MasterProductId, m => m.Id, (b, m) => new { b, m })
+                //.Select(i => new BannerImages
+                //{
+                //    Bannerpath = !(string.IsNullOrEmpty(i.b.BannerPath)) ? i.b.BannerPath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "",
+                //    ProductId = i.b.MasterProductId,
+                //    ProductName = i.m.Any() ? i.m.FirstOrDefault().Name : "",
+                //    ShopId = i.b.ShopId,
+                //    ShopName = name
+                //}).ToList();
 
                 var banners = db.Banners.Where(i => i.Status == 0 && i.ShopId == id && (DbFunctions.TruncateTime(i.FromDate) <= DbFunctions.TruncateTime(DateTime.Now) && DbFunctions.TruncateTime(i.Todate) >= DbFunctions.TruncateTime(DateTime.Now)))
-                .GroupJoin(db.MasterProducts, b => b.MasterProductId, m => m.Id, (b, m) => new { b, m })
-                .Select(i => new BannerImages
-                {
-                    Bannerpath = !(string.IsNullOrEmpty(i.b.BannerPath)) ? i.b.BannerPath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "",
-                    ProductId = i.b.MasterProductId,
-                    ProductName = i.m.Any()? i.m.FirstOrDefault().Name :"",
-                    ShopId = i.b.ShopId,
-                    ShopName = name
-                }).ToList();
+               //.GroupJoin(db.MasterProducts, b => b.MasterProductId, m => m.Id, (b, m) => new { b, m })
+               .Select(i => new BannerImages
+               {
+                   Bannerpath = !(string.IsNullOrEmpty(i.BannerPath)) ? i.BannerPath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "",
+                   ProductId = i.MasterProductId,
+                   ProductName = i.MasterProductId !=0? db.MasterProducts.FirstOrDefault(a=>a.Id == i.MasterProductId).Name:"",
+                   ShopId = i.ShopId,
+                   ShopName = name
+               }).ToList();
                 return banners;
             }
             catch (Exception ex)
@@ -4898,13 +4951,24 @@ namespace ShopNow.Controllers
         //    }
         //}
 
-        Double RatingCalculation(int id)
+        double RatingCalculation(int id)
         {
-            Double rating = 0;
-            var ratingCount = db.CustomerReviews.Where(i => i.ShopId == id).Count();
-            var ratingSum = (from ss in db.CustomerReviews
-                             where ss.ShopId == id
-                             select (Double?)ss.Rating).Sum() ?? 0;
+            //Double rating = 0;
+            //var ratingCount = db.CustomerReviews.Where(i => i.ShopId == id).Count();
+            //var ratingSum = (from ss in db.CustomerReviews
+            //                 where ss.ShopId == id
+            //                 select (Double?)ss.Rating).Sum() ?? 0;
+            //if (ratingCount == 0)
+            //    ratingCount = 1;
+            //rating = (ratingSum * 5) / (ratingCount * 5);
+            //return Math.Round(rating, 1);
+
+            double rating = 0;
+
+            var ratingList = db.CustomerReviews.Where(i => i.ShopId == id).Select(i => new { id = i.Id, rating = i.Rating }).ToList();
+            double ratingSum = ratingList.Sum(i => i.rating);
+
+            double ratingCount = ratingList.Count();
             if (ratingCount == 0)
                 ratingCount = 1;
             rating = (ratingSum * 5) / (ratingCount * 5);
@@ -7920,6 +7984,19 @@ namespace ShopNow.Controllers
 
             }
 
+            return Json(true, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult UpdateReviewCount()
+        {
+            var shopList = db.Shops.ToList();
+            foreach (var item in shopList)
+            {
+                var shop = db.Shops.FirstOrDefault(i => i.Id == item.Id);
+                shop.CustomerReview = db.CustomerReviews.Where(i => i.ShopId == item.Id).Count();
+                db.Entry(shop).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+            }
             return Json(true, JsonRequestBehavior.AllowGet);
         }
     }

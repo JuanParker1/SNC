@@ -46,15 +46,29 @@
                             </div>
                         </div>
                         <div class="col-md-4">
-                            <h6 class="font-weight-bold text-secondary mb-3">Prescription Image(s)</h6>
+                            <h6 class="font-weight-bold text-secondary mb-3">Prescription Image(s) / Audio</h6>
                             @foreach (var im in Model.ImagePathLists)
                             {
                                 <img alt="Image" data-toggle="modal" data-target="#myModal" class="img-thumbnail PrescriptionImage p-1" src="@im.ImagePath" onerror="this.src='/Images/noimage.png'" style="width:45px;height:45px" />
                             }
-                            <h6 class="font-weight-bold text-secondary mt-3">Prescription Audio</h6>
-                            <audio controls="controls" src="@Model.AudioPath"></audio>
+                            @*<h6 class="font-weight-bold text-secondary mt-3">Prescription Audio</h6>*@
+                            <br />
+                            @if (!string.IsNullOrEmpty(Model.AudioPath))
+                            {
+                                <audio controls="controls" src="@Model.AudioPath" class="mt-2"></audio>
+                            }
                         </div>
+                        @if (!string.IsNullOrEmpty(Model.Remarks))
+                        {
+                            <div class="col-md-12">
+                                <div class="d-flex">
+                                    <span>Remarks:</span>
+                                    <span class="font-weight-bold text-secondary ml-2">@Model.Remarks</span>
+                                </div>
+                            </div>
+                        }
                     </div>
+                    <hr />
                     <h6 class="mt-3">Add Order Item(s)</h6>
                     <div class="row mt-1">
                         <div class="col-md-6">
