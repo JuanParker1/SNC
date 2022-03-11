@@ -324,7 +324,9 @@ namespace ShopNow.Controllers
             }
             Session["EditAddOns"] = null;
             SaveKeywordData(master.Name);
-
+            // Tag Category 
+            SaveTagCategory(model.CategoryId, 0, 0, master.Id);
+            DeleteTagCategory();
             return RedirectToAction("FoodEdit", new { id = AdminHelpers.ECodeLong(model.Id) });
         }
 
@@ -727,6 +729,7 @@ namespace ShopNow.Controllers
                 master.DateUpdated = DateTime.Now;
                 _db.Entry(master).State = System.Data.Entity.EntityState.Modified;
                 _db.SaveChanges();
+               
             }
             catch (AmazonS3Exception amazonS3Exception)
             {
@@ -2593,7 +2596,7 @@ namespace ShopNow.Controllers
         }
 
         //Tag Category Session
-        public JsonResult AddFoodCreateTagCategory(int id, int type)
+        public JsonResult AddTagCategory(int id, int type)
         {
             List<TagCategorySessionList> tagCategoryList = Session["AddTagCategory"] as List<TagCategorySessionList> ?? new List<TagCategorySessionList>();
             if (id != 0)
@@ -2609,7 +2612,7 @@ namespace ShopNow.Controllers
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult RemoveFoodCreateTagCategory(int id)
+        public JsonResult RemoveTagCategory(int id)
         {
             List<TagCategorySessionList> tagCategoryList = Session["AddTagCategory"] as List<TagCategorySessionList> ?? new List<TagCategorySessionList>();
 
@@ -2619,83 +2622,24 @@ namespace ShopNow.Controllers
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult AddFoodUpdateTagCategory(int id, int type)
+        public JsonResult RemoveAlreadyAddedTagCategory(int tagCatId)
         {
-            List<TagCategorySessionList> tagCategoryList = Session["UpdateTagCategory"] as List<TagCategorySessionList> ?? new List<TagCategorySessionList>();
-            if (id != 0)
+            List<TagCategorySessionList> tagCategoryList = Session["AddedTagCategory"] as List<TagCategorySessionList> ?? new List<TagCategorySessionList>();
+
+            if (tagCatId != 0)
             {
                 var tagCategory = new TagCategorySessionList
                 {
-                    Id = id,
-                    Type = type
+                    Id = tagCatId,
+                    Type = 0
                 };
                 tagCategoryList.Add(tagCategory);
             }
-            Session["UpdateTagCategory"] = tagCategoryList;
-            return Json(true, JsonRequestBehavior.AllowGet);
-        }
-
-        public JsonResult RemoveFoodUpdateTagCategory(int id)
-        {
-            List<TagCategorySessionList> tagCategoryList = Session["UpdateTagCategory"] as List<TagCategorySessionList> ?? new List<TagCategorySessionList>();
-
-            if (tagCategoryList.Remove(tagCategoryList.SingleOrDefault(i => i.Id == id)))
-                Session["UpdateTagCategory"] = tagCategoryList;
+            Session["AddedTagCategory"] = tagCategoryList;
 
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult AddFMCGCreateTagCategory(int id, int type)
-        {
-            List<TagCategorySessionList> tagCategoryList = Session["AddTagCategory"] as List<TagCategorySessionList> ?? new List<TagCategorySessionList>();
-            if (id != 0)
-            {
-                var tagCategory = new TagCategorySessionList
-                {
-                    Id = id,
-                    Type = type
-                };
-                tagCategoryList.Add(tagCategory);
-            }
-            Session["AddTagCategory"] = tagCategoryList;
-            return Json(true, JsonRequestBehavior.AllowGet);
-        }
-
-        public JsonResult RemoveFMCGCreateTagCategory(int id)
-        {
-            List<TagCategorySessionList> tagCategoryList = Session["AddTagCategory"] as List<TagCategorySessionList> ?? new List<TagCategorySessionList>();
-
-            if (tagCategoryList.Remove(tagCategoryList.SingleOrDefault(i => i.Id == id)))
-                Session["AddTagCategory"] = tagCategoryList;
-
-            return Json(true, JsonRequestBehavior.AllowGet);
-        }
-
-        public JsonResult AddMedicalCreateTagCategory(int id, int type)
-        {
-            List<TagCategorySessionList> tagCategoryList = Session["AddTagCategory"] as List<TagCategorySessionList> ?? new List<TagCategorySessionList>();
-            if (id != 0)
-            {
-                var tagCategory = new TagCategorySessionList
-                {
-                    Id = id,
-                    Type = type
-                };
-                tagCategoryList.Add(tagCategory);
-            }
-            Session["AddTagCategory"] = tagCategoryList;
-            return Json(true, JsonRequestBehavior.AllowGet);
-        }
-
-        public JsonResult RemoveMedicalCreateTagCategory(int id)
-        {
-            List<TagCategorySessionList> tagCategoryList = Session["AddTagCategory"] as List<TagCategorySessionList> ?? new List<TagCategorySessionList>();
-
-            if (tagCategoryList.Remove(tagCategoryList.SingleOrDefault(i => i.Id == id)))
-                Session["AddTagCategory"] = tagCategoryList;
-
-            return Json(true, JsonRequestBehavior.AllowGet);
-        }
         public void SaveTagCategory(int categoryId, int subCategoryId, int nextSubCategoryId, long masterId)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -2784,6 +2728,24 @@ namespace ShopNow.Controllers
                 }
             }
             Session["AddTagCategory"] = null;
+        }
+
+        public void DeleteTagCategory()
+        {
+            List<TagCategorySessionList> tagCategoryList = Session["AddedTagCategory"] as List<TagCategorySessionList>;
+            if (tagCategoryList != null)
+            {
+                if (tagCategoryList.Count() > 0)
+                {
+                    foreach (var item in tagCategoryList)
+                    {
+                        var tagcategory = _db.TagCategories.FirstOrDefault(i => i.Id == item.Id);
+                        _db.TagCategories.Remove(tagcategory);
+                        _db.SaveChanges();
+                    }
+                }
+            }
+            Session["AddedTagCategory"] = null;
         }
     }
 }
