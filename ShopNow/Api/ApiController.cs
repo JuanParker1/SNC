@@ -2939,7 +2939,7 @@ namespace ShopNow.Controllers
                         IsLiked = i.cf.Any(a => a.CustomerId == customerId && a.IsFavorite == true && a.ProductId == i.p.p.p.Id),
                         LikeText = (i.cf.Any(a => a.CustomerId == customerId && a.IsFavorite == true && a.ProductId == i.p.p.p.Id) == true && i.cf.Where(a => a.ProductId == i.p.p.p.Id && a.IsFavorite == true).Count() == 1) ? "You Liked" : i.cf.Any(a => a.CustomerId == customerId && a.IsFavorite == true && a.ProductId == i.p.p.p.Id) == true ? "You & " + (i.cf.Where(a => a.ProductId == i.p.p.p.Id && a.IsFavorite == true).Count() - 1) + " more" : i.cf.Where(a => a.ProductId == i.p.p.p.Id && a.IsFavorite == true).Count() > 0 ? i.cf.Where(a => a.ProductId == i.p.p.p.Id && a.IsFavorite == true).Count() + " like" : "",
                         ShopPrice = i.p.p.p.ShopPrice
-                    }).ToList();
+                    }).OrderByDescending(i=>i.IsOnline).ToList();
 
                 if (!string.IsNullOrEmpty(str))
                 {
@@ -3011,7 +3011,7 @@ namespace ShopNow.Controllers
                         IsLiked = i.cf.Any(a => a.CustomerId == customerId && a.IsFavorite == true && a.ProductId == i.p.p.p.Id),
                         LikeText = (i.cf.Any(a => a.CustomerId == customerId && a.IsFavorite == true && a.ProductId == i.p.p.p.Id) == true && i.cf.Where(a => a.ProductId == i.p.p.p.Id && a.IsFavorite == true).Count() == 1) ? "You Liked" : i.cf.Any(a => a.CustomerId == customerId && a.IsFavorite == true && a.ProductId == i.p.p.p.Id) == true ? "You & " + (i.cf.Where(a => a.ProductId == i.p.p.p.Id && a.IsFavorite == true).Count() - 1) + " more" : i.cf.Where(a => a.ProductId == i.p.p.p.Id && a.IsFavorite == true).Count() > 0 ? i.cf.Where(a => a.ProductId == i.p.p.p.Id && a.IsFavorite == true).Count() + " like" : "",
                         ShopPrice = i.p.p.p.ShopPrice
-                    }).ToList();
+                    }).OrderByDescending(i => i.IsOnline).ToList();
 
                 if (!string.IsNullOrEmpty(str))
                 {
