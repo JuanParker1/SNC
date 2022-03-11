@@ -393,6 +393,7 @@ namespace ShopNow.Controllers
             if (model.ShopId != 0)
             {
                 var sh = db.Shops.FirstOrDefault(i => i.Id == model.ShopId);// Shop.Get(model.ShopId);
+                UpdateShopMaxOfferPercentage(sh.Id, model.Percentage);
                 var productcount = db.Products.Where(i => i.ShopId == model.ShopId && i.Status == 0).Count();
                 if (productcount >= 10 && sh.Status == 1)
                 {
@@ -498,7 +499,7 @@ namespace ShopNow.Controllers
             prod.UpdatedBy = user.Name;
             db.Entry(prod).State = System.Data.Entity.EntityState.Modified;
             db.SaveChanges();
-
+            UpdateShopMaxOfferPercentage(prod.ShopId, prod.Percentage);
             //Addons
             if (prod.Customisation == true)
             {
@@ -634,6 +635,7 @@ namespace ShopNow.Controllers
             if (model.ShopId != 0)
             {
                 var sh = db.Shops.FirstOrDefault(i => i.Id == model.ShopId);
+                UpdateShopMaxOfferPercentage(sh.Id, model.Percentage);
                 var productcount = db.Products.Where(i => i.ShopId == model.ShopId && i.Status == 0).Count();
                 if (productcount >= 10 && sh.Status == 1)
                 {
@@ -767,6 +769,7 @@ namespace ShopNow.Controllers
             db.Entry(prod).State = System.Data.Entity.EntityState.Modified;
             db.SaveChanges();
 
+            UpdateShopMaxOfferPercentage(prod.ShopId, prod.Percentage);
             //return RedirectToAction("FMCGList", new { ShopId = prod.ShopId, shopName = prod.ShopName });
             return RedirectToAction("FMCGEdit", new { id = AdminHelpers.ECodeLong(model.Id) });
         }
@@ -822,6 +825,7 @@ namespace ShopNow.Controllers
             if (model.ShopId != 0)
             {
                 var sh = db.Shops.FirstOrDefault(i => i.Id == model.ShopId);// Shop.Get(model.ShopId);
+                UpdateShopMaxOfferPercentage(sh.Id, model.Percentage);
                 var productcount = db.Products.Where(i => i.ShopId == model.ShopId && i.Status == 0).Count();
                 if (productcount >= 10 && sh.Status == 1)
                 {
@@ -927,6 +931,7 @@ namespace ShopNow.Controllers
             db.Entry(prod).State = System.Data.Entity.EntityState.Modified;
             db.SaveChanges();
 
+            UpdateShopMaxOfferPercentage(prod.ShopId, prod.Percentage);
             return RedirectToAction("ElectronicEdit", new { id = AdminHelpers.ECodeLong(model.Id) });
         }
 
@@ -1864,6 +1869,17 @@ namespace ShopNow.Controllers
                 }).ToListAsync();
 
             return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
+        }
+
+        public void UpdateShopMaxOfferPercentage(int shopid, double percentage)
+        {
+            var shop = db.Shops.FirstOrDefault(i => i.Id == shopid);
+            if (percentage > shop.MaxOfferPercentage)
+            {
+                shop.MaxOfferPercentage = percentage;
+                db.Entry(shop).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+            }
         }
 
         protected override void Dispose(bool disposing)
