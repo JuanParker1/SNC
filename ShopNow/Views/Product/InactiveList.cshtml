@@ -9,25 +9,21 @@
 <div class="container-fluid">
     <form method="get" action="/Product/InactiveList" class="my-3">
         <div class="row my-2">
-            <div class="col-md-3">
+            <div class="col-md-2">
                 <h5 class="text-success" style="letter-spacing:1px">@ViewBag.Title</h5>
             </div>
-            <div class="col-md-6">
-                <div class="row">
-                    <div class="col-md-4">
-                        <select id="select-shop" class="form-control" name="ShopId">
-                            @if (Model.ShopId != 0)
-                            {
-                                <option value="@Model.ShopId">@Model.ShopName</option>
-                            }
-                        </select>
-                        <input type="hidden" name="ShopName" value="@Model.ShopName" />
-                    </div>
-                    <div class="col-md-4">
-                        <input type="submit" class="btn btn-info" value="Apply Filter" />
-                        <a href="/Product/InactiveList" class="btn btn-warning ml-2">Clear Filter</a>
-                    </div>
-                </div>
+            <div class="col-md-4">
+                <select id="select-shop" class="form-control" name="ShopId">
+                    @if (Model.ShopId != 0)
+                    {
+                        <option value="@Model.ShopId">@Model.ShopName</option>
+                    }
+                </select>
+                <input type="hidden" name="ShopName" value="@Model.ShopName" />
+            </div>
+            <div class="col-md-3">
+                <input type="submit" class="btn btn-info" value="Apply Filter" />
+                <a href="/Product/InactiveList" class="btn btn-warning ml-2">Clear Filter</a>
             </div>
             <div class="col-md-3">
                 <h5 class="text-success text-right">Total Count: @Model.TotalCount</h5>
