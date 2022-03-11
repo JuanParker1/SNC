@@ -85,6 +85,7 @@ namespace ShopNow.Models
         public int DeliveryTierType { get; set; }
         public bool IsTrail { get; set; }
         public double ShopPricePercentage { get; set; }
+        public double MaxOfferPercentage { get; set; }
         public int Status { get; set; }
         public System.DateTime DateEncoded { get; set; }
         public System.DateTime DateUpdated { get; set; }
