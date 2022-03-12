@@ -116,6 +116,7 @@ namespace ShopNow.Controllers
             billingcharge.UpdatedBy = user.Name;
             db.BillingCharges.Add(billingcharge);
             db.SaveChanges();
+            UpdateShopDeliveryDiscountPercentage(billingcharge.ShopId, billingcharge.DeliveryDiscountPercentage);
             return RedirectToAction("BillingChargeList");
         }
 
@@ -154,6 +155,7 @@ namespace ShopNow.Controllers
                 bill.UpdatedBy = user.Name;
                 db.Entry(bill).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
+                UpdateShopDeliveryDiscountPercentage(bill.ShopId, bill.DeliveryDiscountPercentage);
             }
             return RedirectToAction("BillingChargeList");
         }
@@ -395,6 +397,14 @@ namespace ShopNow.Controllers
             }).ToListAsync();
 
             return Json(new { model.List, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
+        }
+
+        public void UpdateShopDeliveryDiscountPercentage(int shopid,double percentage)
+        {
+            var shop = db.Shops.FirstOrDefault(i => i.Id == shopid);
+            shop.DeliveryDiscountPercentage = percentage;
+            db.Entry(shop).State = System.Data.Entity.EntityState.Modified;
+            db.SaveChanges();
         }
 
         protected override void Dispose(bool disposing)

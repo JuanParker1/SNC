@@ -89,8 +89,8 @@
         <EntityTypeShape EntityType="sncModel.Order" Width="1.5" PointX="31.375" PointY="17.75" />
         <EntityTypeShape EntityType="sncModel.TagCategory" Width="1.5" PointX="33.375" PointY="17.75" />
         <EntityTypeShape EntityType="sncModel.CustomerGiftCard" Width="1.5" PointX="9.375" PointY="13.75" />
-        <EntityTypeShape EntityType="sncModel.Shop" Width="1.5" PointX="19.375" PointY="33.75" />
         <EntityTypeShape EntityType="sncModel.NextSubCategory" Width="1.5" PointX="33.375" PointY="21.75" />
+        <EntityTypeShape EntityType="sncModel.Shop" Width="1.5" PointX="19.375" PointY="33.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
