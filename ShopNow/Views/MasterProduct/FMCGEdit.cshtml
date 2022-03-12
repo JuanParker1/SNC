@@ -135,7 +135,17 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label"><strong class="text-secondary">Tag Category</strong></label>
+                                            <select class="form-control" name="TagCategoryId" id="TagCategoryId" multiple></select>
+                                            <input type="hidden" name="TagCategoryName" />
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
+                            
                         </div>
                         <div class="row">
                             <div class="col-md-6">
@@ -310,6 +320,39 @@
     <script src="~/Scripts/ckeditor/ckeditor.js"></script>
     <script>
         $(document).ready(function () {
+              var tagCategorySelect = $('#TagCategoryId');
+            var TagCategoryId = "@Model.TagCategory";
+            var TagCategoryName = "@Model.TagCategoryName";
+            if (TagCategoryId) {
+                var array_code = TagCategoryId.split(',');
+                var array_name = TagCategoryName.split(',');
+                $.each(array_code, function (i) {
+                    $('select[name="TagCategoryId"] option[value=' + array_code[i] + ']').attr('selected', 'selected');
+                    var option = new Option(array_name[i], array_code[i] +','+ "TagCategory", true, true);
+                    tagCategorySelect.append(option).trigger('change');
+                });
+            }
+
+            $('#TagCategoryId').select2({
+                placeholder: "Search Tag Category",
+                width: '100%',
+                ajax: {
+                    url: "/MasterProduct/GetFMCGTagCategorySelect2",
+                    delay: 250,
+                    dataType: 'json'
+                }
+            }).on('select2:select', function (e) {
+                $.getJSON('/MasterProduct/AddTagCategory', { id: e.params.data.id, type: e.params.data.type }, function () { });
+            }).on('select2:unselect', function (e) {
+                var oldTagCategory = e.params.data.id.split(',');
+                if (oldTagCategory.length > 1) {
+                    $.getJSON('/MasterProduct/RemoveAlreadyAddedTagCategory', { tagCatId: oldTagCategory[0] }, function () { });
+                } else {
+                    $.getJSON('/MasterProduct/RemoveTagCategory', { id: e.params.data.id }, function () { });
+                }
+            });
+
+
             $('#BrandId').select2({
                 placeholder: "Search Brand",
                 ajax: {

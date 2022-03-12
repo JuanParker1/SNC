@@ -152,8 +152,15 @@
                                         </div>
                                     </div>
                                     <div class="col-md-6">
-                                        <label class="col-form-label"><strong class="text-secondary">Short Description</strong></label>
-                                        <input type="text" class="form-control" name="ShortDescription" id="ShortDescription" maxlength="100" />
+                                        <div class="form-group">
+                                            <label class="control-label"><strong class="text-secondary">Short Description</strong></label>
+                                            <input type="text" class="form-control" name="ShortDescription" id="ShortDescription" maxlength="100" />
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label"><strong class="text-secondary">Tag Category</strong></label>
+                                            <select class="form-control" name="TagCategoryId" id="TagCategoryId" multiple></select>
+                                            <input type="hidden" name="TagCategoryName" />
+                                        </div>
                                     </div>
                                     <div class="col-md-6">
                                         <label class="control-label"><strong class="text-secondary">Long Description</strong></label>
@@ -233,6 +240,20 @@
                 }
             }).on('select2:select', function (e) {
                 $('input[name="CategoryName"]').val(e.params.data.text);
+                });
+
+            $('#TagCategoryId').select2({
+                placeholder: " Search Tag Category",
+                width: '100%',
+                ajax: {
+                    url: "/MasterProduct/GetElectronicTagCategorySelect2",
+                    delay: 250,
+                    dataType: 'json'
+                }
+            }).on('select2:select', function (e) {
+                $.getJSON('/MasterProduct/AddTagCategory', { id: e.params.data.id, type: e.params.data.type }, function () { });
+            }).on('select2:unselect', function (e) {
+                $.getJSON('/MasterProduct/RemoveTagCategory', { id: e.params.data.id }, function () { });
             });
 
             function readURLProduct1(input) {

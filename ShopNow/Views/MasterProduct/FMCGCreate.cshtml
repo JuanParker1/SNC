@@ -323,9 +323,9 @@
                     dataType: 'json'
                 }
             }).on('select2:select', function (e) {
-                $.getJSON('/MasterProduct/AddFMCGCreateTagCategory', { id: e.params.data.id, type: e.params.data.type }, function () { });
+                $.getJSON('/MasterProduct/AddTagCategory', { id: e.params.data.id, type: e.params.data.type }, function () { });
             }).on('select2:unselect', function (e) {
-                $.getJSON('/MasterProduct/RemoveFMCGCreateTagCategory', { id: e.params.data.id }, function () { });
+                $.getJSON('/MasterProduct/RemoveTagCategory', { id: e.params.data.id }, function () { });
             });
             //$('#SubCategoryIds').select2({
             //    placeholder: "Search I Sub Category",

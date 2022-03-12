@@ -39,6 +39,7 @@
                                         <input type="hidden" name="OrderNumber" />
                                         <input type="hidden" name="DeliveryLatitude" id="DeliveryLatitude" />
                                         <input type="hidden" name="DeliveryLongitude" id="DeliveryLongitude" />
+                                        <input type="hidden" name="ShopCategoryId" id="ShopCategoryId" />
                                     </div>
                                 </div>
                                 <div class="form-group row">
@@ -217,6 +218,7 @@
                 $('input[name="PickupLongitude"]').val(e.params.data.longitude);
                 $('input[name="CustomerId"]').val(e.params.data.customerid);
                 $('input[name="OrderNumber"]').val(Math.floor(Math.random() * 1000000000));
+                $('input[name="ShopCategoryId"]').val(e.params.data.shopCategoryId);
             });
 
             $('#PhoneNumber').on('change', function () {
@@ -333,25 +335,31 @@
             var DeliveryLongitude = parseFloat($("#DeliveryLongitude").val());
             var ShopId = $("#ShopId").val();
             var distance = parseFloat($("#Distance").val());
-            $.getJSON("/Service/GetDeliveryCharge", { ShopId: ShopId, PickupLatitude: PickupLatitude, PickupLongitude: PickupLongitude, DeliveryLatitude: DeliveryLatitude, DeliveryLongitude: DeliveryLongitude, Distance: distance }, function (data) {
-                $("#DeliveryCharge").val(data.DeliveryCharge.toFixed(2));
-                $("#dcharge").text(data.DeliveryCharge.toFixed(2));
-                $("#dist").text(data.distance.toFixed(2));
-               // $("#Distance").val(data.Distance.toFixed(2));
-                var dcharge = parseFloat(data.DeliveryCharge);
-                if (data.DeliveryCredit < 50) {
-                    swal("Low Delivery Credit!", "Kindly Update Delivery Credits.", "warning");
-                }
-                else {
-                    if (dcharge >= 50 && dcharge <= 300) {
-                        $("#btnSubmit").removeAttr("disabled");
-                    } else {
-                        swal("Warning!", "Delivery Address is not within Limit. Kindly Update the address.", "warning");
-                        clearFields();
+            var shopcatId = $('#ShopCategoryId').val();
+            var distancelimit = shopcatId == 4 ? 30 : 16;
+            if (distance <= distancelimit) {
+                $.getJSON("/Service/GetDeliveryCharge", { ShopId: ShopId, PickupLatitude: PickupLatitude, PickupLongitude: PickupLongitude, DeliveryLatitude: DeliveryLatitude, DeliveryLongitude: DeliveryLongitude, Distance: distance }, function (data) {
+                    $("#DeliveryCharge").val(data.DeliveryCharge.toFixed(2));
+                    $("#dcharge").text(data.DeliveryCharge.toFixed(2));
+                    $("#dist").text(data.distance.toFixed(2));
+                    // $("#Distance").val(data.Distance.toFixed(2));
+                    var dcharge = parseFloat(data.DeliveryCharge);
+                    if (data.DeliveryCredit < 50) {
+                        swal("Low Delivery Credit!", "Kindly Update Delivery Credits.", "warning");
                     }
-                }
-            });
-
+                    else {
+                        if (dcharge >= 50 && dcharge <= 300) {
+                            $("#btnSubmit").removeAttr("disabled");
+                        } else {
+                            swal("Warning!", "Delivery Address is not within Limit. Kindly Update the address.", "warning");
+                            clearFields();
+                        }
+                    }
+                });
+            } else {
+                swal("Warning!", "Delivery Address is not within Limit(" + distancelimit + " kms). Kindly Update the address.", "warning");
+                clearFields();
+            }
         }
 
         function clearFields() {

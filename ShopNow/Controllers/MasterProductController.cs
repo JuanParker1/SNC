@@ -248,6 +248,9 @@ namespace ShopNow.Controllers
                 addOns.Add(addOn);
             }
             Session["EditAddOns"] = addOns;
+
+            Session["AddTagCategory"] = new List<TagCategorySessionList>();
+            Session["AddedTagCategory"] = new List<TagCategorySessionList>();
             return View(model);
         }
 
@@ -531,7 +534,6 @@ namespace ShopNow.Controllers
                 return RedirectToAction("LogOut", "Home");
             }
             var user = ((Helpers.Sessions.User)Session["USER"]);
-            Session["AddTagCategory"] = null;
             Session["AddTagCategory"] = new List<TagCategorySessionList>();
             ViewBag.Name = user.Name;
             return View();
@@ -669,6 +671,13 @@ namespace ShopNow.Controllers
                 model.NextSubCategoryName = nextsubcategoryName.Name;
             else
                 model.NextSubCategoryName = "N/A";
+
+            model.TagCategory = string.Join(",", _db.TagCategories.Where(i => i.MasterProductId == masterProduct.Id).Select(i => i.Id));
+            model.TagCategoryName = string.Join(",", _db.TagCategories.Where(i => i.MasterProductId == masterProduct.Id).Select(i => i.CategoryName));
+
+            Session["AddTagCategory"] = new List<TagCategorySessionList>();
+            Session["AddedTagCategory"] = new List<TagCategorySessionList>();
+
             return View(model);
         }
 
@@ -747,7 +756,9 @@ namespace ShopNow.Controllers
             }
             //return RedirectToAction("FMCGList");
             SaveKeywordData(master.Name);
-
+            // Tag Category 
+            SaveTagCategory(master.CategoryId, master.SubCategoryId, master.NextSubCategoryId, master.Id);
+            DeleteTagCategory();
             return RedirectToAction("FMCGEdit", new { id = AdminHelpers.ECodeLong(model.Id) });
         }
 
@@ -780,7 +791,6 @@ namespace ShopNow.Controllers
         public ActionResult MedicalCreate()
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
-            Session["AddTagCategory"] = null;
             Session["AddTagCategory"] = new List<TagCategorySessionList>();
             ViewBag.Name = user.Name;
             return View();
@@ -922,6 +932,11 @@ namespace ShopNow.Controllers
             model.DrugCompoundDetailIds1 = masterProduct.DrugCompoundDetailIds;
             if(masterProduct.CategoryId !=0)
             model.CategoryName = _db.Categories.FirstOrDefault(i => i.Id == masterProduct.CategoryId).Name;
+
+            model.TagCategory = string.Join(",", _db.TagCategories.Where(i => i.MasterProductId == masterProduct.Id).Select(i => i.Id));
+            model.TagCategoryName = string.Join(",", _db.TagCategories.Where(i => i.MasterProductId == masterProduct.Id).Select(i => i.CategoryName));
+            Session["AddTagCategory"] = new List<TagCategorySessionList>();
+            Session["AddedTagCategory"] = new List<TagCategorySessionList>();
             return View(model);
         }
 
@@ -1021,6 +1036,9 @@ namespace ShopNow.Controllers
             }
             // return RedirectToAction("MedicalList");
             SaveKeywordDataWithCombination(master.Name,master.DrugCompoundDetailName);
+            // Tag Category 
+            SaveTagCategory(master.CategoryId, 0, 0, master.Id);
+            DeleteTagCategory();
             return RedirectToAction("MedicalEdit", new { id = AdminHelpers.ECodeLong(model.Id) });
         }
 
@@ -1204,6 +1222,7 @@ namespace ShopNow.Controllers
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
+            Session["AddTagCategory"] = new List<TagCategorySessionList>();
             return View();
         }
 
@@ -1289,6 +1308,9 @@ namespace ShopNow.Controllers
                 }
             }
             SaveKeywordData(prod.Name);
+
+            // Tag Category 
+            SaveTagCategory(model.CategoryId,0, 0, prod.Id);
             return View();
         }
 
@@ -1318,6 +1340,12 @@ namespace ShopNow.Controllers
                 model.CategoryName = categoryName.Name;
             else
                 model.CategoryName = "N/A";
+
+            model.TagCategory = string.Join(",", _db.TagCategories.Where(i => i.MasterProductId == masterProduct.Id).Select(i => i.Id));
+            model.TagCategoryName = string.Join(",", _db.TagCategories.Where(i => i.MasterProductId == masterProduct.Id).Select(i => i.CategoryName));
+            Session["AddTagCategory"] = new List<TagCategorySessionList>();
+            Session["AddedTagCategory"] = new List<TagCategorySessionList>();
+
             return View(model);
         }
 
@@ -1391,6 +1419,9 @@ namespace ShopNow.Controllers
                 }
             }
             SaveKeywordData(prod.Name);
+            // Tag Category 
+            SaveTagCategory(model.CategoryId, 0, 0, prod.Id);
+            DeleteTagCategory();
             return RedirectToAction("ElectronicEdit", new { id = AdminHelpers.ECodeLong(model.Id) });
         }
 
@@ -2587,6 +2618,39 @@ namespace ShopNow.Controllers
                    id = i.Id,
                    text = i.Name,
                    type =3
+               }).ToListAsync();
+
+            var catSubList = cat.Union(subcat).ToList();
+            var catSubNextList = catSubList.Union(nextSubCat);
+
+            return Json(new { results = catSubNextList, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
+        }
+
+        public async Task<JsonResult> GetElectronicTagCategorySelect2(string q = "")
+        {
+            var cat = await _db.Categories.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0 && a.ProductTypeId == 4)
+               .Select(i => new
+               {
+                   id = i.Id,
+                   text = i.Name,
+                   type = 1
+               }).ToListAsync();
+            var catArray = cat.Select(i => i.id).ToArray();
+            var subcat = await _db.SubCategories.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0 && catArray.Contains(a.CategoryId))
+                .Select(i => new
+                {
+                    id = i.Id,
+                    text = i.Name,
+                    type = 2
+                }).ToListAsync();
+
+            var subcatArray = subcat.Select(i => i.id).ToArray();
+            var nextSubCat = await _db.NextSubCategories.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0 && subcatArray.Contains(a.SubCategoryId))
+               .Select(i => new
+               {
+                   id = i.Id,
+                   text = i.Name,
+                   type = 3
                }).ToListAsync();
 
             var catSubList = cat.Union(subcat).ToList();
