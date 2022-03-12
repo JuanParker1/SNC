@@ -2626,6 +2626,39 @@ namespace ShopNow.Controllers
             return Json(new { results = catSubNextList, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
         }
 
+        public async Task<JsonResult> GetElectronicTagCategorySelect2(string q = "")
+        {
+            var cat = await _db.Categories.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0 && a.ProductTypeId == 4)
+               .Select(i => new
+               {
+                   id = i.Id,
+                   text = i.Name,
+                   type = 1
+               }).ToListAsync();
+            var catArray = cat.Select(i => i.id).ToArray();
+            var subcat = await _db.SubCategories.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0 && catArray.Contains(a.CategoryId))
+                .Select(i => new
+                {
+                    id = i.Id,
+                    text = i.Name,
+                    type = 2
+                }).ToListAsync();
+
+            var subcatArray = subcat.Select(i => i.id).ToArray();
+            var nextSubCat = await _db.NextSubCategories.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0 && subcatArray.Contains(a.SubCategoryId))
+               .Select(i => new
+               {
+                   id = i.Id,
+                   text = i.Name,
+                   type = 3
+               }).ToListAsync();
+
+            var catSubList = cat.Union(subcat).ToList();
+            var catSubNextList = catSubList.Union(nextSubCat);
+
+            return Json(new { results = catSubNextList, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
+        }
+
         //Tag Category Session
         public JsonResult AddTagCategory(int id, int type)
         {
