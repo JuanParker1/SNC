@@ -789,7 +789,10 @@ namespace ShopNow.Controllers
             var deliveryCharge = db.DeliveryCharges.FirstOrDefault(i => i.Type == shop.DeliveryType && i.TireType == shop.DeliveryTierType && i.VehicleType == mode && i.Status == 0);
             if (deliveryCharge != null)
             {
-                model.DeliveryChargeKM = billingCharge.DeliveryDiscountPercentage < 10 ? deliveryCharge.ChargeUpto5Km : 50;
+                if (shop.ShopCategoryId == 1)
+                    model.DeliveryChargeKM = billingCharge.DeliveryDiscountPercentage < 10 ? deliveryCharge.ChargeUpto5Km : 50;
+                else
+                    model.DeliveryChargeKM = deliveryCharge.ChargeUpto5Km;
                 model.DeliveryChargeOneKM = deliveryCharge.ChargePerKm;
                 model.DeliveryMode = deliveryCharge.VehicleType;
                 model.Distance = 5;
@@ -4112,8 +4115,7 @@ namespace ShopNow.Controllers
                      ReviewCount = i.CustomerReview,
                      Address = i.Address,
                      NextOnTime = i.NextOnTime,
-                     OfferPercentage = i.MaxOfferPercentage,
-                     IsShopRate = i.DeliveryDiscountPercentage >= 10 ? true : false
+                     OfferPercentage = i.MaxOfferPercentage
                  }).ToList();
                 model.GroceriesList = db.Shops.SqlQuery(queryGroceriesList,
                 new SqlParameter("Latitude", Latitude),
@@ -4135,8 +4137,7 @@ namespace ShopNow.Controllers
                      ReviewCount = i.CustomerReview,
                      Address = i.Address,
                      NextOnTime = i.NextOnTime,
-                     OfferPercentage = i.MaxOfferPercentage,
-                     IsShopRate = i.DeliveryDiscountPercentage >= 10 ? true : false
+                     OfferPercentage = i.MaxOfferPercentage
                  }).ToList();
                 model.HealthList = db.Shops.SqlQuery(queryHealthList,
                 new SqlParameter("Latitude", Latitude),
@@ -4158,8 +4159,7 @@ namespace ShopNow.Controllers
                     ReviewCount = i.CustomerReview,
                     Address = i.Address,
                     NextOnTime = i.NextOnTime,
-                    OfferPercentage = i.MaxOfferPercentage,
-                    IsShopRate = i.DeliveryDiscountPercentage >= 10 ? true : false
+                    OfferPercentage = i.MaxOfferPercentage
                 }).ToList();
 
                 model.ElectronicsList = db.Shops.SqlQuery(queryElectronicsList,
@@ -4182,8 +4182,7 @@ namespace ShopNow.Controllers
                      ReviewCount = i.CustomerReview,
                      Address = i.Address,
                      NextOnTime = i.NextOnTime,
-                     OfferPercentage = i.MaxOfferPercentage,
-                     IsShopRate = i.DeliveryDiscountPercentage >= 10 ? true : false
+                     OfferPercentage = i.MaxOfferPercentage
                  }).ToList();
                 model.ServicesList = db.Shops.SqlQuery(qServicesList,
                 new SqlParameter("Latitude", Latitude),
@@ -4205,8 +4204,7 @@ namespace ShopNow.Controllers
                     ReviewCount = i.CustomerReview,
                     Address = i.Address,
                     NextOnTime = i.NextOnTime,
-                    OfferPercentage = i.MaxOfferPercentage,
-                    IsShopRate = i.DeliveryDiscountPercentage >= 10 ? true : false
+                    OfferPercentage = i.MaxOfferPercentage
                 }).ToList();
                 model.OtherList = db.Shops.SqlQuery(queryOtherList,
                 new SqlParameter("Latitude", Latitude),
@@ -4228,8 +4226,7 @@ namespace ShopNow.Controllers
                      ReviewCount = i.CustomerReview,
                      Address = i.Address,
                      NextOnTime = i.NextOnTime,
-                     OfferPercentage = i.MaxOfferPercentage,
-                     IsShopRate = i.DeliveryDiscountPercentage >= 10 ? true : false
+                     OfferPercentage = i.MaxOfferPercentage
                  }).ToList();
                 return Json(model, JsonRequestBehavior.AllowGet);
             }
@@ -4282,8 +4279,7 @@ namespace ShopNow.Controllers
                      ReviewCount = i.CustomerReview,
                      Address = i.Address,
                      NextOnTime = i.NextOnTime,
-                     OfferPercentage = i.MaxOfferPercentage,
-                     IsShopRate = i.DeliveryDiscountPercentage >= 10 ? true : false
+                     OfferPercentage = i.MaxOfferPercentage
                  }).ToList();
                 return Json(model, JsonRequestBehavior.AllowGet);
             }
@@ -4309,8 +4305,7 @@ namespace ShopNow.Controllers
                      ReviewCount = i.CustomerReview,
                      Address = i.Address,
                      NextOnTime = i.NextOnTime,
-                     OfferPercentage = i.MaxOfferPercentage,
-                     IsShopRate = i.DeliveryDiscountPercentage >= 10 ? true : false
+                     OfferPercentage = i.MaxOfferPercentage
                  }).ToList();
                 return Json(model, JsonRequestBehavior.AllowGet);
             }
@@ -4336,8 +4331,7 @@ namespace ShopNow.Controllers
                       ReviewCount = i.CustomerReview,
                       Address = i.Address,
                       NextOnTime = i.NextOnTime,
-                      OfferPercentage = i.MaxOfferPercentage,
-                      IsShopRate = i.DeliveryDiscountPercentage >= 10 ? true : false
+                      OfferPercentage = i.MaxOfferPercentage
                   }).ToList();
                 return Json(model, JsonRequestBehavior.AllowGet);
             }
@@ -4363,8 +4357,7 @@ namespace ShopNow.Controllers
                      ReviewCount = i.CustomerReview,
                      Address = i.Address,
                      NextOnTime = i.NextOnTime,
-                     OfferPercentage = i.MaxOfferPercentage,
-                     IsShopRate = i.DeliveryDiscountPercentage >= 10 ? true : false
+                     OfferPercentage = i.MaxOfferPercentage
                  }).ToList();
                 return Json(model, JsonRequestBehavior.AllowGet);
             }
@@ -4407,8 +4400,7 @@ namespace ShopNow.Controllers
                      ReviewCount = i.CustomerReview,
                      Address = i.Address,
                      NextOnTime = i.NextOnTime,
-                     OfferPercentage = i.MaxOfferPercentage,
-                     IsShopRate = i.DeliveryDiscountPercentage >= 10 ? true : false
+                     OfferPercentage = i.MaxOfferPercentage
                  }).ToList();
                 return Json(model, JsonRequestBehavior.AllowGet);
             }
@@ -4437,8 +4429,7 @@ namespace ShopNow.Controllers
                      ReviewCount = i.CustomerReview,
                      Address = i.Address,
                      NextOnTime = i.NextOnTime,
-                     OfferPercentage = i.MaxOfferPercentage,
-                     IsShopRate = i.DeliveryDiscountPercentage >= 10 ? true : false
+                     OfferPercentage = i.MaxOfferPercentage
                  }).ToList();
                 return Json(model, JsonRequestBehavior.AllowGet);
             }
