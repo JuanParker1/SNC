@@ -5699,7 +5699,7 @@ namespace ShopNow.Controllers
             var order = db.Orders.FirstOrDefault(i => i.Id == orderId);
             if (order != null)
             {
-                if (type == 1)
+                if (type == 1 || order.Status == 3)
                 {
                     order.OrderReadyTime = DateTime.Now;
                     order.Status = 8;
