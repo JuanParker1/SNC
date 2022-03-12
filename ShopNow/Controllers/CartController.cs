@@ -1062,6 +1062,7 @@ namespace ShopNow.Controllers
                         if (product != null)
                         {
                             product.HoldOnStok -= Convert.ToInt32(item.Quantity);
+                            product.Qty += Convert.ToInt32(item.Quantity);
                             db.Entry(product).State = System.Data.Entity.EntityState.Modified;
                             db.SaveChanges();
                         }
