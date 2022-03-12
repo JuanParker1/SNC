@@ -386,6 +386,8 @@ namespace ShopNow.ViewModels
         public string ASIN { get; set; }
         public int CategoryId { get; set; }
         public string CategoryName { get; set; }
+        public string TagCategoryName { get; set; }
+        public string TagCategory { get; set; }
         public int SubCategoryId { get; set; }
         public string SubCategoryName { get; set; }
         public int NextSubCategoryId { get; set; }
@@ -495,6 +497,8 @@ namespace ShopNow.ViewModels
         public string BrandName { get; set; }
         public int CategoryId { get; set; }
         public string CategoryName { get; set; }
+        public string TagCategory { get; set; }
+        public string TagCategoryName { get; set; }
         public int MeasurementUnitId { get; set; }
         public string MeasurementUnitName { get; set; }
         public string DrugCompoundDetailIds1 { get; set; }
@@ -570,6 +574,8 @@ namespace ShopNow.ViewModels
         public string BrandName { get; set; }
         public int CategoryId { get; set; }
         public string CategoryName { get; set; }
+        public string TagCategory { get; set; }
+        public string TagCategoryName { get; set; }
         public string ShortDescription { get; set; }
         public string LongDescription { get; set; }
         public double Price { get; set; }
