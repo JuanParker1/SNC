@@ -729,12 +729,21 @@ namespace ShopNow.Controllers
                 bill.DateUpdated = DateTime.Now;
                 db.Entry(bill).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
+                UpdateShopDeliveryDiscountPercentage(bill.ShopId,bill.DeliveryDiscountPercentage);
                 return Json(new { message = "Successfully Updated Bill!" });
             }
             else
             {
                 return Json(new { message = "Fail to Update Bill!" });
             }
+        }
+
+        public void UpdateShopDeliveryDiscountPercentage(int shopid, double percentage)
+        {
+            var shop = db.Shops.FirstOrDefault(i => i.Id == shopid);
+            shop.DeliveryDiscountPercentage = percentage;
+            db.Entry(shop).State = System.Data.Entity.EntityState.Modified;
+            db.SaveChanges();
         }
 
         public JsonResult GetBillOrDelivary(int bill, int shopId)
@@ -775,17 +784,19 @@ namespace ShopNow.Controllers
                 mode = 2;
             if (totalWeight > 40 || liters > 120)
                 mode = 3;
+
+            var billingCharge = db.BillingCharges.FirstOrDefault(i => i.ShopId == shopId && i.Status == 0);
             var deliveryCharge = db.DeliveryCharges.FirstOrDefault(i => i.Type == shop.DeliveryType && i.TireType == shop.DeliveryTierType && i.VehicleType == mode && i.Status == 0);
             if (deliveryCharge != null)
             {
-                model.DeliveryChargeKM = deliveryCharge.ChargeUpto5Km;
+                model.DeliveryChargeKM = billingCharge.DeliveryDiscountPercentage < 10 ? deliveryCharge.ChargeUpto5Km : 50;
                 model.DeliveryChargeOneKM = deliveryCharge.ChargePerKm;
                 model.DeliveryMode = deliveryCharge.VehicleType;
                 model.Distance = 5;
                 model.Remark = db.PincodeRates.FirstOrDefault(i => i.Id == shop.PincodeRateId && i.Status == 0)?.Remarks;
             }
 
-            var billingCharge = db.BillingCharges.FirstOrDefault(i => i.ShopId == shopId && i.Status == 0);
+            
             if (billingCharge != null)
             {
                 model.BillingId = billingCharge.Id;
@@ -4078,7 +4089,8 @@ namespace ShopNow.Controllers
                      Address = i.Address,
                      NextOnTime = i.NextOnTime,
                      //OfferPercentage = db.Products.Where(b => b.ShopId == i.s.Id && b.Status == 0).Select(b => b.Percentage)?.Max(b => b) ?? 0
-                     OfferPercentage = i.MaxOfferPercentage
+                     OfferPercentage = i.MaxOfferPercentage,
+                     IsShopRate = i.DeliveryDiscountPercentage >= 10 ? true : false
                  }).ToList();
                 model.SuperMarketList = db.Shops.SqlQuery(querySuperMarketList,
                 new SqlParameter("Latitude", Latitude),
@@ -4100,7 +4112,8 @@ namespace ShopNow.Controllers
                      ReviewCount = i.CustomerReview,
                      Address = i.Address,
                      NextOnTime = i.NextOnTime,
-                     OfferPercentage = i.MaxOfferPercentage
+                     OfferPercentage = i.MaxOfferPercentage,
+                     IsShopRate = i.DeliveryDiscountPercentage >= 10 ? true : false
                  }).ToList();
                 model.GroceriesList = db.Shops.SqlQuery(queryGroceriesList,
                 new SqlParameter("Latitude", Latitude),
@@ -4122,7 +4135,8 @@ namespace ShopNow.Controllers
                      ReviewCount = i.CustomerReview,
                      Address = i.Address,
                      NextOnTime = i.NextOnTime,
-                     OfferPercentage = i.MaxOfferPercentage
+                     OfferPercentage = i.MaxOfferPercentage,
+                     IsShopRate = i.DeliveryDiscountPercentage >= 10 ? true : false
                  }).ToList();
                 model.HealthList = db.Shops.SqlQuery(queryHealthList,
                 new SqlParameter("Latitude", Latitude),
@@ -4144,7 +4158,8 @@ namespace ShopNow.Controllers
                     ReviewCount = i.CustomerReview,
                     Address = i.Address,
                     NextOnTime = i.NextOnTime,
-                    OfferPercentage = i.MaxOfferPercentage
+                    OfferPercentage = i.MaxOfferPercentage,
+                    IsShopRate = i.DeliveryDiscountPercentage >= 10 ? true : false
                 }).ToList();
 
                 model.ElectronicsList = db.Shops.SqlQuery(queryElectronicsList,
@@ -4167,7 +4182,8 @@ namespace ShopNow.Controllers
                      ReviewCount = i.CustomerReview,
                      Address = i.Address,
                      NextOnTime = i.NextOnTime,
-                     OfferPercentage = i.MaxOfferPercentage
+                     OfferPercentage = i.MaxOfferPercentage,
+                     IsShopRate = i.DeliveryDiscountPercentage >= 10 ? true : false
                  }).ToList();
                 model.ServicesList = db.Shops.SqlQuery(qServicesList,
                 new SqlParameter("Latitude", Latitude),
@@ -4189,7 +4205,8 @@ namespace ShopNow.Controllers
                     ReviewCount = i.CustomerReview,
                     Address = i.Address,
                     NextOnTime = i.NextOnTime,
-                    OfferPercentage = i.MaxOfferPercentage
+                    OfferPercentage = i.MaxOfferPercentage,
+                    IsShopRate = i.DeliveryDiscountPercentage >= 10 ? true : false
                 }).ToList();
                 model.OtherList = db.Shops.SqlQuery(queryOtherList,
                 new SqlParameter("Latitude", Latitude),
@@ -4211,7 +4228,8 @@ namespace ShopNow.Controllers
                      ReviewCount = i.CustomerReview,
                      Address = i.Address,
                      NextOnTime = i.NextOnTime,
-                     OfferPercentage = i.MaxOfferPercentage
+                     OfferPercentage = i.MaxOfferPercentage,
+                     IsShopRate = i.DeliveryDiscountPercentage >= 10 ? true : false
                  }).ToList();
                 return Json(model, JsonRequestBehavior.AllowGet);
             }
@@ -4237,7 +4255,8 @@ namespace ShopNow.Controllers
                      ReviewCount = i.CustomerReview,
                      Address = i.Address,
                      NextOnTime = i.NextOnTime,
-                     OfferPercentage = i.MaxOfferPercentage
+                     OfferPercentage = i.MaxOfferPercentage,
+                     IsShopRate = i.DeliveryDiscountPercentage >= 10 ? true : false
                  }).ToList();
                 return Json(model, JsonRequestBehavior.AllowGet);
             }
@@ -4263,7 +4282,8 @@ namespace ShopNow.Controllers
                      ReviewCount = i.CustomerReview,
                      Address = i.Address,
                      NextOnTime = i.NextOnTime,
-                     OfferPercentage = i.MaxOfferPercentage
+                     OfferPercentage = i.MaxOfferPercentage,
+                     IsShopRate = i.DeliveryDiscountPercentage >= 10 ? true : false
                  }).ToList();
                 return Json(model, JsonRequestBehavior.AllowGet);
             }
@@ -4289,7 +4309,8 @@ namespace ShopNow.Controllers
                      ReviewCount = i.CustomerReview,
                      Address = i.Address,
                      NextOnTime = i.NextOnTime,
-                     OfferPercentage = i.MaxOfferPercentage
+                     OfferPercentage = i.MaxOfferPercentage,
+                     IsShopRate = i.DeliveryDiscountPercentage >= 10 ? true : false
                  }).ToList();
                 return Json(model, JsonRequestBehavior.AllowGet);
             }
@@ -4315,7 +4336,8 @@ namespace ShopNow.Controllers
                       ReviewCount = i.CustomerReview,
                       Address = i.Address,
                       NextOnTime = i.NextOnTime,
-                      OfferPercentage = i.MaxOfferPercentage
+                      OfferPercentage = i.MaxOfferPercentage,
+                      IsShopRate = i.DeliveryDiscountPercentage >= 10 ? true : false
                   }).ToList();
                 return Json(model, JsonRequestBehavior.AllowGet);
             }
@@ -4341,7 +4363,8 @@ namespace ShopNow.Controllers
                      ReviewCount = i.CustomerReview,
                      Address = i.Address,
                      NextOnTime = i.NextOnTime,
-                     OfferPercentage = i.MaxOfferPercentage
+                     OfferPercentage = i.MaxOfferPercentage,
+                     IsShopRate = i.DeliveryDiscountPercentage >= 10 ? true : false
                  }).ToList();
                 return Json(model, JsonRequestBehavior.AllowGet);
             }
@@ -4384,7 +4407,8 @@ namespace ShopNow.Controllers
                      ReviewCount = i.CustomerReview,
                      Address = i.Address,
                      NextOnTime = i.NextOnTime,
-                     OfferPercentage = i.MaxOfferPercentage
+                     OfferPercentage = i.MaxOfferPercentage,
+                     IsShopRate = i.DeliveryDiscountPercentage >= 10 ? true : false
                  }).ToList();
                 return Json(model, JsonRequestBehavior.AllowGet);
             }
@@ -4413,7 +4437,8 @@ namespace ShopNow.Controllers
                      ReviewCount = i.CustomerReview,
                      Address = i.Address,
                      NextOnTime = i.NextOnTime,
-                     OfferPercentage = i.MaxOfferPercentage
+                     OfferPercentage = i.MaxOfferPercentage,
+                     IsShopRate = i.DeliveryDiscountPercentage >= 10 ? true : false
                  }).ToList();
                 return Json(model, JsonRequestBehavior.AllowGet);
             }
@@ -5895,49 +5920,98 @@ namespace ShopNow.Controllers
         [HttpPost]
         public JsonResult SavePrescription(SavePrescriptionViewModel model)
         {
-            if (model.Type == 0)
+            var shop = db.Shops.FirstOrDefault(i => i.Id == model.ShopId);
+            if (shop != null)
             {
-                var prescription = _mapper.Map<SavePrescriptionViewModel, CustomerPrescription>(model);
-                prescription.DateEncoded = DateTime.Now;
-                prescription.Status = 0;
-                db.CustomerPrescriptions.Add(prescription);
-                db.SaveChanges();
-
-                if (model.ImageListItems != null)
+                if (shop.ShopCategoryId == 4)
                 {
-                    foreach (var image in model.ImageListItems)
+                    var prescription = _mapper.Map<SavePrescriptionViewModel, CustomerPrescription>(model);
+                    prescription.DateEncoded = DateTime.Now;
+                    prescription.Status = 0;
+                    db.CustomerPrescriptions.Add(prescription);
+                    db.SaveChanges();
+
+                    if (model.ImageListItems != null)
                     {
-                        var prescriptionImage = new CustomerPrescriptionImage
+                        foreach (var image in model.ImageListItems)
                         {
-                            CustomerPrescriptionId = prescription.Id,
-                            ImagePath = image.ImagePath
-                        };
-                        db.CustomerPrescriptionImages.Add(prescriptionImage);
-                        db.SaveChanges();
+                            var prescriptionImage = new CustomerPrescriptionImage
+                            {
+                                CustomerPrescriptionId = prescription.Id,
+                                ImagePath = image.ImagePath
+                            };
+                            db.CustomerPrescriptionImages.Add(prescriptionImage);
+                            db.SaveChanges();
+                        }
+                    }
+                }
+                else
+                {
+                    var grocery = _mapper.Map<SavePrescriptionViewModel, CustomerGroceryUpload>(model);
+                    grocery.DateEncoded = DateTime.Now;
+                    grocery.Status = 0;
+                    db.CustomerGroceryUploads.Add(grocery);
+                    db.SaveChanges();
+
+                    if (model.ImageListItems != null)
+                    {
+                        foreach (var image in model.ImageListItems)
+                        {
+                            var groceryImage = new CustomerGroceryUploadImage
+                            {
+                                CustomerGroceryUploadId = grocery.Id,
+                                ImagePath = image.ImagePath
+                            };
+                            db.CustomerGroceryUploadImages.Add(groceryImage);
+                            db.SaveChanges();
+                        }
                     }
                 }
             }
-            else {
-                var grocery = _mapper.Map<SavePrescriptionViewModel, CustomerGroceryUpload>(model);
-                grocery.DateEncoded = DateTime.Now;
-                grocery.Status = 0;
-                db.CustomerGroceryUploads.Add(grocery);
-                db.SaveChanges();
 
-                if (model.ImageListItems != null)
-                {
-                    foreach (var image in model.ImageListItems)
-                    {
-                        var groceryImage = new CustomerGroceryUploadImage
-                        {
-                            CustomerGroceryUploadId = grocery.Id,
-                            ImagePath = image.ImagePath
-                        };
-                        db.CustomerGroceryUploadImages.Add(groceryImage);
-                        db.SaveChanges();
-                    }
-                }
-            }
+            //if (model.Type == 0)
+            //{
+            //    var prescription = _mapper.Map<SavePrescriptionViewModel, CustomerPrescription>(model);
+            //    prescription.DateEncoded = DateTime.Now;
+            //    prescription.Status = 0;
+            //    db.CustomerPrescriptions.Add(prescription);
+            //    db.SaveChanges();
+
+            //    if (model.ImageListItems != null)
+            //    {
+            //        foreach (var image in model.ImageListItems)
+            //        {
+            //            var prescriptionImage = new CustomerPrescriptionImage
+            //            {
+            //                CustomerPrescriptionId = prescription.Id,
+            //                ImagePath = image.ImagePath
+            //            };
+            //            db.CustomerPrescriptionImages.Add(prescriptionImage);
+            //            db.SaveChanges();
+            //        }
+            //    }
+            //}
+            //else {
+            //    var grocery = _mapper.Map<SavePrescriptionViewModel, CustomerGroceryUpload>(model);
+            //    grocery.DateEncoded = DateTime.Now;
+            //    grocery.Status = 0;
+            //    db.CustomerGroceryUploads.Add(grocery);
+            //    db.SaveChanges();
+
+            //    if (model.ImageListItems != null)
+            //    {
+            //        foreach (var image in model.ImageListItems)
+            //        {
+            //            var groceryImage = new CustomerGroceryUploadImage
+            //            {
+            //                CustomerGroceryUploadId = grocery.Id,
+            //                ImagePath = image.ImagePath
+            //            };
+            //            db.CustomerGroceryUploadImages.Add(groceryImage);
+            //            db.SaveChanges();
+            //        }
+            //    }
+            //}
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
@@ -7747,257 +7821,270 @@ namespace ShopNow.Controllers
         //}
 
         //Update search data if save as space seperated
-        public JsonResult UpdateSearchData()
-        {
-            var list = db.SearchDatas.Where(i => i.KeyValue.Length > 100).ToList();
-            foreach (var item in list)
-            {
-                string[] keyArr = item.KeyValue.Split(null);
-                foreach (var li in keyArr)
-                {
-                    var searchdata = new SearchData
-                    {
-                        KeyValue = li,
-                        Source = item.Source
-                    };
-                    db.SearchDatas.Add(searchdata);
-                    db.SaveChanges();
-                }
+        //public JsonResult UpdateSearchData()
+        //{
+        //    var list = db.SearchDatas.Where(i => i.KeyValue.Length > 100).ToList();
+        //    foreach (var item in list)
+        //    {
+        //        string[] keyArr = item.KeyValue.Split(null);
+        //        foreach (var li in keyArr)
+        //        {
+        //            var searchdata = new SearchData
+        //            {
+        //                KeyValue = li,
+        //                Source = item.Source
+        //            };
+        //            db.SearchDatas.Add(searchdata);
+        //            db.SaveChanges();
+        //        }
 
-                var oldSD = db.SearchDatas.FirstOrDefault(i => i.Id == item.Id);
-                db.SearchDatas.Remove(oldSD);
-                db.SaveChanges();
-            }
+        //        var oldSD = db.SearchDatas.FirstOrDefault(i => i.Id == item.Id);
+        //        db.SearchDatas.Remove(oldSD);
+        //        db.SaveChanges();
+        //    }
 
-            return Json(true);
-        }
+        //    return Json(true);
+        //}
 
-        public JsonResult AddPaymentData(string code,int ordernumber) 
-        {
-            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls |
-                                                     SecurityProtocolType.Tls11 |
-                                                     SecurityProtocolType.Tls12;
-            string key = BaseClass.razorpaykey;// "rzp_live_PNoamKp52vzWvR";
-            string secret = BaseClass.razorpaySecretkey;//"yychwOUOsYLsSn3XoNYvD1HY";
+        //public JsonResult AddPaymentData(string code,int ordernumber) 
+        //{
+        //    ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls |
+        //                                             SecurityProtocolType.Tls11 |
+        //                                             SecurityProtocolType.Tls12;
+        //    string key = BaseClass.razorpaykey;// "rzp_live_PNoamKp52vzWvR";
+        //    string secret = BaseClass.razorpaySecretkey;//"yychwOUOsYLsSn3XoNYvD1HY";
 
-            RazorpayClient client = new RazorpayClient(key, secret);
-            Razorpay.Api.Payment varpayment = new Razorpay.Api.Payment();
-            var s = varpayment.Fetch(code);
-            PaymentsData pay = new PaymentsData();
-            pay.OrderNumber = ordernumber;
-            pay.PaymentId = code;
+        //    RazorpayClient client = new RazorpayClient(key, secret);
+        //    Razorpay.Api.Payment varpayment = new Razorpay.Api.Payment();
+        //    var s = varpayment.Fetch(code);
+        //    PaymentsData pay = new PaymentsData();
+        //    pay.OrderNumber = ordernumber;
+        //    pay.PaymentId = code;
 
-            pay.Invoice_Id = s["invoice_id"];
-            if (s["status"] == "created")
-                pay.Status = 0;
-            else if (s["status"] == "authorized")
-                pay.Status = 1;
-            else if (s["status"] == "captured")
-                pay.Status = 2;
-            else if (s["status"] == "refunded")
-                pay.Status = 3;
-            else if (s["status"] == "failed")
-                pay.Status = 4;
-            pay.Order_Id = s["order_id"];
-            if (s["fee"] != null && s["fee"] > 0)
-                pay.Fee = (decimal)s["fee"] / 100;
-            else
-                pay.Fee = s["fee"];
-            pay.Entity = s["entity"];
-            pay.Currency = s["currency"];
-            pay.Method = s["method"];
-            if (s["tax"] != null && s["tax"] > 0)
-                pay.Tax = (decimal)s["tax"] / 100;
-            else
-                pay.Tax = s["tax"];
-            if (s["amount"] != null && s["amount"] > 0)
-                pay.Amount = s["amount"] / 100;
-            else
-                pay.Amount = s["amount"];
+        //    pay.Invoice_Id = s["invoice_id"];
+        //    if (s["status"] == "created")
+        //        pay.Status = 0;
+        //    else if (s["status"] == "authorized")
+        //        pay.Status = 1;
+        //    else if (s["status"] == "captured")
+        //        pay.Status = 2;
+        //    else if (s["status"] == "refunded")
+        //        pay.Status = 3;
+        //    else if (s["status"] == "failed")
+        //        pay.Status = 4;
+        //    pay.Order_Id = s["order_id"];
+        //    if (s["fee"] != null && s["fee"] > 0)
+        //        pay.Fee = (decimal)s["fee"] / 100;
+        //    else
+        //        pay.Fee = s["fee"];
+        //    pay.Entity = s["entity"];
+        //    pay.Currency = s["currency"];
+        //    pay.Method = s["method"];
+        //    if (s["tax"] != null && s["tax"] > 0)
+        //        pay.Tax = (decimal)s["tax"] / 100;
+        //    else
+        //        pay.Tax = s["tax"];
+        //    if (s["amount"] != null && s["amount"] > 0)
+        //        pay.Amount = s["amount"] / 100;
+        //    else
+        //        pay.Amount = s["amount"];
 
-            pay.Fee -= pay.Tax; //Total fee minu tax
-            pay.DateEncoded = DateTime.Now;
-            db.PaymentsDatas.Add(pay);
-            db.SaveChanges();
-            return Json(true,JsonRequestBehavior.AllowGet);
-        }
+        //    pay.Fee -= pay.Tax; //Total fee minu tax
+        //    pay.DateEncoded = DateTime.Now;
+        //    db.PaymentsDatas.Add(pay);
+        //    db.SaveChanges();
+        //    return Json(true,JsonRequestBehavior.AllowGet);
+        //}
 
-        public JsonResult UpdateKeywordDataFromMaster()
-        {
-            var masterProductList = db.MasterProducts.Where(i => i.Status == 0 && !string.IsNullOrEmpty(i.DrugCompoundDetailName)).Select(i=> new{ Name= i.Name , Combination = i.DrugCompoundDetailName}).ToList();
-            foreach (var item in masterProductList)
-            {
-                //var nameArray = item.Name.Split(' ');
-                //foreach (var name in nameArray)
-                //{
-                //    var checkExist = db.KeywordDatas.Any(i => i.Name.Trim().ToLower() == name.Trim().ToLower());
-                //    if (!checkExist)
-                //    {
-                //        var keywordData = new KeywordData
-                //        {
-                //            Name = name
-                //        };
-                //        db.KeywordDatas.Add(keywordData);
-                //        db.SaveChanges();
-                //    }
-                //}
+        //public JsonResult UpdateKeywordDataFromMaster()
+        //{
+        //    var masterProductList = db.MasterProducts.Where(i => i.Status == 0 && !string.IsNullOrEmpty(i.DrugCompoundDetailName)).Select(i=> new{ Name= i.Name , Combination = i.DrugCompoundDetailName}).ToList();
+        //    foreach (var item in masterProductList)
+        //    {
+        //        //var nameArray = item.Name.Split(' ');
+        //        //foreach (var name in nameArray)
+        //        //{
+        //        //    var checkExist = db.KeywordDatas.Any(i => i.Name.Trim().ToLower() == name.Trim().ToLower());
+        //        //    if (!checkExist)
+        //        //    {
+        //        //        var keywordData = new KeywordData
+        //        //        {
+        //        //            Name = name
+        //        //        };
+        //        //        db.KeywordDatas.Add(keywordData);
+        //        //        db.SaveChanges();
+        //        //    }
+        //        //}
 
-                if (!string.IsNullOrEmpty(item.Combination))
-                {
-                    var combinationArray = item.Combination.Split(' ');
-                    foreach (var name in combinationArray)
-                    {
-                        foreach (var itemname in name.Split(','))
-                        {
-                            var checkExist = db.KeywordDatas.Any(i => i.Name.Trim().ToLower() == itemname.Trim().ToLower());
-                            if (!checkExist)
-                            {
-                                var keywordData = new KeywordData
-                                {
-                                    Name = itemname
-                                };
-                                db.KeywordDatas.Add(keywordData);
-                                db.SaveChanges();
-                            }
-                        } 
-                    }
-                }
-            }
-            return Json(true, JsonRequestBehavior.AllowGet);
-        }
+        //        if (!string.IsNullOrEmpty(item.Combination))
+        //        {
+        //            var combinationArray = item.Combination.Split(' ');
+        //            foreach (var name in combinationArray)
+        //            {
+        //                foreach (var itemname in name.Split(','))
+        //                {
+        //                    var checkExist = db.KeywordDatas.Any(i => i.Name.Trim().ToLower() == itemname.Trim().ToLower());
+        //                    if (!checkExist)
+        //                    {
+        //                        var keywordData = new KeywordData
+        //                        {
+        //                            Name = itemname
+        //                        };
+        //                        db.KeywordDatas.Add(keywordData);
+        //                        db.SaveChanges();
+        //                    }
+        //                } 
+        //            }
+        //        }
+        //    }
+        //    return Json(true, JsonRequestBehavior.AllowGet);
+        //}
 
 
-        public JsonResult UpdateTagCategory()
-        {
-            var list = db.MasterProducts.Where(i => i.Status == 0 && i.Id > 62284)
-                .Select(i=> new {
-                    Id = i.Id,
-                    CategoryId = i.CategoryId,
-                    SubCategoryId = i.SubCategoryId,
-                    NextSubCategoryId = i.NextSubCategoryId
-                }).ToList();
-            foreach (var item in list)
-            {
-                if (item.CategoryId != 0)
-                {
-                    var tagcategory = new TagCategory
-                    {
-                        CategoryId = item.CategoryId,
-                        CategoryName = db.Categories.FirstOrDefault(i=>i.Id == item.CategoryId)?.Name,
-                        CreatedBy = "Admin",
-                        UpdatedBy = "Admin",
-                        DateUpdated = DateTime.Now,
-                        DateEncoded = DateTime.Now,
-                        MasterProductId = item.Id
-                    };
-                    db.TagCategories.Add(tagcategory);
-                    db.SaveChanges();
-                }
+        //public JsonResult UpdateTagCategory()
+        //{
+        //    var list = db.MasterProducts.Where(i => i.Status == 0 && i.Id > 62284)
+        //        .Select(i=> new {
+        //            Id = i.Id,
+        //            CategoryId = i.CategoryId,
+        //            SubCategoryId = i.SubCategoryId,
+        //            NextSubCategoryId = i.NextSubCategoryId
+        //        }).ToList();
+        //    foreach (var item in list)
+        //    {
+        //        if (item.CategoryId != 0)
+        //        {
+        //            var tagcategory = new TagCategory
+        //            {
+        //                CategoryId = item.CategoryId,
+        //                CategoryName = db.Categories.FirstOrDefault(i=>i.Id == item.CategoryId)?.Name,
+        //                CreatedBy = "Admin",
+        //                UpdatedBy = "Admin",
+        //                DateUpdated = DateTime.Now,
+        //                DateEncoded = DateTime.Now,
+        //                MasterProductId = item.Id
+        //            };
+        //            db.TagCategories.Add(tagcategory);
+        //            db.SaveChanges();
+        //        }
 
-                if (item.SubCategoryId != 0)
-                {
-                    var tagcategory = new TagCategory
-                    {
-                        CategoryId = item.SubCategoryId,
-                        CategoryName = db.SubCategories.FirstOrDefault(i => i.Id == item.SubCategoryId)?.Name,
-                        CreatedBy = "Admin",
-                        UpdatedBy = "Admin",
-                        DateUpdated = DateTime.Now,
-                        DateEncoded = DateTime.Now,
-                        MasterProductId = item.Id
-                    };
-                    db.TagCategories.Add(tagcategory);
-                    db.SaveChanges();
-                }
-                if (item.NextSubCategoryId != 0)
-                {
-                    var tagcategory = new TagCategory
-                    {
-                        CategoryId = item.NextSubCategoryId,
-                        CategoryName = db.NextSubCategories.FirstOrDefault(i => i.Id == item.NextSubCategoryId)?.Name,
-                        CreatedBy = "Admin",
-                        UpdatedBy = "Admin",
-                        DateUpdated = DateTime.Now,
-                        DateEncoded = DateTime.Now,
-                        MasterProductId = item.Id
-                    };
-                    db.TagCategories.Add(tagcategory);
-                    db.SaveChanges();
-                }
+        //        if (item.SubCategoryId != 0)
+        //        {
+        //            var tagcategory = new TagCategory
+        //            {
+        //                CategoryId = item.SubCategoryId,
+        //                CategoryName = db.SubCategories.FirstOrDefault(i => i.Id == item.SubCategoryId)?.Name,
+        //                CreatedBy = "Admin",
+        //                UpdatedBy = "Admin",
+        //                DateUpdated = DateTime.Now,
+        //                DateEncoded = DateTime.Now,
+        //                MasterProductId = item.Id
+        //            };
+        //            db.TagCategories.Add(tagcategory);
+        //            db.SaveChanges();
+        //        }
+        //        if (item.NextSubCategoryId != 0)
+        //        {
+        //            var tagcategory = new TagCategory
+        //            {
+        //                CategoryId = item.NextSubCategoryId,
+        //                CategoryName = db.NextSubCategories.FirstOrDefault(i => i.Id == item.NextSubCategoryId)?.Name,
+        //                CreatedBy = "Admin",
+        //                UpdatedBy = "Admin",
+        //                DateUpdated = DateTime.Now,
+        //                DateEncoded = DateTime.Now,
+        //                MasterProductId = item.Id
+        //            };
+        //            db.TagCategories.Add(tagcategory);
+        //            db.SaveChanges();
+        //        }
 
-            }
-            return Json(true, JsonRequestBehavior.AllowGet);
-        }
+        //    }
+        //    return Json(true, JsonRequestBehavior.AllowGet);
+        //}
 
-        public JsonResult UpdateCustomerAddressIdInOrders()
-        {
-            var orders = db.Orders.Where(i=>i.CustomerAddressId == 0).Select(i => new { Id = i.Id, Address = i.DeliveryAddress }).ToList();
-            foreach (var item in orders)
-            {
-                if (!string.IsNullOrEmpty(item.Address))
-                {
-                    var order = db.Orders.FirstOrDefault(i => i.Id == item.Id);
-                    var cust = db.CustomerAddresses.FirstOrDefault(i => i.Address == item.Address);
-                    if (cust != null)
-                    {
-                        order.CustomerAddressId = cust.Id;
-                        db.Entry(order).State = System.Data.Entity.EntityState.Modified;
-                        db.SaveChanges();
-                    }
-                }
-            }
+        //public JsonResult UpdateCustomerAddressIdInOrders()
+        //{
+        //    var orders = db.Orders.Where(i=>i.CustomerAddressId == 0).Select(i => new { Id = i.Id, Address = i.DeliveryAddress }).ToList();
+        //    foreach (var item in orders)
+        //    {
+        //        if (!string.IsNullOrEmpty(item.Address))
+        //        {
+        //            var order = db.Orders.FirstOrDefault(i => i.Id == item.Id);
+        //            var cust = db.CustomerAddresses.FirstOrDefault(i => i.Address == item.Address);
+        //            if (cust != null)
+        //            {
+        //                order.CustomerAddressId = cust.Id;
+        //                db.Entry(order).State = System.Data.Entity.EntityState.Modified;
+        //                db.SaveChanges();
+        //            }
+        //        }
+        //    }
 
-            return Json(true, JsonRequestBehavior.AllowGet);
-        }
+        //    return Json(true, JsonRequestBehavior.AllowGet);
+        //}
 
-        public JsonResult UpdateTagCategoryType()
-        {
-            var tageCategoryList = db.TagCategories.Where(i=>i.Type == 0).ToList();
-            foreach (var item in tageCategoryList)
-            {
-                var category = db.Categories.FirstOrDefault(i => i.Id == item.CategoryId && i.Name == item.CategoryName);
-                if (category != null)
-                {
-                    var tagcategory = db.TagCategories.FirstOrDefault(i => i.Id == item.Id);
-                    tagcategory.Type = 1;
-                    db.Entry(tagcategory).State = System.Data.Entity.EntityState.Modified;
-                    db.SaveChanges();
-                }
+        //public JsonResult UpdateTagCategoryType()
+        //{
+        //    var tageCategoryList = db.TagCategories.Where(i=>i.Type == 0).ToList();
+        //    foreach (var item in tageCategoryList)
+        //    {
+        //        var category = db.Categories.FirstOrDefault(i => i.Id == item.CategoryId && i.Name == item.CategoryName);
+        //        if (category != null)
+        //        {
+        //            var tagcategory = db.TagCategories.FirstOrDefault(i => i.Id == item.Id);
+        //            tagcategory.Type = 1;
+        //            db.Entry(tagcategory).State = System.Data.Entity.EntityState.Modified;
+        //            db.SaveChanges();
+        //        }
 
-                var subcategory = db.SubCategories.FirstOrDefault(i => i.Id == item.CategoryId && i.Name == item.CategoryName);
-                if (subcategory != null)
-                {
-                    var tagcategory = db.TagCategories.FirstOrDefault(i => i.Id == item.Id);
-                    tagcategory.Type = 2;
-                    db.Entry(tagcategory).State = System.Data.Entity.EntityState.Modified;
-                    db.SaveChanges();
-                }
+        //        var subcategory = db.SubCategories.FirstOrDefault(i => i.Id == item.CategoryId && i.Name == item.CategoryName);
+        //        if (subcategory != null)
+        //        {
+        //            var tagcategory = db.TagCategories.FirstOrDefault(i => i.Id == item.Id);
+        //            tagcategory.Type = 2;
+        //            db.Entry(tagcategory).State = System.Data.Entity.EntityState.Modified;
+        //            db.SaveChanges();
+        //        }
 
-                var subcategory2 = db.NextSubCategories.FirstOrDefault(i => i.Id == item.CategoryId && i.Name == item.CategoryName);
-                if (subcategory2 != null)
-                {
-                    var tagcategory = db.TagCategories.FirstOrDefault(i => i.Id == item.Id);
-                    tagcategory.Type = 3;
-                    db.Entry(tagcategory).State = System.Data.Entity.EntityState.Modified;
-                    db.SaveChanges();
-                }
+        //        var subcategory2 = db.NextSubCategories.FirstOrDefault(i => i.Id == item.CategoryId && i.Name == item.CategoryName);
+        //        if (subcategory2 != null)
+        //        {
+        //            var tagcategory = db.TagCategories.FirstOrDefault(i => i.Id == item.Id);
+        //            tagcategory.Type = 3;
+        //            db.Entry(tagcategory).State = System.Data.Entity.EntityState.Modified;
+        //            db.SaveChanges();
+        //        }
 
-            }
+        //    }
 
-            return Json(true, JsonRequestBehavior.AllowGet);
-        }
+        //    return Json(true, JsonRequestBehavior.AllowGet);
+        //}
 
-        public JsonResult UpdateReviewCount()
-        {
-            var shopList = db.Shops.ToList();
-            foreach (var item in shopList)
-            {
-                var shop = db.Shops.FirstOrDefault(i => i.Id == item.Id);
-                shop.CustomerReview = db.CustomerReviews.Where(i => i.ShopId == item.Id).Count();
-                db.Entry(shop).State = System.Data.Entity.EntityState.Modified;
-                db.SaveChanges();
-            }
-            return Json(true, JsonRequestBehavior.AllowGet);
-        }
+        //public JsonResult UpdateReviewCount()
+        //{
+        //    var shopList = db.Shops.ToList();
+        //    foreach (var item in shopList)
+        //    {
+        //        var shop = db.Shops.FirstOrDefault(i => i.Id == item.Id);
+        //        shop.CustomerReview = db.CustomerReviews.Where(i => i.ShopId == item.Id).Count();
+        //        db.Entry(shop).State = System.Data.Entity.EntityState.Modified;
+        //        db.SaveChanges();
+        //    }
+        //    return Json(true, JsonRequestBehavior.AllowGet);
+        //}
+
+        //public JsonResult UpdateShopDeliveryDiscountPercentageTemp()
+        //{
+        //    var billList = db.BillingCharges.Where(i=>i.Status ==0).ToList();
+        //    foreach (var item in billList)
+        //    {
+        //        var shop = db.Shops.FirstOrDefault(i => i.Id == item.ShopId);
+        //        shop.DeliveryDiscountPercentage = item.DeliveryDiscountPercentage;
+        //        db.Entry(shop).State = System.Data.Entity.EntityState.Modified;
+        //        db.SaveChanges();
+        //    }
+        //    return Json(true, JsonRequestBehavior.AllowGet);
+        //}
     }
 }
