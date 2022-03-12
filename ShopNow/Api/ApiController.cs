@@ -789,7 +789,10 @@ namespace ShopNow.Controllers
             var deliveryCharge = db.DeliveryCharges.FirstOrDefault(i => i.Type == shop.DeliveryType && i.TireType == shop.DeliveryTierType && i.VehicleType == mode && i.Status == 0);
             if (deliveryCharge != null)
             {
-                model.DeliveryChargeKM = billingCharge.DeliveryDiscountPercentage < 10 ? deliveryCharge.ChargeUpto5Km : 50;
+                if (shop.ShopCategoryId == 1)
+                    model.DeliveryChargeKM = billingCharge.DeliveryDiscountPercentage < 10 ? deliveryCharge.ChargeUpto5Km : 50;
+                else
+                    model.DeliveryChargeKM = deliveryCharge.ChargeUpto5Km;
                 model.DeliveryChargeOneKM = deliveryCharge.ChargePerKm;
                 model.DeliveryMode = deliveryCharge.VehicleType;
                 model.Distance = 5;
