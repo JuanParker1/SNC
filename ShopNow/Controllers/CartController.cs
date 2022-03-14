@@ -62,7 +62,9 @@ namespace ShopNow.Controllers
                 RefundRemark = i.c.p.RefundRemark ?? "",
                 DateEncoded = i.c.c.DateEncoded,
                 IsPickupDrop = i.c.c.IsPickupDrop,
-                ShopDistrict = i.s.DistrictName
+                ShopDistrict = i.s.DistrictName,
+                TotalPrice = i.c.c.TotalPrice,
+                Distance = i.c.c.Distance
             }).OrderBy(i => i.Status).OrderByDescending(i => i.DateEncoded).ToList();
             int counter = 1;
             model.ListItems.ForEach(x => x.No = counter++);
@@ -2076,6 +2078,34 @@ namespace ShopNow.Controllers
             db.Entry(order).State = System.Data.Entity.EntityState.Modified;
             db.SaveChanges();
             return RedirectToAction("Delivered");
+        }
+
+        public ActionResult UpdateAmount(CartUpdateAmountViewModel model)
+        {
+            var cart = db.Orders.FirstOrDefault(i => i.OrderNumber == model.OrderNumber);
+            var payment = db.Payments.FirstOrDefault(i => i.OrderNumber == model.OrderNumber);
+            if (cart != null && model.OrderNumber != 0)
+            {
+                cart.NetTotal = model.Amount;
+                cart.Convinenientcharge = model.ConvenientCharge;
+                cart.DeliveryCharge = model.GrossDeliveryCharge;
+                cart.ShopDeliveryDiscount = model.ShopDeliveryDiscount;
+                cart.NetDeliveryCharge = model.DeliveryCharge;
+                db.Entry(cart).State = EntityState.Modified;
+                db.SaveChanges();
+            }
+            if (payment != null && model.OrderNumber != 0)
+            {
+                payment.Amount = model.Amount;
+                payment.GSTAmount = model.Amount;
+                payment.ConvenientCharge = model.ConvenientCharge;
+                payment.PackingCharge = model.PackingCharge;
+                payment.DeliveryCharge = model.GrossDeliveryCharge;
+                db.Entry(payment).State = EntityState.Modified;
+                db.SaveChanges();
+            }
+
+            return RedirectToAction("List");
         }
 
         protected override void Dispose(bool disposing)
