@@ -257,6 +257,12 @@
     <script>
         $(document).ready(function () {
 
+            $("#Phone").on('keypress', function (e) {
+                if (e.keycode == 13) {
+                    $("#btnCheckCustomer").click();
+                }
+            });
+
             $('#btnCheckCustomer').on('click', function () {
                 var isValidated = false;
                 var requiredArr = [
@@ -324,7 +330,6 @@
             function readURL(input) {
                 if (input.files && input.files[0]) {
                     var reader = new FileReader();
-
                     reader.onload = function (e) {
                         $('#img-upload').attr('src', e.target.result);
                     }
@@ -344,7 +349,6 @@
             function readURLlicense(input) {
                 if (input.files && input.files[0]) {
                     var reader = new FileReader();
-
                     reader.onload = function (e) {
                         $('#img-pan').attr('src', e.target.result);
                     }
@@ -364,7 +368,6 @@
             function readURLaccount(input) {
                 if (input.files && input.files[0]) {
                     var reader = new FileReader();
-
                     reader.onload = function (e) {
                         $('#img-account').attr('src', e.target.result);
                     }
@@ -378,7 +381,7 @@
             $("#btnBankRemove").on('click', function () {
                 $('#img-account').attr('src', '');
                 $("#BankPassbookImage").val('');
-                $(this).addClass("d-none");
+                $(this).addClass("d-none");                                                                                                                                                                                        
             });
         });
 

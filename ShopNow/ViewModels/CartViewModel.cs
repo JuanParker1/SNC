@@ -1028,6 +1028,8 @@ namespace ShopNow.ViewModels
             public string DeliveryBoyName { get; set; }
             public string PaymentMode { get; set; }
             public double Amount { get; set; }
+            public double TotalPrice { get; set; }
+            public double Distance { get; set; }
             public string CustomerPhoneNumber { get; set; }
             public int Status { get; set; }
             public DateTime DateEncoded { get; set; }
@@ -1065,5 +1067,16 @@ namespace ShopNow.ViewModels
                 }
             }
         }
+    }
+
+    public class CartUpdateAmountViewModel
+    {
+        public int OrderNumber { get; set; }
+        public double Amount { get; set; }
+        public double ConvenientCharge { get; set; }
+        public double PackingCharge { get; set; }
+        public double GrossDeliveryCharge { get; set; }
+        public double ShopDeliveryDiscount { get; set; }
+        public double DeliveryCharge { get; set; }
     }
 }

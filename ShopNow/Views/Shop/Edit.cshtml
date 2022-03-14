@@ -62,30 +62,32 @@
                 <div class="alert alert-warning font-weight-bold p-2">Please Go to <a href="https://shopnowpay.com/" target="_blank">ShopNowPay</a> and Enter your Products for Shop Activation.</div>
             </div>
         }
+        @if (Model.Status == 1 && Model.Verify == false && (Model.PhoneNumber != "" || Model.PhoneNumber != null) && Model.PhoneVerify == false)
+        {
+            <div class="col-md-4 PhoneVerify">
+                <h6 class="text-success">Phone Verification</h6>
+                <span>CALL from <span class="text-danger">@Model.PhoneNumber</span> TO <span class="text-warning">04448134440</span></span><br /><span>and verify your Phone number</span>
+            </div>
+        }
     </div>
     @*@if (Model.Status == 1 && Model.Verify == true )
         {*@
-    <div class="row text-center">
-        <div class="col-md-6">
-            <button type="button" id="GeneratePassword" class="btn btn-success showPasswordtext">Generate Password</button>
-            <button type="button" class="btn btn-success disablePasswordtext" disabled>Password</button>
-        </div>
-        <div class="col-md-6">
-            <input type="text" class="form-control" id="Password" value="@Model.Password" readonly />
+    <div class="col-md-6">
+        <div class="row text-center">
+            <div class="col-md-4">
+                <button type="button" id="GeneratePassword" class="btn btn-success showPasswordtext">Generate Password</button>
+                <button type="button" class="btn btn-success disablePasswordtext" disabled>Password</button>
+            </div>
+            <div class="col-md-4">
+                <input type="text" class="form-control" id="Password" value="@Model.Password" readonly />
+            </div>
+            <div class="col-md-4">
+                <label class="font-weight-bold text-secondary"> Platform Credit : </label> <span class="fa fa-rupee text-secondary"></span> <span class="text-danger">@Model.PlatformCredit</span>
+                <label class="font-weight-bold text-secondary"> Delivery Credit : </label> <span class="fa fa-rupee text-secondary"></span> <span class="text-danger">@Model.DeliveryCredit</span>
+            </div>
         </div>
     </div>
     @*}*@
-    @if (Model.Status == 1 && Model.Verify == false && (Model.PhoneNumber != "" || Model.PhoneNumber != null) && Model.PhoneVerify == false)
-    {
-        <div class="col-md-3 PhoneVerify">
-            <h6 class="text-success">Phone Verification</h6>
-            <span>CALL from <span class="text-danger">@Model.PhoneNumber</span> TO <span class="text-warning">04448134440</span></span><br /><span>and verify your Phone number</span>
-        </div>
-    }
-    <div class="col-md-2 ml-3">
-        <label class="font-weight-bold text-secondary"> Platform Credit : </label> <span class="fa fa-rupee text-secondary"></span> <span class="text-danger">@Model.PlatformCredit</span>
-        <label class="font-weight-bold text-secondary"> Delivery Credit : </label> <span class="fa fa-rupee text-secondary"></span> <span class="text-danger">@Model.DeliveryCredit</span>
-    </div>
 </div>
 <div class="container-fluid">
     <div class="row">
@@ -333,28 +335,32 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-md-1"></div>
-                                        <div class="col-md-4">
-                                            <label class="text-secondary font-weight-bold ml-2 text-center">Aadhar Image</label><br />
-                                            <input type="radio" class="ml-3" name="AadharDocument" id="AadharDocumentImage" value="Image" checked> <label for="AadharDocumentImage"> Image</label>
-                                            <input type="radio" class="ml-3" name="AadharDocument" id="AadharDocumentPDF" value="PDF"> <label for="AadharDocumentPDF"> PDF</label>
-                                            <div class="row ml-3 AadharDocumentPdf d-none mt-2 mb-3">
-                                                @if (Model.ImageAadharPath != null)
-                                                {
-                                                    <a href="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageAadharPath" target="_blank" class="AadharPdflink mb-2"> Click here for Pdf view</a>
-                                                }
-                                                <input type="file" id="AadharPdf" name="AadharPdf" />
-                                            </div>
-                                            <div class="row AadharDocumentImg ml-3 mt-2">
-                                                <div class="img-upload-container">
-                                                    <img class="img-container w-100 h-100 mb-2" id="img-aadhar" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageAadharPath" onerror="this.src='/Images/noimage.png'" />
-                                                    <input type="file" id="AadharImage" name="AadharImage" class="d-none" />
-                                                    <label for="AadharImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
-                                                </div>
-                                            </div>
-                                            <div class="row mb-2">
-                                                <div class="col-md-12 ml-5">
-                                                    <button type="button" class="btn btn-sm btn-danger" id="btnAadharRemove">Remove</button>
+                                        <div class="col-md-2"></div>
+                                        <div class="col-md-3">
+                                            <div class="card border-primary bg-muted">
+                                                <div class="card-body text-center">
+                                                    <label class="text-secondary font-weight-bold ml-2 text-center">Aadhar Image</label><br />
+                                                    <input type="radio" class="ml-3" name="AadharDocument" id="AadharDocumentImage" value="Image" checked> <label for="AadharDocumentImage"> Image</label>
+                                                    <input type="radio" class="ml-3" name="AadharDocument" id="AadharDocumentPDF" value="PDF"> <label for="AadharDocumentPDF"> PDF</label>
+                                                    <div class="row ml-3 AadharDocumentPdf d-none mt-2 mb-3">
+                                                        @if (Model.ImageAadharPath != null)
+                                                        {
+                                                            <a href="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageAadharPath" target="_blank" class="AadharPdflink mb-2"> Click here for Pdf view</a>
+                                                        }
+                                                        <input type="file" id="AadharPdf" name="AadharPdf" />
+                                                    </div>
+                                                    <div class="row AadharDocumentImg ml-5 mt-1">
+                                                        <div class="img-upload-container ml-3">
+                                                            <img class="img-container w-100 h-100 mb-2" id="img-aadhar" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageAadharPath" onerror="this.src='/Images/noimage.png'" />
+                                                            <input type="file" id="AadharImage" name="AadharImage" class="d-none" />
+                                                            <label for="AadharImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row mb-2">
+                                                        <div class="col-md-12 ml-2 mt-1">
+                                                            <button type="button" class="btn btn-sm btn-danger" id="btnAadharRemove">Remove</button>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -968,9 +974,7 @@
                 <div class="row" id="print-FSSAI">
                     <div class="col-md-6">
                         <a href="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageFSSAIPath" target="_blank" class="ml-3 fssai-pdf"> Click here for Pdf view</a>
-                        @*<a href="~/Home/ImageDenied">*@
                         <img class="img-container w-100 h-100 mb-2 fssai-img" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageFSSAIPath" onerror="this.src='/Images/noimage.png'" />
-                        @*</a>*@
                     </div>
                     <div class="col-md-6">
                         <label class="text-left text-secondary font-weight-bold mt-1"><i>License Number</i></label>
@@ -1040,9 +1044,7 @@
                 <div class="row" id="print-Establish">
                     <div class="col-md-6">
                         <a href="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageEstablishPath" target="_blank" class="mb-2 establish-pdf"> Click here for Pdf view</a>
-                        @*  <a href="~/Home/ImageDenied">*@
                         <img class="img-container w-100 h-100 mb-2 establish-img" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageEstablishPath" onerror="this.src='/Images/noimage.png'" />
-                        @* </a>*@
                     </div>
                     <div class="col-md-6">
                         <div class="col-md-12">
@@ -1116,9 +1118,7 @@
                 <div class="row" id="print-GSTIN">
                     <div class="col-md-6">
                         <a href="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageGSTINPath" target="_blank" class="mb-2 gstin-pdf"> Click here for Pdf view</a>
-                        @*<a href="~/Home/ImageDenied">*@
                         <img class="img-container w-100 h-100 mb-2 gstin-img" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageGSTINPath" onerror="this.src='/Images/noimage.png'" />
-                        @* </a>*@
                     </div>
                     <div class="col-md-6">
                         <label class="text-left text-secondary font-weight-bold mt-1"><i>GSTIN Number</i></label>
@@ -1152,9 +1152,7 @@
                 <div class="row" id="print-Pan">
                     <div class="col-md-6">
                         <a href="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePanPath" target="_blank" class="mb-2 pan-pdf"> Click here for Pdf view</a>
-                        @*<a href="~/Home/ImageDenied">*@
                         <img class="img-container w-100 h-100 mb-2 pan-img" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePanPath" onerror="this.src='/Images/noimage.png'" />
-                        @*</a>*@
                     </div>
                     <div class="col-md-6">
                         <label class="col-md-4 text-left text-secondary font-weight-bold mt-1"><i>Pan Number</i></label>
@@ -1188,9 +1186,7 @@
                 <div class="row" id="print-Account">
                     <div class="col-md-6">
                         <a href="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageAccountPath" target="_blank" class="mb-2 pan-pdf"> Click here for Pdf view</a>
-                        @*<a href="~/Home/ImageDenied">*@
                         <img class="img-container w-100 h-100 mb-2 pan-img" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageAccountPath" onerror="this.src='/Images/noimage.png'" />
-                        @* </a>*@
                     </div>
                     <div class="col-md-6">
                         <label class="col-md-4 text-left text-secondary font-weight-bold mt-1"><i>Bank Name</i></label>
@@ -1230,9 +1226,7 @@
                 <div class="row" id="print-Auth">
                     <div class="col-md-6">
                         <a href="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageAuthoriseBrandPath" target="_blank" class="mb-2 auth-pdf"> Click here for Pdf view</a>
-                        @*<a href="~/Home/ImageDenied">*@
                         <img class="img-container w-100 h-100 mb-2 auth-img" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageAuthoriseBrandPath" onerror="this.src='/Images/noimage.png'" />
-                        @*</a>*@
                     </div>
                     <div class="col-md-6">
                         <label class="col-md-4 text-left text-secondary font-weight-bold mt-1"><i>Authorised Brand Name</i></label>
@@ -1607,13 +1601,10 @@
                     $('.FssaiImg').removeClass('d-none');
                     $('.FssaiPdf').addClass('d-none');
                     $("#FSSAIPdf").val("");
-                    //$('.penFssi').addClass('d-none');
                 } else {
                     $('.FssaiImg').addClass('d-none');
                     $('.FssaiPdf').removeClass('d-none');
                     $("#FSSAIImage").val("");
-                    //$("#img-fssai").attr('src', '');
-                    //$('.penFssi').addClass('d-none');
                 }
             });
 
@@ -1622,13 +1613,11 @@
                     $('.DrugImg').removeClass('d-none');
                     $('.DrugPdf').addClass('d-none');
                     $("#DrugPdf").val("");
-                    //$('.penDrug').addClass('d-none');
                 } else {
                     $('.DrugImg').addClass('d-none');
                     $('.DrugPdf').removeClass('d-none');
                     $("#DrugImage").val("");
                     $("#img-drug").attr('src', '');
-                    //$('.penDrug').addClass('d-none');
                 }
             });
 
@@ -1637,13 +1626,11 @@
                     $('.EstImg').removeClass('d-none');
                     $('.EstPdf').addClass('d-none');
                     $("#EstablishPdf").val("");
-                    //$('.penEsta').addClass('d-none');
                 } else {
                     $('.EstImg').addClass('d-none');
                     $('.EstPdf').removeClass('d-none');
                     $("#EstablishImage").val("");
                     $("#img-establish").attr('src', '');
-                    //$('.penEsta').addClass('d-none');
                 }
             });
 
@@ -1652,13 +1639,11 @@
                     $('.OtherImg').removeClass('d-none');
                     $('.OtherPdf').addClass('d-none');
                     $("#OtherLicensePdf").val("");
-                    //$('.penOther').addClass('d-none');
                 } else {
                     $('.OtherImg').addClass('d-none');
                     $('.OtherPdf').removeClass('d-none');
                     $("#OtherLicenseImage").val("");
                     $("#img-other").attr('src', '');
-                    //$('.penOther').addClass('d-none');
                 }
             });
 
@@ -1667,13 +1652,11 @@
                     $('.AuthLicenseImg').removeClass('d-none');
                     $('.AuthLicensePdf').addClass('d-none');
                     $("#AuthorisedDistributorPdf").val("");
-                    //$('.penAuth').addClass('d-none');
                 } else {
                     $('.AuthLicenseImg').addClass('d-none');
                     $('.AuthLicensePdf').removeClass('d-none');
                     $("#AuthorisedDistributorImage").val("");
                     $("#img-authorise").attr('src', '');
-                    //$('.penAuth').addClass('d-none');
                 }
             });
 
@@ -1682,13 +1665,11 @@
                     $('.GstinLicenseImg').removeClass('d-none');
                     $('.GstinLicensePdf').addClass('d-none');
                     $("#GSTINPdf").val("");
-                    //$('.penGstn').addClass('d-none');
                 } else {
                     $('.GstinLicenseImg').addClass('d-none');
                     $('.GstinLicensePdf').removeClass('d-none');
                     $("#GSTINImage").val("");
                     $("#img-gstin").attr('src', '');
-                    //$('.penGstn').addClass('d-none');
                 }
             });
 
@@ -1697,13 +1678,11 @@
                     $('.PanLicenseImg').removeClass('d-none');
                     $('.PanLicensePdf').addClass('d-none');
                     $("#PanPdf").val("");
-                    //$('.penPan').addClass('d-none');
                 } else {
                     $('.PanLicenseImg').addClass('d-none');
                     $('.PanLicensePdf').removeClass('d-none');
                     $("#PanImage").val("");
                     $("#img-pan").attr('src', '');
-                    //$('.penPan').addClass('d-none');
                 }
             });
 
@@ -2028,19 +2007,6 @@
                 $("#ImageAccountPath").val("");
             });
 
-            //$(function () {
-            //    var Id = $('#Id').val();
-            //    $.getJSON("/Shop/Activation?Id=" + Id, function (data) {
-            //        if (data.count >= 10) {
-            //            $(".generateOTP").addClass("d-none");
-            //            $(".verifyOTP").removeClass("d-none");
-            //            $(".PhoneVerify").addClass("d-none");
-            //            $(".generatePassword").removeClass("d-none");
-            //            $(".NotverifyOTP").addClass("d-none");
-            //        }
-            //    });
-            //});
-
             $(function () {
                 var $radios = $('input:radio[name=distributorCheck]');
                 if ($radios.is(':checked') === true) {
@@ -2313,15 +2279,6 @@
                 infowindow.open(map, marker);
             });
             markers.push(marker);
-
-            //var google_maps_geoIdr = new google.maps.GeoIdr();
-            //google_maps_geoIdr.geoId(
-            //    { 'latLng': pos },
-            //    function (results, status) {
-            //        console.log(results);
-
-            //    }
-            //);
 
             autocomplete.addListener('place_changed', function () {
                 document.getElementById("location-error").style.display = 'none';
