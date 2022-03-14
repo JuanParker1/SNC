@@ -375,6 +375,7 @@ namespace ShopNow.ViewModels
             public double ShopCancelPeriod { get; set; }
             public DateTime? ShopCancelledTime { get; set; }
             public double OrderPeriod { get; set; }
+            public string CancelledRemark { get; set; }
         }
 
         public List<CustomerCancelledList> CustomerCancelledLists { get; set; }
@@ -584,6 +585,7 @@ namespace ShopNow.ViewModels
             public string ShopName { get; set; }
             public string PhoneNumber { get; set; }
             public string DeliveryAddress { get; set; }
+            public string CancelledRemark { get; set; }
             public System.DateTime DateEncoded { get; set; }
         }
         public List<DeliveryBoyPaymentStatusList> DeliveryBoyPaymentStatusLists { get; set; }

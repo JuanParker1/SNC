@@ -32,12 +32,13 @@
                     <h4 class="text-center d-none d-print-block">Cancelled Report</h4>
                     @Html.Grid(Model.CancelledReportLists).Columns(columns =>
                    {
-                       columns.Add(c => c.OrderNumber).Titled("Order Number").Filterable(true).SetWidth(10);
+                       columns.Add(c => c.DateEncoded).Titled("Date").Filterable(true).SetWidth(10).Format("{0:dd-MM-yyyy hh:mm tt}");
+                       columns.Add(c => c.OrderNumber).Titled("Order Number").Filterable(true).SetWidth(5);
                        columns.Add(c => c.ShopName).Titled("Shop Name").Filterable(true).SetWidth(15);
-                       columns.Add(c => c.DeliveryAddress).Titled("Delivery Address").Filterable(true).SetWidth(15);
+                       columns.Add(c => c.DeliveryAddress).Titled("Delivery Address").Filterable(true).SetWidth(25);
                        columns.Add(c => c.PhoneNumber).Titled("Phone Number").Filterable(true).SetWidth(15);
-                       columns.Add().Encoded(false).Sanitized(false).RenderValueAs(o => "<span>Cancelled</span>").Titled("Order Status").SetWidth(15);
-                       columns.Add(c => c.DateEncoded).Titled("Date").Filterable(true).SetWidth(10);
+                      // columns.Add().Encoded(false).Sanitized(false).RenderValueAs(o => "<span>Cancelled</span>").Titled("Order Status").SetWidth(15);
+                       columns.Add(c => c.CancelledRemark).Titled("Remarks").Filterable(true).SetWidth(25);
                    }).WithPaging(25).Sortable(true)
                 </div>
             </div>

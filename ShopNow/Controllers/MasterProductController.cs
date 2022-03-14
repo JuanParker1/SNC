@@ -248,6 +248,9 @@ namespace ShopNow.Controllers
                 addOns.Add(addOn);
             }
             Session["EditAddOns"] = addOns;
+
+            Session["AddTagCategory"] = new List<TagCategorySessionList>();
+            Session["AddedTagCategory"] = new List<TagCategorySessionList>();
             return View(model);
         }
 
@@ -324,7 +327,9 @@ namespace ShopNow.Controllers
             }
             Session["EditAddOns"] = null;
             SaveKeywordData(master.Name);
-
+            // Tag Category 
+            SaveTagCategory(model.CategoryId, 0, 0, master.Id);
+            DeleteTagCategory();
             return RedirectToAction("FoodEdit", new { id = AdminHelpers.ECodeLong(model.Id) });
         }
 
@@ -529,7 +534,6 @@ namespace ShopNow.Controllers
                 return RedirectToAction("LogOut", "Home");
             }
             var user = ((Helpers.Sessions.User)Session["USER"]);
-            Session["AddTagCategory"] = null;
             Session["AddTagCategory"] = new List<TagCategorySessionList>();
             ViewBag.Name = user.Name;
             return View();
@@ -667,6 +671,13 @@ namespace ShopNow.Controllers
                 model.NextSubCategoryName = nextsubcategoryName.Name;
             else
                 model.NextSubCategoryName = "N/A";
+
+            model.TagCategory = string.Join(",", _db.TagCategories.Where(i => i.MasterProductId == masterProduct.Id).Select(i => i.Id));
+            model.TagCategoryName = string.Join(",", _db.TagCategories.Where(i => i.MasterProductId == masterProduct.Id).Select(i => i.CategoryName));
+
+            Session["AddTagCategory"] = new List<TagCategorySessionList>();
+            Session["AddedTagCategory"] = new List<TagCategorySessionList>();
+
             return View(model);
         }
 
@@ -727,6 +738,7 @@ namespace ShopNow.Controllers
                 master.DateUpdated = DateTime.Now;
                 _db.Entry(master).State = System.Data.Entity.EntityState.Modified;
                 _db.SaveChanges();
+               
             }
             catch (AmazonS3Exception amazonS3Exception)
             {
@@ -744,7 +756,9 @@ namespace ShopNow.Controllers
             }
             //return RedirectToAction("FMCGList");
             SaveKeywordData(master.Name);
-
+            // Tag Category 
+            SaveTagCategory(master.CategoryId, master.SubCategoryId, master.NextSubCategoryId, master.Id);
+            DeleteTagCategory();
             return RedirectToAction("FMCGEdit", new { id = AdminHelpers.ECodeLong(model.Id) });
         }
 
@@ -777,7 +791,6 @@ namespace ShopNow.Controllers
         public ActionResult MedicalCreate()
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
-            Session["AddTagCategory"] = null;
             Session["AddTagCategory"] = new List<TagCategorySessionList>();
             ViewBag.Name = user.Name;
             return View();
@@ -919,6 +932,11 @@ namespace ShopNow.Controllers
             model.DrugCompoundDetailIds1 = masterProduct.DrugCompoundDetailIds;
             if(masterProduct.CategoryId !=0)
             model.CategoryName = _db.Categories.FirstOrDefault(i => i.Id == masterProduct.CategoryId).Name;
+
+            model.TagCategory = string.Join(",", _db.TagCategories.Where(i => i.MasterProductId == masterProduct.Id).Select(i => i.Id));
+            model.TagCategoryName = string.Join(",", _db.TagCategories.Where(i => i.MasterProductId == masterProduct.Id).Select(i => i.CategoryName));
+            Session["AddTagCategory"] = new List<TagCategorySessionList>();
+            Session["AddedTagCategory"] = new List<TagCategorySessionList>();
             return View(model);
         }
 
@@ -1018,6 +1036,9 @@ namespace ShopNow.Controllers
             }
             // return RedirectToAction("MedicalList");
             SaveKeywordDataWithCombination(master.Name,master.DrugCompoundDetailName);
+            // Tag Category 
+            SaveTagCategory(master.CategoryId, 0, 0, master.Id);
+            DeleteTagCategory();
             return RedirectToAction("MedicalEdit", new { id = AdminHelpers.ECodeLong(model.Id) });
         }
 
@@ -1201,6 +1222,7 @@ namespace ShopNow.Controllers
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
+            Session["AddTagCategory"] = new List<TagCategorySessionList>();
             return View();
         }
 
@@ -1286,6 +1308,9 @@ namespace ShopNow.Controllers
                 }
             }
             SaveKeywordData(prod.Name);
+
+            // Tag Category 
+            SaveTagCategory(model.CategoryId,0, 0, prod.Id);
             return View();
         }
 
@@ -1315,6 +1340,12 @@ namespace ShopNow.Controllers
                 model.CategoryName = categoryName.Name;
             else
                 model.CategoryName = "N/A";
+
+            model.TagCategory = string.Join(",", _db.TagCategories.Where(i => i.MasterProductId == masterProduct.Id).Select(i => i.Id));
+            model.TagCategoryName = string.Join(",", _db.TagCategories.Where(i => i.MasterProductId == masterProduct.Id).Select(i => i.CategoryName));
+            Session["AddTagCategory"] = new List<TagCategorySessionList>();
+            Session["AddedTagCategory"] = new List<TagCategorySessionList>();
+
             return View(model);
         }
 
@@ -1388,6 +1419,9 @@ namespace ShopNow.Controllers
                 }
             }
             SaveKeywordData(prod.Name);
+            // Tag Category 
+            SaveTagCategory(model.CategoryId, 0, 0, prod.Id);
+            DeleteTagCategory();
             return RedirectToAction("ElectronicEdit", new { id = AdminHelpers.ECodeLong(model.Id) });
         }
 
@@ -2592,8 +2626,41 @@ namespace ShopNow.Controllers
             return Json(new { results = catSubNextList, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
         }
 
+        public async Task<JsonResult> GetElectronicTagCategorySelect2(string q = "")
+        {
+            var cat = await _db.Categories.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0 && a.ProductTypeId == 4)
+               .Select(i => new
+               {
+                   id = i.Id,
+                   text = i.Name,
+                   type = 1
+               }).ToListAsync();
+            var catArray = cat.Select(i => i.id).ToArray();
+            var subcat = await _db.SubCategories.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0 && catArray.Contains(a.CategoryId))
+                .Select(i => new
+                {
+                    id = i.Id,
+                    text = i.Name,
+                    type = 2
+                }).ToListAsync();
+
+            var subcatArray = subcat.Select(i => i.id).ToArray();
+            var nextSubCat = await _db.NextSubCategories.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0 && subcatArray.Contains(a.SubCategoryId))
+               .Select(i => new
+               {
+                   id = i.Id,
+                   text = i.Name,
+                   type = 3
+               }).ToListAsync();
+
+            var catSubList = cat.Union(subcat).ToList();
+            var catSubNextList = catSubList.Union(nextSubCat);
+
+            return Json(new { results = catSubNextList, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
+        }
+
         //Tag Category Session
-        public JsonResult AddFoodCreateTagCategory(int id, int type)
+        public JsonResult AddTagCategory(int id, int type)
         {
             List<TagCategorySessionList> tagCategoryList = Session["AddTagCategory"] as List<TagCategorySessionList> ?? new List<TagCategorySessionList>();
             if (id != 0)
@@ -2609,7 +2676,7 @@ namespace ShopNow.Controllers
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult RemoveFoodCreateTagCategory(int id)
+        public JsonResult RemoveTagCategory(int id)
         {
             List<TagCategorySessionList> tagCategoryList = Session["AddTagCategory"] as List<TagCategorySessionList> ?? new List<TagCategorySessionList>();
 
@@ -2619,83 +2686,24 @@ namespace ShopNow.Controllers
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult AddFoodUpdateTagCategory(int id, int type)
+        public JsonResult RemoveAlreadyAddedTagCategory(int tagCatId)
         {
-            List<TagCategorySessionList> tagCategoryList = Session["UpdateTagCategory"] as List<TagCategorySessionList> ?? new List<TagCategorySessionList>();
-            if (id != 0)
+            List<TagCategorySessionList> tagCategoryList = Session["AddedTagCategory"] as List<TagCategorySessionList> ?? new List<TagCategorySessionList>();
+
+            if (tagCatId != 0)
             {
                 var tagCategory = new TagCategorySessionList
                 {
-                    Id = id,
-                    Type = type
+                    Id = tagCatId,
+                    Type = 0
                 };
                 tagCategoryList.Add(tagCategory);
             }
-            Session["UpdateTagCategory"] = tagCategoryList;
-            return Json(true, JsonRequestBehavior.AllowGet);
-        }
-
-        public JsonResult RemoveFoodUpdateTagCategory(int id)
-        {
-            List<TagCategorySessionList> tagCategoryList = Session["UpdateTagCategory"] as List<TagCategorySessionList> ?? new List<TagCategorySessionList>();
-
-            if (tagCategoryList.Remove(tagCategoryList.SingleOrDefault(i => i.Id == id)))
-                Session["UpdateTagCategory"] = tagCategoryList;
+            Session["AddedTagCategory"] = tagCategoryList;
 
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult AddFMCGCreateTagCategory(int id, int type)
-        {
-            List<TagCategorySessionList> tagCategoryList = Session["AddTagCategory"] as List<TagCategorySessionList> ?? new List<TagCategorySessionList>();
-            if (id != 0)
-            {
-                var tagCategory = new TagCategorySessionList
-                {
-                    Id = id,
-                    Type = type
-                };
-                tagCategoryList.Add(tagCategory);
-            }
-            Session["AddTagCategory"] = tagCategoryList;
-            return Json(true, JsonRequestBehavior.AllowGet);
-        }
-
-        public JsonResult RemoveFMCGCreateTagCategory(int id)
-        {
-            List<TagCategorySessionList> tagCategoryList = Session["AddTagCategory"] as List<TagCategorySessionList> ?? new List<TagCategorySessionList>();
-
-            if (tagCategoryList.Remove(tagCategoryList.SingleOrDefault(i => i.Id == id)))
-                Session["AddTagCategory"] = tagCategoryList;
-
-            return Json(true, JsonRequestBehavior.AllowGet);
-        }
-
-        public JsonResult AddMedicalCreateTagCategory(int id, int type)
-        {
-            List<TagCategorySessionList> tagCategoryList = Session["AddTagCategory"] as List<TagCategorySessionList> ?? new List<TagCategorySessionList>();
-            if (id != 0)
-            {
-                var tagCategory = new TagCategorySessionList
-                {
-                    Id = id,
-                    Type = type
-                };
-                tagCategoryList.Add(tagCategory);
-            }
-            Session["AddTagCategory"] = tagCategoryList;
-            return Json(true, JsonRequestBehavior.AllowGet);
-        }
-
-        public JsonResult RemoveMedicalCreateTagCategory(int id)
-        {
-            List<TagCategorySessionList> tagCategoryList = Session["AddTagCategory"] as List<TagCategorySessionList> ?? new List<TagCategorySessionList>();
-
-            if (tagCategoryList.Remove(tagCategoryList.SingleOrDefault(i => i.Id == id)))
-                Session["AddTagCategory"] = tagCategoryList;
-
-            return Json(true, JsonRequestBehavior.AllowGet);
-        }
         public void SaveTagCategory(int categoryId, int subCategoryId, int nextSubCategoryId, long masterId)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -2784,6 +2792,24 @@ namespace ShopNow.Controllers
                 }
             }
             Session["AddTagCategory"] = null;
+        }
+
+        public void DeleteTagCategory()
+        {
+            List<TagCategorySessionList> tagCategoryList = Session["AddedTagCategory"] as List<TagCategorySessionList>;
+            if (tagCategoryList != null)
+            {
+                if (tagCategoryList.Count() > 0)
+                {
+                    foreach (var item in tagCategoryList)
+                    {
+                        var tagcategory = _db.TagCategories.FirstOrDefault(i => i.Id == item.Id);
+                        _db.TagCategories.Remove(tagcategory);
+                        _db.SaveChanges();
+                    }
+                }
+            }
+            Session["AddedTagCategory"] = null;
         }
     }
 }

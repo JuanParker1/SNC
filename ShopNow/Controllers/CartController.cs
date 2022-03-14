@@ -396,7 +396,8 @@ namespace ShopNow.Controllers
                             Amount = i.c.IsPickupDrop == true ? i.c.TotalPrice : i.p.Amount,
                             DateEncoded = i.c.DateEncoded,
                             ShopCancelledTime = i.c.ShopAcceptedTime,
-                            ShopCancelPeriod = i.c.ShopAcceptedTime != null ? Math.Round((i.c.ShopAcceptedTime.Value - i.c.DateEncoded).TotalMinutes) : 0
+                            ShopCancelPeriod = i.c.ShopAcceptedTime != null ? Math.Round((i.c.ShopAcceptedTime.Value - i.c.DateEncoded).TotalMinutes) : 0,
+                            CancelledRemark = i.c.CancelledRemark
                         }).OrderByDescending(i => i.DateEncoded).ToList();
             int counter = 1;
             model.CancelledLists.ForEach(x => x.No = counter++);
@@ -418,7 +419,8 @@ namespace ShopNow.Controllers
                 OrderNumber = i.OrderNumber.ToString(),
                 DeliveryAddress = i.DeliveryAddress,
                 PhoneNumber = i.CustomerPhoneNumber,
-                DateEncoded = i.DateEncoded
+                DateEncoded = i.DateEncoded,
+                CancelledRemark = i.CancelledRemark
             }).OrderByDescending(i => i.DateEncoded).ToList();
             return View(model);
         }
@@ -1064,6 +1066,7 @@ namespace ShopNow.Controllers
                         if (product != null)
                         {
                             product.HoldOnStok -= Convert.ToInt32(item.Quantity);
+                            product.Qty += Convert.ToInt32(item.Quantity);
                             db.Entry(product).State = System.Data.Entity.EntityState.Modified;
                             db.SaveChanges();
                         }

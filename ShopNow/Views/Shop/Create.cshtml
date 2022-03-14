@@ -284,28 +284,30 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-md-1"></div>
-                                        <div class="col-md-4">
-                                            <label class="text-secondary font-weight-bold ml-2">Aadhar Image</label><br />
-                                            <input type="radio" class="ml-3" name="AadharDocument" id="AadharDocumentImage" value="Image" checked> <label for="AadharDocumentImage"> Image</label>
-                                            <input type="radio" class="ml-3" name="AadharDocument" id="AadharDocumentPDF" value="PDF"> <label for="AadharDocumentPDF"> PDF</label>
-                                            <div class="row ml-3 AadharDocumentPdf d-none mt-2 mb-3">
-                                                <input type="file" id="AadharPdf" name="AadharPdf" />
-                                            </div>
-                                            <div class="row ml-3 AadharDocumentImg mt-2">
-                                                <div class="row">
-                                                    <div class="col-md-12">
-                                                        <div class="img-upload-container">
-                                                            <img class="img-container w-100 h-100 mb-2" id="img-aadhar" onerror="this.src='/Images/noimage.png'" />
-                                                            <input type="file" id="AadharImage" name="AadharImage" class="d-none" />
-                                                            <label for="AadharImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                        <div class="col-md-2"></div>
+                                        <div class="col-md-3">
+                                            <div class="card border-success bg-muted">
+                                                <div class="card-body text-center">
+                                                    <label class="text-secondary font-weight-bold ml-2">Aadhar Image</label><br />
+                                                    <input type="radio" class="ml-3" name="AadharDocument" id="AadharDocumentImage" value="Image" checked> <label for="AadharDocumentImage"> Image</label>
+                                                    <input type="radio" class="ml-3" name="AadharDocument" id="AadharDocumentPDF" value="PDF"> <label for="AadharDocumentPDF"> PDF</label>
+                                                    <div class="row ml-3 AadharDocumentPdf d-none mt-2 mb-3">
+                                                        <input type="file" id="AadharPdf" name="AadharPdf" />
+                                                    </div>
+                                                    <div class="row ml-3 AadharDocumentImg mt-1 ml-5">
+                                                        <div class="col-md-12">
+                                                            <div class="img-upload-container">
+                                                                <img class="img-container w-100 h-100 mb-2" id="img-aadhar" onerror="this.src='/Images/noimage.png'" />
+                                                                <input type="file" id="AadharImage" name="AadharImage" class="d-none" />
+                                                                <label for="AadharImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-md-12">
-                                                    <input type="button" class="btn btn-danger btn-sm ml-5 d-none" id="btnAadharRemove" value="Remove" />
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <input type="button" class="btn btn-danger btn-sm ml-4 d-none" id="btnAadharRemove" value="Remove" />
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -450,7 +452,7 @@
                                                     <div class="row ml-3 OtherPdf d-none mt-2 mb-3">
                                                         <input type="file" id="OtherLicensePdf" name="OtherLicensePdf" />
                                                     </div>
-                                                    <div class="row OtherImg my-2">  
+                                                    <div class="row OtherImg my-2">
                                                         <div class="col-md-12 text-center ml-4">
                                                             <div class="img-upload-container ml-5">
                                                                 <img class="img-container w-100 h-100 mb-2" id="img-other" onerror="this.src='/Images/noimage.png'" />
@@ -759,7 +761,6 @@
     <link href="~/Content/sweetalert/sweetalert.css" rel="stylesheet" />
     <script src="https://maps.googleapis.com/maps/api/js?key=@mapkey&libraries=places&callback=initMap" async defer></script>
     <script>
-        //$('#AuthorisedBrandId').select2();
 
         function myFunction() {
             var checkBox = document.getElementById("myCheck");
@@ -857,7 +858,6 @@
                 });
             });
 
-
             $('#ShopCategoryId').select2({
                 placeholder: "Search Shop Type",
                 ajax: {
@@ -894,174 +894,164 @@
                 }
             });
 
-            $('input:radio[name="distributorCheck"]').change(
-                function () {
-                    if (this.checked && this.value == 'yes') {
-                        $('.distributor').removeClass('d-none');
-                        $('.brand').removeClass('d-none');
-                    } else {
-                        $('.distributor').addClass('d-none');
-                        $('.brand').addClass('d-none');
-                    }
-                });
+            $('input:radio[name="distributorCheck"]').change(function () {
+                if (this.checked && this.value == 'yes') {
+                    $('.distributor').removeClass('d-none');
+                    $('.brand').removeClass('d-none');
+                } else {
+                    $('.distributor').addClass('d-none');
+                    $('.brand').addClass('d-none');
+                }
+            });
 
-            $('input:radio[name="FssaiLicense"]').change(
-                function () {
-                    if (this.checked && this.value == 'Image') {
-                        $('.FssaiImg').removeClass('d-none');
-                        $('.FssaiPdf').addClass('d-none');
-                        $("#FSSAIPdf").val("");
-                        $('.penFssi').addClass('d-none');
-                        $("#btnFssaiRemove").addClass("d-none");
-                    } else {
-                        $('.FssaiImg').addClass('d-none');
-                        $('.FssaiPdf').removeClass('d-none');
-                        $("#FSSAIImage").val("");
-                        $("#img-fssai").attr('src', '');
-                        $('.penFssi').addClass('d-none');
-                        $("#btnFssaiRemove").addClass("d-none");
-                    }
-                });
+            $('input:radio[name="FssaiLicense"]').change(function () {
+                if (this.checked && this.value == 'Image') {
+                    $('.FssaiImg').removeClass('d-none');
+                    $('.FssaiPdf').addClass('d-none');
+                    $("#FSSAIPdf").val("");
+                    $('.penFssi').addClass('d-none');
+                    $("#btnFssaiRemove").addClass("d-none");
+                } else {
+                    $('.FssaiImg').addClass('d-none');
+                    $('.FssaiPdf').removeClass('d-none');
+                    $("#FSSAIImage").val("");
+                    $("#img-fssai").attr('src', '');
+                    $('.penFssi').addClass('d-none');
+                    $("#btnFssaiRemove").addClass("d-none");
+                }
+            });
 
-            $('input:radio[name="DrugLicense"]').change(
-                function () {
-                    if (this.checked && this.value == 'Image') {
-                        $('.DrugImg').removeClass('d-none');
-                        $('.DrugPdf').addClass('d-none');
-                        $("#DrugPdf").val("");
-                        $('.penDrug').addClass('d-none');
-                        $("#btnDrugRemove").addClass("d-none");
-                    } else {
-                        $('.DrugImg').addClass('d-none');
-                        $('.DrugPdf').removeClass('d-none');
-                        $("#DrugImage").val("");
-                        $("#img-drug").attr('src', '');
-                        $('.penDrug').addClass('d-none');
-                        $("#btnDrugRemove").addClass("d-none");
-                    }
-                });
+            $('input:radio[name="DrugLicense"]').change(function () {
+                if (this.checked && this.value == 'Image') {
+                    $('.DrugImg').removeClass('d-none');
+                    $('.DrugPdf').addClass('d-none');
+                    $("#DrugPdf").val("");
+                    $('.penDrug').addClass('d-none');
+                    $("#btnDrugRemove").addClass("d-none");
+                } else {
+                    $('.DrugImg').addClass('d-none');
+                    $('.DrugPdf').removeClass('d-none');
+                    $("#DrugImage").val("");
+                    $("#img-drug").attr('src', '');
+                    $('.penDrug').addClass('d-none');
+                    $("#btnDrugRemove").addClass("d-none");
+                }
+            });
 
-            $('input:radio[name="EstablishLicense"]').change(
-                function () {
-                    if (this.checked && this.value == 'Image') {
-                        $('.EstImg').removeClass('d-none');
-                        $('.EstPdf').addClass('d-none');
-                        $("#EstablishPdf").val("");
-                        $('.penEsta').addClass('d-none');
-                        $('#btnEstaRemove').addClass('d-none');
-                    } else {
-                        $('.EstImg').addClass('d-none');
-                        $('.EstPdf').removeClass('d-none');
-                        $("#EstablishImage").val("");
-                        $("#img-establish").attr('src', '');
-                        $('.penEsta').addClass('d-none');
-                        $('#btnEstaRemove').addClass('d-none');
-                    }
-                });
+            $('input:radio[name="EstablishLicense"]').change(function () {
+                if (this.checked && this.value == 'Image') {
+                    $('.EstImg').removeClass('d-none');
+                    $('.EstPdf').addClass('d-none');
+                    $("#EstablishPdf").val("");
+                    $('.penEsta').addClass('d-none');
+                    $('#btnEstaRemove').addClass('d-none');
+                } else {
+                    $('.EstImg').addClass('d-none');
+                    $('.EstPdf').removeClass('d-none');
+                    $("#EstablishImage").val("");
+                    $("#img-establish").attr('src', '');
+                    $('.penEsta').addClass('d-none');
+                    $('#btnEstaRemove').addClass('d-none');
+                }
+            });
 
-            $('input:radio[name="OtherLicense"]').change(
-                function () {
-                    if (this.checked && this.value == 'Image') {
-                        $('.OtherImg').removeClass('d-none');
-                        $('.OtherPdf').addClass('d-none');
-                        $("#OtherLicensePdf").val("");
-                        $('.penOther').addClass('d-none');
-                        $("#btnOtherRemove").addClass('d-none');
-                    } else {
-                        $('.OtherImg').addClass('d-none');
-                        $('.OtherPdf').removeClass('d-none');
-                        $("#OtherLicenseImage").val("");
-                        $("#img-other").attr('src', '');
-                        $('.penOther').addClass('d-none');
-                        $("#btnOtherRemove").addClass('d-none');
-                    }
-                });
+            $('input:radio[name="OtherLicense"]').change(function () {
+                if (this.checked && this.value == 'Image') {
+                    $('.OtherImg').removeClass('d-none');
+                    $('.OtherPdf').addClass('d-none');
+                    $("#OtherLicensePdf").val("");
+                    $('.penOther').addClass('d-none');
+                    $("#btnOtherRemove").addClass('d-none');
+                } else {
+                    $('.OtherImg').addClass('d-none');
+                    $('.OtherPdf').removeClass('d-none');
+                    $("#OtherLicenseImage").val("");
+                    $("#img-other").attr('src', '');
+                    $('.penOther').addClass('d-none');
+                    $("#btnOtherRemove").addClass('d-none');
+                }
+            });
 
-            $('input:radio[name="AuthLicense"]').change(
-                function () {
-                    if (this.checked && this.value == 'Image') {
-                        $('.AuthLicenseImg').removeClass('d-none');
-                        $('.AuthLicensePdf').addClass('d-none');
-                        $("#AuthorisedDistributorPdf").val("");
-                        $('.penAuth').addClass('d-none');
-                        $("#btnAuthRemove").addClass('d-none');
-                    } else {
-                        $('.AuthLicenseImg').addClass('d-none');
-                        $('.AuthLicensePdf').removeClass('d-none');
-                        $("#AuthorisedDistributorImage").val("");
-                        $("#img-authorise").attr('src', '');
-                        $('.penAuth').addClass('d-none');
-                        $("#btnAuthRemove").addClass('d-none');
-                    }
-                });
+            $('input:radio[name="AuthLicense"]').change(function () {
+                if (this.checked && this.value == 'Image') {
+                    $('.AuthLicenseImg').removeClass('d-none');
+                    $('.AuthLicensePdf').addClass('d-none');
+                    $("#AuthorisedDistributorPdf").val("");
+                    $('.penAuth').addClass('d-none');
+                    $("#btnAuthRemove").addClass('d-none');
+                } else {
+                    $('.AuthLicenseImg').addClass('d-none');
+                    $('.AuthLicensePdf').removeClass('d-none');
+                    $("#AuthorisedDistributorImage").val("");
+                    $("#img-authorise").attr('src', '');
+                    $('.penAuth').addClass('d-none');
+                    $("#btnAuthRemove").addClass('d-none');
+                }
+            });
 
-            $('input:radio[name="GstinLicense"]').change(
-                function () {
-                    if (this.checked && this.value == 'Image') {
-                        $('.GstinLicenseImg').removeClass('d-none');
-                        $('.GstinLicensePdf').addClass('d-none');
-                        $("#GSTINPdf").val("");
-                        $('.penGstn').addClass('d-none');
-                        $('#btnGstnRemove').addClass('d-none');
-                    } else {
-                        $('.GstinLicenseImg').addClass('d-none');
-                        $('.GstinLicensePdf').removeClass('d-none');
-                        $("#GSTINImage").val("");
-                        $("#img-gstin").attr('src', '');
-                        $('.penGstn').addClass('d-none');
-                        $('#btnGstnRemove').addClass('d-none');
-                    }
-                });
+            $('input:radio[name="GstinLicense"]').change(function () {
+                if (this.checked && this.value == 'Image') {
+                    $('.GstinLicenseImg').removeClass('d-none');
+                    $('.GstinLicensePdf').addClass('d-none');
+                    $("#GSTINPdf").val("");
+                    $('.penGstn').addClass('d-none');
+                    $('#btnGstnRemove').addClass('d-none');
+                } else {
+                    $('.GstinLicenseImg').addClass('d-none');
+                    $('.GstinLicensePdf').removeClass('d-none');
+                    $("#GSTINImage").val("");
+                    $("#img-gstin").attr('src', '');
+                    $('.penGstn').addClass('d-none');
+                    $('#btnGstnRemove').addClass('d-none');
+                }
+            });
 
-            $('input:radio[name="PanLicense"]').change(
-                function () {
-                    if (this.checked && this.value == 'Image') {
-                        $('.PanLicenseImg').removeClass('d-none');
-                        $('.PanLicensePdf').addClass('d-none');
-                        $("#PanPdf").val("");
-                        $('.penPan').addClass('d-none');
-                        $("#btnPanRemove").addClass('d-none');
-                    } else {
-                        $('.PanLicenseImg').addClass('d-none');
-                        $('.PanLicensePdf').removeClass('d-none');
-                        $("#PanImage").val("");
-                        $("#img-pan").attr('src', '');
-                        $('.penPan').addClass('d-none');
-                        $("#btnPanRemove").addClass('d-none');
-                    }
-                });
+            $('input:radio[name="PanLicense"]').change(function () {
+                if (this.checked && this.value == 'Image') {
+                    $('.PanLicenseImg').removeClass('d-none');
+                    $('.PanLicensePdf').addClass('d-none');
+                    $("#PanPdf").val("");
+                    $('.penPan').addClass('d-none');
+                    $("#btnPanRemove").addClass('d-none');
+                } else {
+                    $('.PanLicenseImg').addClass('d-none');
+                    $('.PanLicensePdf').removeClass('d-none');
+                    $("#PanImage").val("");
+                    $("#img-pan").attr('src', '');
+                    $('.penPan').addClass('d-none');
+                    $("#btnPanRemove").addClass('d-none');
+                }
+            });
 
-            $('input:radio[name="AadharDocument"]').change(
-                function () {
-                    if (this.checked && this.value == 'Image') {
-                        $('.AadharDocumentImg').removeClass('d-none');
-                        $('.AadharDocumentPdf').addClass('d-none');
-                        $("#AadharPdf").val("");
-                        $("#btnAadharRemove").addClass("d-none");
-                    } else {
-                        $('.AadharDocumentImg').addClass('d-none');
-                        $('.AadharDocumentPdf').removeClass('d-none');
-                        $("#AadharImage").val("");
-                        $("#img-aadhar").attr('src', '');
-                        $("#btnAadharRemove").addClass("d-none");
-                    }
-                });
+            $('input:radio[name="AadharDocument"]').change(function () {
+                if (this.checked && this.value == 'Image') {
+                    $('.AadharDocumentImg').removeClass('d-none');
+                    $('.AadharDocumentPdf').addClass('d-none');
+                    $("#AadharPdf").val("");
+                    $("#btnAadharRemove").addClass("d-none");
+                } else {
+                    $('.AadharDocumentImg').addClass('d-none');
+                    $('.AadharDocumentPdf').removeClass('d-none');
+                    $("#AadharImage").val("");
+                    $("#img-aadhar").attr('src', '');
+                    $("#btnAadharRemove").addClass("d-none");
+                }
+            });
 
-            $('input:radio[name="AccountDocument"]').change(
-                function () {
-                    if (this.checked && this.value == 'Image') {
-                        $('.AccountDocumentImg').removeClass('d-none');
-                        $('.AccountDocumentPdf').addClass('d-none');
-                        $("#AccountPdf").val("");
-                        $("#btnBankRemove").addClass('d-none');
-                    } else {
-                        $('.AccountDocumentImg').addClass('d-none');
-                        $('.AccountDocumentPdf').removeClass('d-none');
-                        $("#AccountImage").val("");
-                        $("#img-account").attr('src', '');
-                        $("#btnBankRemove").addClass('d-none');
-                    }
-                });
+            $('input:radio[name="AccountDocument"]').change(function () {
+                if (this.checked && this.value == 'Image') {
+                    $('.AccountDocumentImg').removeClass('d-none');
+                    $('.AccountDocumentPdf').addClass('d-none');
+                    $("#AccountPdf").val("");
+                    $("#btnBankRemove").addClass('d-none');
+                } else {
+                    $('.AccountDocumentImg').addClass('d-none');
+                    $('.AccountDocumentPdf').removeClass('d-none');
+                    $("#AccountImage").val("");
+                    $("#img-account").attr('src', '');
+                    $("#btnBankRemove").addClass('d-none');
+                }
+            });
 
             $('#AuthorisedBrandId').select2({
                 placeholder: "Search Brand",
@@ -1124,141 +1114,73 @@
                 }
             });
 
-            function readAuthoriseURL(input) {
+            function readURL(input) {
                 if (input.files && input.files[0]) {
                     var reader = new FileReader();
-
                     reader.onload = function (e) {
-                        $('#img-authorise').attr('src', e.target.result);
+                        $('#img-upload').attr('src', e.target.result);
                     }
                     reader.readAsDataURL(input.files[0]);
                 }
             }
-            $("#AuthorisedDistributorImage").change(function () {
-                readAuthoriseURL(this);
-                $('.penAuth').removeClass('d-none');
-                $("#btnAuthRemove").removeClass('d-none');
+            $("#ShopImage").change(function () {
+                readURL(this);
+                $("#btnShopRemove").removeClass("d-none");
             });
-            $("#AuthorisedDistributorPdf").change(function () {
-                $('.penAuth').removeClass('d-none');
-                $("#btnAuthRemove").removeClass('d-none');
-            });
-            $("#btnAuthRemove").on('click', function () {
-                $('#img-authorise').attr('src', '');
-                $("#AuthorisedDistributorImage").val('');
-                $('.penAuth').addClass('d-none');
-                $(this).addClass("d-none");
-            });
-            $("#btnAuthRemove").on('click', function () {
-                $("#AuthorisedDistributorPdf").val('');
-                $('.penAuth').addClass('d-none');
+            $("#btnShopRemove").on('click', function () {
+                $('#img-upload').attr('src', '');
+                $("#ShopImage").val('');
                 $(this).addClass("d-none");
             });
 
-            function readOtherLicenseURL(input) {
+            function readURLLogo(input) {
                 if (input.files && input.files[0]) {
                     var reader = new FileReader();
-
                     reader.onload = function (e) {
-                        $('#img-other').attr('src', e.target.result);
+                        $('#img-logo').attr('src', e.target.result);
                     }
                     reader.readAsDataURL(input.files[0]);
                 }
             }
-            $("#OtherLicenseImage").change(function () {
-                readOtherLicenseURL(this);
-                $('.penOther').removeClass('d-none');
-                $("#btnOtherRemove").removeClass("d-none");
+            $("#LogoImage").change(function () {
+                readURLLogo(this);
+                $("#btnLogoRemove").removeClass("d-none");
             });
-            $("#OtherLicensePdf").change(function () {
-                $('.penOther').removeClass('d-none');
-                $("#btnOtherRemove").removeClass("d-none");
-            });
-            $("#btnOtherRemove").on('click', function () {
-                $('#img-other').attr('src', '');
-                $("#OtherLicenseImage").val('');
-                $('.penOther').addClass('d-none');
-                $(this).addClass("d-none");
-            });
-            $("#btnOtherRemove").on('click', function () {
-                $("#OtherLicensePdf").val('');
-                $('.penOther').addClass('d-none');
+            $("#btnLogoRemove").on('click', function () {
+                $('#img-logo').attr('src', '');
+                $("#LogoImage").val('');
                 $(this).addClass("d-none");
             });
 
-            function readEstablishURL(input) {
+            function readURLAadhar(input) {
                 if (input.files && input.files[0]) {
                     var reader = new FileReader();
-
                     reader.onload = function (e) {
-                        $('#img-establish').attr('src', e.target.result);
-                    }
-
-                    reader.readAsDataURL(input.files[0]);
-                }
-            }
-            $("#EstablishImage").change(function () {
-                readEstablishURL(this);
-                $('.penEsta').removeClass('d-none');
-                $("#btnEstaRemove").removeClass("d-none");
-            });
-            $("#EstablishPdf").change(function () {
-                $('.penEsta').removeClass('d-none');
-                $("#btnEstaRemove").removeClass("d-none");
-            });
-            $("#btnEstaRemove").on('click', function () {
-                $('#img-establish').attr('src', '');
-                $("#EstablishImage").val('');
-                $('.penEsta').addClass('d-none');
-                $(this).addClass("d-none");
-            });
-            $("#btnEstaRemove").on('click', function () {
-                $("#EstablishPdf").val('');
-                $('.penEsta').addClass('d-none');
-                $(this).addClass("d-none");
-            });
-
-            function readDrugURL(input) {
-                if (input.files && input.files[0]) {
-                    var reader = new FileReader();
-
-                    reader.onload = function (e) {
-                        $('#img-drug').attr('src', e.target.result);
+                        $('#img-aadhar').attr('src', e.target.result);
                     }
                     reader.readAsDataURL(input.files[0]);
                 }
             }
-            $("#DrugImage").change(function () {
-                readDrugURL(this);
-                document.getElementById("SaveR").disabled = false;
-                document.getElementById("Save").disabled = false;
-                $('.drug').addClass('d-none');
-                $('.penDrug').removeClass('d-none');
-                $("#btnDrugRemove").removeClass("d-none");
+            $("#AadharImage").change(function () {
+                readURLAadhar(this);
+                $("#btnAadharRemove").removeClass("d-none");
             });
-            $("#DrugPdf").change(function () {
-                document.getElementById("SaveR").disabled = false;
-                document.getElementById("Save").disabled = false;
-                $('.drug').addClass('d-none');
-                $('.penDrug').removeClass('d-none');
-                $("#btnDrugRemove").removeClass("d-none");
-            });
-            $("#btnDrugRemove").on('click', function () {
-                $('#img-drug').attr('src', '');
-                $("#DrugImage").val('');
-                $('.penDrug').addClass('d-none');
+            $("#btnAadharRemove").on('click', function () {
+                $('#img-aadhar').attr('src', '');
+                $("#AadharImage").val("");
                 $(this).addClass("d-none");
             });
-            $("#btnDrugRemove").on('click', function () {
-                $("#DrugPdf").val('');
-                $('.penDrug').addClass('d-none');
+            $("#AadharPdf").change(function () {
+                $("#btnAadharRemove").removeClass("d-none");
+            });
+            $("#btnAadharRemove").on('click', function () {
+                $("#AadharPdf").val("");
                 $(this).addClass("d-none");
             });
 
             function readFssaiURL(input) {
                 if (input.files && input.files[0]) {
                     var reader = new FileReader();
-
                     reader.onload = function (e) {
                         $('#img-fssai').attr('src', e.target.result);
                     }
@@ -1292,41 +1214,135 @@
                 $(this).addClass("d-none");
             });
 
-            function readURLPan(input) {
+            function readDrugURL(input) {
                 if (input.files && input.files[0]) {
                     var reader = new FileReader();
-
                     reader.onload = function (e) {
-                        $('#img-pan').attr('src', e.target.result);
+                        $('#img-drug').attr('src', e.target.result);
                     }
                     reader.readAsDataURL(input.files[0]);
                 }
             }
-            $("#PanImage").change(function () {
-                readURLPan(this);
-                $('.penPan').removeClass('d-none');
-                $("#btnPanRemove").removeClass("d-none");
+            $("#DrugImage").change(function () {
+                readDrugURL(this);
+                document.getElementById("SaveR").disabled = false;
+                document.getElementById("Save").disabled = false;
+                $('.drug').addClass('d-none');
+                $('.penDrug').removeClass('d-none');
+                $("#btnDrugRemove").removeClass("d-none");
             });
-            $("#PanPdf").change(function () {
-                $('.penPan').removeClass('d-none');
-                $("#btnPanRemove").removeClass("d-none");
+            $("#DrugPdf").change(function () {
+                document.getElementById("SaveR").disabled = false;
+                document.getElementById("Save").disabled = false;
+                $('.drug').addClass('d-none');
+                $('.penDrug').removeClass('d-none');
+                $("#btnDrugRemove").removeClass("d-none");
             });
-            $("#btnPanRemove").on('click', function () {
-                $('#img-pan').attr('src', '');
-                $("#PanImage").val('');
-                $('.penPan').addClass('d-none');
+            $("#btnDrugRemove").on('click', function () {
+                $('#img-drug').attr('src', '');
+                $("#DrugImage").val('');
+                $('.penDrug').addClass('d-none');
                 $(this).addClass("d-none");
             });
-            $("#btnPanRemove").on('click', function () {
-                $("#PanPdf").val('');
-                $('.penPan').addClass('d-none');
+            $("#btnDrugRemove").on('click', function () {
+                $("#DrugPdf").val('');
+                $('.penDrug').addClass('d-none');
+                $(this).addClass("d-none");
+            });
+
+            function readEstablishURL(input) {
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        $('#img-establish').attr('src', e.target.result);
+                    }
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
+            $("#EstablishImage").change(function () {
+                readEstablishURL(this);
+                $('.penEsta').removeClass('d-none');
+                $("#btnEstaRemove").removeClass("d-none");
+            });
+            $("#EstablishPdf").change(function () {
+                $('.penEsta').removeClass('d-none');
+                $("#btnEstaRemove").removeClass("d-none");
+            });
+            $("#btnEstaRemove").on('click', function () {
+                $('#img-establish').attr('src', '');
+                $("#EstablishImage").val('');
+                $('.penEsta').addClass('d-none');
+                $(this).addClass("d-none");
+            });
+            $("#btnEstaRemove").on('click', function () {
+                $("#EstablishPdf").val('');
+                $('.penEsta').addClass('d-none');
+                $(this).addClass("d-none");
+            });
+
+            function readOtherLicenseURL(input) {
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        $('#img-other').attr('src', e.target.result);
+                    }
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
+            $("#OtherLicenseImage").change(function () {
+                readOtherLicenseURL(this);
+                $('.penOther').removeClass('d-none');
+                $("#btnOtherRemove").removeClass("d-none");
+            });
+            $("#OtherLicensePdf").change(function () {
+                $('.penOther').removeClass('d-none');
+                $("#btnOtherRemove").removeClass("d-none");
+            });
+            $("#btnOtherRemove").on('click', function () {
+                $('#img-other').attr('src', '');
+                $("#OtherLicenseImage").val('');
+                $('.penOther').addClass('d-none');
+                $(this).addClass("d-none");
+            });
+            $("#btnOtherRemove").on('click', function () {
+                $("#OtherLicensePdf").val('');
+                $('.penOther').addClass('d-none');
+                $(this).addClass("d-none");
+            });
+
+            function readAuthoriseURL(input) {
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        $('#img-authorise').attr('src', e.target.result);
+                    }
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
+            $("#AuthorisedDistributorImage").change(function () {
+                readAuthoriseURL(this);
+                $('.penAuth').removeClass('d-none');
+                $("#btnAuthRemove").removeClass('d-none');
+            });
+            $("#AuthorisedDistributorPdf").change(function () {
+                $('.penAuth').removeClass('d-none');
+                $("#btnAuthRemove").removeClass('d-none');
+            });
+            $("#btnAuthRemove").on('click', function () {
+                $('#img-authorise').attr('src', '');
+                $("#AuthorisedDistributorImage").val('');
+                $('.penAuth').addClass('d-none');
+                $(this).addClass("d-none");
+            });
+            $("#btnAuthRemove").on('click', function () {
+                $("#AuthorisedDistributorPdf").val('');
+                $('.penAuth').addClass('d-none');
                 $(this).addClass("d-none");
             });
 
             function readURLGstin(input) {
                 if (input.files && input.files[0]) {
                     var reader = new FileReader();
-
                     reader.onload = function (e) {
                         $('#img-gstin').attr('src', e.target.result);
                     }
@@ -1354,10 +1370,39 @@
                 $(this).addClass("d-none");
             });
 
+            function readURLPan(input) {
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        $('#img-pan').attr('src', e.target.result);
+                    }
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
+            $("#PanImage").change(function () {
+                readURLPan(this);
+                $('.penPan').removeClass('d-none');
+                $("#btnPanRemove").removeClass("d-none");
+            });
+            $("#PanPdf").change(function () {
+                $('.penPan').removeClass('d-none');
+                $("#btnPanRemove").removeClass("d-none");
+            });
+            $("#btnPanRemove").on('click', function () {
+                $('#img-pan').attr('src', '');
+                $("#PanImage").val('');
+                $('.penPan').addClass('d-none');
+                $(this).addClass("d-none");
+            });
+            $("#btnPanRemove").on('click', function () {
+                $("#PanPdf").val('');
+                $('.penPan').addClass('d-none');
+                $(this).addClass("d-none");
+            });
+
             function readURLAccount(input) {
                 if (input.files && input.files[0]) {
                     var reader = new FileReader();
-
                     reader.onload = function (e) {
                         $('#img-account').attr('src', e.target.result);
                     }
@@ -1381,87 +1426,17 @@
                 $(this).addClass("d-none");
             });
 
-            function readURL(input) {
-                if (input.files && input.files[0]) {
-                    var reader = new FileReader();
-
-                    reader.onload = function (e) {
-                        $('#img-upload').attr('src', e.target.result);
-                    }
-                    reader.readAsDataURL(input.files[0]);
-                }
-            }
-            $("#ShopImage").change(function () {
-                readURL(this);
-                $("#btnShopRemove").removeClass("d-none");
-            });
-            $("#btnShopRemove").on('click', function () {
-                $('#img-upload').attr('src', '');
-                $("#ShopImage").val('');
-                $(this).addClass("d-none");
-            });
-
-            function readURLLogo(input) {
-                if (input.files && input.files[0]) {
-                    var reader = new FileReader();
-
-                    reader.onload = function (e) {
-                        $('#img-logo').attr('src', e.target.result);
-                    }
-
-                    reader.readAsDataURL(input.files[0]);
-                }
-            }
-            $("#LogoImage").change(function () {
-                readURLLogo(this);
-                $("#btnLogoRemove").removeClass("d-none");
-            });
-            $("#btnLogoRemove").on('click', function () {
-                $('#img-logo').attr('src', '');
-                $("#LogoImage").val('');
-                $(this).addClass("d-none");
-            });
-
             function readURLBanner(input) {
                 if (input.files && input.files[0]) {
                     var reader = new FileReader();
-
                     reader.onload = function (e) {
                         $('#img-banner').attr('src', e.target.result);
                     }
-
                     reader.readAsDataURL(input.files[0]);
                 }
             }
             $("#BannerImage").change(function () {
                 readURLBanner(this);
-            });
-
-            function readURLAadhar(input) {
-                if (input.files && input.files[0]) {
-                    var reader = new FileReader();
-
-                    reader.onload = function (e) {
-                        $('#img-aadhar').attr('src', e.target.result);
-                    }
-                    reader.readAsDataURL(input.files[0]);
-                }
-            }
-            $("#AadharImage").change(function () {
-                readURLAadhar(this);
-                $("#btnAadharRemove").removeClass("d-none");
-            });
-            $("#btnAadharRemove").on('click', function () {
-                $('#img-aadhar').attr('src', '');
-                $("#AadharImage").val("");
-                $(this).addClass("d-none");
-            });
-            $("#AadharPdf").change(function () {
-                $("#btnAadharRemove").removeClass("d-none");
-            });
-            $("#btnAadharRemove").on('click', function () {
-                $("#AadharPdf").val("");
-                $(this).addClass("d-none");
             });
 
         });

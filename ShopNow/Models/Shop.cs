@@ -91,5 +91,6 @@ namespace ShopNow.Models
         public System.DateTime DateUpdated { get; set; }
         public string CreatedBy { get; set; }
         public string UpdatedBy { get; set; }
+        public double DeliveryDiscountPercentage { get; set; }
     }
 }

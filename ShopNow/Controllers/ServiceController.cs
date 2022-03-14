@@ -206,7 +206,8 @@ namespace ShopNow.Controllers
                 address = i.Address,
                 latitude = i.Latitude,
                 longitude = i.Longitude,
-                customerid = i.CustomerId
+                customerid = i.CustomerId,
+                shopCategoryId = i.ShopCategoryId
             }).ToListAsync();
             
             return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
