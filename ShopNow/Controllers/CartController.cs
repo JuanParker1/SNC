@@ -2094,6 +2094,7 @@ namespace ShopNow.Controllers
                 cart.DeliveryCharge = model.GrossDeliveryCharge;
                 cart.ShopDeliveryDiscount = model.ShopDeliveryDiscount;
                 cart.NetDeliveryCharge = model.DeliveryCharge;
+                cart.Distance = model.Distance;
                 db.Entry(cart).State = EntityState.Modified;
                 db.SaveChanges();
             }
@@ -2109,6 +2110,18 @@ namespace ShopNow.Controllers
             }
 
             return RedirectToAction("List");
+        }
+
+        public JsonResult GetDeliveryDiscount(int OrderNumber)
+        {
+            var order = db.Orders.FirstOrDefault(i => i.OrderNumber == OrderNumber);
+            var billingCharge = db.BillingCharges.FirstOrDefault(i => i.ShopId == order.ShopId && i.Status == 0);
+            double ShopDeliveryDiscount = 0;
+            if (billingCharge != null)
+            {
+                ShopDeliveryDiscount = order.TotalPrice * (billingCharge.DeliveryDiscountPercentage / 100);
+            }
+            return Json(ShopDeliveryDiscount, JsonRequestBehavior.AllowGet);
         }
 
         protected override void Dispose(bool disposing)
