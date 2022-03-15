@@ -405,13 +405,17 @@
                     };
                     $('#btn-save').attr("disabled", true);
                     $.post('/CustomerPrescription/AddToCart', model, function (data) {
-                        if (data) {
+                        if (data.status) {
                             // swal('Success', 'Order Placed successfully', 'success');
                             location.href = "List";
                         } else {
-                            timeArray.length = 0;
+                            itemArray = [];
+                            itemTotal = 0;
+                            totalWeight = 0;
+                            totalSize = 0;
                             $('#tbl-items tbody').empty();
                             $('#div-items').addClass('d-none');
+                            swal("Notice!", "Something went wrong! Kindly refresh the page and try again.", "error");
                         }
                     });
                 } else

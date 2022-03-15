@@ -2446,7 +2446,7 @@ namespace ShopNow.Controllers
 
         public async Task<JsonResult> GetAllSelect2(string q = "")
         {
-            var model = await _db.MasterProducts.Where(a => a.Name.StartsWith(q) && a.Status == 0).Take(50).OrderBy(i => i.Name).Select(i => new
+            var model = await _db.MasterProducts.Where(a => a.Name.Contains(q) && a.Status == 0).Take(500).OrderBy(i => i.Name).Select(i => new
             {
                 id = i.Id,
                 text = i.Name
