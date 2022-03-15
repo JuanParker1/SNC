@@ -1078,5 +1078,6 @@ namespace ShopNow.ViewModels
         public double GrossDeliveryCharge { get; set; }
         public double ShopDeliveryDiscount { get; set; }
         public double DeliveryCharge { get; set; }
+        public double Distance { get; set; }
     }
 }
