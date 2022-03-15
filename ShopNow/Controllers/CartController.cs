@@ -1121,11 +1121,13 @@ namespace ShopNow.Controllers
             db.Entry(deliveryboy).State = System.Data.Entity.EntityState.Modified;
             db.SaveChanges();
 
+            order.DeliveryBoyOnWork = 0;
             order.DeliveryBoyId = 0;
             order.DeliveryBoyName = string.Empty;
             order.DeliveryBoyPhoneNumber = string.Empty;
             order.Status = 3;
             order.DateUpdated = DateTime.Now;
+            order.UpdatedBy = user.Name;
             db.Entry(order).State = System.Data.Entity.EntityState.Modified;
             db.SaveChanges();
             return RedirectToAction("DeliveryAgentAssigned");
