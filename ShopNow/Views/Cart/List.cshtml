@@ -170,7 +170,7 @@
         <div class="modal-content">
             <div class="modal-body">
                 <form method="get" action="/Cart/UpdateAmount">
-                    <input type="hidden" name="OrderNumber" />
+                    <input type="hidden" name="OrderNumber" id="OrderNumber" />
                     <h5>Update Amount <span class="ml-2" id="orderno-text"></span></h5>
                     <div class="row">
                         <div class="form-group col-md-4">
@@ -187,7 +187,6 @@
                         </div>
                     </div>
                     <div class="row">
-                       
                         <div class="form-group col-md-4">
                             <label>Shop Delivery Discount</label>
                             <input class="form-control" step="any" type="number" name="ShopDeliveryDiscount" required onkeyup="calculateDeliveryCharge()" />
@@ -199,6 +198,11 @@
                         <div class="form-group col-md-4">
                             <label>Net Total</label>
                             <input class="form-control" step="any" type="number" name="Amount" required />
+                        </div>
+                    </div>
+                    <div class="row">
+                         <div class="form-group col-md-4">
+                            <div class="dist"></div>
                         </div>
                     </div>
                     <div class="text-right">
@@ -323,6 +327,9 @@
                 var orderno = $(this).data('orderno');
                 var totalprice = $(this).data('totalprice');
                 var distance = $(this).data('distance');
+                if (distance == 0) {
+                    $(".dist").append("<label>Distance</label><input class='form-control' step='any' type='number' name='Distance' />");
+                }
                 $('[name="OrderNumber"]').val(orderno);
                 $('[name="TotalPrice"]').val(totalprice);
                 $("#distance").text(distance);
@@ -333,13 +340,20 @@
         });
         function calculateDeliveryCharge() {
             var grossDC = $('input[name="GrossDeliveryCharge"]').val();
-            var deliveryDiscount = $('input[name="ShopDeliveryDiscount"]').val();
-            var deliveryCharge = Math.round(parseFloat(grossDC) - parseFloat(deliveryDiscount));
-            $('input[name="DeliveryCharge"]').val(deliveryCharge);
-            var totalprice = $('input[name="TotalPrice"]').val();
-            var convenient = $('input[name="ConvenientCharge"]').val();
-            var nettotal = parseFloat(totalprice) + parseFloat(deliveryCharge) + parseFloat(convenient);
-            $('input[name="Amount"]').val(nettotal);
+            var orderno = $("#OrderNumber").val();
+            $.getJSON("/Cart/GetDeliveryDiscount", { OrderNumber: orderno }, function (data) {
+                if (data != null) {
+                    var deliveryDiscount = data;
+                    $('input[name="ShopDeliveryDiscount"]').val(deliveryDiscount);
+                    var deliveryCharge = Math.round(parseFloat(grossDC) - parseFloat(deliveryDiscount));
+                    $('input[name="DeliveryCharge"]').val(deliveryCharge);
+                    var totalprice = $('input[name="TotalPrice"]').val();
+                    var convenient = $('input[name="ConvenientCharge"]').val();
+                    var nettotal = parseFloat(totalprice) + parseFloat(deliveryCharge) + parseFloat(convenient);
+                    $('input[name="Amount"]').val(nettotal);
+                }
+            });
+           
         }
     </script>
 }
