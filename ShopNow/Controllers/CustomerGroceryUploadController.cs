@@ -160,143 +160,150 @@ namespace ShopNow.Controllers
             ViewBag.Name = user.Name;
             try
             {
-                var shop = db.Shops.FirstOrDefault(i => i.Id == model.ShopId);
-                var customer = db.Customers.FirstOrDefault(i => i.Id == model.CustomerId);
-                var shopCredits = db.ShopCredits.FirstOrDefault(i => i.CustomerId == shop.CustomerId);
-                if ((shopCredits.PlatformCredit < 26 && shopCredits.DeliveryCredit < 67) && shop.IsTrail == false)
+                if (model.ToPay > 0)
                 {
-                    //Shop DeActivate
-                    shop.Status = 6;
-                    db.Entry(shop).State = EntityState.Modified;
-                    db.SaveChanges();
+                    var shop = db.Shops.FirstOrDefault(i => i.Id == model.ShopId);
+                    var customer = db.Customers.FirstOrDefault(i => i.Id == model.CustomerId);
+                    var shopCredits = db.ShopCredits.FirstOrDefault(i => i.CustomerId == shop.CustomerId);
+                    if ((shopCredits.PlatformCredit < 26 && shopCredits.DeliveryCredit < 67) && shop.IsTrail == false)
+                    {
+                        //Shop DeActivate
+                        shop.Status = 6;
+                        db.Entry(shop).State = EntityState.Modified;
+                        db.SaveChanges();
+                    }
+                    else
+                    {
+                        //Order 
+                        var order = _mapper.Map<GroceryAddToCartViewModel, Models.Order>(model);
+                        if (model.CustomerId != 0)
+                        {
+                            order.CustomerId = customer.Id;
+                            order.CustomerName = customer.Name;
+                            order.CustomerPhoneNumber = customer.PhoneNumber;
+                            order.CreatedBy = customer.Name;
+                            order.UpdatedBy = customer.Name;
+                        }
+                        order.OrderNumber = model.OrderNumber;
+                        order.ShopId = shop.Id;
+                        order.ShopName = shop.Name;
+                        order.DeliveryAddress = model.DeliveryAddress;
+                        order.ShopPhoneNumber = shop.PhoneNumber ?? shop.ManualPhoneNumber;
+                        order.ShopOwnerPhoneNumber = shop.OwnerPhoneNumber;
+                        order.TotalPrice = model.ListItems.Sum(i => i.Price);
+                        order.TotalProduct = model.ListItems.Count();
+                        order.TotalQuantity = model.ListItems.Sum(i => Convert.ToInt32(i.Quantity));
+                        order.NetTotal = model.ToPay;
+                        order.DeliveryCharge = model.GrossDeliveryCharge;
+                        order.ShopDeliveryDiscount = model.ShopDeliveryDiscount;
+                        order.NetDeliveryCharge = model.NetDeliveryCharge;
+                        order.Convinenientcharge = model.ConvenientCharge;
+                        order.Packingcharge = model.PackingCharge;
+                        order.Latitude = model.Latitude ?? 0;
+                        order.Longitude = model.Longitude ?? 0;
+                        order.Distance = model.Distance;
+                        order.RatePerOrder = db.PlatFormCreditRates.FirstOrDefault(i => i.Status == 0).RatePerOrder;
+                        order.PaymentMode = "Cash On Hand";
+                        order.PaymentModeType = 2;
+                        order.DateEncoded = DateTime.Now;
+                        order.DateUpdated = DateTime.Now;
+                        order.Status = 2;
+                        order.UploadType = 2;               // For Grocery Upload type is 2
+                        order.UploadId = model.GroceryId;
+                        db.Orders.Add(order);
+                        db.SaveChanges();
+                        //OrderItems
+                        foreach (var item in model.ListItems)
+                        {
+                            if (item.ItemId != 0)
+                            {
+                                //var product = db.Products.FirstOrDefault(i => i.ItemId == item.ItemId && i.Status == 0);
+                                var product = db.Products.FirstOrDefault(i => i.Id == item.ProductId && i.Status == 0);
+                                product.HoldOnStok = Convert.ToInt32(item.Quantity);
+                                product.Qty = product.Qty - Convert.ToInt32(item.Quantity);
+                                db.Entry(product).State = System.Data.Entity.EntityState.Modified;
+                                db.SaveChanges();
+                            }
+                            var orderItem = _mapper.Map<GroceryAddToCartViewModel.ListItem, OrderItem>(item);
+                            orderItem.Status = 0;
+                            orderItem.OrderId = order.Id;
+                            orderItem.OrdeNumber = order.OrderNumber;
+                            orderItem.ProductId = item.ProductId;
+                            orderItem.ProductName = item.ProductName;
+                            orderItem.BrandId = item.BrandId;
+                            orderItem.BrandName = item.BrandName;
+                            orderItem.CategoryId = item.CategoryId;
+                            orderItem.CategoryName = item.CategoryName;
+                            orderItem.ImagePath = item.ImagePath;
+                            orderItem.Quantity = item.Quantity;
+                            orderItem.UnitPrice = item.UnitPrice;
+                            orderItem.Price = item.Price;
+                            orderItem.MRPPrice = item.MRPPrice;
+                            db.OrderItems.Add(orderItem);
+                            db.SaveChanges();
+                        }
+                        // Payment
+                        var payment = new Payment();
+                        payment.Amount = model.ToPay;
+                        payment.PaymentMode = "Cash On Hand";
+                        payment.PaymentModeType = 2;
+                        payment.CustomerId = customer.Id;
+                        payment.CustomerName = customer.Name;
+                        payment.ShopId = shop.Id;
+                        payment.ShopName = shop.Name;
+                        payment.OriginalAmount = order.TotalPrice;
+                        payment.GSTAmount = model.ToPay;
+                        payment.Currency = "Rupees";
+                        payment.CountryName = null;
+                        payment.PaymentResult = "pending";
+                        payment.Credits = "N/A";
+                        payment.OrderNumber = order.OrderNumber;
+                        payment.PaymentCategoryType = 0;
+                        payment.Credits = "N/A";
+                        payment.CreditType = 2;
+                        payment.ConvenientCharge = model.ConvenientCharge;
+                        payment.PackingCharge = model.PackingCharge;
+                        payment.DeliveryCharge = model.GrossDeliveryCharge;
+                        payment.RatePerOrder = order.RatePerOrder;
+                        payment.RefundStatus = 1;
+                        payment.Status = 0;
+                        payment.CreatedBy = customer.Name;
+                        payment.UpdatedBy = customer.Name;
+                        payment.DateEncoded = DateTime.Now;
+                        payment.DateUpdated = DateTime.Now;
+                        db.Payments.Add(payment);
+                        db.SaveChanges();
+                        // Prescription 
+                        var grocery = db.CustomerGroceryUploads.FirstOrDefault(i => i.Id == model.GroceryId);
+                        if (grocery != null)
+                        {
+                            grocery.Status = 1;
+                            db.Entry(grocery).State = System.Data.Entity.EntityState.Modified;
+                            db.SaveChanges();
+                        }
+
+                        // Shop Credits Balance
+                        shopCredits.PlatformCredit -= payment.RatePerOrder.Value;
+                        db.Entry(shopCredits).State = System.Data.Entity.EntityState.Modified;
+                        db.SaveChanges();
+
+                        if (order != null)
+                        {
+                            var fcmToken = (from c in db.Customers
+                                            join s in db.Shops on c.Id equals s.CustomerId
+                                            where s.Id == model.ShopId
+                                            select c.FcmTocken ?? "").FirstOrDefault().ToString();
+                            Helpers.PushNotification.SendbydeviceId("You have received new order.Accept Soon", "ShopNowChat", "a.mp3", fcmToken.ToString());
+
+                            return Json(new { status = true, orderId = order.Id }, JsonRequestBehavior.AllowGet);
+                        }
+                        else
+                            return Json(new { status = false }, JsonRequestBehavior.AllowGet);
+                    }
                 }
                 else
                 {
-                    //Order 
-                    var order = _mapper.Map<GroceryAddToCartViewModel, Models.Order>(model);
-                    if (model.CustomerId != 0)
-                    {
-                        order.CustomerId = customer.Id;
-                        order.CustomerName = customer.Name;
-                        order.CustomerPhoneNumber = customer.PhoneNumber;
-                        order.CreatedBy = customer.Name;
-                        order.UpdatedBy = customer.Name;
-                    }
-                    order.OrderNumber = model.OrderNumber;
-                    order.ShopId = shop.Id;
-                    order.ShopName = shop.Name;
-                    order.DeliveryAddress = model.DeliveryAddress;
-                    order.ShopPhoneNumber = shop.PhoneNumber ?? shop.ManualPhoneNumber;
-                    order.ShopOwnerPhoneNumber = shop.OwnerPhoneNumber;
-                    order.TotalPrice = model.ListItems.Sum(i => i.Price);
-                    order.TotalProduct = model.ListItems.Count();
-                    order.TotalQuantity = model.ListItems.Sum(i => Convert.ToInt32(i.Quantity));
-                    order.NetTotal = model.ToPay;
-                    order.DeliveryCharge = model.GrossDeliveryCharge;
-                    order.ShopDeliveryDiscount = model.ShopDeliveryDiscount;
-                    order.NetDeliveryCharge = model.NetDeliveryCharge;
-                    order.Convinenientcharge = model.ConvenientCharge;
-                    order.Packingcharge = model.PackingCharge;
-                    order.Latitude = model.Latitude ?? 0;
-                    order.Longitude = model.Longitude ?? 0;
-                    order.Distance = model.Distance;
-                    order.RatePerOrder = db.PlatFormCreditRates.FirstOrDefault(i => i.Status == 0).RatePerOrder;
-                    order.PaymentMode = "Cash On Hand";
-                    order.PaymentModeType = 2;
-                    order.DateEncoded = DateTime.Now;
-                    order.DateUpdated = DateTime.Now;
-                    order.Status = 2;
-                    order.UploadType = 2;               // For Grocery Upload type is 2
-                    order.UploadId = model.GroceryId;
-                    db.Orders.Add(order);
-                    db.SaveChanges();
-                    //OrderItems
-                    foreach (var item in model.ListItems)
-                    {
-                        if (item.ItemId != 0)
-                        {
-                            //var product = db.Products.FirstOrDefault(i => i.ItemId == item.ItemId && i.Status == 0);
-                            var product = db.Products.FirstOrDefault(i => i.Id == item.ProductId && i.Status == 0);
-                            product.HoldOnStok = Convert.ToInt32(item.Quantity);
-                            product.Qty = product.Qty - Convert.ToInt32(item.Quantity);
-                            db.Entry(product).State = System.Data.Entity.EntityState.Modified;
-                            db.SaveChanges();
-                        }
-                        var orderItem = _mapper.Map<GroceryAddToCartViewModel.ListItem, OrderItem>(item);
-                        orderItem.Status = 0;
-                        orderItem.OrderId = order.Id;
-                        orderItem.OrdeNumber = order.OrderNumber;
-                        orderItem.ProductId = item.ProductId;
-                        orderItem.ProductName = item.ProductName;
-                        orderItem.BrandId = item.BrandId;
-                        orderItem.BrandName = item.BrandName;
-                        orderItem.CategoryId = item.CategoryId;
-                        orderItem.CategoryName = item.CategoryName;
-                        orderItem.ImagePath = item.ImagePath;
-                        orderItem.Quantity = item.Quantity;
-                        orderItem.UnitPrice = item.UnitPrice;
-                        orderItem.Price = item.Price;
-                        orderItem.MRPPrice = item.MRPPrice;
-                        db.OrderItems.Add(orderItem);
-                        db.SaveChanges();
-                    }
-                    // Payment
-                    var payment = new Payment();
-                    payment.Amount = model.ToPay;
-                    payment.PaymentMode = "Cash On Hand";
-                    payment.PaymentModeType = 2;
-                    payment.CustomerId = customer.Id;
-                    payment.CustomerName = customer.Name;
-                    payment.ShopId = shop.Id;
-                    payment.ShopName = shop.Name;
-                    payment.OriginalAmount = order.TotalPrice;
-                    payment.GSTAmount = model.ToPay;
-                    payment.Currency = "Rupees";
-                    payment.CountryName = null;
-                    payment.PaymentResult = "pending";
-                    payment.Credits = "N/A";
-                    payment.OrderNumber = order.OrderNumber;
-                    payment.PaymentCategoryType = 0;
-                    payment.Credits = "N/A";
-                    payment.CreditType = 2;
-                    payment.ConvenientCharge = model.ConvenientCharge;
-                    payment.PackingCharge = model.PackingCharge;
-                    payment.DeliveryCharge = model.GrossDeliveryCharge;
-                    payment.RatePerOrder = order.RatePerOrder;
-                    payment.RefundStatus = 1;
-                    payment.Status = 0;
-                    payment.CreatedBy = customer.Name;
-                    payment.UpdatedBy = customer.Name;
-                    payment.DateEncoded = DateTime.Now;
-                    payment.DateUpdated = DateTime.Now;
-                    db.Payments.Add(payment);
-                    db.SaveChanges();
-                    // Prescription 
-                    var grocery = db.CustomerGroceryUploads.FirstOrDefault(i => i.Id == model.GroceryId);
-                    if (grocery != null)
-                    {
-                        grocery.Status = 1;
-                        db.Entry(grocery).State = System.Data.Entity.EntityState.Modified;
-                        db.SaveChanges();
-                    }
-
-                    // Shop Credits Balance
-                    shopCredits.PlatformCredit -= payment.RatePerOrder.Value;
-                    db.Entry(shopCredits).State = System.Data.Entity.EntityState.Modified;
-                    db.SaveChanges();
-
-                    if (order != null)
-                    {
-                        var fcmToken = (from c in db.Customers
-                                        join s in db.Shops on c.Id equals s.CustomerId
-                                        where s.Id == model.ShopId
-                                        select c.FcmTocken ?? "").FirstOrDefault().ToString();
-                        Helpers.PushNotification.SendbydeviceId("You have received new order.Accept Soon", "ShopNowChat", "a.mp3", fcmToken.ToString());
-
-                        return Json(new { status = true, orderId = order.Id }, JsonRequestBehavior.AllowGet);
-                    }
-                    else
-                        return Json(new { status = false }, JsonRequestBehavior.AllowGet);
+                    return Json(new { status = false }, JsonRequestBehavior.AllowGet);
                 }
             }
             catch
