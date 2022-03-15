@@ -1,7 +1,7 @@
 ﻿@model ShopNow.ViewModels.ShopOrdersReportViewModel
 @using GridMvc.Html
 @{
-    ViewBag.Title = "Monthly Order Report";
+    ViewBag.Title = "Order Report";
 }
 <title>ShopNow | @ViewBag.Title</title>
 <link href="~/Content/Gridmvc.css" rel="stylesheet" />
@@ -11,59 +11,59 @@
         padding: 12px 6px;
     }
 </style>
-<div class="container-fluid mb-5">
+<div class="container-fluid mb-5 mx-auto">
     <h5 class="d-print-block d-none text-center">@Model.ShopName</h5>
     <form method="get" action="/Sales/ShopOrdersReport" class="my-3 d-print-none">
-        <div class="row my-2">
-            <div class="col-md-3">
-                <h5 class="text-success" style="letter-spacing:1px">@ViewBag.Title</h5>
+        <div class="row mt-2 my-1">
+            <div class="col-md-2">
+                <h5 class="text-success">@ViewBag.Title</h5>
             </div>
-            <div class="col-md-9">
+            <div class="col-md-3">
+                <label class="font-weight-bold">Select Shop</label>
+                <select id="select-shop" class="form-control" name="ShopId">
+                    @if (Model.ShopId != 0)
+                    {
+                        <option value="@Model.ShopId">@Model.ShopName</option>
+                    }
+                </select>
+                <input type="hidden" name="ShopName" value="@Model.ShopName" />
+            </div>
+            <div class="col-md-2">
+                <label class="font-weight-bold">Start Date</label>
+                <input id="date-start" type="date" class="form-control" name="StartDate" @if (Model.StartDate != null) { <text> value="@Model.StartDate.Value.ToString("yyyy-MM-dd")" </text> } />
+            </div>
+            <div class="col-md-2">
+                <label class="font-weight-bold">End Date</label>
+                <input id="date-end" type="date" class="form-control" name="EndDate" @if (Model.EndDate != null) { <text> value="@Model.EndDate.Value.ToString("yyyy-MM-dd")" </text> } />
+            </div>
+            <div class="col-md-2 mt-2">
                 <div class="row">
-                    <div class="col-md-3">
-                        <label class="font-weight-bold">Select Shop</label>
-                        <select id="select-shop" class="form-control" name="ShopId" required>
-                            @if (Model.ShopId != 0)
-                            {
-                                <option value="@Model.ShopId">@Model.ShopName</option>
-                            }
-                        </select>
-                        <input type="hidden" name="ShopName" value="@Model.ShopName" />
-                    </div>
-                    <div class="col-md-2">
-                        <label class="font-weight-bold">Start Date</label>
-                        <input id="date-start" type="date" class="form-control" name="StartDate" @if (Model.StartDate != null) { <text> value="@Model.StartDate.Value.ToString("yyyy-MM-dd")" </text> } required />
-                    </div>
-                    <div class="col-md-2">
-                        <label class="font-weight-bold">End Date</label>
-                        <input id="date-end" type="date" class="form-control" name="EndDate" @if (Model.EndDate != null) { <text> value="@Model.EndDate.Value.ToString("yyyy-MM-dd")" </text> } required />
-                    </div>
-                    <div class="col-md-3 mt-2">
-                        <input type="submit" class="btn btn-info mt-4" value="Apply Filter" />
-                        <a href="/Sales/ShopOrdersReport" class="btn btn-warning mt-4">Clear Filter</a>
-                    </div>
-                    <div class="col-md-2 mt-2 pull-right">
-                        <div class="input-group">
-                            <button id="btnPrint" class="btn btn-sm btn-secondary mt-4 mr-2" value="Print"><i class="fa fa-print fa-lg" aria-hidden="true"></i></button>
-                            <button id="btnExport" class="btn btn-sm btn-secondary mt-4" value="Export To Excel"><i class="fa fa-file-excel-o fa-lg" aria-hidden="true"></i></button>
-                        </div>
-                    </div>
+                    <input type="submit" class="btn btn-info mt-4 mr-2" value="Apply Filter" />
+                    <a href="/Sales/ShopOrdersReport" class="btn btn-warning mt-4">Clear</a>
+                </div>
+            </div>
+            <div class="col-md-1 mt-2 text-right">
+                <div class="row">
+                    <button id="btnPrint" class="btn btn-secondary mt-4 mr-2" value="Print"><i class="fa fa-print fa-lg" aria-hidden="true"></i></button>
+                    <button id="btnExport" class="btn btn-secondary mt-4" value="Export To Excel"><i class="fa fa-file-excel-o fa-lg" aria-hidden="true"></i></button>
                 </div>
             </div>
         </div>
     </form>
-    <div class="card mt-3 shadow">
-        <div class="card-body">
-            @Html.Grid(Model.ListItems).Columns(columns =>
-            {
-               columns.Add(c => c.SiNo).Titled("Sl.No").Filterable(false).SetWidth(1);
-               columns.Add(c => c.ShopName).Titled("ShopName").Filterable(true).SetWidth(50);
-               columns.Add(c => c.CustomerName).Titled("CustomerName").Filterable(true).SetWidth(50);
-               columns.Add(c => c.OrderDate).Titled("OrderDate").Filterable(true).Format("{0:dd-MMM-yyyy}").SetWidth(50);
-               columns.Add(c => c.OrderNumber).Titled("Order Number").Filterable(true).SetWidth(50);
-               columns.Add(c => c.RefundAmount).Titled("RefundAmount").Filterable(true).SetWidth(50);
-               columns.Add(c => c.Price).Titled("Amount").Filterable(true).SetWidth(50);
-             }).Sortable(true)
+    <div class="row">
+        <div class="card mt-3 shadow">
+            <div class="card-body">
+                @Html.Grid(Model.ListItems).Columns(columns =>
+                {
+                   columns.Add(c => c.SiNo).Titled("Sl.No").Filterable(false).SetWidth(1);
+                   columns.Add(c => c.ShopName).Titled("ShopName").Filterable(true).SetWidth(50);
+                   columns.Add(c => c.CustomerName).Titled("CustomerName").Filterable(true).SetWidth(50);
+                   columns.Add(c => c.OrderDate).Titled("OrderDate").Filterable(true).Format("{0:dd-MMM-yyyy}").SetWidth(50);
+                   columns.Add(c => c.OrderNumber).Titled("Order Number").Filterable(true).SetWidth(50);
+                   columns.Add(c => c.RefundAmount).Titled("RefundAmount").Filterable(true).SetWidth(50);
+                   columns.Add(c => c.Price).Titled("Amount").Filterable(true).SetWidth(50);
+                 }).Sortable(true)
+            </div>
         </div>
     </div>
 </div>
