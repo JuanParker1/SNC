@@ -949,23 +949,16 @@ namespace ShopNow.Controllers
                 {
                     double stock = 0;
                     StringBuilder sb = new StringBuilder();
-                    using (WebClient myData = new WebClient())
+                    foreach (var item in model.ListItems)
                     {
-                        //myData.Headers["X-Auth-Token"] = "62AA1F4C9180EEE6E27B00D2F4F79E5FB89C18D693C2943EA171D54AC7BD4302BE3D88E679706F8C";
-                        //myData.Headers[HttpRequestHeader.Accept] = "application/json";
-                        //myData.Headers[HttpRequestHeader.ContentType] = "application/x-www-form-urlencoded";
-                        foreach (var item in model.ListItems)
+                        //stock = Math.Floor(GetStockQty(item.ItemId.ToString(), item.OutletId)); //for gofrugal itemid id string
+                        stock = Math.Floor(GetStockQty(Convert.ToInt32(item.ItemId), item.OutletId));
+                        if (stock < item.Quantity)
                         {
-                            //stock = Math.Floor(GetStockQty(item.ItemId.ToString(), item.OutletId)); //for gofrugal itemid id string
-                            stock = Math.Floor(GetStockQty(Convert.ToInt32(item.ItemId), item.OutletId));
-                            if (stock < item.Quantity)
-                            {
-                                if (stock != 0)
-                                    sb.Append($"{item.ProductName} has only {stock} available now. <br/>");
-                                else
-                                    sb.Append($"{item.ProductName} has no stock available now. <br/>");
-                            }
-
+                            if (stock != 0)
+                                sb.Append($"{item.ProductName} has only {stock} available now. <br/>");
+                            else
+                                sb.Append($"{item.ProductName} has no stock available now. <br/>");
                         }
                     }
                     return Json(new { message = sb.ToString() });
