@@ -1871,12 +1871,20 @@ namespace ShopNow.Controllers
             return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
         }
 
-        public void UpdateShopMaxOfferPercentage(int shopid, double percentage)
+        public void UpdateShopMaxOfferPercentage(int shopid)
         {
+            //var shop = db.Shops.FirstOrDefault(i => i.Id == shopid);
+            //if (percentage > shop.MaxOfferPercentage)
+            //{
+            //    shop.MaxOfferPercentage = percentage;
+            //    db.Entry(shop).State = System.Data.Entity.EntityState.Modified;
+            //    db.SaveChanges();
+            //}
             var shop = db.Shops.FirstOrDefault(i => i.Id == shopid);
-            if (percentage > shop.MaxOfferPercentage)
+            if (shop != null)
             {
-                shop.MaxOfferPercentage = percentage;
+                double maxPercentage = db.Products.Where(b => b.ShopId == shopid && b.Status == 0).Select(b => b.Percentage)?.Max(b => b) ?? 0;
+                shop.MaxOfferPercentage = maxPercentage;
                 db.Entry(shop).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
             }
