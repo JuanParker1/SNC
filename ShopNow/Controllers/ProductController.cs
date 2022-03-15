@@ -393,7 +393,9 @@ namespace ShopNow.Controllers
             if (model.ShopId != 0)
             {
                 var sh = db.Shops.FirstOrDefault(i => i.Id == model.ShopId);// Shop.Get(model.ShopId);
-                UpdateShopMaxOfferPercentage(sh.Id, model.Percentage);
+                if (prod.Percentage > 0)
+                    UpdateShopMaxOfferPercentage(sh.Id);
+
                 var productcount = db.Products.Where(i => i.ShopId == model.ShopId && i.Status == 0).Count();
                 if (productcount >= 10 && sh.Status == 1)
                 {
@@ -499,7 +501,8 @@ namespace ShopNow.Controllers
             prod.UpdatedBy = user.Name;
             db.Entry(prod).State = System.Data.Entity.EntityState.Modified;
             db.SaveChanges();
-            UpdateShopMaxOfferPercentage(prod.ShopId, prod.Percentage);
+            if (prod.Percentage > 0)
+                UpdateShopMaxOfferPercentage(prod.ShopId);
             //Addons
             if (prod.Customisation == true)
             {
@@ -635,7 +638,8 @@ namespace ShopNow.Controllers
             if (model.ShopId != 0)
             {
                 var sh = db.Shops.FirstOrDefault(i => i.Id == model.ShopId);
-                UpdateShopMaxOfferPercentage(sh.Id, model.Percentage);
+                if (product.Percentage > 0)
+                    UpdateShopMaxOfferPercentage(sh.Id);
                 var productcount = db.Products.Where(i => i.ShopId == model.ShopId && i.Status == 0).Count();
                 if (productcount >= 10 && sh.Status == 1)
                 {
@@ -769,7 +773,8 @@ namespace ShopNow.Controllers
             db.Entry(prod).State = System.Data.Entity.EntityState.Modified;
             db.SaveChanges();
 
-            UpdateShopMaxOfferPercentage(prod.ShopId, prod.Percentage);
+            if (prod.Percentage > 0)
+                UpdateShopMaxOfferPercentage(prod.ShopId);
             //return RedirectToAction("FMCGList", new { ShopId = prod.ShopId, shopName = prod.ShopName });
             return RedirectToAction("FMCGEdit", new { id = AdminHelpers.ECodeLong(model.Id) });
         }
@@ -825,7 +830,8 @@ namespace ShopNow.Controllers
             if (model.ShopId != 0)
             {
                 var sh = db.Shops.FirstOrDefault(i => i.Id == model.ShopId);// Shop.Get(model.ShopId);
-                UpdateShopMaxOfferPercentage(sh.Id, model.Percentage);
+                if (product.Percentage > 0)
+                    UpdateShopMaxOfferPercentage(sh.Id);
                 var productcount = db.Products.Where(i => i.ShopId == model.ShopId && i.Status == 0).Count();
                 if (productcount >= 10 && sh.Status == 1)
                 {
@@ -931,7 +937,8 @@ namespace ShopNow.Controllers
             db.Entry(prod).State = System.Data.Entity.EntityState.Modified;
             db.SaveChanges();
 
-            UpdateShopMaxOfferPercentage(prod.ShopId, prod.Percentage);
+            if (prod.Percentage > 0)
+                UpdateShopMaxOfferPercentage(prod.ShopId);
             return RedirectToAction("ElectronicEdit", new { id = AdminHelpers.ECodeLong(model.Id) });
         }
 
@@ -1871,12 +1878,20 @@ namespace ShopNow.Controllers
             return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
         }
 
-        public void UpdateShopMaxOfferPercentage(int shopid, double percentage)
+        public void UpdateShopMaxOfferPercentage(int shopid)
         {
+            //var shop = db.Shops.FirstOrDefault(i => i.Id == shopid);
+            //if (percentage > shop.MaxOfferPercentage)
+            //{
+            //    shop.MaxOfferPercentage = percentage;
+            //    db.Entry(shop).State = System.Data.Entity.EntityState.Modified;
+            //    db.SaveChanges();
+            //}
             var shop = db.Shops.FirstOrDefault(i => i.Id == shopid);
-            if (percentage > shop.MaxOfferPercentage)
+            if (shop != null)
             {
-                shop.MaxOfferPercentage = percentage;
+                double maxPercentage = db.Products.Where(b => b.ShopId == shopid && b.Status == 0).Select(b => b.Percentage)?.Max(b => b) ?? 0;
+                shop.MaxOfferPercentage = maxPercentage;
                 db.Entry(shop).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
             }

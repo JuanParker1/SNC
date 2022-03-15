@@ -396,7 +396,10 @@
                             // swal('Success', 'Order Placed successfully', 'success');
                             location.href = "List";
                         } else {
-                            timeArray.length = 0;
+                            itemArray = [];
+                            itemTotal = 0;
+                            totalWeight = 0;
+                            totalSize = 0;
                             $('#tbl-items tbody').empty();
                             $('#div-items').addClass('d-none');
                         }
