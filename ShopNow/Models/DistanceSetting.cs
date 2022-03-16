@@ -19,6 +19,6 @@ namespace ShopNow.Models
         public Nullable<System.TimeSpan> Time { get; set; }
         public int Status { get; set; }
         public string UpdatedBy { get; set; }
-        public System.DateTime UpdatedDateTime { get; set; }
+        public System.DateTime UpdatedDateTime { get; set; } 
     }
 }
