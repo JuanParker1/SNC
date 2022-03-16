@@ -36,16 +36,22 @@ namespace ShopNow.Controllers
             if(type == 1)
             {
                 var fcmTokenList = db.Customers.OrderBy(i => i.Id).Where(i => !string.IsNullOrEmpty(i.FcmTocken) && i.FcmTocken != "NULL").Select(i => i.FcmTocken).ToArray();
-                Helpers.PushNotification.SendBulk(message, title, "a.mp3", fcmTokenList.Take(1000).ToArray());
-                Helpers.PushNotification.SendBulk(message, title, "a.mp3", fcmTokenList.Skip(1000).Take(1000).ToArray());
-                Helpers.PushNotification.SendBulk(message, title, "a.mp3", fcmTokenList.Skip(2000).Take(1000).ToArray());
+                if (fcmTokenList.Count() < 1000)
+                    Helpers.PushNotification.SendBulk(message, title, "a.mp3", fcmTokenList.Take(1000).ToArray());
+                if (fcmTokenList.Count() > 1000 && fcmTokenList.Count() <= 2000)
+                    Helpers.PushNotification.SendBulk(message, title, "a.mp3", fcmTokenList.Skip(1000).Take(1000).ToArray());
+                if (fcmTokenList.Count() > 2000 && fcmTokenList.Count() <= 3000)
+                    Helpers.PushNotification.SendBulk(message, title, "a.mp3", fcmTokenList.Skip(2000).Take(1000).ToArray());
             }
             if (type == 2)
             {
                 var fcmTokenList = db.Customers.Where(i => !string.IsNullOrEmpty(i.FcmTocken) && i.FcmTocken != "NULL" && district.Contains(i.DistrictName)).Select(i => i.FcmTocken).ToArray();
-                Helpers.PushNotification.SendBulk(message, title, "a.mp3", fcmTokenList.Take(1000).ToArray());
-                Helpers.PushNotification.SendBulk(message, title, "a.mp3", fcmTokenList.Skip(1000).Take(1000).ToArray());
-                Helpers.PushNotification.SendBulk(message, title, "a.mp3", fcmTokenList.Skip(2000).Take(1000).ToArray());
+                if (fcmTokenList.Count() < 1000)
+                    Helpers.PushNotification.SendBulk(message, title, "a.mp3", fcmTokenList.Take(1000).ToArray());
+                if (fcmTokenList.Count() > 1000 && fcmTokenList.Count() <= 2000)
+                    Helpers.PushNotification.SendBulk(message, title, "a.mp3", fcmTokenList.Skip(1000).Take(1000).ToArray());
+                if (fcmTokenList.Count() > 2000 && fcmTokenList.Count() <= 3000)
+                    Helpers.PushNotification.SendBulk(message, title, "a.mp3", fcmTokenList.Skip(2000).Take(1000).ToArray());
             }
             if (type == 3)
             {
