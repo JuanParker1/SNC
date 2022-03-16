@@ -130,7 +130,8 @@ namespace ShopNow.Controllers
                                             IBarU = lst[idx].IBarU,
                                             MenuPrice = lst[idx].MenuPrice,
                                             Name = lst[idx].Name,
-                                            Qty = s.stock,
+                                           // Qty = s.stock,
+                                            Qty=lst[idx].IBarU!=0? Convert.ToInt32(s.stock / lst[idx].IBarU):0,
                                             ShopId = shopmodel.Id,
                                             ShopName = shopmodel.Name,
                                             DateEncoded = DateTime.Now,
@@ -150,9 +151,15 @@ namespace ShopNow.Controllers
                                             GTIN = lst[idx].GTIN,
                                             GTIN14 = lst[idx].GTIN14,
                                             HoldOnStok = lst[idx].HoldOnStok,
+                                            TaxPercentage=lst[idx].TaxPercentage,
+                                            OutletId=lst[idx].OutletId,
+                                            ShopPrice=lst[idx].ShopPrice,
                                             ISBN = lst[idx].ISBN,
                                             IsOnline = lst[idx].IsOnline,
                                             MasterProductId = lst[idx].MasterProductId,
+                                            ItemTimeStamp=lst[idx].ItemTimeStamp,
+                                            MappedDate= lst[idx].MappedDate,
+                                            CategoryId =lst[idx].CategoryId,
                                             Price = lst[idx].Price,
                                             ProductTypeId = 3,
                                             ProductTypeName = "Medical",
@@ -160,7 +167,7 @@ namespace ShopNow.Controllers
                                             ShopCategoryName = shopmodel.ShopCategoryName,
                                             CreatedBy = "Admin",
                                             UpdatedBy = "Admin"
-                                        });
+                                        }) ;
                                     }
                                     else
                                     {
@@ -208,6 +215,7 @@ namespace ShopNow.Controllers
                                 if (updateList.Count > 0)
                                     db.BulkUpdate(updateList);
                                 // db.SaveChanges();
+                                db.BulkSaveChanges();
                             }
                             //    var varMrp=newSortq.Where(i=>i.itemid == Convert.ToInt32(dr[0])).
 
