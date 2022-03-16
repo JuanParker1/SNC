@@ -1923,6 +1923,7 @@ namespace ShopNow.Controllers
                    IsPickupDrop = i.o.o.o.IsPickupDrop,
                    CustomerAddressId = i.o.o.o.CustomerAddressId,
                    RouteAudioPath = i.o.o.o.CustomerAddressId != 0 ? db.CustomerAddresses.FirstOrDefault(a => a.Id == i.o.o.o.CustomerAddressId).RouteAudioPath : "",
+                   Remarks = i.o.o.o.Remarks,
                    OrderItemList = i.oi.ToList()
                }).ToList();
 
