@@ -681,6 +681,17 @@
           <Property Name="DateEncoded" Type="datetime" Nullable="false" />
           <Property Name="DateUpdated" Type="datetime" Nullable="false" />
         </EntityType>
+        <EntityType Name="DistanceSettings">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Distance" Type="float" Nullable="false" />
+          <Property Name="Time" Type="time" Precision="7" />
+          <Property Name="Status" Type="int" Nullable="false" />
+          <Property Name="UpdatedBy" Type="nvarchar" MaxLength="150" />
+          <Property Name="UpdatedDateTime" Type="datetime" Nullable="false" />
+        </EntityType>
         <EntityType Name="DrugCompoundDetails">
           <Key>
             <PropertyRef Name="Id" />
@@ -1783,6 +1794,7 @@
           <EntitySet Name="DeliveryBoyShops" EntityType="Self.DeliveryBoyShops" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DeliveryCharge" EntityType="Self.DeliveryCharge" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DiscountCategories" EntityType="Self.DiscountCategories" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="DistanceSettings" EntityType="Self.DistanceSettings" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DrugCompoundDetails" EntityType="Self.DrugCompoundDetails" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="FAQCategory" EntityType="Self.FAQCategory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="FAQs" EntityType="Self.FAQs" Schema="dbo" store:Type="Tables" />
@@ -3052,6 +3064,7 @@
           <EntitySet Name="CustomerGiftCards" EntityType="sncModel.CustomerGiftCard" />
           <EntitySet Name="NextSubCategories" EntityType="sncModel.NextSubCategory" />
           <EntitySet Name="Shops" EntityType="sncModel.Shop" />
+          <EntitySet Name="DistanceSettings" EntityType="sncModel.DistanceSetting" />
         </EntityContainer>
         <ComplexType Name="GetDEliveryBoyList_Result">
           <Property Type="Int32" Name="Id" Nullable="false" />
@@ -3790,6 +3803,17 @@
           <Property Name="CreatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="UpdatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="DeliveryDiscountPercentage" Type="Double" Nullable="false" />
+        </EntityType>
+        <EntityType Name="DistanceSetting">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Distance" Type="Double" Nullable="false" />
+          <Property Name="Time" Type="Time" Precision="7" />
+          <Property Name="Status" Type="Int32" Nullable="false" />
+          <Property Name="UpdatedBy" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="UpdatedDateTime" Type="DateTime" Nullable="false" Precision="3" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -5672,6 +5696,18 @@
                 <ScalarProperty Name="ImagePath" ColumnName="ImagePath" />
                 <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DistanceSettings">
+            <EntityTypeMapping TypeName="sncModel.DistanceSetting">
+              <MappingFragment StoreEntitySet="DistanceSettings">
+                <ScalarProperty Name="UpdatedDateTime" ColumnName="UpdatedDateTime" />
+                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Time" ColumnName="Time" />
+                <ScalarProperty Name="Distance" ColumnName="Distance" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

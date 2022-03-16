@@ -113,6 +113,7 @@ namespace ShopNow.Models
         public virtual DbSet<CustomerGiftCard> CustomerGiftCards { get; set; }
         public virtual DbSet<NextSubCategory> NextSubCategories { get; set; }
         public virtual DbSet<Shop> Shops { get; set; }
+        public virtual DbSet<DistanceSetting> DistanceSettings { get; set; }
     
         [DbFunction("sncEntities", "GetTableVAlueString")]
         public virtual IQueryable<GetTableVAlueString_Result> GetTableVAlueString(string key)
