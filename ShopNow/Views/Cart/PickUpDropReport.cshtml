@@ -22,18 +22,18 @@
             </div>
             <div class="col-md-2">
                 <div class="form-group">
-                    <label>From Date</label>
+                    <label class="font-weight-bold">From Date</label>
                     <input id="date-start" type="date" class="form-control" name="StartDate" @if (Model.StartDate != null) { <text> value="@Model.StartDate.Value.ToString("yyyy-MM-dd")" </text> } />
                 </div>
             </div>
             <div class="col-md-2">
                 <div class="form-group">
-                    <label>To Date</label>
+                    <label class="font-weight-bold">To Date</label>
                     <input id="date-end" type="date" class="form-control" name="EndDate" @if (Model.EndDate != null) { <text> value="@Model.EndDate.Value.ToString("yyyy-MM-dd")" </text> } />
                 </div>
             </div>
             <div class="col-md-3">
-                <label>Select Shop</label>
+                <label class="font-weight-bold">Select Shop</label>
                 <select name="ShopId" id="ShopId" class="form-control">
                     @if (!string.IsNullOrEmpty(Model.ShopName))
                     {
