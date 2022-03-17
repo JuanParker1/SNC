@@ -337,6 +337,14 @@
                 $('#modal-updateAmount').modal('show');
             });
 
+            $('#modal-updateAmount').on('hidden.bs.modal', function () {
+                $('input[name="ConvenientCharge"]').val('');
+                $('input[name="GrossDeliveryCharge"]').val('');
+                $('input[name="ShopDeliveryDiscount"]').val('');
+                $('input[name="DeliveryCharge"]').val('');
+                $('input[name="Amount"]').val('');
+            });
+
         });
         function calculateDeliveryCharge() {
             var grossDC = $('input[name="GrossDeliveryCharge"]').val();
@@ -344,6 +352,9 @@
             $.getJSON("/Cart/GetDeliveryDiscount", { OrderNumber: orderno }, function (data) {
                 if (data != null) {
                     var deliveryDiscount = data;
+                    if (deliveryDiscount >= grossDC) {
+                        deliveryDiscount = grossDC;
+                    }
                     $('input[name="ShopDeliveryDiscount"]').val(deliveryDiscount);
                     var deliveryCharge = Math.round(parseFloat(grossDC) - parseFloat(deliveryDiscount));
                     $('input[name="DeliveryCharge"]').val(deliveryCharge);
