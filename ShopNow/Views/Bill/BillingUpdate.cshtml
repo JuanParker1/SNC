@@ -98,7 +98,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="d-none" id="MultipleEntry">
+                                            <div id="MultipleEntry">
                                                 <div class="row">
                                                     <div class="col-md-12">
                                                         <div class="form-group row">
@@ -208,16 +208,16 @@
                 }
             });
 
-            $('input[type=radio][name=ItemType]').change(function () {
-                if (this.value == '0') {
-                    $("#MultipleEntry").addClass("d-none");
-                    $("#PackingCharge").val("");
-                }
-                else if (this.value == '1') {
-                    $("#MultipleEntry").removeClass("d-none");
-                    $("#PackingCharge").val("");
-                }
-            });
+            //$('input[type=radio][name=ItemType]').change(function () {
+            //    if (this.value == '0') {
+            //        $("#MultipleEntry").addClass("d-none");
+            //        $("#PackingCharge").val("");
+            //    }
+            //    else if (this.value == '1') {
+            //        $("#MultipleEntry").removeClass("d-none");
+            //        $("#PackingCharge").val("");
+            //    }
+            //});
 
             $('#Edit').on('click', function () {
                 var packingcharge = $("#PackingCharge").val();
