@@ -387,6 +387,7 @@
     <Compile Include="Controllers\CustomerPrescriptionController.cs" />
     <Compile Include="Controllers\DeliveryBoyController.cs" />
     <Compile Include="Controllers\DiscountCategoryController.cs" />
+    <Compile Include="Controllers\DistanceSettingController.cs" />
     <Compile Include="Controllers\DrugCompoundDetailController.cs" />
     <Compile Include="Controllers\ErrorPageController.cs" />
     <Compile Include="Controllers\FAQCategoryController.cs" />
@@ -580,6 +581,9 @@
       <DependentUpon>ApplicationDbContext.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\DiscountCategory.cs">
+      <DependentUpon>ApplicationDbContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DistanceSetting.cs">
       <DependentUpon>ApplicationDbContext.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\DrugCompoundDetail.cs">
@@ -788,6 +792,7 @@
     <Compile Include="ViewModels\DeliveryBoyViewModel.cs" />
     <Compile Include="ViewModels\DeliveryChargeViewModel.cs" />
     <Compile Include="ViewModels\DiscountCategoryViewModel.cs" />
+    <Compile Include="ViewModels\DistanceSettingViewModels.cs" />
     <Compile Include="ViewModels\DrugCompoundDetailViewModel.cs" />
     <Compile Include="ViewModels\FAQViewModel.cs" />
     <Compile Include="ViewModels\LocationDetailsViewModels.cs" />
@@ -3370,6 +3375,7 @@
     <Content Include="Views\Service\Create.cshtml" />
     <Content Include="Views\SearchData\ZeroCountList.cshtml" />
     <Content Include="Views\SearchData\MappedList.cshtml" />
+    <Content Include="Views\DistanceSetting\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

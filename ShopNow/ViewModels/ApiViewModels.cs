@@ -133,6 +133,7 @@ namespace ShopNow.ViewModels
            public bool IsPickupDrop { get; set; }
            public int CustomerAddressId { get; set; }
            public string RouteAudioPath { get; set; }
+           public string Remarks { get; set; }
         }
     }
 

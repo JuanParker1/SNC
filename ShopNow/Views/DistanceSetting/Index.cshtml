@@ -1,0 +1,120 @@
+﻿@model ShopNow.ViewModels.DistanceSettingIndexViewModel
+@using GridMvc.Html
+@{
+    ViewBag.Title = "Distance Setting";
+}
+
+<title>ShopNow | @ViewBag.Title</title>
+<link href="~/Content/Gridmvc.css" rel="stylesheet" />
+<script src="~/Scripts/gridmvc.js"></script>
+
+
+<div class="container-fluid">
+    <div class="d-flex justify-content-between">
+        <h5 class="text-success" style="letter-spacing:1px">@ViewBag.Title</h5>
+    </div>
+    <div class="card shadow mt-3">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-4 border-right">
+                    <form action="/DistanceSetting/Create" method="post">
+                        <div class="form-group">
+                            <label class="col-form-label">Distance (Kms)</label>
+                            <input type="number" class="form-control" name="Distance" required />
+                        </div>
+                        <div class="form-group">
+                            <label class="col-form-label">Time</label>
+                            <input type="time" class="form-control" name="Time" required />
+                        </div>
+                        <div class="mx-auto col-8"> <input type="submit" value="Save" class="btn btn-success btn-block" /></div>
+                    </form>
+                </div>
+                <div class="col-md-8">
+                    @Html.Grid(Model.ListItems).Columns(columns =>
+               {
+               columns.Add(s => s.Distance).Titled("Distance (Kms)").Filterable(true).SetWidth(30);
+               columns.Add(s => s.TimeText).Titled("Time").Filterable(true).SetWidth(5);
+               columns.Add(s => s.UpdatedDateTime).Titled("Date Updated").Filterable(true).SetWidth(30);
+               columns.Add().Encoded(false).Sanitized(false).Titled("Action").SetWidth(5)
+             .RenderValueAs(o => @<div>
+                    <a href="#modal-edit" data-toggle="modal" data-target="#modal-edit" data-id="@o.Id" data-distance="@o.Distance" data-time="@o.Time" class="text-info mr-5 edit-prompt"><i class="fa fa-edit fa-lg"></i></a>
+                    <a href="javascript:void(0)" data-id="@ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id)" class="text-danger btnDelete"><i class="fa fa-trash fa-lg"></i></a>
+                </div>);
+           }).WithPaging(20).Sortable(true)
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modal-edit" tabindex="-1" role="dialog" aria-labelledby="editModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header alert alert-info">
+                <h5 class="modal-title" id="editModalLabel">Update Distance Setting</h5>
+                <button type="button" class="btnClose close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="/DistanceSetting/Edit" method="post">
+                    <input type="hidden" name="Id" id="Id" />
+                    <div class="form-group">
+                        <label class="col-form-label">Distance (Kms)</label>
+                        <input id="edit-distance" type="number" class="form-control" name="Distance" required />
+                    </div>
+                    <div class="form-group">
+                        <label class="col-form-label">Time</label>
+                        <input id="edit-time" type="time" class="form-control" name="Time" required />
+                    </div>
+                    <input type="submit" id="Edit" value="Update" class="btn btn-success float-right Edit" />
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+    <script src="~/Scripts/sweetalert/sweetalert.min.js"></script>
+    <link href="~/Content/sweetalert/sweetalert.css" rel="stylesheet" />
+    <script>
+        $(document).ready(function () {
+
+
+            $(".btnDelete").click(function () {
+                var Id = $(this).attr('data-id');
+                swal({
+                    title: "Are you sure want to delete?",
+                    text: "You will not be able to recover this file!",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "Yes, Delete it!",
+                    cancelButtonText: "No, cancel",
+                    closeOnConfirm: false,
+                    closeOnCancel: true
+                },
+                    function (isConfirm) {
+                        if (isConfirm) {
+                            $.getJSON("/DistanceSetting/Delete", { id: Id }, function (data) {
+                                if (data == true) {
+                                    window.location.reload();
+                                }
+                            });
+                        }
+                    }
+                );
+            });
+
+            $("table").on('click', '.edit-prompt', function () {
+                $('[name="Id"]').val($(this).attr('data-id'));
+                $("#edit-distance").val($(this).attr('data-distance'));
+                $("#edit-time").val($(this).attr('data-time'));
+            });
+
+
+        });
+    </script>
+}
+
