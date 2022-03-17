@@ -95,7 +95,7 @@ namespace ShopNow.Controllers
                     ProductCount = i.o.TotalProduct,
                     ShopName = i.o.ShopName,
                     Status = i.o.Status
-                }).ToList();
+                }).OrderByDescending(i=>i.DateEncoded).ToList();
             model.Name = (string.IsNullOrEmpty(model.Name) || model.Name=="Null" ) ? "N/A" : model.Name;
             model.TotalOrderCount = model.OrderListItems.Count();
             model.CancelOrderCount = model.OrderListItems.Where(i => i.Status != 6).Count();
