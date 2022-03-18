@@ -1464,8 +1464,8 @@ namespace ShopNow.Controllers
 
 
             model.ListItems = db.Orders.Where(a => a.DateEncoded.Month == model.MonthFilter && a.DateEncoded.Year == model.YearFilter &&
-            (a.Status == 6 || a.Status == 7 || a.Status == 9 || a.Status == 10))
-                .Join(db.Shops, o => o.ShopId, s => s.Id, (o, s) => new { o, s })
+            (a.Status == 6 || a.Status == 7 || a.Status == 9 || a.Status == 10)).Select(i=>new { DateEncoded = i.DateEncoded, ShopId = i.ShopId, Status = i.Status })
+                .Join(db.Shops.Select(i=>new { Id = i.Id, ShopCategoryId = i.ShopCategoryId}), o => o.ShopId, s => s.Id, (o, s) => new { o, s })
                 .GroupBy(i => DbFunctions.TruncateTime(i.o.DateEncoded))
                .AsEnumerable()
                .Select(i => new OrderRatioViewModel.ListItem
@@ -1768,10 +1768,10 @@ namespace ShopNow.Controllers
 
         public int GetNewOrderCount(DateTime date, int categoryType)
         {
-            var orders = db.Orders.Where(i => DbFunctions.TruncateTime(i.DateEncoded) < DbFunctions.TruncateTime(date) && i.Status == 6)
+            var orders = db.Orders.Where(i => DbFunctions.TruncateTime(i.DateEncoded) < DbFunctions.TruncateTime(date) && i.Status == 6).Select(i=>new { ShopId=i.ShopId, CustomerId =i.CustomerId})
                 .Join(db.Shops.Where(i => categoryType != 0 ? i.ShopCategoryId == categoryType : true), o => o.ShopId, s => s.Id, (o, s) => new { o, s })
                 .Select(i => i.o.CustomerId);
-            var count = db.Orders.Where(a => !orders.Contains(a.CustomerId) && DbFunctions.TruncateTime(a.DateEncoded) == DbFunctions.TruncateTime(date) && a.Status == 6)
+            var count = db.Orders.Where(a => !orders.Contains(a.CustomerId) && DbFunctions.TruncateTime(a.DateEncoded) == DbFunctions.TruncateTime(date) && a.Status == 6).Select(i => new { ShopId = i.ShopId})
                 .Join(db.Shops.Where(i => categoryType != 0 ? i.ShopCategoryId == categoryType : true), o => o.ShopId, s => s.Id, (o, s) => new { o, s })
                 .Count();
             return count;
