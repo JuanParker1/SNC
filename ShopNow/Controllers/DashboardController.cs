@@ -2,6 +2,7 @@
 using ShopNow.Models;
 using ShopNow.ViewModels;
 using System;
+using System.Data.Entity;
 using System.Linq;
 using System.Web.Mvc;
 
@@ -19,7 +20,7 @@ namespace ShopNow.Controllers
             ViewBag.customer = _db.Customers.Where(i => i.Status == 0).Count();
             ViewBag.Shops = _db.Shops.Where(i => i.Status == 0).Count();
             ViewBag.Delivery = _db.DeliveryBoys.Where(i => i.Status == 0).Count();
-            ViewBag.Order = _db.Orders.Where(i => i.Status == 0 && i.OrderNumber != 0 && i.Status != 7 && i.Status != 6 && i.Status != 9 && i.Status != 10).Count();
+            ViewBag.Order = _db.Orders.Where(i => i.Status == 6).Count();
             
             model.MonthFilter = model.MonthFilter != 0 ? model.MonthFilter : DateTime.Now.Month;
             model.YearFilter = model.YearFilter != 0 ? model.YearFilter : DateTime.Now.Year;
@@ -47,6 +48,13 @@ namespace ShopNow.Controllers
             model.OrderMeatAndVegCount = shopOrderCount.Where(i => i.s.ShopCategoryId == 2).Count();
             model.OrderSupermarketCount = shopOrderCount.Where(i => i.s.ShopCategoryId == 3).Count();
             model.OrderMedicalCount = shopOrderCount.Where(i => i.s.ShopCategoryId == 4).Count();
+            
+            var last5DaysOrders = _db.Orders.Where(i =>(DbFunctions.TruncateTime(DbFunctions.AddDays(DateTime.Now,-4)) <= DbFunctions.TruncateTime(i.DateEncoded)) && i.Status ==6).Select(i => new { DateEncoded = i.DateEncoded }).ToList();
+            model.OrderTodayCount = last5DaysOrders.Where(i => i.DateEncoded.Date == DateTime.Now.Date).Count();
+            model.Order2ndDayCount = last5DaysOrders.Where(i => i.DateEncoded.Date == DateTime.Now.AddDays(-1).Date).Count();
+            model.Order3rdDayCount = last5DaysOrders.Where(i => i.DateEncoded.Date == DateTime.Now.AddDays(-2).Date).Count();
+            model.Order4thDayCount = last5DaysOrders.Where(i => i.DateEncoded.Date == DateTime.Now.AddDays(-3).Date).Count();
+            model.Order5thDay = last5DaysOrders.Where(i => i.DateEncoded.Date == DateTime.Now.AddDays(-4).Date).Count();
             return View(model);
         }
 

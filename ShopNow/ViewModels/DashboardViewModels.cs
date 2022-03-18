@@ -27,5 +27,11 @@ namespace ShopNow.ViewModels
         public int OrderMedicalCount { get; set; }
         public int OrderMeatAndVegCount { get; set; }
         public int OrderSupermarketCount { get; set; }
+
+        public int Order5thDay { get; set; }
+        public int Order4thDayCount { get; set; }
+        public int Order3rdDayCount { get; set; }
+        public int Order2ndDayCount { get; set; }
+        public int OrderTodayCount { get; set; }
     }
 }

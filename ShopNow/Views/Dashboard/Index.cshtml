@@ -145,53 +145,66 @@
                     </div>
                     @*</div>*@
                 </section>
-                <div class="col-xl-12 mt-5 px-1">
-                    <div class="card shadow-sm">
-                        <div class="card-body">
-                            <h3 class="text-center"><b>@Model.YearFilter Order Summary</b></h3>
-                            <form action="/Dashboard/Index" method="get">
-                                <div class="d-flex">
-                                    <select id="select-year-filter" class="form-control mr-3" name="YearFilter" style="width:10%;">
-                                        @for (int year = 2021; year <= DateTime.Now.Year; year++)
-                                        {
-                                            <option value="@year">@year</option>
-                                        }
-                                    </select>
-                                    <input type="hidden" name="MonthFilter" value="@Model.MonthFilter" />
-                                    <input type="submit" class="btn btn-info mr-3" value="Filter" />
-                                    <a href="/Dashboard/Index" class="btn btn-warning">Clear</a>
-                                </div>
-                            </form>
-                            <div id="bar-chart-example" class="w-100"></div>
+                <div class="row">
+                    <div class="col-xl-12 mt-5 px-1">
+                        <div class="card shadow-sm">
+                            <div class="card-body">
+                                <h3 class="text-center"><b>@Model.YearFilter Order Summary</b></h3>
+                                <form action="/Dashboard/Index" method="get">
+                                    <div class="d-flex">
+                                        <select id="select-year-filter" class="form-control mr-3" name="YearFilter" style="width:10%;">
+                                            @for (int year = 2021; year <= DateTime.Now.Year; year++)
+                                            {
+                                                <option value="@year">@year</option>
+                                            }
+                                        </select>
+                                        <input type="hidden" name="MonthFilter" value="@Model.MonthFilter" />
+                                        <input type="submit" class="btn btn-info mr-3" value="Filter" />
+                                        <a href="/Dashboard/Index" class="btn btn-warning">Clear</a>
+                                    </div>
+                                </form>
+                                <div id="bar-chart-example" class="w-100"></div>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-xl-12 mt-5 px-1">
-                    <div class="card shadow-sm">
-                        <div class="card-body">
-                            <h3 class="text-center"><b>@DateTime.Now.ToString("MMMM")-@Model.YearFilter Shop Category wise Order Summary</b></h3>
-                            <form action="/Dashboard/Index" method="get">
-                                <div class="d-flex">
-                                    <select id="select-month-filter" class="form-control mr-3" name="MonthFilter" style="width:10%;">
-                                        <option value="1">January</option>
-                                        <option value="2">February</option>
-                                        <option value="3">March</option>
-                                        <option value="4">April</option>
-                                        <option value="5">May</option>
-                                        <option value="6">June</option>
-                                        <option value="7">July</option>
-                                        <option value="8">August</option>
-                                        <option value="9">September</option>
-                                        <option value="10">October</option>
-                                        <option value="11">November</option>
-                                        <option value="12">December</option>
-                                    </select>
-                                    <input type="hidden" name="YearFilter" value="@Model.YearFilter" />
-                                    <input type="submit" class="btn btn-info mr-3" value="Filter" />
-                                    <a href="/Dashboard/Index" class="btn btn-warning">Clear</a>
-                                </div>
-                            </form>
-                            <div id="bar-chart-shop-category" class="w-100"></div>
+                <div class="row">
+                    <div class="col-md-6 mt-5 px-1">
+                        <div class="card shadow-sm h-100">
+                            <div class="card-body">
+                                <h3 class="text-center mb-3"><b>@DateTime.Now.ToString("MMMM")-@Model.YearFilter Shop Category wise Order Summary</b></h3>
+                                <form action="/Dashboard/Index" method="get">
+                                    <div class="d-flex">
+                                        <select id="select-month-filter" class="form-control mr-3" name="MonthFilter" style="width:30%;">
+                                            <option value="1">January</option>
+                                            <option value="2">February</option>
+                                            <option value="3">March</option>
+                                            <option value="4">April</option>
+                                            <option value="5">May</option>
+                                            <option value="6">June</option>
+                                            <option value="7">July</option>
+                                            <option value="8">August</option>
+                                            <option value="9">September</option>
+                                            <option value="10">October</option>
+                                            <option value="11">November</option>
+                                            <option value="12">December</option>
+                                        </select>
+                                        <input type="hidden" name="YearFilter" value="@Model.YearFilter" />
+                                        <input type="submit" class="btn btn-info mr-3" value="Filter" />
+                                        <a href="/Dashboard/Index" class="btn btn-warning">Clear</a>
+                                    </div>
+                                </form>
+                                <div id="bar-chart-shop-category"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 mt-5 px-1">
+                        <div class="card shadow-sm h-100">
+                            <div class="card-body">
+                                <h3 class="text-center mb-3"><b>Last 5 days Orders</b></h3>
+                                <div id="bar-chart-last-5days" class="mt-5"></div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -201,9 +214,6 @@
                     </div>
                 </footer>
             </div>
-        </div>
-        <div class="row mt-5">
-
         </div>
     </div>
     <script>
@@ -246,21 +256,45 @@
                 "datasets": {
                     "values":[@Model.OrderMedicalCount,@Model.OrderRestaurantCount,@Model.OrderMeatAndVegCount,@Model.OrderSupermarketCount],
                     "labels": [
-                        "Medical- @Model.OrderMedicalCount",
-                        "Restaurant- @Model.OrderRestaurantCount",
-                        "Meat & Vegetables- @Model.OrderMeatAndVegCount",
-                        "Supermarket- @Model.OrderSupermarketCount"
+                        "Medical",
+                        "Restaurant",
+                        "Meat & Vegetables",
+                        "Supermarket"
                     ],
                         "color": "green"
         },
             "height": "400px",
-            "width": "1000px",
+            "width": "750px",
             //"background": "#FFFFFF",
             "shadowDepth": "0",
 
             };
             MaterialCharts.bar("#bar-chart-shop-category", shopcategoryBarChartData);
             $('#bar-chart-shop-category .material-charts-box-chart-vertical-tick-label').each(function () {
+                var value = Math.ceil($(this).html());
+                $(this).html(value);
+            });
+
+              var last5DaysBarChartData = {
+                "datasets": {
+                    "values":[@Model.Order5thDay,@Model.Order4thDayCount,@Model.Order3rdDayCount,@Model.Order2ndDayCount,@Model.OrderTodayCount],
+                    "labels": [
+                        "@DateTime.Now.AddDays(-4).ToString("dd-MMM-yyyy")",
+                        "@DateTime.Now.AddDays(-3).ToString("dd-MMM-yyyy")",
+                         "@DateTime.Now.AddDays(-2).ToString("dd-MMM-yyyy")",
+                        "@DateTime.Now.AddDays(-3).ToString("dd-MMM-yyyy")",
+                          "@DateTime.Now.ToString("dd-MMM-yyyy")",
+                    ],
+                        "color": "green"
+        },
+            "height": "400px",
+            "width": "750px",
+            //"background": "#FFFFFF",
+            "shadowDepth": "0",
+
+            };
+            MaterialCharts.bar("#bar-chart-last-5days", last5DaysBarChartData);
+            $('#bar-chart-last-5days .material-charts-box-chart-vertical-tick-label').each(function () {
                 var value = Math.ceil($(this).html());
                 $(this).html(value);
             });
