@@ -55,6 +55,39 @@ namespace ShopNow.Controllers
             model.Order3rdDayCount = last5DaysOrders.Where(i => i.DateEncoded.Date == DateTime.Now.AddDays(-2).Date).Count();
             model.Order4thDayCount = last5DaysOrders.Where(i => i.DateEncoded.Date == DateTime.Now.AddDays(-3).Date).Count();
             model.Order5thDay = last5DaysOrders.Where(i => i.DateEncoded.Date == DateTime.Now.AddDays(-4).Date).Count();
+
+            //var allOrderList = _db.Orders.Where(i => i.Status == 6)
+            //    .Select(i => new
+            //    {
+            //        OrderNumber = i.OrderNumber,
+            //        NetTotal = i.NetTotal,
+            //        DeliveryBoyName = i.DeliveryBoyName,
+            //        DeliveryBoyId = i.DeliveryBoyId,
+            //        Distance = i.Distance,
+            //        Date = i.DateEncoded,
+            //        CustomerName = i.CustomerName,
+            //        CustomerPhoneNumber = i.CustomerPhoneNumber,
+            //        DeliveryBoyPhoneNumber = i.DeliveryBoyPhoneNumber
+            //    }).ToList();
+
+            //model.DBListItems = allOrderList.Where(i => i.Distance < 30).GroupBy(i => i.DeliveryBoyId)
+            //    .Select(i => new DashboardIndexViewModel.TopDBListItem
+            //    {
+            //        Distance = i.Sum(a => a.Distance),
+            //        Name = i.FirstOrDefault().DeliveryBoyName,
+            //        OrderCount = i.Count(),
+            //        Number = i.FirstOrDefault().DeliveryBoyPhoneNumber
+            //    }).OrderByDescending(i => i.OrderCount).Take(5).ToList();
+
+            //model.TopOrderListItems = allOrderList.Join(_db.Payments, o => o.OrderNumber, p => p.OrderNumber, (o, p) => new { o, p })
+            //    .Select(i => new DashboardIndexViewModel.TopOrderListItem
+            //    {
+            //        Amount = i.o.NetTotal - i.p.RefundAmount ?? 0,
+            //        Date = i.o.Date,
+            //        Name = i.o.CustomerName,
+            //        OrderNumber = i.o.OrderNumber,
+            //        PhoneNumber = i.o.CustomerPhoneNumber
+            //    }).OrderByDescending(i => i.Amount).Take(5).ToList();
             return View(model);
         }
 

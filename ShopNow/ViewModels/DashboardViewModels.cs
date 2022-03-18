@@ -33,5 +33,24 @@ namespace ShopNow.ViewModels
         public int Order3rdDayCount { get; set; }
         public int Order2ndDayCount { get; set; }
         public int OrderTodayCount { get; set; }
+        
+        //public List<TopDBListItem> DBListItems { get; set; }
+        //public class TopDBListItem
+        //{
+        //    public string Name { get; set; }
+        //    public string Number { get; set; }
+        //    public int OrderCount { get; set; }
+        //    public double Distance { get; set; }
+        //}
+
+        //public List<TopOrderListItem> TopOrderListItems { get; set; }
+        //public class TopOrderListItem
+        //{
+        //    public string Name { get; set; }
+        //    public string PhoneNumber { get; set; }
+        //    public DateTime Date { get; set; }
+        //    public int OrderNumber { get; set; }
+        //    public double Amount { get; set; }
+        //}
     }
 }
