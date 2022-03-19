@@ -3254,7 +3254,9 @@ namespace ShopNow.Controllers
                         shopcategoryname=i.ShopCategoryName
                     }).ToList();
                     string s = "";
-                     string Url = api.Url + "items?q=itemTimeStamp>=20220305061004,status==R,outletId==" + api.OutletId + "&limit=200000";
+                    // string Url = api.Url + "items?q=itemTimeStamp>=20220305061004,status==R,outletId==" + api.OutletId + "&limit=200000";
+                    string Url = api.Url + "items?q=itemTimeStamp>=1,status==R,outletId==" + api.OutletId + "&limit=200000";
+                    // string Url = api.Url + "items?q=itemTimeStamp>=1,status==R,outletId==4&limit=200000";
                     //string Url = api.Url + "items?q=itemId==3463,outletId==2&status==R";
                     using (WebClient client = new WebClient())
                     {
