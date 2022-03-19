@@ -77,6 +77,8 @@ namespace ShopNow.ViewModels
         public string CustomerPrescriptionRemarks { get; set; }
         public double PickupLatitude { get; set; }
         public double PickupLongitude { get; set; }
+        public double ShopLatitude { get; set; }
+        public double ShopLongitude { get; set; }
 
         public DateTime? PickupDateTime { get; set; }
         public DateTime? DeliveryDate { get; set; }
@@ -1037,6 +1039,7 @@ namespace ShopNow.ViewModels
             public string RefundRemark { get; set; }
             public bool IsPickupDrop { get; set; }
             public string ShopDistrict { get; set; }
+            public string Remarks { get; set; }
             public string OrderStatusText
             {
                 get

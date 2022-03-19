@@ -64,7 +64,8 @@ namespace ShopNow.Controllers
                 IsPickupDrop = i.c.c.IsPickupDrop,
                 ShopDistrict = i.s.DistrictName,
                 TotalPrice = i.c.c.TotalPrice,
-                Distance = i.c.c.Distance
+                Distance = i.c.c.Distance,
+                Remarks = i.c.c.Remarks
             }).OrderBy(i => i.Status).OrderByDescending(i => i.DateEncoded).ToList();
             int counter = 1;
             model.ListItems.ForEach(x => x.No = counter++);
@@ -498,6 +499,9 @@ namespace ShopNow.Controllers
                           ImagePath = "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.ImagePath
                       }).ToList();
                 model.ShopAddress = shop.Address;
+                model.ShopLatitude = shop.Latitude;
+                model.ShopLongitude = shop.Longitude;
+
                 //var deliveryBoy = db.DeliveryBoys.FirstOrDefault(i => i.Id == order.DeliveryBoyId);
                 //if (deliveryBoy != null)
                 //{
@@ -2001,6 +2005,29 @@ namespace ShopNow.Controllers
             return RedirectToAction("Details", "Cart", new { id = AdminHelpers.ECodeLong(orderId) });
         }
 
+        public ActionResult UpdateDeliveredOrderDeliveryAddress(long UpdateOrderId, string UpdateAddress, double UpdateDistance = 0, double UpdateLatitude = 0, double UpdateLongitude = 0, double UpdateDeliveryCharge = 0,double UpdateShopDeliveryDiscount=0, double UpdateNetDeliveryCharge=0)
+        {
+            var order = db.Orders.FirstOrDefault(i => i.Id == UpdateOrderId);
+            order.DeliveryAddress = UpdateAddress;
+            order.Latitude = UpdateLatitude;
+            order.Longitude = UpdateLongitude;
+            order.Distance = UpdateDistance;
+            order.DeliveryCharge = UpdateDeliveryCharge;
+            order.ShopDeliveryDiscount = UpdateShopDeliveryDiscount;
+            order.NetDeliveryCharge = UpdateNetDeliveryCharge;
+            order.NetTotal = order.TotalPrice + order.Packingcharge + order.Convinenientcharge + UpdateNetDeliveryCharge - order.WalletAmount - order.OfferAmount + order.TipsAmount;
+            order.DateUpdated = DateTime.Now;
+            db.Entry(order).State = EntityState.Modified;
+            db.SaveChanges();
+
+            var payment = db.Payments.FirstOrDefault(i => i.OrderNumber == order.OrderNumber);
+            payment.DeliveryCharge = UpdateDeliveryCharge;
+            payment.GSTAmount = order.NetTotal;
+            payment.Amount = order.NetTotal;
+            db.Entry(payment).State = EntityState.Modified;
+            db.SaveChanges();
+            return RedirectToAction("Details", "Cart", new { id = AdminHelpers.ECodeLong(UpdateOrderId) });
+        }
         public JsonResult GetDeliveryCharge(double PickupLatitude, double PickupLongitude, double DeliveryLatitude, double DeliveryLongitude)
         {
             double DeliveryCharge = 0;
@@ -2125,6 +2152,7 @@ namespace ShopNow.Controllers
             }
             return Json(ShopDeliveryDiscount, JsonRequestBehavior.AllowGet);
         }
+
 
         protected override void Dispose(bool disposing)
         {
