@@ -7,8 +7,11 @@
 <link href="~/Content/Gridmvc.css" rel="stylesheet" />
 <script src="~/Scripts/gridmvc.js"></script>
 <style>
-    table > thead > tr > th:first-child {
+    table > thead > tr > th:nth-child(1) {
         padding: 12px 5px;
+    }
+    table > thead > tr > th:nth-child(4) {
+        padding: 12px 15px;
     }
 </style>
 <div class="container-fluid">
@@ -43,7 +46,7 @@
                         columns.Add(c => c.No).Titled("Sl.No").Filterable(false).SetWidth(1);
                         columns.Add(c => c.OrderNumber).Titled("OrderNo").Filterable(true).SetWidth(10);
                         columns.Add(c => c.ShopName).Titled("Shop Name").Filterable(true).SetWidth(15);
-                        columns.Add(c => c.PaymentMode).Titled("Payment Mode").Filterable(true).SetWidth(10);
+                        columns.Add(c => c.PaymentMode).Titled("Payment Mode").Filterable(true).SetWidth(15);
                         columns.Add(c => c.Amount).Titled("Amount").Filterable(true).SetWidth(10);
                         columns.Add(c => c.DeliveryBoyPhoneNumber).Titled("D.Boy Phone").Filterable(true).SetWidth(15);
                           //columns.Add().RenderValueAs(c => c.Status == 5 ? "On The Way" : "On The Way").Titled("Order Status").Filterable(true).SetWidth(10);

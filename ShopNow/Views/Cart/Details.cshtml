@@ -313,12 +313,12 @@
                         </div>
                     }
                     @*@if (Model.PrescriptionImagePath != null)
-                        {
-                            <label>Prescription Image</label><br />
-                            <div class="d-flex">
-                                <img alt="Image" data-toggle="modal" data-target="#PrescriptionImageModal" class="img-thumbnail PrescriptionImage p-1" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/@Model.PrescriptionImagePath" onerror="this.src='/Images/No Photo.png'" style="width:45px;height:45px" />
-                            </div>
-                        }*@
+                    {
+                        <label>Prescription Image</label><br />
+                        <div class="d-flex">
+                            <img alt="Image" data-toggle="modal" data-target="#PrescriptionImageModal" class="img-thumbnail PrescriptionImage p-1" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/@Model.PrescriptionImagePath" onerror="this.src='/Images/No Photo.png'" style="width:45px;height:45px" />
+                        </div>
+                    }*@
                     @if (Model.ImagePathLists.Count() > 0)
                     {
                         <label>Prescription Image</label><br />
@@ -346,6 +346,8 @@
                     <div class="d-flex">
                         <label class="mr-3">Name:</label>
                         <b>@Model.ShopName</b>
+                        <input type="hidden" name="ShopId" id="ShopId" value="@Model.ShopId" />
+                        <input type="hidden" name="TotalPrice" id="TotalPrice" value="@Model.TotalPrice" />
                     </div>
                     <div class="d-flex">
                         <label class="mr-3">Ph Number:</label>
@@ -422,15 +424,23 @@
                         {
                             <a href="~/Customer/Details?id=@ShopNow.Helpers.AdminHelpers.ECodeInt(Model.CustomerId)"><span class="font-weight-bold"> @Model.CustomerPhoneNumber</span></a>
                         }
-                        else {
+                        else
+                        {
                             <span>@Model.CustomerPhoneNumber</span>
-                        }</div>
+                        }
+                    </div>
                     <div class="d-flex">
                         <label class="mr-3">Address:</label>
                         <a onclick="gotomap(@Model.Latitude,@Model.Longitude)" href="" target="_blank"> <span class="font-weight-bold"> @Model.DeliveryAddress</span></a>
                         @if (Model.IsPickupDrop == true)
                         {
                             <a href="#modal-update-deliveryaddress" data-target="#modal-update-deliveryaddress" data-toggle="modal" class="ml-3"><i class="fa fa-edit"></i></a>
+                        }
+                    </div>
+                    <div class="d-flex flex-row-reverse">
+                        @if (Model.IsPickupDrop == false)
+                        {
+                            <a href="#modal-deliveryaddress-update-deliveredorder" data-target="#modal-deliveryaddress-update-deliveredorder" data-toggle="modal" class="btn btn-primary ml-3">Update Address</a>
                         }
                     </div>
                 </div>
@@ -1009,6 +1019,61 @@
     </div>
 </div>
 
+<div class="modal fade" id="modal-deliveryaddress-update-deliveredorder" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <form method="get" action="/Cart/UpdateDeliveredOrderDeliveryAddress">
+                    <input type="hidden" name="UpdateOrderId" value="@Model.Id" />
+                    <input type="hidden" name="ShopLatitude" value="@Model.ShopLatitude" />
+                    <input type="hidden" name="ShopLongitude" value="@Model.ShopLongitude" />
+                    <h5>Update Delivery Address</h5>
+                    <div class="row form-group">
+                        <div class="col-md-12">
+                            <label>Address</label>
+                            <textarea id="deliveredorder-delivery-address" class="form-control" name="UpdateAddress" onchange="GetUpdateLatLong();" required>@Model.DeliveryAddress</textarea>
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-md-6">
+                            <label>Latitude</label>
+                            <input type="text" class="form-control" name="UpdateLatitude" value="@Model.Latitude" />
+                        </div>
+                        <div class="col-md-6">
+                            <label>Longitude</label>
+                            <input type="text" class="form-control" name="UpdateLongitude" value="@Model.Longitude" />
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-md-6">
+                            <label>Distance(Km)</label>
+                            <input type="text" class="form-control" name="UpdateDistance" id="UpdateDistance" value="@Model.Distance" />
+                        </div>
+                        <div class="col-md-6">
+                            <label>Delivery Charge</label>
+                            <input type="text" class="form-control" name="UpdateDeliveryCharge" value="@Model.DeliveryCharge" />
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-md-6">
+                            <label>Shop Delivery Discount</label>
+                            <input type="text" class="form-control" name="UpdateShopDeliveryDiscount" value="@Model.ShopDeliveryDiscount" />
+                        </div>
+                        <div class="col-md-6">
+                            <label>Net Delivery Charge</label>
+                            <input type="text" class="form-control" name="UpdateNetDeliveryCharge" value="@Model.NetDeliveryCharge" />
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <button class="btn btn-sm btn-success mr-3">Submit</button>
+                        <button class="btn btn-sm btn-danger" data-dismiss="modal">Close</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
 @section Scripts
 {
     <script src="~/Scripts/sweetalert/sweetalert.min.js"></script>
@@ -1191,5 +1256,88 @@
                     $('input[name="Distance"]').val(data.Distance.toFixed(2));
                 });
             }
+        // Update Delivered Order Delivery Address
+
+        var geocoder1;
+        function GetUpdateLatLong() {
+            geocoder1 = new google.maps.Geocoder();
+            var address = document.getElementById('deliveredorder-delivery-address').value;
+            geocoder1.geocode({ 'address': address }, function (results, status) {
+                if (status == 'OK') {
+                    $('input[name="UpdateLatitude"]').val(results[0].geometry.location.lat());
+                    $('input[name="UpdateLongitude"]').val(results[0].geometry.location.lng());
+                    calculateRoadDistance();
+                }
+            });
+        }
+
+        // Calculate Road Distance
+        function calculateRoadDistance() {
+            var shopid = $('#ShopId').val();
+            var itemTotal = parseFloat($('#TotalPrice').val());
+            $.ajax({
+                url: '/Service/GetLocationDetails?sourceLatitude=' + $('[name="ShopLatitude"]').val() + '&sourceLongitude=' + $('[name="ShopLongitude"]').val() + '&destinationLatitude=' + $('input[name="UpdateLatitude"]').val() + '&destinationLongitude=' + $('input[name="UpdateLongitude"]').val() + '',
+                type: 'GET',
+                dataType: 'json',
+                success: function (data) {
+                    if (data) {
+                        $('#UpdateDistance').val(data.Distance);
+                        var distance = data.Distance;
+                        $.getJSON("/CustomerPrescription/GetShopCharge", { shopid: shopid, itemTotal: itemTotal, customerid: 0, totalSize: 0, totalWeight: 0, distance: distance }, function (data) {
+                            if (data != null) {
+                                $('[name="UpdateDeliveryCharge"]').val(data.GrossDeliveryCharge.toFixed(2));
+                                $('[name="UpdateShopDeliveryDiscount"]').val(data.ShopDeliveryDiscount.toFixed(2));
+                                $('[name="UpdateNetDeliveryCharge"]').val(data.NetDeliveryCharge.toFixed(2));
+                            }
+                        });
+                    } else {
+                        var service = new google.maps.DistanceMatrixService();
+                        const origin = { lat: parseFloat($('[name="ShopLatitude"]').val()), lng: parseFloat($('[name="ShopLongitude"]').val()) };
+                        const dest = { lat: parseFloat($('[name="UpdateLatitude"]').val()), lng: parseFloat($('[name="UpdateLongitude"]').val()) };
+                        const request = {
+                            origins: [origin],
+                            destinations: [dest],
+                            travelMode: google.maps.TravelMode.DRIVING,
+                        };
+                        service.getDistanceMatrix(request).then((response) => {
+                            var distance = (response.rows[0].elements[0].distance.value / 1000).toFixed(2);
+                            var duration = (response.rows[0].elements[0].duration.value / 60).toFixed(2);
+                            $('#UpdateDistance').val(distance);
+                            saveLocation(origin.lat, origin.lng, dest.lat, dest.lng, distance, duration);
+
+                            var distance = distance;
+                            $.getJSON("/CustomerPrescription/GetShopCharge", { shopid: shopid, itemTotal: itemTotal, customerid: 0, totalSize: 0, totalWeight: 0, distance: distance }, function (data) {
+                                if (data != null) {
+                                    $('[name="UpdateDeliveryCharge"]').val(data.GrossDeliveryCharge.toFixed(2));
+                                    $('[name="UpdateShopDeliveryDiscount"]').val(data.ShopDeliveryDiscount.toFixed(2));
+                                    $('[name="UpdateNetDeliveryCharge"]').val(data.NetDeliveryCharge.toFixed(2));
+                                }
+                            });
+
+                        });
+                    }
+                },
+                error: function () { alert('Something went wrong, try again later!'); },
+            });
+        }
+
+        function saveLocation(srclat, srclng, deslat, deslng, dist, dur) {
+            var locationValues = {
+                SourceLatitude: srclat,
+                SourceLontitude: srclng,
+                DestinationLatitude: deslat,
+                DestinationLontitude: deslng,
+                Distance: dist,
+                Duration: dur
+            };
+            $.ajax({
+                url: '/Service/SaveLocationDetails',
+                type: 'POST',
+                dataType: 'json',
+                data: locationValues,
+                success: function () { },
+                error: function () { alert('Something went wrong, try again later!'); },
+            });
+        }
     </script>
 }
