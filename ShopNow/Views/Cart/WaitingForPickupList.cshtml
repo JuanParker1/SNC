@@ -42,17 +42,17 @@
                {
                    columns.Add(c => c.No).Titled("Sl.No").Filterable(false).SetWidth(1);
                    columns.Add(c => c.OrderNumber).Titled("OrderNo").Filterable(true).SetWidth(10);
-                   columns.Add(c => c.ShopName).Titled("Shop Name").Filterable(true).SetWidth(15);
-                   columns.Add(c => c.PaymentMode).Titled("Payment Mode").Filterable(true).SetWidth(12);
+                   columns.Add(c => c.ShopName).Titled("Shop Name").Filterable(true).SetWidth(27);
+                   columns.Add(c => c.PaymentMode).Titled("Payment Mode").Filterable(true).SetWidth(20);
                    columns.Add(c => c.Amount).Titled("Amount").Filterable(true).SetWidth(8);
                    columns.Add(c => c.DeliveryBoyPhoneNumber).Titled("D.Boy Phone").Filterable(true).SetWidth(10);
                    //columns.Add().RenderValueAs(c => c.Status == 4 ? "Waiting for Pickup" : "Waiting for Pickup").Titled("Order Status").Filterable(true).SetWidth(15);
                    columns.Add().Encoded(false).Sanitized(false).RenderValueAs(c => (c.Status == 4 && c.IsPickupDrop == true) ? "<span>Waiting for Pickup</span><br/><span class='font-weight-bold text-primary'>Pickup-Drop</span>" : "Waiting for Pickup").Titled("Order Status").Filterable(true).SetWidth(10);
                    columns.Add(c => c.DateEncoded).Titled("Date").Filterable(true).SetWidth(15).Format("{0:dd-MMM-yyyy}");
                    columns.Add().Encoded(false).Sanitized(false)
-                  .RenderValueAs(o => Html.ActionLink("View", "Edit", new { ordernumber = o.OrderNumber, id = @ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id) }, new { @class = "btn btn-sm btn-info mr-1", }).ToHtmlString()
-                  + Html.ActionLink("Pickup Slip", "PickupSlip", new { OrderNumber = o.OrderNumber, id = @ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id) }, new { @class = "btn btn-sm btn-secondary mr-1 mt-2", }).ToHtmlString()
-                  + Html.ActionLink("UnAssigned", "UnAssignDeliveryBoy", new { OrderNumber = o.OrderNumber }, new { @class = "btn btn-sm btn-danger mt-2" }).ToHtmlString()).Titled("Action").SetWidth(10);
+                  .RenderValueAs(o => Html.ActionLink("View", "Edit", new { ordernumber = o.OrderNumber, id = @ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id) }, new { @class = "btn btn-sm btn-info btn-block mr-1", }).ToHtmlString()
+                  + Html.ActionLink("Pickup Slip", "PickupSlip", new { OrderNumber = o.OrderNumber, id = @ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id) }, new { @class = "btn btn-sm btn-secondary btn-block mr-1 mt-2", }).ToHtmlString()
+                  + Html.ActionLink("UnAssigned", "UnAssignDeliveryBoy", new { OrderNumber = o.OrderNumber }, new { @class = "btn btn-sm btn-block btn-danger mt-2" }).ToHtmlString()).Titled("Action").SetWidth(10);
                    columns.Add().Encoded(false).Sanitized(false)
                    .RenderValueAs(o => (o.RefundAmount == 0 || o.RefundAmount == null) ? "<a href='#modal-refund' data-id='" + o.Id + "' data-toggle='modal' data-target='#modal-refund' class='btn btn-sm btn-primary btn-modal-refund btn-block mt-4'>Refund</a>" : o.RefundAmount.Value > 0 ? "<span>" + o.RefundAmount + "(" + o.RefundRemark + ")" + "</span>" : "N/A").Titled("Refund").SetWidth(10);
                }).WithPaging(20).Sortable(true)

@@ -819,7 +819,6 @@
     <Compile Include="ViewModels\ShopDiscountCategoryViewModel.cs" />
     <Compile Include="ViewModels\ShopScheduleViewModels.cs" />
     <Compile Include="ViewModels\ShopViewModel.cs" />
-    <Compile Include="ViewModels\StockViewModel.cs" />
     <Compile Include="ViewModels\SubCategoryViewModel.cs" />
     <Compile Include="ViewModels\SupportViewModel.cs" />
     <Compile Include="ViewModels\WebAPIViewModel.cs" />

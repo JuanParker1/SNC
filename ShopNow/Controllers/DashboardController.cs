@@ -2,6 +2,7 @@
 using ShopNow.Models;
 using ShopNow.ViewModels;
 using System;
+using System.Data.Entity;
 using System.Linq;
 using System.Web.Mvc;
 
@@ -19,7 +20,7 @@ namespace ShopNow.Controllers
             ViewBag.customer = _db.Customers.Where(i => i.Status == 0).Count();
             ViewBag.Shops = _db.Shops.Where(i => i.Status == 0).Count();
             ViewBag.Delivery = _db.DeliveryBoys.Where(i => i.Status == 0).Count();
-            ViewBag.Order = _db.Orders.Where(i => i.Status == 0 && i.OrderNumber != 0 && i.Status != 7 && i.Status != 6 && i.Status != 9 && i.Status != 10).Count();
+            ViewBag.Order = _db.Orders.Where(i => i.Status == 6).Count();
             
             model.MonthFilter = model.MonthFilter != 0 ? model.MonthFilter : DateTime.Now.Month;
             model.YearFilter = model.YearFilter != 0 ? model.YearFilter : DateTime.Now.Year;
@@ -47,6 +48,46 @@ namespace ShopNow.Controllers
             model.OrderMeatAndVegCount = shopOrderCount.Where(i => i.s.ShopCategoryId == 2).Count();
             model.OrderSupermarketCount = shopOrderCount.Where(i => i.s.ShopCategoryId == 3).Count();
             model.OrderMedicalCount = shopOrderCount.Where(i => i.s.ShopCategoryId == 4).Count();
+            
+            var last5DaysOrders = _db.Orders.Where(i =>(DbFunctions.TruncateTime(DbFunctions.AddDays(DateTime.Now,-4)) <= DbFunctions.TruncateTime(i.DateEncoded)) && i.Status ==6).Select(i => new { DateEncoded = i.DateEncoded }).ToList();
+            model.OrderTodayCount = last5DaysOrders.Where(i => i.DateEncoded.Date == DateTime.Now.Date).Count();
+            model.Order2ndDayCount = last5DaysOrders.Where(i => i.DateEncoded.Date == DateTime.Now.AddDays(-1).Date).Count();
+            model.Order3rdDayCount = last5DaysOrders.Where(i => i.DateEncoded.Date == DateTime.Now.AddDays(-2).Date).Count();
+            model.Order4thDayCount = last5DaysOrders.Where(i => i.DateEncoded.Date == DateTime.Now.AddDays(-3).Date).Count();
+            model.Order5thDay = last5DaysOrders.Where(i => i.DateEncoded.Date == DateTime.Now.AddDays(-4).Date).Count();
+
+            //var allOrderList = _db.Orders.Where(i => i.Status == 6)
+            //    .Select(i => new
+            //    {
+            //        OrderNumber = i.OrderNumber,
+            //        NetTotal = i.NetTotal,
+            //        DeliveryBoyName = i.DeliveryBoyName,
+            //        DeliveryBoyId = i.DeliveryBoyId,
+            //        Distance = i.Distance,
+            //        Date = i.DateEncoded,
+            //        CustomerName = i.CustomerName,
+            //        CustomerPhoneNumber = i.CustomerPhoneNumber,
+            //        DeliveryBoyPhoneNumber = i.DeliveryBoyPhoneNumber
+            //    }).ToList();
+
+            //model.DBListItems = allOrderList.Where(i => i.Distance < 30).GroupBy(i => i.DeliveryBoyId)
+            //    .Select(i => new DashboardIndexViewModel.TopDBListItem
+            //    {
+            //        Distance = i.Sum(a => a.Distance),
+            //        Name = i.FirstOrDefault().DeliveryBoyName,
+            //        OrderCount = i.Count(),
+            //        Number = i.FirstOrDefault().DeliveryBoyPhoneNumber
+            //    }).OrderByDescending(i => i.OrderCount).Take(5).ToList();
+
+            //model.TopOrderListItems = allOrderList.Join(_db.Payments, o => o.OrderNumber, p => p.OrderNumber, (o, p) => new { o, p })
+            //    .Select(i => new DashboardIndexViewModel.TopOrderListItem
+            //    {
+            //        Amount = i.o.NetTotal - i.p.RefundAmount ?? 0,
+            //        Date = i.o.Date,
+            //        Name = i.o.CustomerName,
+            //        OrderNumber = i.o.OrderNumber,
+            //        PhoneNumber = i.o.CustomerPhoneNumber
+            //    }).OrderByDescending(i => i.Amount).Take(5).ToList();
             return View(model);
         }
 
