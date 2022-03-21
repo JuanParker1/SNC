@@ -980,6 +980,8 @@ namespace ShopNow.Controllers
                 product.DateUpdated = DateTime.Now;
                 db.Entry(product).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
+
+                UpdateMedicalShopMaxOfferPercentage(product.ShopId);
             }
             return Json(true, JsonRequestBehavior.AllowGet);
         }
