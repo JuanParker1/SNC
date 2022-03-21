@@ -105,7 +105,7 @@ namespace ShopNow.Controllers
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
-            model.CartPendingLists = db.Orders.Where(i => (model.ShopId != 0 ? i.ShopId == model.ShopId : true) && i.Status == 2 && SqlFunctions.DateDiff("minute", i.DateUpdated, DateTime.Now) >= 5)
+            model.CartPendingLists = db.Orders.Where(i => (model.ShopId != 0 ? i.ShopId == model.ShopId : true) && i.Status == 2 && (i.PickupDateTime != null ? SqlFunctions.DateDiff("minute", DateTime.Now, i.PickupDateTime) <= 35 : SqlFunctions.DateDiff("minute", i.DateUpdated, DateTime.Now) >= 5))
                            .Join(db.Payments, c => c.OrderNumber, p => p.OrderNumber, (c, p) => new { c, p })
                            .Select(i => new CartListViewModel.CartPendingList
                            {
@@ -1861,7 +1861,7 @@ namespace ShopNow.Controllers
 
         public JsonResult GetDeliveryLocations()
         {
-            var ordersList = db.Orders.Where(i => i.Status == 2 || i.Status == 3 || i.Status == 4 || i.Status == 5)
+            var ordersList = db.Orders.Where(i => (i.Status == 2 || i.Status == 3 || i.Status == 4 || i.Status == 5) && ((i.Status ==2 && i.PickupDateTime != null) ? SqlFunctions.DateDiff("minute", DateTime.Now, i.PickupDateTime) <= 30 : true))
                 .Join(db.Shops, o => o.ShopId, s => s.Id, (o, s) => new { o, s })
                 .AsEnumerable()
                 .Select(i => new
