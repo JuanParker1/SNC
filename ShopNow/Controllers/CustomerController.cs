@@ -255,7 +255,7 @@ namespace ShopNow.Controllers
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult VerifyAadharImage(int code)
+        public JsonResult VerifyAadharImage(int code,string aadharNumber)
         {
             var customer = db.Customers.Where(m => m.Id == code).FirstOrDefault();
             bool IsAdded = false;
@@ -297,6 +297,7 @@ namespace ShopNow.Controllers
                         message = "Date Of Birth is Empty!";
                     }
                 }
+                customer.AadharNumber = aadharNumber;
                 customer.AadharVerify = IsAdded;
                 customer.DateUpdated = DateTime.Now;
                 db.Entry(customer).State = System.Data.Entity.EntityState.Modified;
