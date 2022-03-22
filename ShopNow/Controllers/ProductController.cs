@@ -968,11 +968,11 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SNCPRD217")]
-        public JsonResult Delete(string id)
+        public JsonResult Delete(string Id)
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
-            var dId = AdminHelpers.DCodeInt(id);
+            var dId = AdminHelpers.DCodeInt(Id);
             var product = db.Products.FirstOrDefault(i => i.Id == dId);
             if (product != null)
             {
@@ -980,8 +980,11 @@ namespace ShopNow.Controllers
                 product.DateUpdated = DateTime.Now;
                 db.Entry(product).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
-
-                UpdateMedicalShopMaxOfferPercentage(product.ShopId);
+                var shopMedical = db.Shops.Where(i => i.ShopCategoryId == 4 && i.Id == product.ShopId).FirstOrDefault();
+                if (shopMedical != null)
+                    UpdateMedicalShopMaxOfferPercentage(product.ShopId);
+                else
+                    UpdateShopMaxOfferPercentage(product.ShopId);
             }
             return Json(true, JsonRequestBehavior.AllowGet);
         }

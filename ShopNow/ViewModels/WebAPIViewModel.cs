@@ -5,6 +5,15 @@ using System.Web;
 
 namespace ShopNow.ViewModels
 {
+    public class WebApiTimeStampViewModel
+    {
+        public int CategoryType { get; set; }
+        public int ShopId { get; set; }
+        public string ShopName { get; set; }
+        public string Link { get; set; }
+        public string AuthName { get; set; }
+        public string AuthKey { get; set; }
+    }
     public class WebApiCreateViewModel
     {
         public int CategoryType { get; set; }
@@ -30,7 +39,7 @@ namespace ShopNow.ViewModels
     public class items
     {
         public int itemId { get; set; }
-        public string itemName { get; set; }      
+        public string itemName { get; set; }
         public string iBarU { get; set; }
         public string status { get; set; }
         public string manufacturer { get; set; }
@@ -49,7 +58,7 @@ namespace ShopNow.ViewModels
         public string loyaltypointsper100value { get; set; }
         public string minimumloyaltyreductionpercentage { get; set; }
         public string specialcostfordelivery { get; set; }
-        public string  outletId { get; set; }
+        public string outletId { get; set; }
         public string specialPrice { get; set; }
         public string minSaleQuantity { get; set; }
         public string Cat1 { get; set; }
@@ -66,9 +75,9 @@ namespace ShopNow.ViewModels
     }
 
     public class TimeSpanViewModel
-    {      
-            public string ItemTimeStamp { get; set; }
-       
-    }
+    {
+        public string ItemTimeStamp { get; set; }
 
     }
+
+}

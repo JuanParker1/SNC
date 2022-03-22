@@ -2004,7 +2004,7 @@ namespace ShopNow.Controllers
             db.SaveChanges();
             return RedirectToAction("Details", "Cart", new { id = AdminHelpers.ECodeLong(orderId) });
         }
-
+        [AccessPolicy(PageCode = "SNCCUDA313")]
         public ActionResult UpdateDeliveredOrderDeliveryAddress(long UpdateOrderId, string UpdateAddress, double UpdateDistance = 0, double UpdateLatitude = 0, double UpdateLongitude = 0, double UpdateDeliveryCharge = 0,double UpdateShopDeliveryDiscount=0, double UpdateNetDeliveryCharge=0)
         {
             var order = db.Orders.FirstOrDefault(i => i.Id == UpdateOrderId);
