@@ -12,13 +12,12 @@ namespace ShopNow.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class DistanceSetting
+    public partial class DailyVisitor
     {
         public int Id { get; set; }
-        public double Distance { get; set; }
-        public Nullable<System.TimeSpan> Time { get; set; }
-        public int Status { get; set; }
-        public string UpdatedBy { get; set; }
-        public System.DateTime UpdatedDateTime { get; set; }
+        public int CustomerId { get; set; }
+        public int ShopId { get; set; }
+        public string ShopName { get; set; }
+        public System.DateTime DateUpdated { get; set; }
     }
 }
