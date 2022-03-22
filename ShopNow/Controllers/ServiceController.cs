@@ -173,14 +173,17 @@ namespace ShopNow.Controllers
             //var Distance = (((Math.Acos(Math.Sin((PickupLatitude * Math.PI / 180)) * Math.Sin(((DeliveryLatitude) * Math.PI / 180)) + Math.Cos((PickupLatitude * Math.PI / 180)) * Math.Cos((DeliveryLatitude * Math.PI / 180))
             //     * Math.Cos(((PickupLongitude - DeliveryLongitude) * Math.PI / 180)))) * 180 / Math.PI) * 60 * 1.1515 * 1609.344) / 1000;
 
-            if (distance < 5)
+            if (distance <= 5)
             {
                 DeliveryCharge = 50;
             }
-            else
+            else if (distance > 5 && distance <= 15)
             {
-                var dist = distance - 5;
-                var amount = dist * 6;
+                double amount = (distance - 5) * 6;
+                DeliveryCharge = 50 + amount;
+            }
+            else { // above 15kms -12Rs
+                double amount = (10 * 6) + ((distance - 15) * 12);
                 DeliveryCharge = 50 + amount;
             }
             return Json(new { DeliveryCharge, distance, DeliveryCredit }, JsonRequestBehavior.AllowGet);
