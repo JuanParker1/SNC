@@ -10,6 +10,11 @@
     table > thead > tr > th:nth-child(1) {
         padding: 12px 6px;
     }
+
+    table > thead > tr > th:nth-child(5) {
+        padding: 12px 8px;
+    }
+
     table > thead > tr > th:nth-child(7) {
         padding: 12px 14px;
     }
@@ -59,11 +64,11 @@
                 <div class="card-body">
                     @Html.Grid(Model.PickUpDropReportLists).Columns(columns =>
                {
-                   columns.Add(p => p.No).Filterable(false).SetWidth(1);
-                   columns.Add(p => p.OrderNumber).Filterable(true).SetWidth(10);
-                   columns.Add(p => p.ShopName).Filterable(true).SetWidth(10);
-                   columns.Add(p => p.PaymentMode).Filterable(true).SetWidth(10);
-                   columns.Add(c => c.Amount).Titled("Amount").Filterable(true).SetWidth(5);
+                   columns.Add(p => p.No).Filterable(false).Titled("Sl.No").SetWidth(1);
+                   columns.Add(p => p.OrderNumber).Filterable(true).Titled("Order Number").SetWidth(10);
+                   columns.Add(p => p.ShopName).Filterable(true).Titled("Shop Name").SetWidth(10);
+                   columns.Add(p => p.PaymentMode).Filterable(true).Titled("Payment Mode").SetWidth(10);
+                   columns.Add(c => c.Amount).Titled("Amount").Filterable(true).SetWidth(1);
                    columns.Add(c => c.DeliveryAddress).Titled("Delivery Address").Filterable(true).SetWidth(15);
                    columns.Add(c => c.PhoneNumber).Titled("Customer Phone No").Filterable(true).SetWidth(15);
                    columns.Add(c => c.DateEncoded).Titled("Date").Filterable(true).SetWidth(10).Format("{0:dd-MM-yyyy hh:mm tt}");
@@ -73,6 +78,7 @@
         </div>
     </div>
 </div>
+
 <table id="table-excel" class="d-none">
     <thead>
         <tr>

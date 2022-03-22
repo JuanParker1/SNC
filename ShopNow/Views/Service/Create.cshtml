@@ -335,9 +335,9 @@
             var DeliveryLongitude = parseFloat($("#DeliveryLongitude").val());
             var ShopId = $("#ShopId").val();
             var distance = parseFloat($("#Distance").val());
-            var shopcatId = $('#ShopCategoryId').val();
-            var distancelimit = shopcatId == 4 ? 30 : 16;
-            if (distance <= distancelimit) {
+           // var shopcatId = $('#ShopCategoryId').val();
+           // var distancelimit = shopcatId == 4 ? 30 : 16;
+          //  if (distance <= distancelimit) {
                 $.getJSON("/Service/GetDeliveryCharge", { ShopId: ShopId, PickupLatitude: PickupLatitude, PickupLongitude: PickupLongitude, DeliveryLatitude: DeliveryLatitude, DeliveryLongitude: DeliveryLongitude, Distance: distance }, function (data) {
                     $("#DeliveryCharge").val(data.DeliveryCharge.toFixed(2));
                     $("#dcharge").text(data.DeliveryCharge.toFixed(2));
@@ -356,10 +356,10 @@
                         }
                     }
                 });
-            } else {
-                swal("Warning!", "Delivery Address is not within Limit(" + distancelimit + " kms). Kindly Update the address.", "warning");
-                clearFields();
-            }
+            //} else {
+            //    swal("Warning!", "Delivery Address is not within Limit(" + distancelimit + " kms). Kindly Update the address.", "warning");
+            //    clearFields();
+            //}
         }
 
         function clearFields() {

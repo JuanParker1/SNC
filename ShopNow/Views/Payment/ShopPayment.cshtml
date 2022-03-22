@@ -35,16 +35,16 @@
                 <div class="card-body">
                     @Html.Grid(Model.ListItems).Columns(columns =>
    {
-      columns.Add(c => c.ShopName).Titled("Shop Name").Filterable(true).SetWidth(10);
+      columns.Add(c => c.ShopName).Titled("Shop Name").Filterable(true).SetWidth(30);
       columns.Add(c => c.ShopOwnerPhoneNumber).Titled("Phone No.").Filterable(true).SetWidth(9);
       columns.Add(c => c.TransactionType).Titled("Trans Type").Filterable(true).SetWidth(10);
       columns.Add(c => c.FinalAmount).Titled("Amount").Filterable(true).SetWidth(4);
       columns.Add(c => c.PaymentDate).Titled("Payment Date").Filterable(true).SetWidth(30).Format("{0:dd-MMM-yyyy}");
       columns.Add(c => c.AccountName).Titled("Account Name").Filterable(true).SetWidth(30);
-      columns.Add(c => c.AccountNumber).Titled("Account No.").Filterable(true).SetWidth(10);
-      columns.Add(c => c.PaymentId).Titled("Payment Id").Filterable(true).SetWidth(10);
+      columns.Add(c => c.AccountNumber).Titled("Account No.").Filterable(true).SetWidth(28);
+      columns.Add(c => c.PaymentId).Titled("Payment Id").Filterable(true).SetWidth(28);
       columns.Add(c => c.IfscCode).Titled("IFSC Code").Filterable(true).SetWidth(8);
-      columns.Add(c => c.AccountType).Titled("Account Type").Filterable(true).SetWidth(30);
+      columns.Add(c => c.AccountType).Titled("Account Type").Filterable(true).SetWidth(28);
    }).WithPaging(20).Sortable(true)
                 </div>
             </div>
@@ -80,28 +80,28 @@
     <tbody>
         @foreach (var item in Model.ListItems.GroupBy(i => i.ShopId))
         {
-        <tr>
-            <td>PAB_VENDOR</td>
-            <td>@item.FirstOrDefault().PaymentMode</td>
-            <td type="string">@item.FirstOrDefault().DebitAccountNo</td>
-            <td>@item.FirstOrDefault().AccountName.ToUpper()</td>
-            <td type="string">@item.FirstOrDefault().AccountNumber</td>
-            <td>@item.FirstOrDefault().IfscCode</td>
-            <td>@item.Sum(i => i.FinalAmount).ToString("0.00")</td>
-            <td>@item.FirstOrDefault().AccountName.ToUpper()</td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td>@item.FirstOrDefault().Remarks</td>
-            <td>@DateTime.Now.ToString("dd-MM-yyyy")</td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-        </tr>
+            <tr>
+                <td>PAB_VENDOR</td>
+                <td>@item.FirstOrDefault().PaymentMode</td>
+                <td type="string">@item.FirstOrDefault().DebitAccountNo</td>
+                <td>@item.FirstOrDefault().AccountName.ToUpper()</td>
+                <td type="string">@item.FirstOrDefault().AccountNumber</td>
+                <td>@item.FirstOrDefault().IfscCode</td>
+                <td>@item.Sum(i => i.FinalAmount).ToString("0.00")</td>
+                <td>@item.FirstOrDefault().AccountName.ToUpper()</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>@item.FirstOrDefault().Remarks</td>
+                <td>@DateTime.Now.ToString("dd-MM-yyyy")</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
         }
     </tbody>
 </table>

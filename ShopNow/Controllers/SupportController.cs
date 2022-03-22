@@ -35,22 +35,15 @@ namespace ShopNow.Controllers
             //To take count for last 3days
             DateTime last3Date = DateTime.Now.AddDays(-3);
 
-            model.ShopAcceptanceCount = db.Orders.Where(i => i.Status == 2 && (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(last3Date)) && SqlFunctions.DateDiff("minute", i.DateUpdated, DateTime.Now) >= 5)
-                   .AsEnumerable().Count();
+            model.ShopAcceptanceCount = db.Orders.Where(i => i.Status == 2 && (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(last3Date)) && (i.PickupDateTime != null ? SqlFunctions.DateDiff("minute", DateTime.Now, i.PickupDateTime) <= 35 : SqlFunctions.DateDiff("minute", i.DateUpdated, DateTime.Now) >= 5)).Count();
 
-            model.DeliveryAcceptanceCount = db.Orders.Where(i => i.Status == 4 && i.DeliveryBoyId !=0 && i.DeliveryBoyOnWork==0 && (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(last3Date)) && SqlFunctions.DateDiff("minute", i.DateUpdated, DateTime.Now) >= 5)
-              //  .Join(db.DeliveryBoys.Where(i => i.isAssign == 1 && i.OnWork == 0), c => c.DeliveryBoyId, d => d.Id, (c, d) => new { c, d })
-                      .AsEnumerable().Count();
+            model.DeliveryAcceptanceCount = db.Orders.Where(i => i.Status == 4 && i.DeliveryBoyId !=0 && i.DeliveryBoyOnWork==0 && (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(last3Date)) && SqlFunctions.DateDiff("minute", i.DateUpdated, DateTime.Now) >= 5).Count();
 
-            model.ShopPickupCount = db.Orders.Where(i => i.Status == 4 && i.DeliveryBoyId != 0 && i.DeliveryBoyOnWork == 1 && (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(last3Date)) && SqlFunctions.DateDiff("minute", i.DateUpdated, DateTime.Now) >= 15)
-               // .Join(db.DeliveryBoys.Where(i => i.isAssign == 1 && i.OnWork == 1), c => c.DeliveryBoyId, d => d.Id, (c, d) => new { c, d })
-                      .AsEnumerable().Count();
+            model.ShopPickupCount = db.Orders.Where(i => i.Status == 4 && i.DeliveryBoyId != 0 && i.DeliveryBoyOnWork == 1 && (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(last3Date)) && SqlFunctions.DateDiff("minute", i.DateUpdated, DateTime.Now) >= 15).Count();
 
-            model.CustomerDeliveryCount = db.Orders.Where(i => i.Status == 5 && (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(last3Date)) && SqlFunctions.DateDiff("minute", i.DateUpdated, DateTime.Now) >= 15)
-                    .AsEnumerable().Count();
+            model.CustomerDeliveryCount = db.Orders.Where(i => i.Status == 5 && (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(last3Date)) && SqlFunctions.DateDiff("minute", i.DateUpdated, DateTime.Now) >= 15).Count();
 
-            model.OrderswithoutDeliveryboyCount = db.Orders.Where(i => i.Status == 3 && (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(last3Date)))
-                    .AsEnumerable().Count();
+            model.OrderswithoutDeliveryboyCount = db.Orders.Where(i => i.Status == 3 && (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(last3Date))).Count();
 
             model.OrderCount = db.Orders.Where(i => i.Status != 7 && i.Status != 6 && i.Status != 0 && i.Status != -1 && i.Status != 9 && i.Status != 10 && (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(last3Date)) && (i.PickupDateTime != null ? SqlFunctions.DateDiff("minute", DateTime.Now, i.PickupDateTime) <= 30 : true)).Count();
 

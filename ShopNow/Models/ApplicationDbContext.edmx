@@ -592,6 +592,16 @@
           <Property Name="DateEncoded" Type="datetime" />
           <Property Name="Description" Type="nvarchar(max)" />
         </EntityType>
+        <EntityType Name="DailyVisitors">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CustomerId" Type="int" Nullable="false" />
+          <Property Name="ShopId" Type="int" Nullable="false" />
+          <Property Name="ShopName" Type="nvarchar" MaxLength="500" />
+          <Property Name="DateUpdated" Type="datetime" Nullable="false" />
+        </EntityType>
         <EntityType Name="DeliveryBoys">
           <Key>
             <PropertyRef Name="Id" />
@@ -1790,6 +1800,7 @@
           <EntitySet Name="CustomerSearchData" EntityType="Self.CustomerSearchData" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CustomerSearchHistory" EntityType="Self.CustomerSearchHistory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CustomerWalletHistory" EntityType="Self.CustomerWalletHistory" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="DailyVisitors" EntityType="Self.DailyVisitors" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DeliveryBoys" EntityType="Self.DeliveryBoys" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DeliveryBoyShops" EntityType="Self.DeliveryBoyShops" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DeliveryCharge" EntityType="Self.DeliveryCharge" Schema="dbo" store:Type="Tables" />
@@ -3065,6 +3076,7 @@
           <EntitySet Name="NextSubCategories" EntityType="sncModel.NextSubCategory" />
           <EntitySet Name="Shops" EntityType="sncModel.Shop" />
           <EntitySet Name="DistanceSettings" EntityType="sncModel.DistanceSetting" />
+          <EntitySet Name="DailyVisitors" EntityType="sncModel.DailyVisitor" />
         </EntityContainer>
         <ComplexType Name="GetDEliveryBoyList_Result">
           <Property Type="Int32" Name="Id" Nullable="false" />
@@ -3814,6 +3826,16 @@
           <Property Name="Status" Type="Int32" Nullable="false" />
           <Property Name="UpdatedBy" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
           <Property Name="UpdatedDateTime" Type="DateTime" Nullable="false" Precision="3" />
+        </EntityType>
+        <EntityType Name="DailyVisitor">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CustomerId" Type="Int32" Nullable="false" />
+          <Property Name="ShopId" Type="Int32" Nullable="false" />
+          <Property Name="ShopName" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="DateUpdated" Type="DateTime" Nullable="false" Precision="3" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -5708,6 +5730,17 @@
                 <ScalarProperty Name="Status" ColumnName="Status" />
                 <ScalarProperty Name="Time" ColumnName="Time" />
                 <ScalarProperty Name="Distance" ColumnName="Distance" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DailyVisitors">
+            <EntityTypeMapping TypeName="sncModel.DailyVisitor">
+              <MappingFragment StoreEntitySet="DailyVisitors">
+                <ScalarProperty Name="DateUpdated" ColumnName="DateUpdated" />
+                <ScalarProperty Name="ShopName" ColumnName="ShopName" />
+                <ScalarProperty Name="ShopId" ColumnName="ShopId" />
+                <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
