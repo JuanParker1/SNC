@@ -24,6 +24,162 @@ namespace ShopNow.Controllers
                 return ShopNow.Helpers.DRC.Generate(_prefix);
         }
 
+        [AccessPolicy(PageCode = "SNCWATSU296")]
+        public ActionResult TimeStampUpdate()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [AccessPolicy(PageCode = "SNCWATSU296")]
+        public ActionResult TimeStampUpdate(WebApiTSViewModel model)
+        {
+            var user = ((Helpers.Sessions.User)Session["USER"]);
+            int errorCode = 0;
+            try
+            {
+                using (WebClient myData = new WebClient())
+                {
+
+                    myData.Headers["X-Auth-Token"] = "62AA1F4C9180EEE6E27B00D2F4F79E5FB89C18D693C2943EA171D54AC7BD4302BE3D88E679706F8C";
+                    myData.Headers[HttpRequestHeader.Accept] = "application/json";
+                    myData.Headers[HttpRequestHeader.ContentType] = "application/x-www-form-urlencoded";
+                    string getList = myData.DownloadString("http://joyrahq.gofrugal.com/RayMedi_HQ/api/v1/items?q=itemTimeStamp>=" + model.timeSpan + ",status==R,outletId==2&limit=105000");
+                    dynamic config = JsonConvert.DeserializeObject<ExpandoObject>(getList, new ExpandoObjectConverter());
+                    int s = 0;
+                    foreach (var pro in ((IEnumerable<dynamic>)config.items).Where(t => t.status == "R"))
+                    {
+
+                        int ss = Convert.ToInt32(pro.itemId);
+                        var product = db.Products.FirstOrDefault(i => i.ItemId == ss); //Product.GetItemId(Convert.ToString(pro.itemId));
+                        if (product != null)
+                        {
+                            product.ItemId = Convert.ToInt32(pro.itemId);
+                            product.Name = pro.itemName;
+                            product.IBarU = Convert.ToInt32(pro.iBarU);
+                            product.ProductTypeId = 3;
+                            product.ProductTypeName = "Medical";
+                            product.DataEntry = 1;
+
+                            if (pro.appliesOnline != null)
+                            {
+                                product.AppliesOnline = Convert.ToInt32(pro.appliesOnline);
+                            }
+                            else
+                            {
+                                product.AppliesOnline = 5;
+                            }
+
+                            if (pro.stock != null)
+                            {
+                                foreach (var med in pro.stock)
+                                {
+
+                                    if (med.outletId == "2")
+                                    {
+                                        if (med.stock != null)
+                                        {
+                                            product.Qty = Convert.ToInt32(Math.Floor(Convert.ToDouble(med.stock)));
+                                        }
+                                        else
+                                        {
+                                            product.Qty = 0;
+                                        }
+
+                                        if (med.mrp != null)
+                                        {
+                                            product.MenuPrice = Convert.ToDouble(med.mrp);
+                                        }
+                                        else
+                                        {
+                                            product.MenuPrice = 0;
+                                        }
+
+                                        if (med.salePrice != null)
+                                        {
+                                            product.Price = Convert.ToDouble(med.salePrice);
+                                        }
+                                        else
+                                        {
+                                            product.Price = 0;
+                                        }
+                                        if (med.taxPercentage != null)
+                                        {
+
+                                            product.TaxPercentage = Convert.ToDouble(med.taxPercentage);
+                                        }
+                                        else
+                                        {
+                                            product.TaxPercentage = 0;
+                                        }
+                                        //if (med.discountpercentage != null)
+                                        //{
+                                        //    product.DiscountCategoryPercentage = Convert.ToDouble(med.discountpercentage);
+                                        //}
+                                        //else
+                                        //{
+                                        //    product.DiscountCategoryPercentage = 0;
+                                        //}
+                                        if (med.loyaltypointsper100value != null)
+                                        {
+                                            product.LoyaltyPoints = Convert.ToDouble(med.loyaltypointsper100value);
+                                        }
+                                        else
+                                        {
+                                            product.LoyaltyPoints = 0;
+                                        }
+                                        if (med.specialcostfordelivery != null)
+                                        {
+
+                                            product.SpecialCostOfDelivery = Convert.ToDouble(med.specialcostfordelivery);
+                                        }
+                                        else
+                                        {
+                                            product.SpecialCostOfDelivery = 0;
+                                        }
+
+                                        if (med.outletId != null)
+                                        {
+                                            product.OutletId = Convert.ToInt32(med.outletId);
+                                        }
+                                        else
+                                        {
+                                            product.OutletId = 0;
+                                        }
+                                        //product.CategoryNameMain = med.Cat1;
+                                        //product.DiscountCategoryId = CheckCategory(med.Cat1, Convert.ToDouble(med.discountpercentage));
+                                        product.DiscountCategoryName = med.Cat1;
+                                        //product.DiscountCategoryType = 1;
+                                        //product.DiscountType = 1;
+                                        product.ItemTimeStamp = med.itemTimeStamp;
+                                        product.Status = 0;
+                                        product.CreatedBy = user.Name;
+                                        product.UpdatedBy = user.Name;
+                                        product.DateEncoded = DateTime.Now;
+                                        product.DateUpdated = DateTime.Now;
+                                        db.Entry(product).State = EntityState.Modified;
+                                        db.SaveChanges();
+                                    }
+
+                                }
+                            }
+
+                            
+                        }
+                        s = s + 1;
+
+                    }
+                }
+                return RedirectToAction("List", "Product");
+
+            }
+            catch (Exception ex)
+            {
+                return HttpNotFound("Error Code: " + errorCode);
+            }
+        }
+
         [AccessPolicy(PageCode = "SNCWAC294")]
         public ActionResult Create()
         {
@@ -381,7 +537,7 @@ namespace ShopNow.Controllers
             }
         }
 
-        [AccessPolicy(PageCode = "SNCWATSU296")]
+        [AccessPolicy(PageCode = "SNCWATSU2966")]
         public ActionResult TSUpdate()
         {
             return View();
@@ -389,7 +545,7 @@ namespace ShopNow.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [AccessPolicy(PageCode = "SNCWATSU296")]
+        [AccessPolicy(PageCode = "SNCWATSU2966")]
         public ActionResult TSUpdate(WebApiTSViewModel model)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -597,34 +753,6 @@ namespace ShopNow.Controllers
             {
                 return HttpNotFound("Error Code: " + errorCode);
             }
-        }
-
-        public int CheckCategory(string CategoryName, double percentage)
-        {
-            var user = ((Helpers.Sessions.User)Session["USER"]);
-            var category = db.DiscountCategories.FirstOrDefault(i => i.Name == CategoryName); // Category.GetName(CategoryName);
-            if (category != null)
-            {
-
-                return category.Id;
-            }
-            else
-            {
-                DiscountCategory cat = new DiscountCategory();
-                cat.Name = CategoryName;
-                //cat.CategoryType = 0;
-                //cat.Type = 0;
-                cat.Percentage = percentage;
-                cat.DateEncoded = DateTime.Now;
-                cat.DateUpdated = DateTime.Now;
-                cat.CreatedBy = user.Name;
-                cat.UpdatedBy = user.Name;
-                cat.Status = 0;
-                db.DiscountCategories.Add(cat);
-                db.SaveChanges();
-                return cat.Id;
-            }
-
         }
 
         public async Task<JsonResult> GetShopSelect2(string pincode, string q = "")

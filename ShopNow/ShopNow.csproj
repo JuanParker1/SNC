@@ -385,6 +385,7 @@
     <Compile Include="Controllers\CustomerGiftCardController.cs" />
     <Compile Include="Controllers\CustomerGroceryUploadController.cs" />
     <Compile Include="Controllers\CustomerPrescriptionController.cs" />
+    <Compile Include="Controllers\DailyVisitorController.cs" />
     <Compile Include="Controllers\DeliveryBoyController.cs" />
     <Compile Include="Controllers\DiscountCategoryController.cs" />
     <Compile Include="Controllers\DistanceSettingController.cs" />
@@ -569,6 +570,9 @@
       <DependentUpon>ApplicationDbContext.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\CustomerWalletHistory.cs">
+      <DependentUpon>ApplicationDbContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DailyVisitor.cs">
       <DependentUpon>ApplicationDbContext.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\DeliveryBoy.cs">
@@ -787,6 +791,7 @@
     <Compile Include="ViewModels\CustomerGroceryUploadViewModel.cs" />
     <Compile Include="ViewModels\CustomerPrescriptionViewModels.cs" />
     <Compile Include="ViewModels\CustomerReviewViewModel .cs" />
+    <Compile Include="ViewModels\DailyVisitorViewModels.cs" />
     <Compile Include="ViewModels\DashboardViewModels.cs" />
     <Compile Include="ViewModels\DeliveryBoysList.cs" />
     <Compile Include="ViewModels\DeliveryBoyViewModel.cs" />
