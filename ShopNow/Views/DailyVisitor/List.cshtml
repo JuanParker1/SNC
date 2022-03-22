@@ -15,7 +15,7 @@
         <div class="col-md-7">
             <form method="get" action="/DailyVisitor/List">
                 <div class="row">
-                    <div class="col-md-4"><input type="date" class="form-control" name="StartDate" value="@Model.DateFilter.Value.ToString("yyyy-MM-dd")" /></div>
+                    <div class="col-md-4"><input type="date" class="form-control" name="DateFilter" value="@Model.DateFilter.Value.ToString("yyyy-MM-dd")" /></div>
                     <input type="submit" class="btn btn-info" value="Apply Filter" />
                 </div>
             </form>
@@ -29,7 +29,7 @@
                {
                    columns.Add(c => c.DateUpdated).Titled("Date").Filterable(true).SetWidth(10).Format("{0:dd-MM-yyyy hh:mm tt}");
                    columns.Add(c => c.ShopName).Titled("Shop Name").Filterable(true).SetWidth(10);
-                   columns.Add(c => c.Count).Titled("Count").Filterable(true).SetWidth(15);
+                   columns.Add(c => c.Count).Titled("Visitor Count").Filterable(true).SetWidth(15);
                }).Sortable(true)
                 </div>
             </div>
