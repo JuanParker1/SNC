@@ -1,0 +1,38 @@
+﻿@model ShopNow.ViewModels.DailyVisitorListViewModel
+@using GridMvc.Html
+@{
+    ViewBag.Title = "Daily Visitors Count";
+}
+<title>ShopNow | @ViewBag.Title</title>
+<link href="~/Content/Gridmvc.css" rel="stylesheet" />
+<script src="~/Scripts/gridmvc.js"></script>
+
+<div class="container-fluid mb-3">
+    <div class="row my-3">
+        <div class="col-md-3">
+            <h5 class="text-success">@ViewBag.Title</h5>
+        </div>
+        <div class="col-md-7">
+            <form method="get" action="/DailyVisitor/List">
+                <div class="row">
+                    <div class="col-md-4"><input type="date" class="form-control" name="DateFilter" value="@Model.DateFilter.Value.ToString("yyyy-MM-dd")" /></div>
+                    <input type="submit" class="btn btn-info" value="Apply Filter" />
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card shadow">
+                <div class="card-body">
+                    @Html.Grid(Model.ListItems).Columns(columns =>
+               {
+                   columns.Add(c => c.DateUpdated).Titled("Date").Filterable(true).SetWidth(10).Format("{0:dd-MM-yyyy hh:mm tt}");
+                   columns.Add(c => c.ShopName).Titled("Shop Name").Filterable(true).SetWidth(10);
+                   columns.Add(c => c.Count).Titled("Visitor Count").Filterable(true).SetWidth(15);
+               }).Sortable(true)
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

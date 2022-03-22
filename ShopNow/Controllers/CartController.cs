@@ -56,7 +56,7 @@ namespace ShopNow.Controllers
                 Status = i.c.c.Status,
                 DeliveryBoyName = i.c.c.DeliveryBoyName ?? "N/A",
                 PaymentMode = i.c.c.PaymentMode,
-                Amount = i.c.c.IsPickupDrop == true ? (i.c.p.RefundAmount != null && i.c.p.RefundAmount != 0) ? i.c.c.NetTotal - (i.c.p.RefundAmount ?? 0) : i.c.c.TotalPrice : i.c.p.Amount - (i.c.p.RefundAmount ?? 0),
+                Amount = i.c.c.IsPickupDrop == true ? (i.c.p.RefundAmount != null && i.c.p.RefundAmount != 0) ? i.c.c.NetTotal - (i.c.p.RefundAmount ?? 0) : i.c.c.TotalPrice : i.c.c.NetTotal - (i.c.p.RefundAmount ?? 0),
                 CustomerPhoneNumber = i.c.c.CustomerPhoneNumber,
                 RefundAmount = i.c.p.RefundAmount ?? 0,
                 RefundRemark = i.c.p.RefundRemark ?? "",
