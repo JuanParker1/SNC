@@ -56,7 +56,11 @@ namespace ShopNow.Helpers
                         body = body,
 
                         title = title,
-                        soundname = sound
+                        sound = "test",
+                        //link= "",
+                        //priority = "high",
+                        //show_in_foreground = true
+
                     }
                 };
 
