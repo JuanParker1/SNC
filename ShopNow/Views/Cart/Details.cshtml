@@ -1249,13 +1249,50 @@
             }
 
             function getDeliveryCharge() {
-                var DeliveryLatitude = $('input[name="Latitude"]').val();
-                var DeliveryLongitude = $('input[name="Longitude"]').val();
-                $.getJSON("/Cart/GetDeliveryCharge", { PickupLatitude: @Model.PickupLatitude, PickupLongitude: @Model.PickupLongitude, DeliveryLatitude: DeliveryLatitude, DeliveryLongitude: DeliveryLongitude }, function (data) {
-                    $('input[name="DeliveryCharge"]').val(data.DeliveryCharge.toFixed(2));
-                    $('input[name="Distance"]').val(data.Distance.toFixed(2));
+                var shopid = $('#ShopId').val();
+                var itemTotal = parseFloat($('#TotalPrice').val());
+                $.ajax({
+                    url: '/Service/GetLocationDetails?sourceLatitude=' + $('[name="ShopLatitude"]').val() + '&sourceLongitude=' + $('[name="ShopLongitude"]').val() + '&destinationLatitude=' + $('input[name="Latitude"]').val() + '&destinationLongitude=' + $('input[name="Longitude"]').val() + '',
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function (data) {
+                        if (data) {
+                            $('input[name="Distance"]').val(data.Distance.toFixed(2));
+                            var distance = data.Distance;
+                            $.getJSON("/CustomerPrescription/GetShopCharge", { shopid: shopid, itemTotal: itemTotal, customerid: 0, totalSize: 0, totalWeight: 0, distance: distance }, function (data) {
+                                if (data != null) {
+                                    $('input[name="DeliveryCharge"]').val(data.GrossDeliveryCharge.toFixed(2));
+                                }
+                            });
+                        } else {
+                            var service = new google.maps.DistanceMatrixService();
+                            const origin = { lat: parseFloat($('[name="ShopLatitude"]').val()), lng: parseFloat($('[name="ShopLongitude"]').val()) };
+                            const dest = { lat: parseFloat($('[name="Latitude"]').val()), lng: parseFloat($('[name="Longitude"]').val()) };
+                            const request = {
+                                origins: [origin],
+                                destinations: [dest],
+                                travelMode: google.maps.TravelMode.DRIVING,
+                            };
+                            service.getDistanceMatrix(request).then((response) => {
+                                var distance = (response.rows[0].elements[0].distance.value / 1000).toFixed(2);
+                                var duration = (response.rows[0].elements[0].duration.value / 60).toFixed(2);
+                                $('input[name="Distance"]').val(distance);
+                                saveLocation(origin.lat, origin.lng, dest.lat, dest.lng, distance, duration);
+                                var distance = distance;
+                                $.getJSON("/CustomerPrescription/GetShopCharge", { shopid: shopid, itemTotal: itemTotal, customerid: 0, totalSize: 0, totalWeight: 0, distance: distance }, function (data) {
+                                    if (data != null) {
+                                        $('input[name="DeliveryCharge"]').val(data.GrossDeliveryCharge.toFixed(2));
+                                    }
+                                });
+
+                            });
+                        }
+                    },
+                    error: function () { alert('Something went wrong, try again later!'); },
                 });
             }
+
+       
         // Update Delivered Order Delivery Address
 
         var geocoder1;

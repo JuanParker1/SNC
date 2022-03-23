@@ -958,6 +958,8 @@ namespace ShopNow.ViewModels
             public int Status { get; set; }
             public DateTime DateEncoded { get; set; }
             public int OrderNumber { get; set; }
+            public double RefundAmount { get; set; }
+            public string RefundRemarks { get; set; }
             public string StatusText
             {
                 get

@@ -56,7 +56,7 @@ namespace ShopNow.Controllers
                 Status = i.c.c.Status,
                 DeliveryBoyName = i.c.c.DeliveryBoyName ?? "N/A",
                 PaymentMode = i.c.c.PaymentMode,
-                Amount = i.c.c.IsPickupDrop == true ? (i.c.p.RefundAmount != null && i.c.p.RefundAmount != 0) ? i.c.c.NetTotal - (i.c.p.RefundAmount ?? 0) : i.c.c.TotalPrice : i.c.p.Amount - (i.c.p.RefundAmount ?? 0),
+                Amount = i.c.c.IsPickupDrop == true ? (i.c.p.RefundAmount != null && i.c.p.RefundAmount != 0) ? i.c.c.NetTotal - (i.c.p.RefundAmount ?? 0) : i.c.c.TotalPrice : i.c.c.NetTotal - (i.c.p.RefundAmount ?? 0),
                 CustomerPhoneNumber = i.c.c.CustomerPhoneNumber,
                 RefundAmount = i.c.p.RefundAmount ?? 0,
                 RefundRemark = i.c.p.RefundRemark ?? "",
@@ -899,7 +899,8 @@ namespace ShopNow.Controllers
                            DeliveryBoyId = i.o.DeliveryBoyId,
                            DeliveryBoyName = i.o.DeliveryBoyName,
                            ShopName = i.o.ShopName,
-                           DeliveryCharge = i.d.WorkType == 1 ? (i.o.DeliveryCharge == 35 ? 20 + i.o.TipsAmount : 20 + (i.o.DeliveryCharge - 35) + i.o.TipsAmount) : i.o.DeliveryCharge + i.o.TipsAmount,
+                          // DeliveryCharge = i.d.WorkType == 1 ? (i.o.DeliveryCharge == 35 ? 20 + i.o.TipsAmount : 20 + (i.o.DeliveryCharge - 35) + i.o.TipsAmount) : i.o.DeliveryCharge + i.o.TipsAmount,
+                          DeliveryCharge = i.d.WorkType == 1 ? ((i.o.DeliveryCharge == 35 || i.o.DeliveryCharge == 50) ? 20 : 20 + (i.o.IsPickupDrop == false ? i.o.DeliveryCharge - 35 : i.o.Distance <= 15 ? i.o.DeliveryCharge - 50 : (60 + ((i.o.Distance - 15) * 8)))) : i.o.DeliveryCharge,
                            DeliveryBoyPaymentStatus = i.o.DeliveryBoyPaymentStatus,
                            Distance = i.o.Distance
                        }).OrderByDescending(i => i.DateEncoded).ToList();
@@ -2004,7 +2005,7 @@ namespace ShopNow.Controllers
             db.SaveChanges();
             return RedirectToAction("Details", "Cart", new { id = AdminHelpers.ECodeLong(orderId) });
         }
-
+        [AccessPolicy(PageCode = "SNCCUDA313")]
         public ActionResult UpdateDeliveredOrderDeliveryAddress(long UpdateOrderId, string UpdateAddress, double UpdateDistance = 0, double UpdateLatitude = 0, double UpdateLongitude = 0, double UpdateDeliveryCharge = 0,double UpdateShopDeliveryDiscount=0, double UpdateNetDeliveryCharge=0)
         {
             var order = db.Orders.FirstOrDefault(i => i.Id == UpdateOrderId);

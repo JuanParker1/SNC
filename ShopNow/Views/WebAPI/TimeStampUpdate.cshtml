@@ -1,0 +1,130 @@
+﻿@model ShopNow.ViewModels.WebApiTimeStampViewModel
+@{
+    ViewBag.Title = "Time Stamp Update";
+}
+<title>ShopNow | @ViewBag.Title</title>
+<style>
+   .opa {
+        opacity: 0.3;
+    }
+</style>
+
+<div class="loading text-success d-none">
+    Loading
+    <span class="pulse"></span>
+    <span class="pulse"></span>
+    <span class="pulse"></span>
+    <span class="pulse"></span>
+</div>
+<div class="container-fluid D_Load">
+    <div class="row">
+        <div class="col-md-4">
+            <h5 class="mt-1 text-success" style="letter-spacing:1px">@ViewBag.Title</h5>
+        </div>
+        <div class="col-md-8 text-right">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 mx-auto">
+            @using (Html.BeginForm("TimeStampUpdate", "WebApi", FormMethod.Post, new { id = "WebApiTsUpdateForm", role = "form", enctype = "multipart/form-data" }))
+            {
+                <div class="card">
+                    <div class="col-md-10 mx-auto">
+                        <div class="card-body">
+                            @Html.AntiForgeryToken()
+                            <div class="form-group row">
+                                <div class="col-md-3 text-md-left">
+                                    <label class="col-form-label"><strong class="text-secondary">Shop Name</strong></label>
+                                </div>
+                                <div class="col-md-6">
+                                    <select id="ShopId" name="ShopId" class="form-control"></select>
+                                    <input type="hidden" name="ShopName" id="ShopName" />
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-3 text-md-left">
+                                    <label class="col-form-label"><strong class="text-secondary">Time Stamp</strong></label>
+                                    <label class="col-form-label"><strong class="text-secondary">(2021 03 13 15 30 06)</strong></label>
+                                    <table role="presentation">
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    <label class="mb-0"><small>YYYY</small></label>
+                                                </td>
+                                                <td>
+                                                    <label class="mb-0 ml-2"><small>MM</small></label>
+                                                </td>
+                                                <td>
+                                                    <label class="mb-0 ml-2"><small>DD</small></label>
+                                                </td>
+                                                <td>
+                                                    <label class="mb-0 ml-2"><small>HH</small></label>
+                                                </td>
+                                                <td>
+                                                    <label class="mb-0 ml-2"><small>MM</small></label>
+                                                </td>
+                                                <td>
+                                                    <label class="mb-0 ml-2"><small>SS</small></label>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="col-md-6">
+                                    <input type="text" class="form-control" name="TimeStamp" id="TimeStamp" />
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-2 mx-auto">
+                                    <button type="button" class="btn btn-block btn-success Save"><span class="glyphicon glyphicon-file"></span>Sync</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+    <!--Select2-->
+    <script src="~/Scripts/select2/js/select2.js"></script>
+    <link href="~/Scripts/select2/css/select2.css" rel="stylesheet" />
+    <link href="~/Content/select2/select2.custom.css" rel="stylesheet" />
+    <!--Select2 End-->
+    <script src="~/Scripts/sweetalert/sweetalert.min.js"></script>
+    <link href="~/Content/sweetalert/sweetalert.css" rel="stylesheet" />
+    <script>
+        $(document).ready(function () {
+            $('#ShopId').select2({
+                placeholder: "Search Shop",
+                width: '100%',
+                ajax: {
+                    url: "/WebApi/GetShopSelect2",
+                    delay: 250,
+                    dataType: 'json'
+                }
+            }).on('select2:select', function (e) {
+                $('input[name="ShopName"]').val(e.params.data.text);
+            });
+            
+
+            $(".Save").click(function () {
+                var shop = $("#ShopId").val();
+                var timestamp = $("#TimeStamp").val();
+                if (shop != null && timestamp != 0) {
+                    $(".loading").removeClass("d-none");
+                    $(".D_Load").addClass("opa");
+                    $(".Save").prop("disabled", true);
+                    $("#WebApiTsUpdateForm").submit();
+                } else if (shop == null) {
+                    swal("Warning!", "Please select Shop Name", "warning");
+                } else {
+                    swal("Warning!", "Please type TimeStamp", "warning");
+                }
+            });
+        });
+    </script>
+}

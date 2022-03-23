@@ -85,18 +85,18 @@ namespace ShopNow.Controllers
             var customer = db.Customers.FirstOrDefault(m => m.Id == dId);
             var model = _mapper.Map<Customer, CustomerDetailsViewModel>(customer);
             model.OrderListItems = db.Orders.Where(i => i.CustomerId == dId && (i.Status == 6 || i.Status == 7 || i.Status == 9 || i.Status == 10))
-                .Join(db.Payments, o=>o.OrderNumber, p=>p.OrderNumber, (o,p)=>new { o,p})
+                .Join(db.Payments, o => o.OrderNumber, p => p.OrderNumber, (o, p) => new { o, p })
                 .Select(i => new CustomerDetailsViewModel.OrderListItem
                 {
-                    Amount = Math.Abs(i.o.NetTotal - (i.p.RefundAmount??0)),
+                    Amount = Math.Abs(i.o.NetTotal - (i.p.RefundAmount ?? 0)),
                     DateEncoded = i.o.DateEncoded,
                     OrderNumber = i.o.OrderNumber,
                     QuantityCount = i.o.TotalQuantity,
                     ProductCount = i.o.TotalProduct,
                     ShopName = i.o.ShopName,
                     Status = i.o.Status
-                }).OrderByDescending(i=>i.DateEncoded).ToList();
-            model.Name = (string.IsNullOrEmpty(model.Name) || model.Name=="Null" ) ? "N/A" : model.Name;
+                }).OrderByDescending(i => i.DateEncoded).ToList();
+            model.Name = (string.IsNullOrEmpty(model.Name) || model.Name == "Null") ? "N/A" : model.Name;
             model.TotalOrderCount = model.OrderListItems.Count();
             model.CancelOrderCount = model.OrderListItems.Where(i => i.Status != 6).Count();
             model.DeliveredOrderCount = model.OrderListItems.Where(i => i.Status == 6).Count();
@@ -116,8 +116,8 @@ namespace ShopNow.Controllers
             var customer = db.Customers.Where(m => m.Id == dId).FirstOrDefault();
             var model = _mapper.Map<Customer, CustomerEditViewModel>(customer);
             model.DOB = customer.DOB != null ? customer.DOB.Value.ToString("dd-MM-yyyy") : "N/A";
-            model.ImageAadharPath = model.ImageAadharPath != null ? (model.ImageAadharPath.Contains("https://s3.ap-south-1.amazonaws.com/shopnowchat.com/") ? model.ImageAadharPath : "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/" +model.ImageAadharPath) : "";
-            model.ImagePath = model.ImagePath != null ? (model.ImagePath.Contains("https://s3.ap-south-1.amazonaws.com/shopnowchat.com/") ? model.ImagePath : "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/" +model.ImagePath) : "";
+            model.ImageAadharPath = model.ImageAadharPath != null ? (model.ImageAadharPath.Contains("https://s3.ap-south-1.amazonaws.com/shopnowchat.com/") ? model.ImageAadharPath : "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/" + model.ImageAadharPath) : "";
+            model.ImagePath = model.ImagePath != null ? (model.ImagePath.Contains("https://s3.ap-south-1.amazonaws.com/shopnowchat.com/") ? model.ImagePath : "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/" + model.ImagePath) : "";
             return View(model);
         }
 
@@ -207,7 +207,23 @@ namespace ShopNow.Controllers
             return Json(new { IsAdded = IsAdded, message = message, message1 = message1 }, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult StaffCreate(string StaffName,string StaffId,string StaffPassword)
+        [AccessPolicy(PageCode = "SNCCUR110")]
+        public JsonResult Remove(int Id)
+        {
+            var user = ((Helpers.Sessions.User)Session["USER"]);
+            var customer = db.Customers.Where(m => m.Id == Id).FirstOrDefault();
+            if (customer != null)
+            {
+                customer.Position = 0;
+                customer.DateUpdated = DateTime.Now;
+                customer.UpdatedBy = user.Name;
+                db.Entry(customer).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+            }
+            return Json(true, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult StaffCreate(string StaffName, string StaffId, string StaffPassword)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
             bool IsAdded = false;
@@ -239,20 +255,29 @@ namespace ShopNow.Controllers
             return Json(new { IsAdded = IsAdded, message = message, message1 = message1 }, JsonRequestBehavior.AllowGet);
         }
 
-        [AccessPolicy(PageCode = "SNCCUR110")]
-        public JsonResult Remove(int Id)
+        public JsonResult AddWalletAmount(int Id, double walletamount, string description)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
-            var customer = db.Customers.Where(m => m.Id == Id).FirstOrDefault();
-            if (customer != null)
+            ViewBag.Name = user.Name;
+            var customer = db.Customers.FirstOrDefault(m => m.Id == Id);
+            if (customer != null && walletamount != 0)
             {
-                customer.Position = 0;
-                customer.DateUpdated = DateTime.Now;
+                customer.WalletAmount += walletamount;
                 customer.UpdatedBy = user.Name;
+                customer.DateUpdated = DateTime.Now;
                 db.Entry(customer).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
+
+                CustomerWalletHistory wallethistory = new CustomerWalletHistory();
+                wallethistory.CustomerId = Id;
+                wallethistory.Amount = walletamount;
+                wallethistory.Type = 1;
+                wallethistory.Description = description;
+                wallethistory.DateEncoded = DateTime.Now;
+                db.CustomerWalletHistories.Add(wallethistory);
+                db.SaveChanges();
             }
-            return Json(true, JsonRequestBehavior.AllowGet);
+            return Json(new { message = "Rs." + walletamount + " Added Successfully" }, JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult VerifyAadharImage(int code,string aadharNumber)

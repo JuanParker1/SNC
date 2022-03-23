@@ -16,18 +16,17 @@ namespace ShopNow.Controllers
         public ActionResult List(DailyVisitorListViewModel model)
         {
             model.DateFilter = model.DateFilter == null ? DateTime.Now : model.DateFilter;
-            model.ListItems = db.DailyVisitors
+            model.ListItems = db.DailyVisitors.Where(i => DbFunctions.TruncateTime(i.DateUpdated) == DbFunctions.TruncateTime(model.DateFilter))
+                .GroupBy(i => i.ShopId)
                 .AsEnumerable()
-                .Where(i => DbFunctions.TruncateTime(i.DateUpdated) == DbFunctions.TruncateTime(model.DateFilter))
-                .GroupBy(i => new { i.DateUpdated.Date, i.ShopId })
                 .Select(i => new DailyVisitorListViewModel.ListItem
                 {
                     Count = i.Count(),
                     //CustomerId = i.Key.CustomerId,
-                    DateUpdated = i.Key.Date,
-                    ShopId = i.Key.ShopId,
+                    DateUpdated = i.FirstOrDefault().DateUpdated,
+                    ShopId = i.Key,
                     ShopName = i.FirstOrDefault().ShopName
-                }).ToList();
+                }).OrderBy(i => i.DateUpdated).ToList();
             return View(model);
         }
     }
