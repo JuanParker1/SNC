@@ -3381,6 +3381,7 @@
     <Content Include="Views\SearchData\MappedList.cshtml" />
     <Content Include="Views\DistanceSetting\Index.cshtml" />
     <Content Include="Views\WebAPI\TimeStampUpdate.cshtml" />
+    <Content Include="Views\DailyVisitor\List.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
