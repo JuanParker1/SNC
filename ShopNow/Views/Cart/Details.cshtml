@@ -1251,8 +1251,10 @@
             function getDeliveryCharge() {
                 var shopid = $('#ShopId').val();
                 var itemTotal = parseFloat($('#TotalPrice').val());
+                var sourceLatitude = @Model.PickupLatitude;
+                var sourceLongitude = @Model.PickupLongitude;
                 $.ajax({
-                    url: '/Service/GetLocationDetails?sourceLatitude=' + $('[name="ShopLatitude"]').val() + '&sourceLongitude=' + $('[name="ShopLongitude"]').val() + '&destinationLatitude=' + $('input[name="Latitude"]').val() + '&destinationLongitude=' + $('input[name="Longitude"]').val() + '',
+                    url: '/Service/GetLocationDetails?sourceLatitude=' + sourceLatitude + '&sourceLongitude=' + sourceLongitude + '&destinationLatitude=' + $('input[name="Latitude"]').val() + '&destinationLongitude=' + $('input[name="Longitude"]').val() + '',
                     type: 'GET',
                     dataType: 'json',
                     success: function (data) {
@@ -1266,7 +1268,7 @@
                             });
                         } else {
                             var service = new google.maps.DistanceMatrixService();
-                            const origin = { lat: parseFloat($('[name="ShopLatitude"]').val()), lng: parseFloat($('[name="ShopLongitude"]').val()) };
+                            const origin = { lat: parseFloat(sourceLatitude), lng: parseFloat(sourceLongitude) };
                             const dest = { lat: parseFloat($('[name="Latitude"]').val()), lng: parseFloat($('[name="Longitude"]').val()) };
                             const request = {
                                 origins: [origin],
@@ -1292,7 +1294,7 @@
                 });
             }
 
-       
+
         // Update Delivered Order Delivery Address
 
         var geocoder1;
