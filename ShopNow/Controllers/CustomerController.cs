@@ -277,7 +277,7 @@ namespace ShopNow.Controllers
                 db.CustomerWalletHistories.Add(wallethistory);
                 db.SaveChanges();
             }
-            return Json(new { message = walletamount + "Added Successfully" }, JsonRequestBehavior.AllowGet);
+            return Json(new { message = "Rs." + walletamount + " Added Successfully" }, JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult VerifyAadharImage(int code,string aadharNumber)
