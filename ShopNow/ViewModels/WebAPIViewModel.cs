@@ -7,12 +7,10 @@ namespace ShopNow.ViewModels
 {
     public class WebApiTimeStampViewModel
     {
-        public int CategoryType { get; set; }
         public int ShopId { get; set; }
         public string ShopName { get; set; }
-        public string Link { get; set; }
-        public string AuthName { get; set; }
-        public string AuthKey { get; set; }
+        public string TimeStamp { get; set; }
+
     }
     public class WebApiCreateViewModel
     {
