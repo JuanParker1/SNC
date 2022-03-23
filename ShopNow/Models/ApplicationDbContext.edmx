@@ -600,6 +600,7 @@
           <Property Name="CustomerId" Type="int" Nullable="false" />
           <Property Name="ShopId" Type="int" Nullable="false" />
           <Property Name="ShopName" Type="nvarchar" MaxLength="500" />
+          <Property Name="DateEncoded" Type="datetime" Nullable="false" />
           <Property Name="DateUpdated" Type="datetime" Nullable="false" />
         </EntityType>
         <EntityType Name="DeliveryBoys">
@@ -3835,6 +3836,7 @@
           <Property Name="CustomerId" Type="Int32" Nullable="false" />
           <Property Name="ShopId" Type="Int32" Nullable="false" />
           <Property Name="ShopName" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="DateEncoded" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="DateUpdated" Type="DateTime" Nullable="false" Precision="3" />
         </EntityType>
       </Schema>
@@ -5738,6 +5740,7 @@
             <EntityTypeMapping TypeName="sncModel.DailyVisitor">
               <MappingFragment StoreEntitySet="DailyVisitors">
                 <ScalarProperty Name="DateUpdated" ColumnName="DateUpdated" />
+                <ScalarProperty Name="DateEncoded" ColumnName="DateEncoded" />
                 <ScalarProperty Name="ShopName" ColumnName="ShopName" />
                 <ScalarProperty Name="ShopId" ColumnName="ShopId" />
                 <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />

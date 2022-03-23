@@ -7629,6 +7629,7 @@ namespace ShopNow.Controllers
                 DailyVisitor dailyVisitor = new DailyVisitor
                 {
                     CustomerId = customerId,
+                    DateEncoded = DateTime.Now,
                     DateUpdated = DateTime.Now,
                     ShopId = shopId,
                     ShopName = shopName
