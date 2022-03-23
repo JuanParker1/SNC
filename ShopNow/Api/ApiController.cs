@@ -7371,7 +7371,9 @@ namespace ShopNow.Controllers
                         PickupAddress = i.o.PickupAddress,
                         Remarks = i.o.Remarks,
                         Status = i.o.Status,
-                        OrderNumber = i.o.OrderNumber
+                        OrderNumber = i.o.OrderNumber,
+                        RefundAmount = i.p.RefundAmount ?? 0,
+                        RefundRemarks = i.p.RefundRemark
                     }).ToList();
             }
             else if (type == 1)
@@ -7391,7 +7393,9 @@ namespace ShopNow.Controllers
                         PickupAddress = i.o.PickupAddress,
                         Remarks = i.o.Remarks,
                         Status = i.o.Status,
-                        OrderNumber = i.o.OrderNumber
+                        OrderNumber = i.o.OrderNumber,
+                        RefundAmount = i.p.RefundAmount ?? 0,
+                        RefundRemarks = i.p.RefundRemark
                     }).ToList();
             }
             else if (type == 2)
@@ -7411,7 +7415,9 @@ namespace ShopNow.Controllers
                         PickupAddress = i.o.PickupAddress,
                         Remarks = i.o.Remarks,
                         Status = i.o.Status,
-                        OrderNumber = i.o.OrderNumber
+                        OrderNumber = i.o.OrderNumber,
+                        RefundAmount = i.p.RefundAmount ?? 0,
+                        RefundRemarks = i.p.RefundRemark
                     }).ToList();
             }
             else if (type == 3)
@@ -7431,7 +7437,9 @@ namespace ShopNow.Controllers
                         PickupAddress = i.o.PickupAddress,
                         Remarks = i.o.Remarks,
                         Status = i.o.Status,
-                        OrderNumber = i.o.OrderNumber
+                        OrderNumber = i.o.OrderNumber,
+                        RefundAmount = i.p.RefundAmount ?? 0,
+                        RefundRemarks = i.p.RefundRemark
                     }).ToList();
             }
             else
@@ -7451,7 +7459,9 @@ namespace ShopNow.Controllers
                         PickupAddress = i.o.PickupAddress,
                         Remarks = i.o.Remarks,
                         Status = i.o.Status,
-                        OrderNumber = i.o.OrderNumber
+                        OrderNumber = i.o.OrderNumber,
+                        RefundAmount = i.p.RefundAmount ?? 0,
+                        RefundRemarks = i.p.RefundRemark
                     }).ToList();
             }
             int count = model.ListItems.Count();
