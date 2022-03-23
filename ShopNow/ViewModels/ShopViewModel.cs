@@ -499,6 +499,7 @@ namespace ShopNow.ViewModels
         public string DistributorNumber { get; set; }
         public double Latitude { get; set; }
         public double Longitude { get; set; }
+        public int ShopCategoryId { get; set; }
     }
 
 
