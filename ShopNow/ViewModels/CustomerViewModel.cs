@@ -96,6 +96,7 @@ namespace ShopNow.ViewModels
         {
             public DateTime DateEncoded { get; set; }
             public double Amount { get; set; }
+            public long Id { get; set; }
             public int QuantityCount { get; set; }
             public int ProductCount { get; set; }
             public int OrderNumber { get; set; }

@@ -288,6 +288,12 @@ namespace ShopNow.Controllers
             return View();
         }
 
+        public JsonResult GetLastTS(int ShopId)
+        {
+            var timestamp = db.Products.Where(i => i.ShopId == ShopId && i.Status == 0).Max(i=> i.ItemTimeStamp);
+            return Json(timestamp, JsonRequestBehavior.AllowGet);
+        }
+
         [AccessPolicy(PageCode = "SNCWAC294")]
         public ActionResult Create()
         {

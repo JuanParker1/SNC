@@ -762,5 +762,15 @@ namespace ShopNow.ViewModels
             public double DeliveryCredits { get; set; }
             public int OrderNo { get; set; }
         }
+
+        public List<OrderWiseCreditReportListItem> OrderWiseCreditReportList { get; set; }
+        public class OrderWiseCreditReportListItem
+        {
+            public DateTime DateEncoded { get; set; }
+            public int OrderNumber { get; set; }
+            public double PlatformCredit { get; set; }
+            public double DeliveryCredit { get; set; }
+        }
+
     }
 }

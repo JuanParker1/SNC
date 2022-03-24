@@ -96,7 +96,7 @@
                    columns.Add()
                     .Encoded(false)
                     .Sanitized(false)
-                       .RenderValueAs(o => (o.Amount == 0) ? "<a href='#modal-refund' data-orderno='" + o.OrderNumber + "' data-totalprice='" + o.TotalPrice + "' data-distance='"+o.Distance+"' data-toggle='modal' data-target='#modal-updateAmount' class='btn-modal-updateAmount'><u>" + o.Amount + "</u></a>" : "<span>" + o.Amount + "</span>").Titled("Amount").SetWidth(10);
+                       .RenderValueAs(o => (o.Amount == 0) ? "<a href='#modal-refund' data-orderno='" + o.OrderNumber + "' data-totalprice='" + o.TotalPrice + "' data-distance='"+o.Distance+"' data-toggle='modal' data-target='#modal-updateAmount' class='btn-modal-updateAmount'><u>" + o.Amount + "</u></a>" : "<span>" + Math.Round(o.Amount) + "</span>").Titled("Amount").SetWidth(10);
                    //columns.Add(c => c.Amount).Titled("Amount").Filterable(true).SetWidth(10);
                    columns.Add(c => c.DeliveryAddress).Titled("Delivery Address").Filterable(true).SetWidth(40);
                    columns.Add(c => c.CustomerPhoneNumber).Titled("Cust.PhoneNo").Filterable(true).SetWidth(35);
