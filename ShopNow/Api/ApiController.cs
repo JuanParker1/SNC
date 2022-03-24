@@ -1170,6 +1170,7 @@ namespace ShopNow.Controllers
                     payment.PaymentModeType = 1;
                     payment.Key = "Razor";
                     payment.ReferenceCode = model.ReferenceCode;
+                    payment.Amount = order.NetTotal;
                     db.Entry(payment).State = EntityState.Modified;
                     db.SaveChanges();
 
