@@ -5085,6 +5085,22 @@ namespace ShopNow.Controllers
                 }).OrderByDescending(i => i.DateEncoded).ToList();
                 return Json(model.RefundLists, JsonRequestBehavior.AllowGet);
             }
+            else if (type == 3) //Orderwise Credit Report
+            {
+                model.OrderWiseCreditReportList = db.Payments
+                    .Where(i => ((DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(startDate)) &&
+                (DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(endDate))))
+                .Join(db.Orders.Where(i => (i.Status == 6 || i.Status == 7) && i.ShopId == shopId), p => p.OrderNumber, c => c.OrderNumber, (p, c) => new { p, c })
+                .Select(i => new ShopApiReportsViewModel.OrderWiseCreditReportListItem
+                {
+                    DateEncoded = i.p.DateEncoded,
+                    DeliveryCredit = i.c.NetDeliveryCharge,
+                    OrderNumber = i.c.OrderNumber,
+                    PlatformCredit = i.c.RatePerOrder
+                }).OrderByDescending(i => i.DateEncoded).ToList();
+
+                return Json(model.OrderWiseCreditReportList, JsonRequestBehavior.AllowGet);
+            }
             return Json("", JsonRequestBehavior.AllowGet);
         }
 
@@ -7201,17 +7217,17 @@ namespace ShopNow.Controllers
             return Json(list, JsonRequestBehavior.AllowGet);
         }
 
-        //public JsonResult UpdateDeliveryBoyCashHandOverPayment(int orderid)
-        //{
-        //    var order = db.Orders.FirstOrDefault(i => i.Id == orderid);
-        //    if (order != null)
-        //    {
-        //        order.DeliveryOrderPaymentStatus = 1;
-        //        db.Entry(order).State = System.Data.Entity.EntityState.Modified;
-        //        db.SaveChanges();
-        //    }
-        //    return Json(true, JsonRequestBehavior.AllowGet);
-        //}
+        public JsonResult UpdateDeliveryBoyCashHandOverPayment(int orderid)
+        {
+            var order = db.Orders.FirstOrDefault(i => i.Id == orderid);
+            if (order != null)
+            {
+                order.DeliveryOrderPaymentStatus = 1;
+                db.Entry(order).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+            }
+            return Json(true, JsonRequestBehavior.AllowGet);
+        }
 
         [HttpPost]
         public JsonResult SaveShopParcelDrop(ShopCreateParcelDropViewModel model)
@@ -7573,7 +7589,8 @@ namespace ShopNow.Controllers
               {
                   ImagePath = ((!string.IsNullOrEmpty(i.s.ImagePath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.s.ImagePath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/notavailable.png"),
                   Name = i.s.Name,
-                  PhoneNumber = i.s.PhoneNumber
+                  PhoneNumber = i.s.PhoneNumber,
+                  Id = i.s.Id
               }).ToList();
             return Json(list, JsonRequestBehavior.AllowGet);
         }
@@ -7630,6 +7647,18 @@ namespace ShopNow.Controllers
                     db.ShopStaffs.Add(ss);
                     db.SaveChanges();
                 }
+            }
+            return Json(true, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult DeleteStaff(int id)
+        {
+            var staff = db.Staffs.FirstOrDefault(i => i.Id == id);
+            if (staff != null)
+            {
+                staff.Status = 2;
+                db.Entry(staff).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
             }
             return Json(true, JsonRequestBehavior.AllowGet);
         }

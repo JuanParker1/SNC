@@ -117,7 +117,7 @@
                                             <td>@count</td>
                                             <td><b class="@item.StatusTextColor">@item.StatusText</b></td>
                                             <td>@item.DateEncoded.ToString("dd-MMM-yyyy hh:mm tt")</td>
-                                            <td>@item.OrderNumber</td>
+                                            <td><a href="~/Cart/Details?id=@ShopNow.Helpers.AdminHelpers.ECodeLong(item.Id)"><span class="font-weight-bold">@item.OrderNumber</span></a></td>
                                             <td>@item.ShopName</td>
                                             <td>@item.ProductCount</td>
                                             <td>@item.QuantityCount</td>
@@ -144,6 +144,7 @@
         </div>
     </div>
 </div>
+
 <div class="modal fade" id="modal-update-walletamount" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-sm">
         <div class="modal-content">
@@ -157,7 +158,6 @@
                 <div class="form-group">
                     <label class="font-weight-bold text-secondary">Description</label>
                     <textarea class="form-control" name="Description" id="Description" required></textarea>
-                    @*<input type="text" name="Description" id="Description" class="form-control" required />*@
                 </div>
                 <div class="text-right">
                     <button class="btn btn-sm btn-success mr-3" id="btn-AddWallet">Submit</button>

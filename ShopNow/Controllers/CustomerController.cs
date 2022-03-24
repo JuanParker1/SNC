@@ -88,6 +88,7 @@ namespace ShopNow.Controllers
                 .Join(db.Payments, o => o.OrderNumber, p => p.OrderNumber, (o, p) => new { o, p })
                 .Select(i => new CustomerDetailsViewModel.OrderListItem
                 {
+                    Id = i.o.Id,
                     Amount = Math.Abs(i.o.NetTotal - (i.p.RefundAmount ?? 0)),
                     DateEncoded = i.o.DateEncoded,
                     OrderNumber = i.o.OrderNumber,
