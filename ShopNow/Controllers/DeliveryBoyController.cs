@@ -428,7 +428,7 @@ namespace ShopNow.Controllers
             var fcmToken = (from c in db.Customers
                             where c.Id == deliveryBoy.CustomerId
                             select c.FcmTocken ?? "").FirstOrDefault().ToString();
-            Helpers.PushNotification.SendbydeviceId("Your registration has been accepted. Go online to receive order.", "ShopNowChat", "a.mp3", fcmToken.ToString());
+            Helpers.PushNotification.SendbydeviceId("Your registration has been accepted. Go online to receive order.", "Snowch", "OrderStatus","", fcmToken.ToString());
 
             return RedirectToAction("List");
         }
@@ -454,7 +454,7 @@ namespace ShopNow.Controllers
             var fcmToken = (from c in db.Customers
                             where c.Id == deliveryBoy.CustomerId
                             select c.FcmTocken ?? "").FirstOrDefault().ToString();
-            Helpers.PushNotification.SendbydeviceId("Your registration has been rejected.", "ShopNowChat", "a.mp3", fcmToken.ToString());
+            Helpers.PushNotification.SendbydeviceId("Your registration has been rejected.", "Snowch", "OrderStatus","", fcmToken.ToString());
             return RedirectToAction("List");
         }
 

@@ -241,7 +241,7 @@ namespace ShopNow.Controllers
                 var dateAndTime = DateTime.Now;
                 var date = dateAndTime.ToString("d");
                 var time = dateAndTime.ToString("HH:mm");
-                Helpers.PushNotification.SendbydeviceId($"Hi, " + otpmodel.Otp + " is the OTP for (Shop Now Chat) Verification at " + time + " with " + otpmodel.ReferenceCode + " reference - Joyra", "Snowch", "a.mp3", customer.FcmTocken ?? "".ToString());
+                Helpers.PushNotification.SendbydeviceId($"Hi, " + otpmodel.Otp + " is the OTP for (Shop Now Chat) Verification at " + time + " with " + otpmodel.ReferenceCode + " reference - Joyra", "Snowch", "","", customer.FcmTocken ?? "".ToString());
                 otpmodel.Status = 0;
                 otpmodel.DateEncoded = DateTime.Now;
                 otpmodel.DateUpdated = DateTime.Now;
@@ -1396,7 +1396,7 @@ namespace ShopNow.Controllers
                                             join s in db.Shops on c.Id equals s.CustomerId
                                             where s.Id == model.ShopId
                                             select c.FcmTocken ?? "").FirstOrDefault().ToString();
-                            Helpers.PushNotification.SendbydeviceId("You have received new order.Accept Soon", "Snowch", "a.mp3", fcmToken.ToString());
+                            Helpers.PushNotification.SendbydeviceId("You have received new order.Accept Soon", "Snowch", "OwnerNewOrder","", fcmToken.ToString());
                         }
 
                         return Json(new { status = true, orderId = order.Id }, JsonRequestBehavior.AllowGet);
@@ -1651,7 +1651,7 @@ namespace ShopNow.Controllers
                     //accept
                     if (status == 3)
                     {
-                        Helpers.PushNotification.SendbydeviceId($"Your order has been accepted by shop({order.ShopName}).", "Snowch", "a.mp3", fcmToken.ToString());
+                        Helpers.PushNotification.SendbydeviceId($"Your order has been accepted by shop({order.ShopName}).", "Snowch", "OrderStatus", "", fcmToken.ToString());
                     }
                 }
                 //Refund
@@ -1666,7 +1666,7 @@ namespace ShopNow.Controllers
                         payment.DateUpdated = DateTime.Now;
                         db.Entry(payment).State = System.Data.Entity.EntityState.Modified;
                         db.SaveChanges();
-                        Helpers.PushNotification.SendbydeviceId($"Your refund of amount {payment.Amount} for order no {payment.OrderNumber} is for {payment.RefundRemark} initiated and you will get credited with in 7 working days.", "Snowch", "a.mp3", fcmToken.ToString());
+                        Helpers.PushNotification.SendbydeviceId($"Your refund of amount {payment.Amount} for order no {payment.OrderNumber} is for {payment.RefundRemark} initiated and you will get credited with in 7 working days.", "Snowch", "OrderStatus", "", fcmToken.ToString());
                     }
 
                     //Add Wallet Amount to customer
@@ -2112,7 +2112,7 @@ namespace ShopNow.Controllers
                     var fcmToken = (from c in db.Customers
                                     where c.Id == order.CustomerId
                                     select c.FcmTocken ?? "").FirstOrDefault().ToString();
-                    Helpers.PushNotification.SendbydeviceId(notificationMessage, "Snowch", "a.mp3", fcmToken.ToString());
+                    Helpers.PushNotification.SendbydeviceId(notificationMessage, "Snowch", "OrderPickedup", "", fcmToken.ToString());
                 }
                 return Json(new { message = "Successfully DelivaryBoy PickUp!" }, JsonRequestBehavior.AllowGet);
             }
@@ -2292,7 +2292,7 @@ namespace ShopNow.Controllers
 
                 string fcmtocken = customerDetails.FcmTocken ?? "";
 
-                Helpers.PushNotification.SendbydeviceId($"Your order on shop({order.ShopName}) has been delivered by delivery partner {order.DeliveryBoyName}.", "Snowch", "a.mp3", fcmtocken.ToString());
+                Helpers.PushNotification.SendbydeviceId($"Your order on shop({order.ShopName}) has been delivered by delivery partner {order.DeliveryBoyName}.", "Snowch", "OrderStatus", "", fcmtocken.ToString());
             }
             return Json(new { message = "Successfully DelivaryBoy Delivered!" }, JsonRequestBehavior.AllowGet);
         }
@@ -2333,7 +2333,7 @@ namespace ShopNow.Controllers
                     var fcmToken = (from c in db.Customers
                                     where c.Id == deliveryBoyId
                                     select c.FcmTocken ?? "").FirstOrDefault().ToString();
-                    Helpers.PushNotification.SendbydeviceId("You have a new Order. Accept Soon.", "Snowch", "../../assets/b.mp3", fcmToken.ToString());
+                    Helpers.PushNotification.SendbydeviceId("You have a new Order. Accept Soon.", "Snowch", "DeliveryNewOrder", "", fcmToken.ToString());
                 }
 
                 if (order.CustomerId != 0)
@@ -2342,7 +2342,7 @@ namespace ShopNow.Controllers
                     var fcmTokenCustomer = (from c in db.Customers
                                             where c.Id == order.CustomerId
                                             select c.FcmTocken ?? "").FirstOrDefault().ToString();
-                    Helpers.PushNotification.SendbydeviceId($"Delivery Boy ${order.DeliveryBoyName} is Assigned for your Order.", "Snowch", "../../assets/b.mp3", fcmTokenCustomer.ToString());
+                    Helpers.PushNotification.SendbydeviceId($"Delivery Boy ${order.DeliveryBoyName} is Assigned for your Order.", "Snowch", "OrderStatus", "", fcmTokenCustomer.ToString());
                 }
                 return Json(new { message = "Successfully DelivaryBoy Assign!" }, JsonRequestBehavior.AllowGet);
             }
@@ -5922,7 +5922,7 @@ namespace ShopNow.Controllers
                         var fcmToken = (from c in db.Customers
                                         where c.Id == order.CustomerId
                                         select c.FcmTocken ?? "").FirstOrDefault().ToString();
-                        Helpers.PushNotification.SendbydeviceId($"Your refund of amount {payment.RefundAmount} for order no {payment.OrderNumber} is initiated and will get credited with in 7 working days.", "ShopNowChat", "a.mp3", fcmToken.ToString());
+                        Helpers.PushNotification.SendbydeviceId($"Your refund of amount {payment.RefundAmount} for order no {payment.OrderNumber} is initiated and will get credited with in 7 working days.", "ShopNowChat", "OrderStatus", "", fcmToken.ToString());
                     }
                 }
                 return Json(true, JsonRequestBehavior.AllowGet);
@@ -7691,7 +7691,7 @@ namespace ShopNow.Controllers
         //test apis
         public JsonResult SendTestNotification(string deviceId = "", string title = "", string body = "")
         {
-            Helpers.PushNotification.SendbydeviceId(body, title, "test", deviceId);
+            Helpers.PushNotification.SendbydeviceId(body, title, "Orderpickedup", "https://images.unsplash.com/photo-1453728013993-6d66e9c9123a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8dmlld3xlbnwwfHwwfHw%3D&w=1000&q=80", deviceId);
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
