@@ -753,7 +753,7 @@ namespace ShopNow.Controllers
                     var fcmToken = (from c in db.Customers
                                     where c.Id == delivery.CustomerId
                                     select c.FcmTocken ?? "").FirstOrDefault().ToString();
-                    Helpers.PushNotification.SendbydeviceId("You have received new order. Accept Soon", "ShopNowChat", "a.mp3", fcmToken.ToString());
+                    Helpers.PushNotification.SendbydeviceId("You have received new order. Accept Soon", "Snowch", "DeliveryNewOrder", "", fcmToken.ToString());
                 }
                 //Customer
                 if (cart.CustomerId != 0)
@@ -761,7 +761,7 @@ namespace ShopNow.Controllers
                     var fcmTokenCustomer = (from c in db.Customers
                                             where c.Id == cart.CustomerId
                                             select c.FcmTocken ?? "").FirstOrDefault().ToString();
-                    Helpers.PushNotification.SendbydeviceId($"Delivery Boy {cart.DeliveryBoyName} is Assigned for your Order.", "ShopNowChat", "../../assets/b.mp3", fcmTokenCustomer.ToString());
+                    Helpers.PushNotification.SendbydeviceId($"Delivery Boy {cart.DeliveryBoyName} is Assigned for your Order.", "Snowch", "OrderStatus", "", fcmTokenCustomer.ToString());
                 }
                 return RedirectToAction("List");
             }
@@ -1009,7 +1009,7 @@ namespace ShopNow.Controllers
                     var fcmToken = (from c in db.Customers
                                     where c.Id == order.CustomerId
                                     select c.FcmTocken ?? "").FirstOrDefault().ToString();
-                    Helpers.PushNotification.SendbydeviceId($"Your order has been accepted by shop({order.ShopName}).", "ShopNowChat", "a.mp3", fcmToken.ToString());
+                    Helpers.PushNotification.SendbydeviceId($"Your order has been accepted by shop({order.ShopName}).", "ShopNowChat", "OrderStatus", "", fcmToken.ToString());
                 }
                 //AddPaymentData
                 //if (order.PaymentModeType == 1)
@@ -1092,11 +1092,11 @@ namespace ShopNow.Controllers
                                     where c.Id == order.CustomerId
                                     select c.FcmTocken ?? "").FirstOrDefault().ToString();
                     //order cancel
-                    Helpers.PushNotification.SendbydeviceId($"Shop({order.ShopName}) has rejected your order. Kindly contact shop for details or try another order.", "ShopNowChat", "a.mp3", fcmToken.ToString());
+                    Helpers.PushNotification.SendbydeviceId($"Shop({order.ShopName}) has rejected your order. Kindly contact shop for details or try another order.", "Snowch", "OrderStatus", "", fcmToken.ToString());
 
                     //Refund notification
                     if (payment.PaymentMode == "Online Payment" && status == 7)
-                        Helpers.PushNotification.SendbydeviceId($"Your refund of amount {payment.Amount} for order no {payment.OrderNumber} is for {payment.RefundRemark} initiated and you will get credited with in 7 working days.", "ShopNowChat", "a.mp3", fcmToken.ToString());
+                        Helpers.PushNotification.SendbydeviceId($"Your refund of amount {payment.Amount} for order no {payment.OrderNumber} is for {payment.RefundRemark} initiated and you will get credited with in 7 working days.", "Snowch", "OrderStatus", "", fcmToken.ToString());
 
                 }
                 //AddPaymentData
@@ -1210,7 +1210,7 @@ namespace ShopNow.Controllers
                 var fcmToken = (from c in db.Customers
                                 where c.Id == order.CustomerId
                                 select c.FcmTocken ?? "").FirstOrDefault().ToString();
-                Helpers.PushNotification.SendbydeviceId(notificationMessage, "ShopNowChat", "a.mp3", fcmToken.ToString());
+                Helpers.PushNotification.SendbydeviceId(notificationMessage, "Snowch", "OrderPickedup", "", fcmToken.ToString());
             }
             return RedirectToAction("Edit", "Cart", new { OrderNumber = OrderNumber, id = AdminHelpers.ECodeLong(id) });
         }
@@ -1351,7 +1351,7 @@ namespace ShopNow.Controllers
             {
                 string fcmtocken = customerDetails.FcmTocken ?? "";
 
-                Helpers.PushNotification.SendbydeviceId($"Your order on shop({ order.ShopName}) has been delivered by delivery partner { order.DeliveryBoyName}.", "ShopNowChat", "a.mp3", fcmtocken);
+                Helpers.PushNotification.SendbydeviceId($"Your order on shop({ order.ShopName}) has been delivered by delivery partner { order.DeliveryBoyName}.", "Snowch", "OrderStatus", "", fcmtocken);
             }
             return RedirectToAction("Edit", "Cart", new { OrderNumber = OrderNumber, id = AdminHelpers.ECodeLong(id) });
         }
@@ -1539,9 +1539,9 @@ namespace ShopNow.Controllers
                                 where c.Id == order.CustomerId
                                 select c.FcmTocken ?? "").FirstOrDefault().ToString();
                 if (payment.PaymentMode == "Online Payment")
-                    Helpers.PushNotification.SendbydeviceId($"Your refund of amount {payment.RefundAmount} for order no {payment.OrderNumber} is for {payment.RefundRemark} initiated and you will get credited with in 7 working days.", "ShopNowChat", "a.mp3", fcmToken.ToString());
+                    Helpers.PushNotification.SendbydeviceId($"Your refund of amount {payment.RefundAmount} for order no {payment.OrderNumber} is for {payment.RefundRemark} initiated and you will get credited with in 7 working days.", "Snowch", "OrderStatus", "", fcmToken.ToString());
                 else
-                    Helpers.PushNotification.SendbydeviceId($"Your order is reduced with {payment.RefundAmount} amount for {payment.RefundRemark}", "ShopNowChat", "a.mp3", fcmToken.ToString());
+                    Helpers.PushNotification.SendbydeviceId($"Your order is reduced with {payment.RefundAmount} amount for {payment.RefundRemark}", "Snowch", "OrderStatus", "", fcmToken.ToString());
             }
             //AddPaymentData
             //if (order.PaymentModeType == 1)
@@ -2083,7 +2083,7 @@ namespace ShopNow.Controllers
                             var fcmToken = (from c in db.Customers
                                             where c.Id == delivery.CustomerId
                                             select c.FcmTocken ?? "").FirstOrDefault().ToString();
-                            Helpers.PushNotification.SendbydeviceId("You have received new order. Accept Soon", "ShopNowChat", "a.mp3", fcmToken.ToString());
+                            Helpers.PushNotification.SendbydeviceId("You have received new order. Accept Soon", "Snowch", "DeliveryNewOrder", "", fcmToken.ToString());
                         }
                         //Customer
                         if (cart.CustomerId != 0)
@@ -2091,7 +2091,7 @@ namespace ShopNow.Controllers
                             var fcmTokenCustomer = (from c in db.Customers
                                                     where c.Id == cart.CustomerId
                                                     select c.FcmTocken ?? "").FirstOrDefault().ToString();
-                            Helpers.PushNotification.SendbydeviceId($"Delivery Boy {cart.DeliveryBoyName} is Assigned for your Order.", "ShopNowChat", "../../assets/b.mp3", fcmTokenCustomer.ToString());
+                            Helpers.PushNotification.SendbydeviceId($"Delivery Boy {cart.DeliveryBoyName} is Assigned for your Order.", "Snowch", "OrderStatus", "", fcmTokenCustomer.ToString());
                         }
                     }
                 }

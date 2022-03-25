@@ -72,7 +72,7 @@
                                         </td>
                                         <td>@item.DeliveryBoyPhoneNumber</td>
                                         <td>@item.DeliveryBoyName</td>
-                                        <td>@item.Amount</td>
+                                        <td>@Math.Round(item.Amount)</td>
                                         <td>
                                             @if (item.DeliveryOrderPaymentStatus == 0)
                                             {<span class="text-danger mr-3">Pending</span><input type="button" class="btn btn-sm btn-warning btnPayNow" value="Receive" data-ordernumber="@item.OrderNumber" /> }

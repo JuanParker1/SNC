@@ -37,9 +37,9 @@
             <div class="card h-100">
                 <div class="card-body">
                     <label class="font-weight-bold text-muted"><u>Profile Details:</u></label>
-                    <img src="@Model.ImagePath" class="rounded-circle my-3 d-block mx-auto img-thumbnail shadow" alt="customerimage" style="width:170px;">
+                    <img src="@Model.ImagePath" class="rounded-circle my-3 d-block mx-auto img-thumbnail shadow CustomerImage" data-customername="@Model.Name" data-toggle="modal" data-target="#ModalCustomerImg" alt="customerimage" style="width:170px;">
                     <div class="text-center">
-                        <h5>@Model.Name</h5>
+                        <h5 class="text-success text-uppercase">@Model.Name</h5>
                         <h5>@Model.PhoneNumber</h5>
                         <p>@(Model.Address != "NULL" ? @Model.Address : "N/A")</p>
                     </div>
@@ -58,7 +58,7 @@
                         <b>₹@Model.DeliveryWaitingCharge</b>
                     </div>
                     <div class="d-flex">
-                        <label class="mr-3">Last Purchase Date:</label>
+                        <label class="mr-3">Last Purchase:</label>
                         <b>@(Model.LastPurchaseDate != null ? Model.LastPurchaseDate.Value.ToString("dd-MMM-yyyy") : "N/A")</b>
                     </div>
                     <div class="d-flex">
@@ -170,19 +170,15 @@
 
 <div id="ModalCustomerImg" class="modal fade">
     <div class="modal-dialog">
-        <span class="close" data-dismiss="modal">&times;</span>
-        <a href="~/Home/ImageDenied">
-            <img class="modal-content" id="CustomerImg">
-        </a>
-    </div>
-</div>
-
-<div id="ModalAadharImg" class="modal fade">
-    <div class="modal-dialog">
-        <span class="close" data-dismiss="modal">&times;</span>
-        <a href="~/Home/ImageDenied">
-            <img class="modal-content" id="AadharImg">
-        </a>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title showCustomerName text-success text-uppercase"></h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <img class="modal-content img-fluid w-100" style="height:400px;" id="CustomerImg" />
+            </div>
+        </div>
     </div>
 </div>
 
@@ -192,31 +188,19 @@
     <link href="~/Content/sweetalert/sweetalert.css" rel="stylesheet" />
     <script>
         $(document).ready(function () {
-            var modal1 = document.getElementById('ModalCustomerImg');
-            var img1 = document.getElementsByClassName('ProfileImg');
-            var modalImg1 = document.getElementById("CustomerImg");
-            $(img1).click(function () {
-                modal1.style.display = "block";
-                modalImg1.src = this.src;
+            var modal = document.getElementById('ModalCustomerImg');
+            var img = document.getElementsByClassName('CustomerImage');
+            var modalImg = document.getElementById("CustomerImg");
+            $(img).click(function () {
+                var customername = $(this).data('customername');
+                modal.style.display = "block";
+                modalImg.src = this.src.replace("/Small/", "/Large/");
+                $(".showCustomerName").text(customername);
                 if (this.src == "") {
                     $('#ModalCustomerImg').hide();
                 }
                 else {
                     $('#ModalCustomerImg').modal('show');
-                }
-            });
-
-            var modal2 = document.getElementById('ModalAadharImg');
-            var img2 = document.getElementsByClassName('AadharImg');
-            var modalImg2 = document.getElementById("AadharImg");
-            $(img2).click(function () {
-                modal2.style.display = "block";
-                modalImg2.src = this.src;
-                if (this.src == "") {
-                    $('#ModalAadharImg').hide();
-                }
-                else {
-                    $('#ModalAadharImg').modal('show');
                 }
             });
 

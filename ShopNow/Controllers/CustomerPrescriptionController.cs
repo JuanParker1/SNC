@@ -194,7 +194,7 @@ namespace ShopNow.Controllers
                         order.TotalPrice = model.ListItems.Sum(i => i.Price);
                         order.TotalProduct = model.ListItems.Count();
                         order.TotalQuantity = model.ListItems.Sum(i => Convert.ToInt32(i.Quantity));
-                        order.NetTotal = model.ToPay;
+                        order.NetTotal = Math.Round(model.ToPay);
                         order.DeliveryCharge = model.GrossDeliveryCharge;
                         order.ShopDeliveryDiscount = model.ShopDeliveryDiscount;
                         order.NetDeliveryCharge = model.NetDeliveryCharge;
@@ -247,7 +247,7 @@ namespace ShopNow.Controllers
                         }
                         // Payment
                         var payment = new Payment();
-                        payment.Amount = model.ToPay;
+                        payment.Amount = Math.Round(model.ToPay);
                         payment.PaymentMode = "Cash On Hand";
                         payment.PaymentModeType = 2;
                         payment.CustomerId = customer.Id;
@@ -255,7 +255,7 @@ namespace ShopNow.Controllers
                         payment.ShopId = shop.Id;
                         payment.ShopName = shop.Name;
                         payment.OriginalAmount = order.TotalPrice;
-                        payment.GSTAmount = model.ToPay;
+                        payment.GSTAmount = Math.Round(model.ToPay);
                         payment.Currency = "Rupees";
                         payment.CountryName = null;
                         payment.PaymentResult = "pending";
@@ -296,7 +296,7 @@ namespace ShopNow.Controllers
                                             join s in db.Shops on c.Id equals s.CustomerId
                                             where s.Id == model.ShopId
                                             select c.FcmTocken ?? "").FirstOrDefault().ToString();
-                            Helpers.PushNotification.SendbydeviceId("You have received new order.Accept Soon", "ShopNowChat", "a.mp3", fcmToken.ToString());
+                            Helpers.PushNotification.SendbydeviceId("You have received new order.Accept Soon", "Snowch", "OwnerNewOrder", "", fcmToken.ToString());
 
                             return Json(new { status = true, orderId = order.Id }, JsonRequestBehavior.AllowGet);
                         }

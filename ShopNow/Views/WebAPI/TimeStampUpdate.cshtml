@@ -44,31 +44,37 @@
                             <div class="form-group row">
                                 <div class="col-md-3 text-md-left">
                                     <label class="col-form-label"><strong class="text-secondary">Time Stamp</strong></label>
-                                    <p class="col-form-label text-secondary font-weight-bold"><span id="LastTimeStamp"></span></p>
-                                    <table role="presentation" class="tsformat d-none">
-                                        <tbody>
-                                            <tr>
-                                                <td>
-                                                    <label class="mb-0"><small>YYYY</small></label>
-                                                </td>
-                                                <td>
-                                                    <label class="mb-0 ml-2"><small>MM</small></label>
-                                                </td>
-                                                <td>
-                                                    <label class="mb-0 ml-2"><small>DD</small></label>
-                                                </td>
-                                                <td>
-                                                    <label class="mb-0 ml-2"><small>HH</small></label>
-                                                </td>
-                                                <td>
-                                                    <label class="mb-0 ml-2"><small>MM</small></label>
-                                                </td>
-                                                <td>
-                                                    <label class="mb-0 ml-2"><small>SS</small></label>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
+                                    <div class="tsformat d-none">
+                                        <div class="col-form-label text-secondary font-weight-bold">
+                                            <span id="LastTimeStamp"></span>
+                                            <a href="javascript:void(0)" class="btnCopy ml-3" data-toggle="tooltip" data-placement="top" title="Copy"><i class="fa fa-copy"></i></a>
+                                        </div>
+                                        <input type="hidden" id="LTStamp" />
+                                        <table role="presentation">
+                                            <tbody>
+                                                <tr>
+                                                    <td>
+                                                        <label class="mb-0"><small>YYYY</small></label>
+                                                    </td>
+                                                    <td>
+                                                        <label class="mb-0 ml-2"><small>MM</small></label>
+                                                    </td>
+                                                    <td>
+                                                        <label class="mb-0 ml-2"><small>DD</small></label>
+                                                    </td>
+                                                    <td>
+                                                        <label class="mb-0 ml-2"><small>HH</small></label>
+                                                    </td>
+                                                    <td>
+                                                        <label class="mb-0 ml-2"><small>MM</small></label>
+                                                    </td>
+                                                    <td>
+                                                        <label class="mb-0 ml-2"><small>SS</small></label>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
                                 <div class="col-md-6">
                                     <input type="text" class="form-control" name="TimeStamp" id="TimeStamp" />
@@ -110,6 +116,7 @@
                 $('input[name="ShopName"]').val(e.params.data.text);
                 $.getJSON('/WebApi/GetLastTS', { ShopId: e.params.data.id }, function (data) {
                     $('#LastTimeStamp').text(data);
+                    $('#LTStamp').val(data);
                     $(".tsformat").removeClass("d-none");
                 });
             });
@@ -129,6 +136,13 @@
                     swal("Warning!", "Please type TimeStamp", "warning");
                 }
             });
+
+            $(".btnCopy").click(function (event) {
+                var copyText = document.getElementById("LTStamp");
+                copyText.select();
+                navigator.clipboard.writeText(copyText.value);
+            });
+
         });
     </script>
 }

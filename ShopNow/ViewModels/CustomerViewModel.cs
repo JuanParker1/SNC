@@ -35,6 +35,7 @@ namespace ShopNow.ViewModels
         public string Password { get; set; }
         public string Email { get; set; }
         public string DOB { get; set; }
+        public DateTime? DateOfBirth { get; set; }
         public string ImagePath { get; set; }
         public string CountryName { get; set; }
         public string StateName { get; set; }
