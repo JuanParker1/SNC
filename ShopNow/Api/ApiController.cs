@@ -282,7 +282,7 @@ namespace ShopNow.Controllers
                 customer.AadharName = model.AadharName;
                 customer.AadharNumber = model.AadharNumber;
                 customer.ImageAadharPath = model.ImageAadharPath;
-                customer.AgeVerify = model.AgeVerify;
+                //customer.AgeVerify = model.AgeVerify;
                 customer.DOB = model.DOB;
                 customer.ImagePath = model.ImagePath;
                 customer.UpdatedBy = customer.Name;
