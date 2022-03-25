@@ -1357,16 +1357,20 @@ namespace ShopNow.Controllers
                             db.Entry(product).State = System.Data.Entity.EntityState.Modified;
                             db.SaveChanges();
                         }
-                        var orderItem = _mapper.Map<OrderCreateViewModel.ListItem, OrderItem>(item);
-                        orderItem.Status = 0;
-                        orderItem.OrderId = order.Id;
-                        orderItem.OrdeNumber = order.OrderNumber;
-                        db.OrderItems.Add(orderItem);
-                        db.SaveChanges();
+                        
+                            var orderItem = _mapper.Map<OrderCreateViewModel.ListItem, OrderItem>(item);
+                            orderItem.Status = 0;
+                            orderItem.OrderId = order.Id;
+                            orderItem.OrdeNumber = order.OrderNumber;
+                        if (item.Quantity != 0)
+                        {
+                            db.OrderItems.Add(orderItem);
+                            db.SaveChanges();
 
-                        //update totalShopPrice
-                        order.TotalShopPrice += (orderItem.Quantity * orderItem.ShopPrice);
-                        order.TotalMRPPrice += (orderItem.Quantity * orderItem.MRPPrice);
+                            //update totalShopPrice
+                            order.TotalShopPrice += (orderItem.Quantity * orderItem.ShopPrice);
+                            order.TotalMRPPrice += (orderItem.Quantity * orderItem.MRPPrice);
+                        }
 
                         if (item.AddOnListItems != null)
                         {
