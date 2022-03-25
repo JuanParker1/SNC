@@ -31,27 +31,27 @@ namespace ShopNow.Controllers
         }
 
         [HttpPost]
-        public ActionResult SendBulk(string title, string message, string[] district, int type)
+        public ActionResult SendBulk(string title, string message, string[] district, int type,string imagePath="")
         {
             if(type == 1)
             {
                 var fcmTokenList = db.Customers.OrderBy(i => i.Id).Where(i => !string.IsNullOrEmpty(i.FcmTocken) && i.FcmTocken != "NULL").Select(i => i.FcmTocken).ToArray();
                 if (fcmTokenList.Count() < 1000)
-                    Helpers.PushNotification.SendBulk(message, title, "a.mp3", fcmTokenList.Take(1000).ToArray());
+                    Helpers.PushNotification.SendBulk(message, title, "SpecialOffer", imagePath, fcmTokenList.Take(1000).ToArray());
                 if (fcmTokenList.Count() > 1000 && fcmTokenList.Count() <= 2000)
-                    Helpers.PushNotification.SendBulk(message, title, "a.mp3", fcmTokenList.Skip(1000).Take(1000).ToArray());
+                    Helpers.PushNotification.SendBulk(message, title, "SpecialOffer", imagePath, fcmTokenList.Skip(1000).Take(1000).ToArray());
                 if (fcmTokenList.Count() > 2000 && fcmTokenList.Count() <= 3000)
-                    Helpers.PushNotification.SendBulk(message, title, "a.mp3", fcmTokenList.Skip(2000).Take(1000).ToArray());
+                    Helpers.PushNotification.SendBulk(message, title, "SpecialOffer", imagePath, fcmTokenList.Skip(2000).Take(1000).ToArray());
             }
             if (type == 2)
             {
                 var fcmTokenList = db.Customers.Where(i => !string.IsNullOrEmpty(i.FcmTocken) && i.FcmTocken != "NULL" && district.Contains(i.DistrictName)).Select(i => i.FcmTocken).ToArray();
                 if (fcmTokenList.Count() < 1000)
-                    Helpers.PushNotification.SendBulk(message, title, "a.mp3", fcmTokenList.Take(1000).ToArray());
+                    Helpers.PushNotification.SendBulk(message, title, "SpecialOffer", imagePath, fcmTokenList.Take(1000).ToArray());
                 if (fcmTokenList.Count() > 1000 && fcmTokenList.Count() <= 2000)
-                    Helpers.PushNotification.SendBulk(message, title, "a.mp3", fcmTokenList.Skip(1000).Take(1000).ToArray());
+                    Helpers.PushNotification.SendBulk(message, title, "SpecialOffer", imagePath, fcmTokenList.Skip(1000).Take(1000).ToArray());
                 if (fcmTokenList.Count() > 2000 && fcmTokenList.Count() <= 3000)
-                    Helpers.PushNotification.SendBulk(message, title, "a.mp3", fcmTokenList.Skip(2000).Take(1000).ToArray());
+                    Helpers.PushNotification.SendBulk(message, title, "SpecialOffer", imagePath, fcmTokenList.Skip(2000).Take(1000).ToArray());
             }
             if (type == 3)
             {
@@ -60,11 +60,11 @@ namespace ShopNow.Controllers
                     .Join(db.CustomerAppInfoes.Where(i=>i.Version != latestVersion), c => c.Id, ca => ca.CustomerId, (c, ca) => new { c, ca })
                     .Select(i => i.c.FcmTocken).ToArray();
                 if (fcmTokenList.Count() < 1000)
-                    Helpers.PushNotification.SendBulk(message, title, "a.mp3", fcmTokenList.Take(1000).ToArray());
+                    Helpers.PushNotification.SendBulk(message, title, "SpecialOffer", imagePath, fcmTokenList.Take(1000).ToArray());
                 if (fcmTokenList.Count() > 1000 && fcmTokenList.Count() <= 2000)
-                    Helpers.PushNotification.SendBulk(message, title, "a.mp3", fcmTokenList.Skip(1000).Take(1000).ToArray());
+                    Helpers.PushNotification.SendBulk(message, title, "SpecialOffer", imagePath, fcmTokenList.Skip(1000).Take(1000).ToArray());
                 if (fcmTokenList.Count() > 2000 && fcmTokenList.Count() <= 3000)
-                    Helpers.PushNotification.SendBulk(message, title, "a.mp3", fcmTokenList.Skip(2000).Take(1000).ToArray());
+                    Helpers.PushNotification.SendBulk(message, title, "SpecialOffer", imagePath, fcmTokenList.Skip(2000).Take(1000).ToArray());
 
             }
             return RedirectToAction("Index");
