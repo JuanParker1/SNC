@@ -162,7 +162,7 @@ namespace ShopNow.Helpers
         //}
 
 
-        public static string SendBulk(string body, string title, string sound, string[] deviceId)
+        public static string SendBulk(string body, string title, string channelId, string imgPath, string[] deviceId)
         {
             string res = "";
             try
@@ -177,9 +177,10 @@ namespace ShopNow.Helpers
                     registration_ids = deviceId,
                     notification = new
                     {
+                        android_channel_id = channelId,
                         body = body,
                         title = title,
-                        sound = sound
+                        image = imgPath
                     }
                 };
                 var serializer = new JavaScriptSerializer();
