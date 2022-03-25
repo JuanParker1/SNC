@@ -145,19 +145,19 @@
             $(".btnDelete").click(function () {
                 var Id = $(this).attr('data-id');
                 swal({
-                    title: "Are you sure want to delete?",
+                    title: "Are you sure want to Reject?",
                     text: "You will not be able to recover this file!",
                     type: "warning",
                     showCancelButton: true,
                     confirmButtonColor: "#DD6B55",
-                    confirmButtonText: "Yes, Delete it!",
+                    confirmButtonText: "Yes, Reject it!",
                     cancelButtonText: "No, cancel",
                     closeOnConfirm: false,
                     closeOnCancel: true
                 },
                     function (isConfirm) {
                         if (isConfirm) {
-                            $.getJSON("/Customer/Delete", { id: Id }, function (data) {
+                            $.getJSON("/Customer/AadharPendingReject", { id: Id }, function (data) {
                                 if (data == true) {
                                     window.location.reload();
                                 }

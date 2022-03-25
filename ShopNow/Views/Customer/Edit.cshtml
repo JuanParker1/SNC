@@ -167,11 +167,11 @@
                                     </div>
                                     <div class="col-md-12">
                                         <label class="text-left text-secondary font-weight-bold mt-1"><i>Aadhar Number</i></label>
-                                        <input id="edit-aadharnumber" type="text" class="form-control" value="@Model.AadharNumber" />
+                                        <input id="edit-aadharnumber" type="text" class="form-control" value="@Model.AadharNumber" required />
                                     </div>
                                     <div class="col-md-12">
                                         <label class="col-form-label text-secondary font-weight-bold">Date Of Birth</label>
-                                        <input type="text" class="form-control" value="@Model.DOB" readonly />
+                                        <input type="date" class="form-control" id="edit-DOB" @if (Model.DateOfBirth != null) {<text> value="@Model.DateOfBirth.Value.ToString("yyyy-MM-dd")"</text>} required/>
                                     </div>
                                 </div>
                             </div>
@@ -236,7 +236,7 @@
 
 
             $("#btnAadharApprove").click(function () {
-                $.getJSON("/Customer/VerifyAadharImage?Code=" + code + "&aadharNumber=" + $('#edit-aadharnumber').val(), function (data) {
+                $.getJSON("/Customer/VerifyAadharImage?Code=" + code + "&aadharNumber=" + $('#edit-aadharnumber').val() + "&dob=" + $('#edit-DOB').val(), function (data) {
                     if (data.IsAdded == true) {
                         $(".AadharApprovedlbl").removeClass("d-none");
                         $(".AadharRejectedlbl").addClass("d-none");

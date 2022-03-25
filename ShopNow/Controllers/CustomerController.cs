@@ -118,6 +118,7 @@ namespace ShopNow.Controllers
             var customer = db.Customers.Where(m => m.Id == dId).FirstOrDefault();
             var model = _mapper.Map<Customer, CustomerEditViewModel>(customer);
             model.DOB = customer.DOB != null ? customer.DOB.Value.ToString("dd-MM-yyyy") : "N/A";
+            model.DateOfBirth = customer.DOB;
             model.ImageAadharPath = model.ImageAadharPath != null ? (model.ImageAadharPath.Contains("https://s3.ap-south-1.amazonaws.com/shopnowchat.com/") ? model.ImageAadharPath : "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/" + model.ImageAadharPath) : "";
             model.ImagePath = model.ImagePath != null ? (model.ImagePath.Contains("https://s3.ap-south-1.amazonaws.com/shopnowchat.com/") ? model.ImagePath : "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/" + model.ImagePath) : "";
             return View(model);
@@ -152,6 +153,28 @@ namespace ShopNow.Controllers
             if (customer != null)
             {
                 customer.Status = 2;
+                customer.UpdatedBy = user.Name;
+                customer.DateUpdated = DateTime.Now;
+                db.Entry(customer).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+            }
+            return Json(true, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult AadharPendingReject(string id)
+        {
+            var user = ((Helpers.Sessions.User)Session["USER"]);
+            var dId = AdminHelpers.DCodeInt(id);
+            var customer = db.Customers.FirstOrDefault(i => i.Id == dId && i.Status == 0);
+            if (customer != null)
+            {
+                customer.AadharName = null;
+                customer.AadharNumber = null;
+                customer.DOB = null;
+                customer.ImageAadharPath = null;
+                customer.ImagePath = null;
+                customer.AadharVerify = false;
+                customer.AgeVerify = false;
                 customer.UpdatedBy = user.Name;
                 customer.DateUpdated = DateTime.Now;
                 db.Entry(customer).State = System.Data.Entity.EntityState.Modified;
@@ -282,32 +305,32 @@ namespace ShopNow.Controllers
             return Json(new { message = "Rs." + walletamount + " Added Successfully" }, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult VerifyAadharImage(int code,string aadharNumber)
+        public JsonResult VerifyAadharImage(int code,string aadharNumber,DateTime? dob)
         {
             var customer = db.Customers.Where(m => m.Id == code).FirstOrDefault();
             bool IsAdded = false;
             string message = "";
             if (customer != null)
             {
-                if (customer.AadharName != null && customer.AadharNumber != null && customer.DOB != null)
+                if (customer.AadharName != null && aadharNumber != null && dob != null)
                 {
                     IsAdded = true;
                 }
                 else
                 {
-                    if (customer.AadharName == null && customer.AadharNumber == null && customer.DOB == null)
+                    if (customer.AadharName == null && aadharNumber == null && dob == null)
                     {
                         message = "Aadhar Name, Aadhar Number and Date Of Birth are Empty!";
                     }
-                    else if (customer.AadharName == null && customer.AadharNumber == null)
+                    else if (customer.AadharName == null && aadharNumber == null)
                     {
                         message = "Aadhar Name and Aadhar Number are Empty!";
                     }
-                    else if (customer.AadharNumber == null && customer.DOB == null)
+                    else if (aadharNumber == null && dob == null)
                     {
                         message = "Aadhar Number and Date Of Birth are Empty!";
                     }
-                    else if (customer.AadharName == null && customer.DOB == null)
+                    else if (customer.AadharName == null && dob == null)
                     {
                         message = "Aadhar Name and Date Of Birth are Empty!";
                     }
@@ -315,17 +338,19 @@ namespace ShopNow.Controllers
                     {
                         message = "Aadhar Name is Empty!";
                     }
-                    else if (customer.AadharNumber == null)
+                    else if (aadharNumber == null)
                     {
                         message = "Aadhar Number is Empty!";
                     }
-                    else if (customer.DOB == null)
+                    else if (dob == null)
                     {
                         message = "Date Of Birth is Empty!";
                     }
                 }
                 customer.AadharNumber = aadharNumber;
                 customer.AadharVerify = IsAdded;
+                customer.DOB = dob;
+                customer.AgeVerify = true;
                 customer.DateUpdated = DateTime.Now;
                 db.Entry(customer).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
