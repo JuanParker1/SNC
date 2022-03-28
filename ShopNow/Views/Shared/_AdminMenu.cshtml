@@ -26,7 +26,6 @@
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
-
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
             <!--Dashboard-->
@@ -377,6 +376,8 @@
                                         <a class="nav-link" href="~/Cart/BatchList">Batch List</a>
                                         <a class="nav-link" href="~/CustomerPrescription/List">Prescription List</a>
                                         <a class="nav-link" href="~/CustomerPrescription/PrescriptionOrderList">Prescription Order List</a>
+                                        <a class="nav-link" href="~/CustomerGroceryUpload/List">Grocery List</a>
+                                        <a class="nav-link" href="~/CustomerGroceryUpload/GroceryOrderList">Grocery Order List</a>
                                     </li>
                                 </ul>
                             </div>
@@ -433,7 +434,6 @@
                     </div>
                 </div>
             </li>
-
             @*Accounts*@
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -505,8 +505,7 @@
                                     <li class="nav-item">
                                         <a class="nav-link" href="~/Offer/List">Offers</a>
                                         <a class="nav-link" href="~/CustomerGiftCard/List">Gift Card</a>
-                                        <a class="nav-link" href="~/OTP/Index">OTP List</a>
-                                        
+                                        <a class="nav-link" href="~/OTP/Index">OTP List</a>                                        
                                     </li>
                                 </ul>
                             </div>
@@ -530,7 +529,6 @@
 <script>
     $(document).ready(function () {
         // executes when HTML-Document is loaded and DOM is ready
-
         // breakpoint and up
         $(window).resize(function () {
             if ($(window).width() >= 980) {
@@ -549,7 +547,5 @@
                 // do something here
             }
         });
-
-        // document ready
     });
 </script>

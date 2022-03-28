@@ -951,8 +951,8 @@ namespace ShopNow.Controllers
                     StringBuilder sb = new StringBuilder();
                     foreach (var item in model.ListItems)
                     {
-                        stock = Math.Floor(GetStockQty(item.ItemId.ToString(), item.OutletId)); //for gofrugal itemid id string
-                        //stock = Math.Floor(GetStockQty(Convert.ToInt32(item.ItemId), item.OutletId));
+                        //stock = Math.Floor(GetStockQty(item.ItemId.ToString(), item.OutletId)); //for gofrugal itemid id string
+                        stock = Math.Floor(GetStockQty(Convert.ToInt32(item.ItemId), item.OutletId));
                         if (stock < item.Quantity)
                         {
                             if (stock != 0)
@@ -1655,7 +1655,7 @@ namespace ShopNow.Controllers
                     //accept
                     if (status == 3)
                     {
-                        Helpers.PushNotification.SendbydeviceId($"Your order has been accepted by shop({order.ShopName}).", "Snowch", "OrderStatus", "", fcmToken.ToString());
+                        Helpers.PushNotification.SendbydeviceId($"Your order has been accepted by shop({order.ShopName}).", "Snowch", "Orderstatus", "", fcmToken.ToString());
                     }
                 }
                 //Refund
@@ -1670,7 +1670,7 @@ namespace ShopNow.Controllers
                         payment.DateUpdated = DateTime.Now;
                         db.Entry(payment).State = System.Data.Entity.EntityState.Modified;
                         db.SaveChanges();
-                        Helpers.PushNotification.SendbydeviceId($"Your refund of amount {payment.Amount} for order no {payment.OrderNumber} is for {payment.RefundRemark} initiated and you will get credited with in 7 working days.", "Snowch", "OrderStatus", "", fcmToken.ToString());
+                        Helpers.PushNotification.SendbydeviceId($"Your refund of amount {payment.Amount} for order no {payment.OrderNumber} is for {payment.RefundRemark} initiated and you will get credited with in 7 working days.", "Snowch", "Orderstatus", "", fcmToken.ToString());
                     }
 
                     //Add Wallet Amount to customer
@@ -2116,7 +2116,7 @@ namespace ShopNow.Controllers
                     var fcmToken = (from c in db.Customers
                                     where c.Id == order.CustomerId
                                     select c.FcmTocken ?? "").FirstOrDefault().ToString();
-                    Helpers.PushNotification.SendbydeviceId(notificationMessage, "Snowch", "OrderPickedup", "", fcmToken.ToString());
+                    Helpers.PushNotification.SendbydeviceId(notificationMessage, "Snowch", "Orderpickedup", "", fcmToken.ToString());
                 }
                 return Json(new { message = "Successfully DelivaryBoy PickUp!" }, JsonRequestBehavior.AllowGet);
             }
@@ -2296,7 +2296,7 @@ namespace ShopNow.Controllers
 
                 string fcmtocken = customerDetails.FcmTocken ?? "";
 
-                Helpers.PushNotification.SendbydeviceId($"Your order on shop({order.ShopName}) has been delivered by delivery partner {order.DeliveryBoyName}.", "Snowch", "OrderStatus", "", fcmtocken.ToString());
+                Helpers.PushNotification.SendbydeviceId($"Your order on shop({order.ShopName}) has been delivered by delivery partner {order.DeliveryBoyName}.", "Snowch", "Orderstatus", "", fcmtocken.ToString());
             }
             return Json(new { message = "Successfully DelivaryBoy Delivered!" }, JsonRequestBehavior.AllowGet);
         }
@@ -2346,7 +2346,7 @@ namespace ShopNow.Controllers
                     var fcmTokenCustomer = (from c in db.Customers
                                             where c.Id == order.CustomerId
                                             select c.FcmTocken ?? "").FirstOrDefault().ToString();
-                    Helpers.PushNotification.SendbydeviceId($"Delivery Boy ${order.DeliveryBoyName} is Assigned for your Order.", "Snowch", "OrderStatus", "", fcmTokenCustomer.ToString());
+                    Helpers.PushNotification.SendbydeviceId($"Delivery Boy ${order.DeliveryBoyName} is Assigned for your Order.", "Snowch", "Orderstatus", "", fcmTokenCustomer.ToString());
                 }
                 return Json(new { message = "Successfully DelivaryBoy Assign!" }, JsonRequestBehavior.AllowGet);
             }
@@ -3517,39 +3517,39 @@ namespace ShopNow.Controllers
             return Json(new { Page = "" }, JsonRequestBehavior.AllowGet);
         }
 
-        public static double GetStockQty(string code, int outletid) //for gofrugal itemid id string
+        //public static double GetStockQty(string code, int outletid) //for gofrugal itemid id string
+        //{
+        public double GetStockQty(int itemid, int outletid)
         {
-            //public double GetStockQty(int itemid, int outletid)
+
+            //using (WebClient myData = new WebClient())
             //{
 
-            using (WebClient myData = new WebClient())
-            {
+            //    myData.Headers["X-Auth-Token"] = "62AA1F4C9180EEE6E27B00D2F4F79E5FB89C18D693C2943EA171D54AC7BD4302BE3D88E679706F8C";
+            //    myData.Headers[HttpRequestHeader.Accept] = "application/json";
+            //    myData.Headers[HttpRequestHeader.ContentType] = "application/x-www-form-urlencoded";
+            //    string getList = "";
+            //    if (outletid == 0)
+            //        getList = myData.DownloadString("http://joyrahq.gofrugal.com/RayMedi_HQ/api/v1/items?q=status==R,outletId==2,locationId==1,itemId==" + code);
+            //    else
+            //        getList = myData.DownloadString("http://joyrahq.gofrugal.com/RayMedi_HQ/api/v1/items?q=status==R,locationId==1,outletId==" + outletid + ",itemId==" + code);
 
-                myData.Headers["X-Auth-Token"] = "62AA1F4C9180EEE6E27B00D2F4F79E5FB89C18D693C2943EA171D54AC7BD4302BE3D88E679706F8C";
-                myData.Headers[HttpRequestHeader.Accept] = "application/json";
-                myData.Headers[HttpRequestHeader.ContentType] = "application/x-www-form-urlencoded";
-                string getList = "";
-                if (outletid == 0)
-                    getList = myData.DownloadString("http://joyrahq.gofrugal.com/RayMedi_HQ/api/v1/items?q=status==R,outletId==2,locationId==1,itemId==" + code);
-                else
-                    getList = myData.DownloadString("http://joyrahq.gofrugal.com/RayMedi_HQ/api/v1/items?q=status==R,locationId==1,outletId==" + outletid + ",itemId==" + code);
+            //    var result = JsonConvert.DeserializeObject<RootObject>(getList);
+            //    foreach (var pro in result.items)
+            //    {
+            //        foreach (var med in pro.stock)
+            //        {
+            //            return Convert.ToDouble(med.stock);
 
-                var result = JsonConvert.DeserializeObject<RootObject>(getList);
-                foreach (var pro in result.items)
-                {
-                    foreach (var med in pro.stock)
-                    {
-                        return Convert.ToDouble(med.stock);
-
-                    }
-                }
-            }
-
-            //var product = db.Products.FirstOrDefault(i => i.ItemId == itemid && i.OutletId == outletid);
-            //if (product != null)
-            //{
-            //    return product.Qty;
+            //        }
+            //    }
             //}
+
+            var product = db.Products.FirstOrDefault(i => i.ItemId == itemid && i.OutletId == outletid);
+            if (product != null)
+            {
+                return product.Qty;
+            }
             return 0;
         }
 
@@ -5932,7 +5932,7 @@ namespace ShopNow.Controllers
                         var fcmToken = (from c in db.Customers
                                         where c.Id == order.CustomerId
                                         select c.FcmTocken ?? "").FirstOrDefault().ToString();
-                        Helpers.PushNotification.SendbydeviceId($"Your refund of amount {payment.RefundAmount} for order no {payment.OrderNumber} is initiated and will get credited with in 7 working days.", "ShopNowChat", "OrderStatus", "", fcmToken.ToString());
+                        Helpers.PushNotification.SendbydeviceId($"Your refund of amount {payment.RefundAmount} for order no {payment.OrderNumber} is initiated and will get credited with in 7 working days.", "ShopNowChat", "Orderstatus", "", fcmToken.ToString());
                     }
                 }
                 return Json(true, JsonRequestBehavior.AllowGet);
