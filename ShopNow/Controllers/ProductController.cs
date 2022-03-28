@@ -108,6 +108,7 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "SNCPRMC205")]
         public ActionResult MedicalCreate()
         {
+            UpdateMedicalShopMaxOfferPercentage(123);
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
             var shop = db.Shops.Any(i => i.Id == user.Id);
@@ -1912,7 +1913,10 @@ namespace ShopNow.Controllers
             var shop = db.Shops.FirstOrDefault(i => i.Id == shopid);
             if (shop != null)
             {
-                double maxPercentage = db.DiscountCategories.Where(b => b.ShopId == shopid && b.Status == 0).Select(b => b.Percentage)?.Max(b => b) ?? 0;
+                double maxPercentage = db.Products.Where(b => b.ShopId == shopid && b.Status == 0)
+                    .Join(db.DiscountCategories.Where(b => b.ShopId == shopid && b.Status == 0),p=>p.DiscountCategoryId,d=>d.Id,(p,d)=>new { p,d}).Select(b => b.d.Percentage)?.Max(b => b) ?? 0;
+
+               // double maxPercentage = db.DiscountCategories.Where(b => b.ShopId == shopid && b.Status == 0).Select(b => b.Percentage)?.Max(b => b) ?? 0;
                 shop.MaxOfferPercentage = maxPercentage;
                 db.Entry(shop).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
