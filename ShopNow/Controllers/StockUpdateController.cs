@@ -12,13 +12,15 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using ShopNow.Filters;
+using ExcelDataReader;
+using ShopNow.ViewModels;
 
 namespace ShopNow.Controllers
 {
     public class StockUpdateController : Controller
     {
         private sncEntities db = new sncEntities();
-       
+
         [AccessPolicy(PageCode = "SNCSUSM284")]
         public ActionResult StockMaintenance()
         {
@@ -34,27 +36,27 @@ namespace ShopNow.Controllers
             ViewBag.Name = user.Name;
             return View();
         }
-       
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         [AccessPolicy(PageCode = "SNCSUU286")]
-        public ActionResult Update(FormCollection formCollection, stockmodel model)
+        public ActionResult StockMaintenance(HttpPostedFileBase upload, StockViewModel model)
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
             try
             {
-                var shopmodel = db.Shops.FirstOrDefault(a => a.Id == model.shopid);
-                if (Request != null)
+                var shopmodel = db.Shops.FirstOrDefault(a => a.Id == model.ShopId);
+                if (model.button == "upload")
                 {
-                    HttpPostedFileBase file = Request.Files[0];
-                    if (Request.Files[0].ContentLength > 0)
+                    string path = Server.MapPath("~/Content/ExcelUpload/" + upload.FileName);
+                    upload.SaveAs(path);
+                    if (upload != null && upload.ContentLength > 0)
                     {
-                        //int shopid = shopmodel[0].id;
-                        string extension = System.IO.Path.GetExtension(Request.Files[0].FileName).ToLower();
-                        string Name = Request.Files[0].FileName.Replace(extension, Convert.ToString(shopmodel.Id));
+                        string extension = System.IO.Path.GetExtension(upload.FileName).ToLower();
+                        string Name = upload.FileName.Replace(extension, Convert.ToString(shopmodel.Id));
                         Name = Name + extension;
-                        string connString = "";
+                        //string connString = "";
                         string[] validFileTypes = { ".xls", ".xlsx", ".csv" };
                         string path1 = string.Format("{0}{1}", Server.MapPath("~/Content/ExcelUpload/"), Name);
                         if (!Directory.Exists(path1))
@@ -69,181 +71,245 @@ namespace ShopNow.Controllers
                             }
                             Request.Files[0].SaveAs(path1);
                             DataTable dt = new DataTable();
+                            Stream stream = upload.InputStream;
+                            IExcelDataReader reader = null;
                             if (extension == ".csv")
                             {
-                                dt = Utility.ConvertCSVtoDataTable(path1);
+                                reader = ExcelReaderFactory.CreateCsvReader(stream);
+                                //dt = Utility.ConvertCSVtoDataTable(path1);
                             }
                             else if (extension.Trim() == ".xls")
                             {
-                                connString = "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + path1 + ";Extended Properties=\"Excel 8.0;HDR=Yes;IMEX=2\"";
-                                dt = Utility.ConvertXSLXtoDataTable(path1, connString);
+                                reader = ExcelReaderFactory.CreateBinaryReader(stream);
+                                //connString = "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + path1 + ";Extended Properties=\"Excel 8.0;HDR=Yes;IMEX=2\"";
+                                //dt = Utility.ConvertXSLXtoDataTable(path1, connString);
                             }
                             else if (extension.Trim() == ".xlsx")
                             {
-                                connString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + path1 + ";Extended Properties=\"Excel 12.0;HDR=Yes;IMEX=2\"";
-                                dt = Utility.ConvertXSLXtoDataTable(path1, connString);
+                                reader = ExcelReaderFactory.CreateOpenXmlReader(stream);
+                                //connString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + path1 + ";Extended Properties=\"Excel 12.0;HDR=Yes;IMEX=2\"";
+                                //dt = Utility.ConvertXSLXtoDataTable(path1, connString);
                             }
-                            var lstStock = new List<Models.Product>();
-                            List<Models.Product> updateList = new List<Models.Product>();
-                            List<Models.Product> createList = new List<Models.Product>();
-                            //foreach (DataRow dr in dt.Rows)   
-                            //{
-                            //    var stock = new Stocks();
-                            //if (!dr[1].ToString().EndsWith("*"))
-                            //    {
-
-                            var lst = db.Products.Where(m => m.ShopId == shopmodel.Id).ToList();
-                            //var newSortq = from row in dt.AsEnumerable()
-                            //                       where Convert.ToString(row.ItemArray[1])[Convert.ToString(row.ItemArray[1]).Length - 1] != '*'
-                            //                       select new { 
-                            //                      itemid = Convert.ToInt32(row.ItemArray[0]),
-                            //                      stock  = Convert.ToInt32(row.ItemArray[3]),
-                            //                      Mrp= Convert.ToDouble(row.ItemArray[2]),
-                            //                      Iu = Convert.ToInt32(row.ItemArray[4]),
-                            //                      Name = Convert.ToString(row.ItemArray[1]),
-                            //                      itemcode = "PRO"+ Convert.ToString(row.ItemArray[0])
-
-                            //                      };
-                            var newSortq = from row in dt.AsEnumerable()
-                                           where Convert.ToString(row.ItemArray[1])[Convert.ToString(row.ItemArray[1]).Length - 1] != '*'
-                                           group row by Convert.ToInt32(row.ItemArray[0]) into g
-                                           select new
-                                           {
-                                               itemid = Convert.ToInt32(g.Key),
-                                               stock = g.Sum(i => Convert.ToInt32(i.ItemArray[3])),
-                                               Mrp = g.Max(i => Convert.ToInt32(i.ItemArray[2])),//Convert.ToDouble(row.ItemArray[2]),
-                                               Iu = g.FirstOrDefault().ItemArray[4], //Convert.ToInt32(row.ItemArray[4]),
-                                               Name = g.FirstOrDefault().ItemArray[1].ToString()
-                                           };
-                            if (newSortq.Count() > 0)
+                            else
                             {
-                                foreach (var s in newSortq)
-                                {
-                                    int idx = lst.FindIndex(a => a.ItemId == s.itemid);
-                                    if (idx >= 0)
-                                    {
-
-                                        updateList.Add(new Models.Product
-                                        {
-                                            Id = lst[idx].Id,
-                                            ItemId = lst[idx].ItemId,
-                                            IBarU = lst[idx].IBarU,
-                                            MenuPrice = lst[idx].MenuPrice,
-                                            Name = lst[idx].Name,
-                                           // Qty = s.stock,
-                                            Qty=lst[idx].IBarU!=0? Convert.ToInt32(s.stock / lst[idx].IBarU):0,
-                                            ShopId = shopmodel.Id,
-                                            ShopName = shopmodel.Name,
-                                            DateEncoded = DateTime.Now,
-                                            DateUpdated = DateTime.Now,
-                                            Status = lst[idx].Status,
-                                            AppliesOnline = lst[idx].AppliesOnline,
-                                            Customisation = lst[idx].Customisation,
-                                            DataEntry = lst[idx].DataEntry,
-                                            DiscountCategoryId = lst[idx].DiscountCategoryId,
-                                            DiscountCategoryName = lst[idx].DiscountCategoryName,
-                                            MaxSelectionLimit = lst[idx].MaxSelectionLimit,
-                                            MinSelectionLimit = lst[idx].MinSelectionLimit,
-                                            Percentage = lst[idx].Percentage,
-                                            PackingCharge = lst[idx].PackingCharge,
-                                            PackingType = lst[idx].PackingType,
-                                            EAN = lst[idx].EAN,
-                                            GTIN = lst[idx].GTIN,
-                                            GTIN14 = lst[idx].GTIN14,
-                                            HoldOnStok = lst[idx].HoldOnStok,
-                                            TaxPercentage=lst[idx].TaxPercentage,
-                                            OutletId=lst[idx].OutletId,
-                                            ShopPrice=lst[idx].ShopPrice,
-                                            ISBN = lst[idx].ISBN,
-                                            IsOnline = lst[idx].IsOnline,
-                                            MasterProductId = lst[idx].MasterProductId,
-                                            ItemTimeStamp=lst[idx].ItemTimeStamp,
-                                            MappedDate= lst[idx].MappedDate,
-                                            CategoryId =lst[idx].CategoryId,
-                                            Price = lst[idx].Price,
-                                            ProductTypeId = 3,
-                                            ProductTypeName = "Medical",
-                                            ShopCategoryId = shopmodel.ShopCategoryId,
-                                            ShopCategoryName = shopmodel.ShopCategoryName,
-                                            CreatedBy = "Admin",
-                                            UpdatedBy = "Admin"
-                                        }) ;
-                                    }
-                                    else
-                                    {
-                                        createList.Add(new Models.Product
-                                        {
-                                            Id = 0,
-                                            ItemId = s.itemid,
-                                            IBarU = Convert.ToInt32(s.Iu),
-                                            MenuPrice = s.Mrp,
-                                            Name = s.Name,
-                                            Qty = s.stock,
-                                            ShopId = shopmodel.Id,
-                                            ShopName = shopmodel.Name,
-                                            DateEncoded = DateTime.Now,
-                                            DateUpdated = DateTime.Now,
-                                            Status = 0,
-                                            AppliesOnline = 0,
-                                            Customisation = false,
-                                            DataEntry = 1,
-                                            DiscountCategoryId = 0,
-                                            DiscountCategoryName = null,
-                                            MaxSelectionLimit = 0,
-                                            MinSelectionLimit = 0,
-                                            Percentage = 0,
-                                            PackingCharge = 0,
-                                            PackingType = 0,
-                                            EAN = null,
-                                            GTIN = null,
-                                            GTIN14 = null,
-                                            HoldOnStok = 0,
-                                            ISBN = null,
-                                            MasterProductId = 0,
-                                            Price = 0,
-                                            ProductTypeId = 3,
-                                            ProductTypeName = "Medical",
-                                            ShopCategoryId = shopmodel.ShopCategoryId,
-                                            ShopCategoryName = shopmodel.ShopCategoryName,
-                                            CreatedBy = "Admin",
-                                            UpdatedBy = "Admin"
-                                        });
-
-                                    }
-                                }
-                                db.BulkInsert(createList);
-                                if (updateList.Count > 0)
-                                    db.BulkUpdate(updateList);
-                                // db.SaveChanges();
-                                db.BulkSaveChanges();
+                                ModelState.AddModelError("File", "This file format is not supported");
+                                return View();
                             }
-                            //    var varMrp=newSortq.Where(i=>i.itemid == Convert.ToInt32(dr[0])).
+                            DataSet result = reader.AsDataSet(new ExcelDataSetConfiguration()
+                            {
+                                ConfigureDataTable = (_) => new ExcelDataTableConfiguration()
+                                {
+                                    UseHeaderRow = true
+                                }
+                            });
 
+                            // reader.IsFirstRowAsColumnNames = true;
 
+                            reader.Close();
 
-                            //    stock.itemid = Convert.ToInt32(dr[0]);
-                            //        stock.Name = dr[1].ToString();
-                            //        stock.Code = "PRO" + dr[0].ToString();
-                            //        stock.Mrp = Convert.ToDouble(dr[2].ToString());
-                            //        stock.stock = Convert.ToInt32(dr[3]);
-                            //        stock.IU = Convert.ToInt32(dr[4]);
-                            //        lstStock.Add(stock);
-                            //    }
-
-                            //}
-
+                            model.DataTable = result.Tables[0];
+                            model.Filename = upload.FileName;
+                            return View(model);
                         }
                         else
                         {
-                            ViewBag.Error = "Please Upload File in .xls, .xlsx or .csv format";
+                            ModelState.AddModelError("File", "Please Upload Your file");
                         }
                     }
-                    else
+                }
+                else
+                {
+                    if (upload != null)
                     {
-                        ViewBag.Error = "Please Upload Valid File";
+                        // HttpPostedFileBase file = Request.Files[0];
+                        if (upload.ContentLength > 0)
+                        {
+                            //int shopid = shopmodel[0].id;
+                            string extension = System.IO.Path.GetExtension(upload.FileName).ToLower();
+                            string Name = upload.FileName.Replace(extension, Convert.ToString(shopmodel.Id));
+                            Name = Name + extension;
+                            string connString = "";
+                            string[] validFileTypes = { ".xls", ".xlsx", ".csv" };
+                            string path1 = string.Format("{0}{1}", Server.MapPath("~/Content/ExcelUpload/"), Name);
+                            if (!Directory.Exists(path1))
+                            {
+                                Directory.CreateDirectory(Server.MapPath("~/Content/ExcelUpload/"));
+                            }
+                            if (validFileTypes.Contains(extension))
+                            {
+                                if (System.IO.File.Exists(path1))
+                                {
+                                    System.IO.File.Delete(path1);
+                                }
+                                Request.Files[0].SaveAs(path1);
+                                DataTable dt = new DataTable();
+                                if (extension == ".csv")
+                                {
+                                    dt = Utility.ConvertCSVtoDataTable(path1);
+                                }
+                                else if (extension.Trim() == ".xls")
+                                {
+                                    connString = "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + path1 + ";Extended Properties=\"Excel 8.0;HDR=Yes;IMEX=2\"";
+                                    dt = Utility.ConvertXSLXtoDataTable(path1, connString);
+                                }
+                                else if (extension.Trim() == ".xlsx")
+                                {
+                                    connString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + path1 + ";Extended Properties=\"Excel 12.0;HDR=Yes;IMEX=2\"";
+                                    dt = Utility.ConvertXSLXtoDataTable(path1, connString);
+                                }
+                                var lstStock = new List<Models.Product>();
+                                List<Models.Product> updateList = new List<Models.Product>();
+                                List<Models.Product> createList = new List<Models.Product>();
+                                //foreach (DataRow dr in dt.Rows)   
+                                //{
+                                //    var stock = new Stocks();
+                                //if (!dr[1].ToString().EndsWith("*"))
+                                //    {
+
+                                var lst = db.Products.Where(m => m.ShopId == shopmodel.Id).ToList();
+                                //var newSortq = from row in dt.AsEnumerable()
+                                //                       where Convert.ToString(row.ItemArray[1])[Convert.ToString(row.ItemArray[1]).Length - 1] != '*'
+                                //                       select new { 
+                                //                      itemid = Convert.ToInt32(row.ItemArray[0]),
+                                //                      stock  = Convert.ToInt32(row.ItemArray[3]),
+                                //                      Mrp= Convert.ToDouble(row.ItemArray[2]),
+                                //                      Iu = Convert.ToInt32(row.ItemArray[4]),
+                                //                      Name = Convert.ToString(row.ItemArray[1]),
+                                //                      itemcode = "PRO"+ Convert.ToString(row.ItemArray[0])
+
+                                //                      };
+                                var newSortq = from row in dt.AsEnumerable()
+                                               where Convert.ToString(row.ItemArray[1])[Convert.ToString(row.ItemArray[1]).Length - 1] != '*'
+                                               group row by Convert.ToInt32(row.ItemArray[0]) into g
+                                               select new
+                                               {
+                                                   itemid = Convert.ToInt32(g.Key),
+                                                   stock = g.Sum(i => Convert.ToInt32(i.ItemArray[3])),
+                                                   Mrp = g.Max(i => Convert.ToInt32(i.ItemArray[2])),//Convert.ToDouble(row.ItemArray[2]),
+                                                   Iu = g.FirstOrDefault().ItemArray[4], //Convert.ToInt32(row.ItemArray[4]),
+                                                   Name = g.FirstOrDefault().ItemArray[1].ToString()
+                                               };
+                                if (newSortq.Count() > 0)
+                                {
+                                    foreach (var s in newSortq)
+                                    {
+                                        int idx = lst.FindIndex(a => a.ItemId == s.itemid);
+                                        if (idx >= 0)
+                                        {
+
+                                            updateList.Add(new Models.Product
+                                            {
+                                                Id = lst[idx].Id,
+                                                ItemId = lst[idx].ItemId,
+                                                IBarU = lst[idx].IBarU,
+                                                MenuPrice = lst[idx].MenuPrice,
+                                                Name = lst[idx].Name,
+                                                Qty = s.stock,
+                                                ShopId = shopmodel.Id,
+                                                ShopName = shopmodel.Name,
+                                                DateEncoded = DateTime.Now,
+                                                DateUpdated = DateTime.Now,
+                                                Status = lst[idx].Status,
+                                                AppliesOnline = lst[idx].AppliesOnline,
+                                                Customisation = lst[idx].Customisation,
+                                                DataEntry = lst[idx].DataEntry,
+                                                DiscountCategoryId = lst[idx].DiscountCategoryId,
+                                                DiscountCategoryName = lst[idx].DiscountCategoryName,
+                                                MaxSelectionLimit = lst[idx].MaxSelectionLimit,
+                                                MinSelectionLimit = lst[idx].MinSelectionLimit,
+                                                Percentage = lst[idx].Percentage,
+                                                PackingCharge = lst[idx].PackingCharge,
+                                                PackingType = lst[idx].PackingType,
+                                                EAN = lst[idx].EAN,
+                                                GTIN = lst[idx].GTIN,
+                                                GTIN14 = lst[idx].GTIN14,
+                                                HoldOnStok = lst[idx].HoldOnStok,
+                                                ISBN = lst[idx].ISBN,
+                                                IsOnline = lst[idx].IsOnline,
+                                                MasterProductId = lst[idx].MasterProductId,
+                                                Price = lst[idx].Price,
+                                                ProductTypeId = 3,
+                                                ProductTypeName = "Medical",
+                                                ShopCategoryId = shopmodel.ShopCategoryId,
+                                                ShopCategoryName = shopmodel.ShopCategoryName,
+                                                CreatedBy = "Admin",
+                                                UpdatedBy = "Admin"
+                                            });
+                                        }
+                                        else
+                                        {
+                                            createList.Add(new Models.Product
+                                            {
+                                                Id = 0,
+                                                ItemId = s.itemid,
+                                                IBarU = Convert.ToInt32(s.Iu),
+                                                MenuPrice = s.Mrp,
+                                                Name = s.Name,
+                                                Qty = s.stock,
+                                                ShopId = shopmodel.Id,
+                                                ShopName = shopmodel.Name,
+                                                DateEncoded = DateTime.Now,
+                                                DateUpdated = DateTime.Now,
+                                                Status = 0,
+                                                AppliesOnline = 0,
+                                                Customisation = false,
+                                                DataEntry = 1,
+                                                DiscountCategoryId = 0,
+                                                DiscountCategoryName = null,
+                                                MaxSelectionLimit = 0,
+                                                MinSelectionLimit = 0,
+                                                Percentage = 0,
+                                                PackingCharge = 0,
+                                                PackingType = 0,
+                                                EAN = null,
+                                                GTIN = null,
+                                                GTIN14 = null,
+                                                HoldOnStok = 0,
+                                                ISBN = null,
+                                                MasterProductId = 0,
+                                                Price = 0,
+                                                ProductTypeId = 3,
+                                                ProductTypeName = "Medical",
+                                                ShopCategoryId = shopmodel.ShopCategoryId,
+                                                ShopCategoryName = shopmodel.ShopCategoryName,
+                                                CreatedBy = "Admin",
+                                                UpdatedBy = "Admin"
+                                            });
+
+                                        }
+                                    }
+                                    db.BulkInsert(createList);
+                                    if (updateList.Count > 0)
+                                        db.BulkUpdate(updateList);
+                                    // db.SaveChanges();
+                                }
+                                //    var varMrp=newSortq.Where(i=>i.itemid == Convert.ToInt32(dr[0])).
+
+
+
+                                //    stock.itemid = Convert.ToInt32(dr[0]);
+                                //        stock.Name = dr[1].ToString();
+                                //        stock.Code = "PRO" + dr[0].ToString();
+                                //        stock.Mrp = Convert.ToDouble(dr[2].ToString());
+                                //        stock.stock = Convert.ToInt32(dr[3]);
+                                //        stock.IU = Convert.ToInt32(dr[4]);
+                                //        lstStock.Add(stock);
+                                //    }
+
+                                //}
+
+                            }
+                            else
+                            {
+                                ViewBag.Error = "Please Upload File in .xls, .xlsx or .csv format";
+                            }
+                        }
+                        else
+                        {
+                            ViewBag.Error = "Please Upload Valid File";
+                        }
                     }
                 }
-
                 return View("StockMaintenance");
             }
             catch (Exception ex)
@@ -332,7 +398,7 @@ namespace ShopNow.Controllers
                                         updateList.Add(new Models.Product
                                         {
                                             Id = lst[idx].Id,
-                                            ItemId= s.itemid,
+                                            ItemId = s.itemid,
                                             IBarU = lst[idx].IBarU,
                                             MenuPrice = lst[idx].MenuPrice,
                                             Name = lst[idx].Name,
