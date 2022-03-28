@@ -1,10 +1,11 @@
-﻿@model ShopNow.Models.stockmodel
+﻿@model ShopNow.ViewModels.StockViewModel
+@using System.Data;
 @{
     ViewBag.Title = "StockMaintenance";
 }
 
 <div class="container">
-    @using (Html.BeginForm("Update", "StockUpdate", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    @using (Html.BeginForm("StockMaintenance", "StockUpdate", FormMethod.Post, new { enctype = "multipart/form-data" }))
     {
         @Html.AntiForgeryToken()
 
@@ -17,14 +18,97 @@
                 </div>
             </div>
         </div>
+        @*<div class="row">
+                <div class="col-md-6">
+                    <label>Upload Products Excel</label><br />
+                    @Html.TextBoxFor(model => model.excel_file, new { Type = "File", @accept = ".xlsx,.xls" })
+                    @Html.ValidationMessageFor(model => model.excel_file)
+                </div>
+                <div class="col-md-6">
+                    <input type="submit" value="Update" class="btn btn-success" />
+                </div>
+            </div>*@
         <div class="row">
-            <div class="col-md-6">
-                <label>Upload Products Excel</label><br />
-                @Html.TextBoxFor(model => model.excel_file, new { Type = "File", @accept = ".xlsx,.xls" })
-                @Html.ValidationMessageFor(model => model.excel_file)
-            </div>
-            <div class="col-md-6">
-                <input type="submit" value="Update" class="btn btn-success" />
+            <div class="col-md-12">
+                <h5>Upload Products Excel</h5>
+                <div class="row mt-3">
+                    <div class="col-md-6 mb-2">
+                        <input type="file" id="dataFile" name="upload" />
+                        @if (Model != null)
+                        {
+                            <input type="hidden" value="save" name="button" class="btn btn-secondary" />
+                        }
+                        else
+                        {
+                            <input type="hidden" value="upload" name="button" class="btn btn-success" />
+                        }
+                    </div>
+                    <div class="col-md-6">
+                        <input type="submit" value="Upload" class="btn btn-success" />
+                    </div>
+                </div>
+                <div class="row">
+                    @if (Model != null)
+                    {
+                        <div class="col-md-12 my-2"> <hr class="border-success" style="border-top: 1px dashed" /></div>
+                        <div class="col-md-5">
+                            <p class="text-success">Excel Headers</p>
+                            <table id="Upload-list">
+                                <thead>
+                                </thead>
+                                <tbody>
+                                    @foreach (DataColumn col in Model.DataTable.Columns)
+                                    {
+                                        <tr>
+                                            <td>@col.ColumnName</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                            <input id="FileName" name="FileName" type="hidden" value="@Model.Filename" />
+                            <hr class="border-success" style="border-top: 1px dashed" />
+                        </div>
+                        <div class="col-md-6">
+                            <p class="text-success">Choose Excel Headers</p>
+                            <table id="Database-list" class="w-100">
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <label class="col-md-5">ItemCode</label>
+                                            <input id="ItemCode" name="ItemCode" type="text" class="col-md-4" />
+                                        </td>
+                                    <tr>
+                                        <td>
+                                            <label class="col-md-5">ItemName</label>
+                                            <input id="ItemName" name="ItemName" type="text" class="col-md-4" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <label class="col-md-5">MRP</label>
+                                            <input id="MRP" name="MRP" type="text" class="col-md-4" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <label class="col-md-5">Current Stock</label>
+                                            <input id="Stock" name="Stock" type="text" class="col-md-4" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <label class="col-md-5">I_U</label>
+                                            <input id="IBarU" name="IBarU" type="text" class="col-md-4" />
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div class="col-md-9 text-center my-3">
+                                <input type="submit" value="Submit" class="btn btn-success" />
+                            </div>
+                        </div>
+                    }
+                </div>
             </div>
         </div>
     }
@@ -35,21 +119,50 @@
         <script src="~/Scripts/select2/js/select2.js"></script>
         <link href="~/Scripts/select2/css/select2.css" rel="stylesheet" />
         <link href="~/Content/select2/select2.custom.css" rel="stylesheet" />
+        <!--Select2 End-->
         <script>
-                $(document).ready(function () {
+            $(document).ready(function () {
 
-                    $('#select-shop').select2({
-                        placeholder: "Search Shop",
-                        width: '100%',
-                        ajax: {
-                            url: "/StockUpdate/GetActiveShopSelect",
-                            delay: 250,
-                            dataType: 'json'
-                        }
-                    }).on('select2:select', function (e) {
-                        $('input[name="ShopName"]').val(e.params.data.text);
-                    });
+                $('#select-shop').select2({
+                    placeholder: "Search Shop",
+                    width: '100%',
+                    ajax: {
+                        url: "/StockUpdate/GetActiveShopSelect",
+                        delay: 250,
+                        dataType: 'json'
+                    }
+                }).on('select2:select', function (e) {
+                    $('input[name="ShopName"]').val(e.params.data.text);
                 });
+
+                var tbl = document.getElementById("Upload-list");
+                if (tbl != null) {
+                    for (var i = 0; i < tbl.rows.length; i++) {
+                        for (var j = 0; j < tbl.rows[i].cells.length; j++)
+                            tbl.rows[i].cells[j].onclick = function () { getval(this); };
+                    }
+                }
+                function getval(cel) {
+                    $(function () {
+                        $('#ItemCode').on('click', function () {
+                            $('#ItemCode').val(cel.innerHTML)
+                        });
+                        $('#ItemName').on('click', function () {
+                            $('#ItemName').val(cel.innerHTML)
+                        });
+                        $('#MRP').on('click', function () {
+                            $('#MRP').val(cel.innerHTML)
+                        });
+                        $('#Stock').on('click', function () {
+                            $('#Stock').val(cel.innerHTML)
+                        });
+                        $('#IBarU').on('click', function () {
+                            $('#IBarU').val(cel.innerHTML)
+                        });
+                    });
+                }
+
+            });
         </script>
     }
 </div>
