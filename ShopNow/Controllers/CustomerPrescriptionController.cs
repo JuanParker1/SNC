@@ -56,7 +56,7 @@ namespace ShopNow.Controllers
                     {
                         ImagePath = "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + a.ImagePath
                     }).ToList()
-                }).ToList();
+                }).OrderByDescending(i=>i.DateEncoded).ToList();
             return View(model);
         }
 
