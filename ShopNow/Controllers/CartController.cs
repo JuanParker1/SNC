@@ -1092,7 +1092,7 @@ namespace ShopNow.Controllers
                                     where c.Id == order.CustomerId
                                     select c.FcmTocken ?? "").FirstOrDefault().ToString();
                     //order cancel
-                    Helpers.PushNotification.SendbydeviceId($"Shop({order.ShopName}) has rejected your order. Kindly contact shop for details or try another order.", "Snowch", "Orderstatus", "", fcmToken.ToString());
+                    Helpers.PushNotification.SendbydeviceId($"Shop({order.ShopName}) has cancelled your order. Kindly contact shop for details or try another order.", "Snowch", "Orderstatus", "", fcmToken.ToString());
 
                     //Refund notification
                     if (payment.PaymentMode == "Online Payment" && status == 7)

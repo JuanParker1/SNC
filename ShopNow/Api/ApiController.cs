@@ -1955,7 +1955,7 @@ namespace ShopNow.Controllers
                 delivery.DateUpdated = DateTime.Now;
                 db.Entry(delivery).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
-                return Json(new { message = "Successfully  Rejected Order by Delivery Boy!" }, JsonRequestBehavior.AllowGet);
+                return Json(new { message = "Successfully Cancelled Order by Delivery Boy!" }, JsonRequestBehavior.AllowGet);
             }
             else
                 return Json(new { message = "Failed to Reject Order!" }, JsonRequestBehavior.AllowGet);
