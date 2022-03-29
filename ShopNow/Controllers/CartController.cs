@@ -502,6 +502,12 @@ namespace ShopNow.Controllers
                 model.ShopLatitude = shop.Latitude;
                 model.ShopLongitude = shop.Longitude;
 
+                var customer = db.Customers.Where(i => i.Id == model.CustomerId).FirstOrDefault();
+                if(customer != null)
+                {
+                    model.CustomerAlternateNumber = customer.AlternateNumber;
+                }
+
                 //var deliveryBoy = db.DeliveryBoys.FirstOrDefault(i => i.Id == order.DeliveryBoyId);
                 //if (deliveryBoy != null)
                 //{
