@@ -37,7 +37,7 @@
             <div class="card h-100">
                 <div class="card-body">
                     <label class="font-weight-bold text-muted"><u>Profile Details:</u></label>
-                    <img src="@Model.ImagePath" class="rounded-circle my-3 d-block mx-auto img-thumbnail shadow CustomerImage" data-customername="@Model.Name" data-toggle="modal" data-target="#ModalCustomerImg" alt="customerimage" style="width:170px;">
+                    <img src="@Model.ImagePath" class="rounded-circle my-3 d-block mx-auto img-thumbnail shadow CustomerImage" data-customername="@Model.Name" data-toggle="modal" data-target="#ModalCustomerImg" alt="customerimage" style="width:200px;" onerror="this.src='/Images/noimage.png'">
                     <div class="text-center">
                         <h5 class="text-success text-uppercase">@Model.Name</h5>
                         <h5>@Model.PhoneNumber</h5>
