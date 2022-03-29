@@ -269,6 +269,17 @@
                         </div>
                     </div>
                 </div>*@
+
+                @*<div class="row">
+                    <div class="col-md-6 mt-5 px-1">
+                        <div class="card shadow-sm">
+                            <div class="card-body">
+                                <canvas id="gauge1" width="200" height="300" class="d-inline"></canvas>
+                                <canvas id="gauge2" width="200" height="300" class="d-inline"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>*@
                 <footer class="block py-4">
                     <div class="col-md-12 mx-auto">
                         <p class="text-center font-weight-light small">&copy; Copyright 2020. All Rights Reserved.<br /> Designed by Snowch</p>
@@ -277,8 +288,13 @@
             </div>
         </div>
     </div>
+    @*<script src="~/Scripts/jquery.gauge.js"></script>*@
     <script>
+
         $(document).ready(function () {
+            //$("#gauge1").gauge(30, { color: "#388e3c", max: 100, min: 0, unit: " visit", bgcolor: "#f2f2f2" });
+            //$("#gauge2").gauge(30, { color: "#388e3c", max: 100, min: 0, unit: " visit", bgcolor: "#f2f2f2" });
+
               $('select[name="MonthFilter"] option[value=@Model.MonthFilter]').prop('selected', true);
             $('select[name="YearFilter"] option[value=@Model.YearFilter]').prop('selected', true);
 

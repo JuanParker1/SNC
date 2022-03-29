@@ -2953,6 +2953,7 @@
     <Content Include="Scripts\jquery-ui.js" />
     <Content Include="Scripts\jquery.dataTables.min.js" />
     <Content Include="Scripts\jquery.easing.js" />
+    <Content Include="Scripts\jquery.gauge.js" />
     <Content Include="Scripts\jquery.min.js" />
     <Content Include="Scripts\jquery.moneymask.js" />
     <Content Include="Scripts\jquery.signalR-2.1.1.js" />
