@@ -94,9 +94,14 @@
             });
 
             $("#btnExport").click(function () {
+                var name = "@Model.ShopName";
+                var regex = /[.,\s]/g;
+                name = name.replace(regex, ' ');
+                name = name.replace(/&amp;/g, "&")
+                name = name.replaceAll("[^a-zA-Z0-9][.,]", " ");
                 $("table").table2excel({
                     name: "Worksheet Name",
-                    filename: "MonthlyReport-@Model.ShopName",
+                    filename: "MonthlyReport-"+name,
                     fileext: ".xls",
                     exclude_links: true,
                 });
