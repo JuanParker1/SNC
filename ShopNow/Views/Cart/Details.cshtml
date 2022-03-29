@@ -1088,7 +1088,9 @@
             w.close();
         }
         function gotomap(lat, lng) {
-            window.open('https://www.google.com/maps/place/' + lat + ',' + lng, "_blank");
+            var shopName = "@Model.ShopName";
+            //window.open('https://www.google.com/maps/place/' + lat + ',' + lng, "_blank");
+            window.open('https://www.google.com/maps/dir/?api=1&origin=' + shopName + '&destination=' + lat + ',' + lng, "_blank");
         }
         $(document).ready(function () {
             $('[data-toggle="tooltip"]').tooltip();
