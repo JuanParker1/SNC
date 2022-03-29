@@ -26,16 +26,17 @@ namespace ShopNow.Controllers
                 Id = i.Id,
                 Name = i.Name,
                 Version = i.Version,
-                DateUpdated = i.DateUpdated
+                DateUpdated = i.DateUpdated,
+                DeviceType = i.DeviceType
             }).ToList();
             return View(model);
         }
 
         [AccessPolicy(PageCode = "SNCADC035")]
         [HttpPost]
-        public ActionResult Create(string name, string version)
+        public ActionResult Create(string name, string version, int deviceType) //deviceType 1-Android, 2-IOS
         {
-            var isExist = db.AppDetails.Any(i => i.Name == name);
+            var isExist = db.AppDetails.Any(i => i.Name == name && i.Status ==0 && i.DeviceType == deviceType);
             if (!isExist)
             {
                 var appDetail = new AppDetail
@@ -43,7 +44,8 @@ namespace ShopNow.Controllers
                     DateUpdated = DateTime.Now,
                     Name = name,
                     Status = 0,
-                    Version = version
+                    Version = version,
+                    DeviceType = deviceType
                 };
                 db.AppDetails.Add(appDetail);
                 db.SaveChanges();

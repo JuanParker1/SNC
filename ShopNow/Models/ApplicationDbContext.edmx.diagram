@@ -12,7 +12,6 @@
         <EntityTypeShape EntityType="sncModel.AddOnCategory" Width="1.5" PointX="4.75" PointY="3.75" IsExpanded="true" />
         <EntityTypeShape EntityType="sncModel.Agency" Width="1.5" PointX="6.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="sncModel.ApiSetting" Width="1.5" PointX="8.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="sncModel.AppDetail" Width="1.5" PointX="0.75" PointY="8.75" IsExpanded="true" />
         <EntityTypeShape EntityType="sncModel.Banner" Width="1.5" PointX="2.75" PointY="8.75" IsExpanded="true" />
         <EntityTypeShape EntityType="sncModel.BillingCharge" Width="1.5" PointX="4.75" PointY="8.75" IsExpanded="true" />
         <EntityTypeShape EntityType="sncModel.Bill" Width="1.5" PointX="8.75" PointY="6.75" IsExpanded="true" />
@@ -93,6 +92,7 @@
         <EntityTypeShape EntityType="sncModel.Shop" Width="1.5" PointX="19.375" PointY="33.75" />
         <EntityTypeShape EntityType="sncModel.DistanceSetting" Width="1.5" PointX="19.375" PointY="27.75" />
         <EntityTypeShape EntityType="sncModel.DailyVisitor" Width="1.5" PointX="21.375" PointY="27.75" />
+        <EntityTypeShape EntityType="sncModel.AppDetail" Width="1.5" PointX="21.375" PointY="33.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

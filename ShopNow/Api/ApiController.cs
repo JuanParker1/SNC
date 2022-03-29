@@ -7173,14 +7173,18 @@ namespace ShopNow.Controllers
         public JsonResult GetCustomerAppVersion(int customerid)
         {
             string appVersion = "0";
+            string iosVersion = "0";
             string customerVersion = "0";
-            var appDetails = db.AppDetails.FirstOrDefault(i => i.Status == 0);
+            var appDetails = db.AppDetails.Where(i => i.Status == 0).ToList();
             if (appDetails != null)
-                appVersion = appDetails.Version;
+            {
+                appVersion = appDetails.FirstOrDefault(i => i.DeviceType == 1)?.Version;
+                iosVersion = appDetails.FirstOrDefault(i => i.DeviceType == 2)?.Version;
+            }
             var customerAppdetails = db.CustomerAppInfoes.FirstOrDefault(i => i.CustomerId == customerid);
             if (customerAppdetails != null)
                 customerVersion = customerAppdetails.Version;
-            return Json(new { appVersion = appVersion, customerVersion = customerVersion }, JsonRequestBehavior.AllowGet);
+            return Json(new { appVersion = appVersion, customerVersion = customerVersion, iosVersion = iosVersion }, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]

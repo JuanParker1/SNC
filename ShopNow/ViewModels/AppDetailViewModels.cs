@@ -11,9 +11,24 @@ namespace ShopNow.ViewModels
         public class ListItem
         {
             public int Id { get; set; }
+            public int DeviceType { get; set; }
             public string Name { get; set; }
             public string Version { get; set; }
             public DateTime DateUpdated { get; set; }
+
+            public string Device
+            {
+                get
+                {
+                    switch (this.DeviceType)
+                    {
+                        case 2:
+                            return "IOS";
+                        default:
+                            return "Android";
+                    }
+                }
+            }
         }
     }
 }
