@@ -713,7 +713,7 @@ namespace ShopNow.Controllers
                           select (Double?)i.DeliveryCharge).Sum() ?? 0;
 
             model.Lists = db.DeliveryBoys
-               .Where(i => i.Active == 1 && i.Status == 0)
+               .Where(i => i.Active == 1 && i.Status == 0 && i.DistrictName == shop.DistrictName)
                  .AsEnumerable()
                  .Select(i => new CartAssignDeliveryBoyViewModel.CartAssignList
                  {
@@ -723,7 +723,7 @@ namespace ShopNow.Controllers
                      Amount = amount,
                      Meters = (((Math.Acos(Math.Sin((shop.Latitude * Math.PI / 180)) * Math.Sin((i.Latitude * Math.PI / 180)) + Math.Cos((shop.Latitude * Math.PI / 180)) * Math.Cos((i.Latitude * Math.PI / 180))
                  * Math.Cos(((shop.Longitude - i.Longitude) * Math.PI / 180)))) * 180 / Math.PI) * 60 * 1.1515 * 1609.344)
-                 }).Where(i => i.Status == 0).ToList();
+                 }).ToList();
 
             return View(model);
         }
