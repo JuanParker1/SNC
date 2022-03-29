@@ -13,6 +13,7 @@ namespace ShopNow.ViewModels
         public HttpPostedFileBase excel_file { get; set; }
         public string button { get; set; }
         public string Filename { get; set; }
-        public System.Data.DataTable DataTable { get; set; }
+        public System.Data.DataTable DataTable { get; set; } 
+        public HttpPostedFileBase upload { get; set; }
     }
 }

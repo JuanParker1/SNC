@@ -17,6 +17,7 @@ namespace ShopNow.Models
         public int Id { get; set; }
         public string Name { get; set; }
         public string Version { get; set; }
+        public int DeviceType { get; set; }
         public int Status { get; set; }
         public System.DateTime DateUpdated { get; set; }
     }

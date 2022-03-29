@@ -18,13 +18,28 @@
             <div class="row">
                 <div class="col-md-4 border-right">
                     <form action="/AppDetail/Create" method="post">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label class="col-form-label d-block">Device Type</label>
+                                <div class="form-check-inline mr-5">
+                                    <label class="form-check-label">
+                                        <input type="radio" class="form-check-input" name="DeviceType" value="1" checked>Android
+                                    </label>
+                                </div>
+                                <div class="form-check-inline mr-5">
+                                    <label class="form-check-label">
+                                        <input type="radio" class="form-check-input" name="DeviceType" value="2">IOS
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
                         <div class="form-group">
                             <label class="col-form-label">Name</label>
-                            <input type="text" class="form-control" name="Name" required/>
+                            <input type="text" class="form-control" name="Name" required />
                         </div>
                         <div class="form-group">
                             <label class="col-form-label">Version</label>
-                            <input type="text" class="form-control" name="Version" required/>
+                            <input type="text" class="form-control" name="Version" required />
                         </div>
                         <div class="mx-auto col-8"> <input type="submit" value="Save" class="btn btn-success btn-block" /></div>
                     </form>
@@ -32,12 +47,13 @@
                 <div class="col-md-8">
                     @Html.Grid(Model.ListItems).Columns(columns =>
                {
+               columns.Add(s => s.Device).Titled("Device").Filterable(true).SetWidth(30);
                columns.Add(s => s.Name).Titled("Name").Filterable(true).SetWidth(30);
                columns.Add(s => s.Version).Titled("Version").Filterable(true).SetWidth(5);
                columns.Add(s => s.DateUpdated).Titled("Date Updated").Filterable(true).SetWidth(30);
                columns.Add().Encoded(false).Sanitized(false).Titled("Action").SetWidth(5)
              .RenderValueAs(o => @<div>
-                    <a href="#modal-edit" data-toggle="modal" data-target="#modal-edit" data-id="@o.Id" data-name="@o.Name" data-version="@o.Version" class="text-info mr-5 edit-prompt"><i class="fa fa-edit fa-lg"></i></a>
+                    <a href="#modal-edit" data-toggle="modal" data-target="#modal-edit" data-id="@o.Id" data-device="@o.Device" data-name="@o.Name" data-version="@o.Version" class="text-info mr-5 edit-prompt"><i class="fa fa-edit fa-lg"></i></a>
                     <a href="javascript:void(0)" data-id="@ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id)" class="text-danger btnDelete"><i class="fa fa-trash fa-lg"></i></a>
                 </div>);
            }).WithPaging(20).Sortable(true)
@@ -59,6 +75,10 @@
             <div class="modal-body">
                 <form action="/AppDetail/Edit" method="post">
                     <input type="hidden" name="Id" id="Id" />
+                    <div class="form-group">
+                        <label class="col-form-label">Device Type - </label>
+                        <span id="edit-device" class="font-weight-bold"></span>
+                    </div>
                     <div class="form-group">
                         <label class="col-form-label">Name</label>
                         <input id="edit-name" type="text" class="form-control" name="Name" required />
@@ -111,6 +131,7 @@
                 $('[name="Id"]').val($(this).attr('data-id'));
                 $("#edit-name").val($(this).attr('data-name'));
                 $("#edit-version").val($(this).attr('data-version'));
+                $("#edit-device").text($(this).attr('data-device'));
             });
 
 
