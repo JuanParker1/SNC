@@ -311,7 +311,7 @@ namespace ShopNow.ViewModels
             public string DeliveryBoyPhoneNumber { get; set; }
             public string DeliveryBoyName { get; set; }
             public int Status { get; set; }
-            public DateTime DateEncoded { get; set; }
+            public DateTime DateUpdated { get; set; }
             public string PaymentMode { get; set; }
             public double Price { get; set; }
             public double Amount { get; set; }

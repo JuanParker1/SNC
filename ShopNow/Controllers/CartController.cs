@@ -228,13 +228,13 @@ namespace ShopNow.Controllers
                      DeliveryBoyPhoneNumber = i.c.DeliveryBoyPhoneNumber,
                      Status = i.c.Status,
                      DeliveryBoyName = i.c.DeliveryBoyName,
-                     DateEncoded = i.c.DateEncoded,
+                     DateUpdated = i.c.DateUpdated,
                      RefundAmount = i.p.RefundAmount ?? 0,
                      RefundRemark = i.p.RefundRemark ?? "",
                      PaymentMode = i.p.PaymentMode,
                      Amount = i.c.IsPickupDrop == true ? (i.p.RefundAmount != null && i.p.RefundAmount != 0) ? i.c.NetTotal - (i.p.RefundAmount ?? 0) : i.c.TotalPrice : i.p.Amount - (i.p.RefundAmount ?? 0),
                      IsPickupDrop = i.c.IsPickupDrop
-                 }).OrderByDescending(i => i.DateEncoded).ToList();
+                 }).OrderByDescending(i => i.DateUpdated).ToList();
             int counter = 1;
             model.PickupLists.ForEach(x => x.No = counter++);
             return View(model);
@@ -256,14 +256,14 @@ namespace ShopNow.Controllers
                     DeliveryBoyPhoneNumber = i.c.DeliveryBoyPhoneNumber,
                     Status = i.c.Status,
                     DeliveryBoyName = i.c.DeliveryBoyName,
-                    DateEncoded = i.c.DateEncoded,
+                    DateUpdated = i.c.DateUpdated,
                     RefundAmount = i.p.RefundAmount ?? 0,
                     RefundRemark = i.p.RefundRemark ?? "",
                     PaymentMode = i.p.PaymentMode,
                    // Amount = i.c.IsPickupDrop == true ? i.c.TotalPrice - (i.p.RefundAmount ?? 0) : i.p.Amount - (i.p.RefundAmount ?? 0),
                    Amount = i.c.IsPickupDrop == true ? (i.p.RefundAmount != null && i.p.RefundAmount != 0) ? i.c.NetTotal - (i.p.RefundAmount ?? 0) : i.c.TotalPrice : i.p.Amount - (i.p.RefundAmount ?? 0),
                     IsPickupDrop = i.c.IsPickupDrop
-                }).OrderByDescending(i => i.DateEncoded).ToList();
+                }).OrderByDescending(i => i.DateUpdated).ToList();
             int counter = 1;
             model.PickupLists.ForEach(x => x.No = counter++);
             return View(model);
