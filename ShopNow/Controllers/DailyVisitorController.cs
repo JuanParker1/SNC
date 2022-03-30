@@ -22,9 +22,9 @@ namespace ShopNow.Controllers
                 {
                     Count = i.Count(),
                     //CustomerId = i.Key.CustomerId,
-                    DateUpdated = i.OrderByDescending(a=>a.Id).FirstOrDefault().DateUpdated,
+                    DateUpdated = i.OrderByDescending(a=>a.DateUpdated).FirstOrDefault().DateUpdated,
                     ShopId = i.Key,
-                    ShopName = i.FirstOrDefault().ShopName
+                    ShopName = i.OrderByDescending(a => a.DateUpdated).FirstOrDefault().ShopName
                 }).OrderByDescending(i => i.Count).ToList();
             return View(model);
         }
