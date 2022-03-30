@@ -7693,6 +7693,7 @@ namespace ShopNow.Controllers
 
         public JsonResult SaveCustomerVisit(int customerId, int shopId, string shopName)
         {
+
             if (!db.DailyVisitors.Any(i => i.CustomerId == customerId && i.ShopId == shopId && DbFunctions.TruncateTime(i.DateUpdated) == DbFunctions.TruncateTime(DateTime.Now)))
             {
                 DailyVisitor dailyVisitor = new DailyVisitor
@@ -7701,12 +7702,13 @@ namespace ShopNow.Controllers
                     DateEncoded = DateTime.Now,
                     DateUpdated = DateTime.Now,
                     ShopId = shopId,
-                    ShopName = shopName
+                    ShopName = shopId == 0 ? shopName : db.Shops.FirstOrDefault(i => i.Id == shopId).Name
                 };
                 db.DailyVisitors.Add(dailyVisitor);
                 db.SaveChanges();
             }
-            else {
+            else
+            {
                 var dailyVisitor = db.DailyVisitors.FirstOrDefault(i => i.CustomerId == customerId && i.ShopId == shopId && DbFunctions.TruncateTime(i.DateUpdated) == DbFunctions.TruncateTime(DateTime.Now));
                 dailyVisitor.DateUpdated = DateTime.Now;
                 db.Entry(dailyVisitor).State = System.Data.Entity.EntityState.Modified;
