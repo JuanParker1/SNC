@@ -1273,9 +1273,9 @@
                         if (data) {
                             $('input[name="Distance"]').val(data.Distance.toFixed(2));
                             var distance = data.Distance;
-                            $.getJSON("/CustomerPrescription/GetShopCharge", { shopid: shopid, itemTotal: itemTotal, customerid: 0, totalSize: 0, totalWeight: 0, distance: distance }, function (data) {
+                            $.getJSON("/Service/GetDeliveryCharge", { ShopId: shopid, PickupLatitude: 0, PickupLongitude: 0, DeliveryLatitude: 0, DeliveryLongitude: 0, distance: distance }, function (data) {
                                 if (data != null) {
-                                    $('input[name="DeliveryCharge"]').val(data.GrossDeliveryCharge.toFixed(2));
+                                    $('input[name="DeliveryCharge"]').val(data.DeliveryCharge.toFixed(2));
                                 }
                             });
                         } else {
@@ -1293,12 +1293,11 @@
                                 $('input[name="Distance"]').val(distance);
                                 saveLocation(origin.lat, origin.lng, dest.lat, dest.lng, distance, duration);
                                 var distance = distance;
-                                $.getJSON("/CustomerPrescription/GetShopCharge", { shopid: shopid, itemTotal: itemTotal, customerid: 0, totalSize: 0, totalWeight: 0, distance: distance }, function (data) {
+                                $.getJSON("/Service/GetDeliveryCharge", { ShopId: shopid, PickupLatitude: 0, PickupLongitude: 0, DeliveryLatitude: 0, DeliveryLongitude: 0, distance: distance }, function (data) {
                                     if (data != null) {
-                                        $('input[name="DeliveryCharge"]').val(data.GrossDeliveryCharge.toFixed(2));
+                                        $('input[name="DeliveryCharge"]').val(data.DeliveryCharge.toFixed(2));
                                     }
                                 });
-
                             });
                         }
                     },
