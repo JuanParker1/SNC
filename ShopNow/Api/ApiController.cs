@@ -5931,6 +5931,15 @@ namespace ShopNow.Controllers
                     db.Entry(payment).State = System.Data.Entity.EntityState.Modified;
                     db.SaveChanges();
 
+                    var customer = db.Customers.FirstOrDefault(i => i.Id == order.CustomerId);
+                    //Add Wallet Amount to customer
+                    if (order.WalletAmount != 0 && customer != null)
+                    {
+                        customer.WalletAmount += order.WalletAmount;
+                        db.Entry(customer).State = System.Data.Entity.EntityState.Modified;
+                        db.SaveChanges();
+                    }
+
                     if (order.CustomerId != 0)
                     {
                         var fcmToken = (from c in db.Customers

@@ -22,7 +22,7 @@ namespace ShopNow.Controllers
                 {
                     Count = i.Count(),
                     //CustomerId = i.Key.CustomerId,
-                    DateUpdated = i.FirstOrDefault().DateUpdated,
+                    DateUpdated = i.OrderByDescending(a=>a.Id).FirstOrDefault().DateUpdated,
                     ShopId = i.Key,
                     ShopName = i.FirstOrDefault().ShopName
                 }).OrderByDescending(i => i.Count).ToList();
