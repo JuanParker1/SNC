@@ -92,5 +92,6 @@ namespace ShopNow.Models
         public string CreatedBy { get; set; }
         public string UpdatedBy { get; set; }
         public double DeliveryDiscountPercentage { get; set; }
+        public bool IsShopRate { get; set; }
     }
 }
