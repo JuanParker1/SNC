@@ -62,7 +62,7 @@
                              columns.Add(s => s.DistrictName).Titled("District Name").Filterable(true).SetWidth(30);
                              columns.Add(s => s.Count).Titled("Count").Filterable(true).SetWidth(8);
                          }).Sortable(true)
-                                    </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -75,9 +75,19 @@
     <script src="~/Scripts/select2/js/select2.js"></script>
     <link href="~/Scripts/select2/css/select2.css" rel="stylesheet" />
     <link href="~/Content/select2/select2.custom.css" rel="stylesheet" />
+    <script src="~/Scripts/sweetalert/sweetalert.min.js"></script>
+    <link href="~/Content/sweetalert/sweetalert.css" rel="stylesheet" />
     <!--Select2 End-->
     <script>
         $(document).ready(function () {
+              var errormsg = "@ViewBag.ErrorMessage";
+                var msg = "@ViewBag.Message";
+                if (errormsg != "") {
+                    swal("Notice!", errormsg, "warning")
+                }
+                if (msg != "") {
+                    swal("Success!", msg, "success")
+                }
 
             $('[name="Type"]').on('change', function () {
                 let type = parseInt($(this).val());

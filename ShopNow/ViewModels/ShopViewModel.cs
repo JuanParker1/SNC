@@ -100,6 +100,7 @@ namespace ShopNow.ViewModels
         public int DeliveryType { get; set; }
         public int DeliveryTierType { get; set; }
         public double ShopPricePercentage { get; set; }
+        public bool IsShopRate { get; set; }
     }
 
     public class ShopEditViewModel
@@ -209,6 +210,7 @@ namespace ShopNow.ViewModels
         public double PlatformCredit { get; set; }
         public double DeliveryCredit { get; set; }
         public double ShopPricePercentage { get; set; }
+        public bool IsShopRate { get; set; }
     }
 
     public class ShopListViewModel

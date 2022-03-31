@@ -30,6 +30,8 @@
                    columns.Add(c => c.DateUpdated).Titled("Date").Filterable(true).SetWidth(10).Format("{0:dd-MM-yyyy hh:mm tt}");
                    columns.Add(c => c.ShopName).Titled("Shop Name").Filterable(true).SetWidth(10);
                    columns.Add(c => c.Count).Titled("Visitor Count").Filterable(true).SetWidth(15);
+                   columns.Add(c => c.OrderCount).Titled("Order Count").Filterable(true).SetWidth(15);
+                   columns.Add(c => c.ConversionRate).Titled("Conversion Rate").Filterable(true).SetWidth(15);
                }).Sortable(true)
                 </div>
             </div>

@@ -16,15 +16,18 @@ namespace ShopNow.Controllers
         public ActionResult List(DailyVisitorListViewModel model)
         {
             model.DateFilter = model.DateFilter == null ? DateTime.Now : model.DateFilter;
-            model.ListItems = db.DailyVisitors.Where(i => DbFunctions.TruncateTime(i.DateUpdated) == DbFunctions.TruncateTime(model.DateFilter))
-                .GroupBy(i => i.ShopId)
+            model.ListItems = db.DailyVisitors.Where(i => DbFunctions.TruncateTime(i.DateUpdated) == DbFunctions.TruncateTime(model.DateFilter)).GroupBy(i => i.ShopId)
+                .GroupJoin(db.Orders.Where(i => DbFunctions.TruncateTime(i.DateEncoded) == DbFunctions.TruncateTime(model.DateFilter) && i.Status == 6), dv => dv.FirstOrDefault().ShopId, o => o.ShopId, (dv, o) => new { dv, o })
+
                 .Select(i => new DailyVisitorListViewModel.ListItem
                 {
-                    Count = i.Count(),
+                    Count = i.dv.Count(),
                     //CustomerId = i.Key.CustomerId,
-                    DateUpdated = i.OrderByDescending(a=>a.Id).FirstOrDefault().DateUpdated,
-                    ShopId = i.Key,
-                    ShopName = i.FirstOrDefault().ShopName
+                    DateUpdated = i.dv.OrderByDescending(a => a.DateUpdated).FirstOrDefault().DateUpdated,
+                    ShopId = i.dv.Key,
+                    ShopName = i.dv.OrderByDescending(a => a.DateUpdated).FirstOrDefault().ShopName,
+                    OrderCount = i.o.Count(),
+                    ConversionRate = i.o.Count() != 0 ? Math.Round((double)i.o.Count() / i.dv.Count() * 100,2) : 0
                 }).OrderByDescending(i => i.Count).ToList();
             return View(model);
         }
