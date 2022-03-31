@@ -17,6 +17,7 @@ namespace ShopNow.ViewModels
             public DateTime DateUpdated { get; set; }
             public int Count { get; set; }
             public int OrderCount { get; set; }
+            public double ConversionRate { get; set; }
         }
     }
 }
