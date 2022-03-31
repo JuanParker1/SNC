@@ -1071,6 +1071,13 @@ namespace ShopNow.Controllers
                 productsList.ForEach(i => { i.Percentage = model.Percentage; i.Price = Math.Round(i.MenuPrice - (i.MenuPrice * model.Percentage) / 100, 0); });
                 db.SaveChanges();
             }
+            var shop = db.Shops.FirstOrDefault(i => i.Id == model.ShopId);
+            if (shop != null)
+            {
+                shop.MaxOfferPercentage = model.Percentage;
+                db.Entry(shop).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+            }
             ViewBag.Message = "Successfully Updated!";
             return View();
         }
