@@ -6359,7 +6359,7 @@ namespace ShopNow.Controllers
                 string query = "SELECT * " +
                                    " FROM Shops where(3959 * acos(cos(radians(@latitude)) * cos(radians(Latitude)) * cos(radians(Longitude) - radians(@longitude)) + sin(radians(@latitude)) * sin(radians(Latitude)))) < 16 and ShopCategoryId =" + shop.ShopCategoryId + " and (Status = 0 or  Status = 6) and Latitude != 0 and Longitude != 0" +
                                    " order by IsOnline desc,Adscore desc,Rating desc";
-                if (shop.Id == 347 || shop.Id == 360 || shop.Id == 367)
+                if (shop.Id == 347 || shop.Id == 360 || shop.Id == 367 || shop.Id == 322)
                 {
                     model.MRP = product.MenuPrice; //Remove in next App release
                     model.SalePrice = product.MenuPrice;  //Remove in next App release
