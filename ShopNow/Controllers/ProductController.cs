@@ -280,7 +280,7 @@ namespace ShopNow.Controllers
             db.Entry(prod).State = System.Data.Entity.EntityState.Modified;
             db.SaveChanges();
 
-            if (prod.DiscountCategoryId != 0)
+            //if (prod.DiscountCategoryId != 0)
                 UpdateMedicalShopMaxOfferPercentage(prod.ShopId);
             return RedirectToAction("MedicalEdit", new { id = AdminHelpers.ECodeLong(prod.Id) });
         }
@@ -507,7 +507,7 @@ namespace ShopNow.Controllers
             prod.UpdatedBy = user.Name;
             db.Entry(prod).State = System.Data.Entity.EntityState.Modified;
             db.SaveChanges();
-            if (prod.Percentage > 0)
+            //if (prod.Percentage > 0)
                 UpdateShopMaxOfferPercentage(prod.ShopId);
             //Addons
             if (prod.Customisation == true)
@@ -779,7 +779,7 @@ namespace ShopNow.Controllers
             db.Entry(prod).State = System.Data.Entity.EntityState.Modified;
             db.SaveChanges();
 
-            if (prod.Percentage > 0)
+            //if (prod.Percentage > 0)
                 UpdateShopMaxOfferPercentage(prod.ShopId);
             //return RedirectToAction("FMCGList", new { ShopId = prod.ShopId, shopName = prod.ShopName });
             return RedirectToAction("FMCGEdit", new { id = AdminHelpers.ECodeLong(model.Id) });
@@ -943,7 +943,7 @@ namespace ShopNow.Controllers
             db.Entry(prod).State = System.Data.Entity.EntityState.Modified;
             db.SaveChanges();
 
-            if (prod.Percentage > 0)
+            //if (prod.Percentage > 0)
                 UpdateShopMaxOfferPercentage(prod.ShopId);
             return RedirectToAction("ElectronicEdit", new { id = AdminHelpers.ECodeLong(model.Id) });
         }
