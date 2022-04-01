@@ -14,7 +14,7 @@ namespace ShopNow.Controllers
     {
         private sncEntities db = new sncEntities();
 
-        [AccessPolicy(PageCode = "")]
+        [AccessPolicy(PageCode = "SNCDSI337")]
         public ActionResult Index()
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
@@ -34,8 +34,8 @@ namespace ShopNow.Controllers
             return View(model);
         }
 
-        [AccessPolicy(PageCode = "")]
         [HttpPost]
+        [AccessPolicy(PageCode = "SNCDSC338")]
         public ActionResult Create(double distance, TimeSpan? time)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -56,8 +56,8 @@ namespace ShopNow.Controllers
             return RedirectToAction("Index");
         }
 
-        [AccessPolicy(PageCode = "")]
         [HttpPost]
+        [AccessPolicy(PageCode = "SNCDSE339")]
         public ActionResult Edit(int id, double distance, TimeSpan? time)
         {
              var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -71,7 +71,7 @@ namespace ShopNow.Controllers
             return RedirectToAction("Index");
         }
 
-        [AccessPolicy(PageCode = "")]
+        [AccessPolicy(PageCode = "SNCDSD340")]
         public JsonResult Delete(string id)
         {
             int dId = AdminHelpers.DCodeInt(id);

@@ -33,7 +33,6 @@ namespace ShopNow.Controllers
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
             var model = new PaymentReportViewModel();
-
             model.List = db.Orders
                 .Join(db.Payments, c => c.OrderNumber, p => p.OrderNumber, (c, p) => new { c, p }).Where(i => i.c.Status == 6)
             .Select(i => new PaymentReportViewModel.PaymentReportList
@@ -57,7 +56,6 @@ namespace ShopNow.Controllers
             ViewBag.Name = user.Name;
             var rate = db.PlatFormCreditRates.Select(i => i.RatePerOrder).FirstOrDefault();
             var model = new PlatformCreditReportViewModel();
-
             if (shopId != 0)
             {
                 if (StartDate != null && EndDate != null)
@@ -307,23 +305,6 @@ namespace ShopNow.Controllers
             return View(model);
         }
 
-        public ActionResult MarkShopPaymentAsPaidInCart(DateTime date)
-        {
-            var paymentListByDate = db.Payments.Where(i => DbFunctions.TruncateTime(i.DateEncoded) == DbFunctions.TruncateTime(date) && i.OrderNumber != 0).Select(i => i.OrderNumber).ToList();
-            foreach (var orderno in paymentListByDate)
-            {
-                var orderList = db.Orders.Where(i => i.OrderNumber == orderno && i.Status == 6).ToList();
-                foreach (var item in orderList)
-                {
-                    var order = db.Orders.FirstOrDefault(i => i.Id == item.Id);
-                    order.ShopPaymentStatus = 1;
-                    db.Entry(order).State = System.Data.Entity.EntityState.Modified;
-                    db.SaveChanges();
-                }
-            }
-            return RedirectToAction("ShopPayment", "Payment");
-        }
-
         [AccessPolicy(PageCode = "SNCPYDP187")]
         public ActionResult DeliveryBoyPayment(DeliveryBoyPaymentListViewModel model)
         {
@@ -360,23 +341,6 @@ namespace ShopNow.Controllers
                    TotalDeliveryBoyAmount = i.d.WorkType == 1 ? ((i.c.c.DeliveryCharge == 35 || i.c.c.DeliveryCharge == 50) ? 20 + i.c.c.TipsAmount : 20 + (i.c.c.IsPickupDrop == false ? i.c.c.DeliveryCharge - 35 : i.c.c.Distance <= 15 ? i.c.c.DeliveryCharge - 50 : (60 + ((i.c.c.Distance - 15) * 8))) + i.c.c.TipsAmount) : i.c.c.DeliveryCharge + i.c.c.TipsAmount
                }).ToList();
             return View(model);
-        }
-
-        public ActionResult MarkDeliveryBoyPaymentAsPaidInCart(DateTime date)
-        {
-            var paymentListByDate = db.Payments.Where(i => DbFunctions.TruncateTime(i.DateEncoded) == DbFunctions.TruncateTime(date) && i.OrderNumber != 0).Select(i => i.OrderNumber).ToList();
-            foreach (var orderno in paymentListByDate)
-            {
-                var orderList = db.Orders.Where(i => i.OrderNumber == orderno && i.Status == 6).ToList();
-                foreach (var item in orderList)
-                {
-                    var order = db.Orders.FirstOrDefault(i => i.Id == item.Id);
-                    order.DeliveryBoyPaymentStatus = 1;
-                    db.Entry(order).State = System.Data.Entity.EntityState.Modified;
-                    db.SaveChanges();
-                }
-            }
-            return RedirectToAction("DeliveryBoyPayment", "Payment");
         }
 
         [AccessPolicy(PageCode = "SNCPYRP188")]
@@ -438,58 +402,6 @@ namespace ShopNow.Controllers
                      TransactionTax = i.pd.Any() ? i.pd.FirstOrDefault().Tax : 0
                  }).ToList();
 
-            return View(model);
-        }
-
-        public ActionResult ShopPay(int orderNo)
-        {
-            var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
-            var order = db.Orders.FirstOrDefault(i => i.OrderNumber == orderNo && i.Status == 0 && i.ShopPaymentStatus == 0);
-            order.ShopPaymentStatus = 1;
-            db.Entry(order).State = System.Data.Entity.EntityState.Modified;
-            db.SaveChanges();
-            return RedirectToAction("RetailerPayment");
-        }
-
-        public ActionResult ShopBillDifferenceReport(ShopBillDifferenceReportViewModel model)
-        {
-            var user = ((Helpers.Sessions.User)Session["USER"]);
-            ViewBag.Name = user.Name;
-            model.ListItems = db.ShopBillDetails
-                .GroupJoin(db.Payments, s => s.OrderNumber, p => p.OrderNumber, (s,p) => new { s,p })
-                .GroupJoin(db.Orders, p => p.p.FirstOrDefault().OrderNumber, o => o.OrderNumber, (p, o) => new { p, o })
-                .Where(i => i.o.FirstOrDefault().Status == 6 && ((model.StartDate != null && model.EndDate != null) ? DbFunctions.TruncateTime(i.o.FirstOrDefault().DateEncoded) >= DbFunctions.TruncateTime(model.StartDate) && DbFunctions.TruncateTime(i.o.FirstOrDefault().DateEncoded) <= DbFunctions.TruncateTime(model.EndDate) : true) && (model.ShopId != 0 ? i.o.FirstOrDefault().ShopId == model.ShopId : true))
-                .Select(i => new ShopBillDifferenceReportViewModel.ListItem
-                {
-                    OrderId = i.o.FirstOrDefault().Id,
-                    BillAmount = i.p.s.BillAmount,
-                    BillNo = i.p.s.BillNo,
-                    OrderNumber = i.p.s.OrderNumber.ToString(),
-                    ShopName = i.o.FirstOrDefault().ShopName,
-                    TotalPrice = Math.Round(i.o.FirstOrDefault().TotalPrice,2),
-                    DifferenceAmount = Math.Round(i.p.s.BillAmount -  (i.o.FirstOrDefault().TotalPrice - (i.p.p.FirstOrDefault().RefundAmount ?? 0)),2),
-                    DifferencePercentage = Math.Round(((i.p.s.BillAmount - (i.o.FirstOrDefault().TotalPrice - (i.p.p.FirstOrDefault().RefundAmount ?? 0))) /i.p.s.BillAmount)*100,2),
-                    OrderDate = i.o.FirstOrDefault().DateEncoded
-                }).ToList();
-            return View(model);
-        }
-
-        public ActionResult ShopBillDifferencePendingReport(ShopBillDifferenceReportViewModel model)
-        {
-            var user = ((Helpers.Sessions.User)Session["USER"]);
-            ViewBag.Name = user.Name;
-            model.ListItems = db.Orders.Where(i=>i.Status == 6)
-                .GroupJoin(db.Payments, o => o.OrderNumber, p => p.OrderNumber, (o,p) => new { o,p })
-                .Where(i=> !db.ShopBillDetails.Any(s=>s.OrderNumber == i.o.OrderNumber) && ((model.StartDate != null && model.EndDate != null) ? DbFunctions.TruncateTime(i.o.DateEncoded) >= DbFunctions.TruncateTime(model.StartDate) && DbFunctions.TruncateTime(i.o.DateEncoded) <= DbFunctions.TruncateTime(model.EndDate) : true) && (model.ShopId != 0 ? i.o.ShopId == model.ShopId : true))
-                .Select(i => new ShopBillDifferenceReportViewModel.ListItem
-                {
-                    OrderId = i.o.Id,
-                    OrderNumber = i.o.OrderNumber.ToString(),
-                    ShopName = i.o.ShopName,
-                    TotalPrice = Math.Round(i.o.TotalPrice, 2),
-                    BillAmount = 0,
-                    OrderDate = i.o.DateEncoded
-                }).ToList();
             return View(model);
         }
 
@@ -637,6 +549,7 @@ namespace ShopNow.Controllers
             return View(model.creditLists);
         }
 
+        [AccessPolicy(PageCode = "SNCPYOOR329")]
         public ActionResult OrderOfferReport()
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -656,6 +569,94 @@ namespace ShopNow.Controllers
                     ShopLossAmount = i.of.OwnerType == 2 ? i.o.OfferAmount : 0
                 }).ToList();
             return View(model.ListItems);
+        }
+
+        [AccessPolicy(PageCode = "SNCPYSBR330")]
+        public ActionResult ShopBillDifferenceReport(ShopBillDifferenceReportViewModel model)
+        {
+            var user = ((Helpers.Sessions.User)Session["USER"]);
+            ViewBag.Name = user.Name;
+            model.ListItems = db.ShopBillDetails
+                .GroupJoin(db.Payments, s => s.OrderNumber, p => p.OrderNumber, (s, p) => new { s, p })
+                .GroupJoin(db.Orders, p => p.p.FirstOrDefault().OrderNumber, o => o.OrderNumber, (p, o) => new { p, o })
+                .Where(i => i.o.FirstOrDefault().Status == 6 && ((model.StartDate != null && model.EndDate != null) ? DbFunctions.TruncateTime(i.o.FirstOrDefault().DateEncoded) >= DbFunctions.TruncateTime(model.StartDate) && DbFunctions.TruncateTime(i.o.FirstOrDefault().DateEncoded) <= DbFunctions.TruncateTime(model.EndDate) : true) && (model.ShopId != 0 ? i.o.FirstOrDefault().ShopId == model.ShopId : true))
+                .Select(i => new ShopBillDifferenceReportViewModel.ListItem
+                {
+                    OrderId = i.o.FirstOrDefault().Id,
+                    BillAmount = i.p.s.BillAmount,
+                    BillNo = i.p.s.BillNo,
+                    OrderNumber = i.p.s.OrderNumber.ToString(),
+                    ShopName = i.o.FirstOrDefault().ShopName,
+                    TotalPrice = Math.Round(i.o.FirstOrDefault().TotalPrice, 2),
+                    DifferenceAmount = Math.Round(i.p.s.BillAmount - (i.o.FirstOrDefault().TotalPrice - (i.p.p.FirstOrDefault().RefundAmount ?? 0)), 2),
+                    DifferencePercentage = Math.Round(((i.p.s.BillAmount - (i.o.FirstOrDefault().TotalPrice - (i.p.p.FirstOrDefault().RefundAmount ?? 0))) / i.p.s.BillAmount) * 100, 2),
+                    OrderDate = i.o.FirstOrDefault().DateEncoded
+                }).ToList();
+            return View(model);
+        }
+
+        [AccessPolicy(PageCode = "SNCPYSBPR331")]
+        public ActionResult ShopBillDifferencePendingReport(ShopBillDifferenceReportViewModel model)
+        {
+            var user = ((Helpers.Sessions.User)Session["USER"]);
+            ViewBag.Name = user.Name;
+            model.ListItems = db.Orders.Where(i => i.Status == 6)
+                .GroupJoin(db.Payments, o => o.OrderNumber, p => p.OrderNumber, (o, p) => new { o, p })
+                .Where(i => !db.ShopBillDetails.Any(s => s.OrderNumber == i.o.OrderNumber) && ((model.StartDate != null && model.EndDate != null) ? DbFunctions.TruncateTime(i.o.DateEncoded) >= DbFunctions.TruncateTime(model.StartDate) && DbFunctions.TruncateTime(i.o.DateEncoded) <= DbFunctions.TruncateTime(model.EndDate) : true) && (model.ShopId != 0 ? i.o.ShopId == model.ShopId : true))
+                .Select(i => new ShopBillDifferenceReportViewModel.ListItem
+                {
+                    OrderId = i.o.Id,
+                    OrderNumber = i.o.OrderNumber.ToString(),
+                    ShopName = i.o.ShopName,
+                    TotalPrice = Math.Round(i.o.TotalPrice, 2),
+                    BillAmount = 0,
+                    OrderDate = i.o.DateEncoded
+                }).ToList();
+            return View(model);
+        }
+
+        public ActionResult MarkShopPaymentAsPaidInCart(DateTime date)
+        {
+            var paymentListByDate = db.Payments.Where(i => DbFunctions.TruncateTime(i.DateEncoded) == DbFunctions.TruncateTime(date) && i.OrderNumber != 0).Select(i => i.OrderNumber).ToList();
+            foreach (var orderno in paymentListByDate)
+            {
+                var orderList = db.Orders.Where(i => i.OrderNumber == orderno && i.Status == 6).ToList();
+                foreach (var item in orderList)
+                {
+                    var order = db.Orders.FirstOrDefault(i => i.Id == item.Id);
+                    order.ShopPaymentStatus = 1;
+                    db.Entry(order).State = System.Data.Entity.EntityState.Modified;
+                    db.SaveChanges();
+                }
+            }
+            return RedirectToAction("ShopPayment", "Payment");
+        }
+
+        public ActionResult MarkDeliveryBoyPaymentAsPaidInCart(DateTime date)
+        {
+            var paymentListByDate = db.Payments.Where(i => DbFunctions.TruncateTime(i.DateEncoded) == DbFunctions.TruncateTime(date) && i.OrderNumber != 0).Select(i => i.OrderNumber).ToList();
+            foreach (var orderno in paymentListByDate)
+            {
+                var orderList = db.Orders.Where(i => i.OrderNumber == orderno && i.Status == 6).ToList();
+                foreach (var item in orderList)
+                {
+                    var order = db.Orders.FirstOrDefault(i => i.Id == item.Id);
+                    order.DeliveryBoyPaymentStatus = 1;
+                    db.Entry(order).State = System.Data.Entity.EntityState.Modified;
+                    db.SaveChanges();
+                }
+            }
+            return RedirectToAction("DeliveryBoyPayment", "Payment");
+        }
+
+        public ActionResult ShopPay(int orderNo)
+        {
+            var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
+            var order = db.Orders.FirstOrDefault(i => i.OrderNumber == orderNo && i.Status == 0 && i.ShopPaymentStatus == 0);
+            order.ShopPaymentStatus = 1;
+            db.Entry(order).State = System.Data.Entity.EntityState.Modified;
+            db.SaveChanges();
+            return RedirectToAction("RetailerPayment");
         }
 
         public async Task<JsonResult> GetShopSelect2(string q = "")
@@ -688,6 +689,5 @@ namespace ShopNow.Controllers
             }
             base.Dispose(disposing);
         }
-
     }
 }
