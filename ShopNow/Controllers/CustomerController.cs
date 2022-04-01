@@ -104,6 +104,16 @@ namespace ShopNow.Controllers
             model.LastPurchaseDate = model.OrderListItems.Count() > 0 ? model.OrderListItems.OrderByDescending(i => i.DateEncoded).FirstOrDefault().DateEncoded : model.LastPurchaseDate;
             model.AppVersion = db.CustomerAppInfoes.FirstOrDefault(i => i.CustomerId == customer.Id)?.Version ?? "N/A";
             model.ImagePath = model.ImagePath != null ? (model.ImagePath.Contains("https://s3.ap-south-1.amazonaws.com/shopnowchat.com/") ? model.ImagePath : "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/" + model.ImagePath) : "";
+
+            model.WalletListItems = db.CustomerWalletHistories.Where(i => i.CustomerId == dId)
+                .Select(i => new CustomerDetailsViewModel.WalletListItem
+                {
+                    Amount = i.Amount,
+                    Date = i.DateEncoded,
+                    Description = i.Description,
+                    ExpiryDate = i.ExpiryDate,
+                    Type = i.Type
+                }).ToList();
             return View(model);
         }
 
@@ -280,7 +290,7 @@ namespace ShopNow.Controllers
             return Json(new { IsAdded = IsAdded, message = message, message1 = message1 }, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult AddWalletAmount(int Id, double walletamount, string description)
+        public JsonResult AddWalletAmount(int Id, double walletamount, string description, DateTime? expiryDate)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
@@ -299,10 +309,11 @@ namespace ShopNow.Controllers
                 wallethistory.Type = 1;
                 wallethistory.Description = description;
                 wallethistory.DateEncoded = DateTime.Now;
+                wallethistory.ExpiryDate = expiryDate;
                 db.CustomerWalletHistories.Add(wallethistory);
                 db.SaveChanges();
             }
-            return Json(new { message = "&#8377;" + walletamount + " Added Successfully" }, JsonRequestBehavior.AllowGet);
+            return Json(new { message = "Wallet Amount Rs." + walletamount + " Added Successfully" }, JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult VerifyAadharImage(int code,string aadharNumber,DateTime? dob)

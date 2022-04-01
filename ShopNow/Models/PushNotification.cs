@@ -12,14 +12,17 @@ namespace ShopNow.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class CustomerWalletHistory
+    public partial class PushNotification
     {
         public int Id { get; set; }
-        public int CustomerId { get; set; }
-        public double Amount { get; set; }
         public int Type { get; set; }
-        public Nullable<System.DateTime> ExpiryDate { get; set; }
-        public Nullable<System.DateTime> DateEncoded { get; set; }
+        public string District { get; set; }
+        public string Title { get; set; }
+        public string ImageUrl { get; set; }
         public string Description { get; set; }
+        public string RedirectUrl { get; set; }
+        public int Status { get; set; }
+        public System.DateTime DateEncoded { get; set; }
+        public string EncodedBy { get; set; }
     }
 }

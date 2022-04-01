@@ -29,7 +29,7 @@ namespace ShopNow.Controllers
             _mapper = _mapperConfiguration.CreateMapper();
         }
 
-        [AccessPolicy(PageCode = "")]
+        [AccessPolicy(PageCode = "SNCCGUL317")]
         public ActionResult List()
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
@@ -60,6 +60,7 @@ namespace ShopNow.Controllers
             return View(model);
         }
 
+        [AccessPolicy(PageCode = "SNCCGUCL318")]
         public ActionResult CancelList()
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
@@ -87,7 +88,8 @@ namespace ShopNow.Controllers
                 }).ToList();
             return View(model);
         }
-        [AccessPolicy(PageCode = "")]
+
+        [AccessPolicy(PageCode = "SNCCGUGOL319")]
         public ActionResult GroceryOrderList()
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
@@ -111,7 +113,7 @@ namespace ShopNow.Controllers
             return View(model.GroceryOrderLists);
         }
 
-        [AccessPolicy(PageCode = "")]
+        [AccessPolicy(PageCode = "SNCCGUAC320")]
         public ActionResult AddToCart(int id)
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
@@ -153,7 +155,7 @@ namespace ShopNow.Controllers
         }
 
         [HttpPost]
-        [AccessPolicy(PageCode = "")]
+        [AccessPolicy(PageCode = "SNCCGUAC320")]
         public ActionResult AddToCart(GroceryAddToCartViewModel model)
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
@@ -372,7 +374,6 @@ namespace ShopNow.Controllers
             return Json(new { PackingCharge, ConvenientCharge, GrossDeliveryCharge, ShopDeliveryDiscount, NetDeliveryCharge, distance }, JsonRequestBehavior.AllowGet);
         }
         
-
         public JsonResult Reject(int Id)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);

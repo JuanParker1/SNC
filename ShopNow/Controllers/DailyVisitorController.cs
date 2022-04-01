@@ -1,4 +1,5 @@
-﻿using ShopNow.Models;
+﻿using ShopNow.Filters;
+using ShopNow.Models;
 using ShopNow.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -13,8 +14,11 @@ namespace ShopNow.Controllers
     {
         private sncEntities db = new sncEntities();
 
+        [AccessPolicy(PageCode = "SNCDVL336")]
         public ActionResult List(DailyVisitorListViewModel model)
         {
+            var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
+            ViewBag.Name = user.Name;
             model.DateFilter = model.DateFilter == null ? DateTime.Now : model.DateFilter;
             model.ListItems = db.DailyVisitors.Where(i => DbFunctions.TruncateTime(i.DateUpdated) == DbFunctions.TruncateTime(model.DateFilter)).GroupBy(i => i.ShopId)
                 .GroupJoin(db.Orders.Where(i => DbFunctions.TruncateTime(i.DateEncoded) == DbFunctions.TruncateTime(model.DateFilter) && i.Status == 6), dv => dv.FirstOrDefault().ShopId, o => o.ShopId, (dv, o) => new { dv, o })

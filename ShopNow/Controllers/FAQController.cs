@@ -32,7 +32,9 @@ namespace ShopNow.Controllers
             });
             _mapper = _mapperConfiguration.CreateMapper();
         }
+
         // GET: FAQ
+        [AccessPolicy(PageCode = "SNCFL325")]
         public ActionResult List()
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -51,6 +53,7 @@ namespace ShopNow.Controllers
             return View(model);
         }
 
+        [AccessPolicy(PageCode = "SNCFC326")]
         public ActionResult Create()
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
@@ -60,6 +63,7 @@ namespace ShopNow.Controllers
 
         [HttpPost]
         [ValidateInput(false)]
+        [AccessPolicy(PageCode = "SNCFC326")]
         public ActionResult Create(FAQCreateViewModel model)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -76,6 +80,7 @@ namespace ShopNow.Controllers
             return RedirectToAction("List");
         }
 
+        [AccessPolicy(PageCode = "SNCFE327")]
         public ActionResult Edit(string id)
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
@@ -89,6 +94,7 @@ namespace ShopNow.Controllers
 
         [HttpPost]
         [ValidateInput(false)]
+        [AccessPolicy(PageCode = "SNCFE327")]
         public ActionResult Edit(FAQEditViewModel model)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -101,6 +107,7 @@ namespace ShopNow.Controllers
             return RedirectToAction("Edit", new { id = AdminHelpers.ECodeInt(model.Id) });
         }
 
+        [AccessPolicy(PageCode = "SNCFD328")]
         public JsonResult Delete(string id)
         {
             int dId = AdminHelpers.DCodeInt(id);
