@@ -40,10 +40,9 @@ namespace ShopNow.Controllers
                     DeliveryAmountFromCustomer = i.o.o.NetDeliveryCharge,
                     DeliveryDiscount = i.o.o.ShopDeliveryDiscount,
                     TotalDeliveryCharge = i.o.o.DeliveryCharge,
-                   // DeliveryChargePaidToDeliveryBoy = (i.o.o.DeliveryCharge == 35 || i.o.o.DeliveryCharge == 50) ? 20 : 20 + (i.o.o.IsPickupDrop == false ? i.o.o.DeliveryCharge - 35 : i.o.o.DeliveryCharge - 50),
-                    DeliveryChargePaidToDeliveryBoy = (i.o.o.DeliveryCharge == 35 || i.o.o.DeliveryCharge == 50) ? 20 : 20 + (i.o.o.IsPickupDrop == false ? i.o.o.DeliveryCharge - 35 : i.o.o.Distance <= 15 ? i.o.o.DeliveryCharge - 50 : (60 + ((i.o.o.Distance - 15) * 8))),
-                    //DeliveryChargeProfit = i.o.o.IsPickupDrop == false ? 15 : 30,
-                    DeliveryChargeProfit = i.o.o.DeliveryCharge - ((i.o.o.DeliveryCharge == 35 || i.o.o.DeliveryCharge == 50) ? 20 : 20 + (i.o.o.IsPickupDrop == false ? i.o.o.DeliveryCharge - 35 : i.o.o.Distance <= 15 ? i.o.o.DeliveryCharge - 50 : (60 + ((i.o.o.Distance - 15) * 8)))),
+                   // DeliveryChargePaidToDeliveryBoy = (i.o.o.DeliveryCharge == 35 || i.o.o.DeliveryCharge == 50) ? 20 : 20 + (i.o.o.IsPickupDrop == false ? i.o.o.DeliveryCharge - 35 : i.o.o.Distance <= 15 ? i.o.o.DeliveryCharge - 50 : (60 + ((i.o.o.Distance - 15) * 8))),       
+                    DeliveryChargePaidToDeliveryBoy = (i.o.o.Distance <= 5) ? 20 : 20 + (i.o.o.IsPickupDrop == false ? ((i.o.o.Distance - 5) * 6) : i.o.o.Distance <= 15 ? i.o.o.DeliveryCharge - 50 : (60 + ((i.o.o.Distance - 15) * 8))),
+                    DeliveryChargeProfit = i.o.o.DeliveryCharge - ((i.o.o.Distance <= 5) ? 20 : 20 + (i.o.o.IsPickupDrop == false ? ((i.o.o.Distance - 5) * 6) : i.o.o.Distance <= 15 ? i.o.o.DeliveryCharge - 50 : (60 + ((i.o.o.Distance - 15) * 8)))),
                     AmountProfit = i.o.o.TotalShopPrice != 0 ? Math.Round(i.o.o.TotalPrice - i.o.o.TotalShopPrice, MidpointRounding.AwayFromZero) + i.o.o.Convinenientcharge : i.o.o.Convinenientcharge
                 }).OrderBy(i => i.Date).ToList();
 
