@@ -39,6 +39,8 @@ namespace ShopNow.Controllers
         [HttpPost]
         public ActionResult SendBulk(string title, string message, string[] district, int type, string imagePath = "")
         {
+            var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
+            ViewBag.Name = user.Name;
             try
             {
                 if (type == 1)
@@ -80,6 +82,22 @@ namespace ShopNow.Controllers
                     //Helpers.PushNotification.SendBulk(message, title, "SpecialOffer", imagePath, fcmTokenList.Skip(1000).Take(1000).ToArray());
                     //Helpers.PushNotification.SendBulk(message, title, "SpecialOffer", imagePath, fcmTokenList.Skip(2000).Take(1000).ToArray());
                 }
+
+                var pushNotification = new PushNotification
+                {
+                    DateEncoded = DateTime.Now,
+                    Description = message,
+                    District = string.Join(",", district),
+                    EncodedBy = user.Name,
+                    ImageUrl = imagePath,
+                    RedirectUrl = "",
+                    Status = 0,
+                    Title = title,
+                    Type = type
+                };
+                db.PushNotifications.Add(pushNotification);
+                db.SaveChanges();
+
                 return RedirectToAction("Index", new { message = "Notification Send Successfully!", type = 1 });
             }
             catch
