@@ -415,6 +415,7 @@ namespace ShopNow.ViewModels
             public double Amount { get; set; }
             public int Type { get; set; } //1-Credit,2-Debit
             public DateTime? Date { get; set; }
+            public DateTime? ExpiryDate { get; set; }
         }
     }
 

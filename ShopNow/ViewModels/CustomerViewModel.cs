@@ -137,6 +137,30 @@ namespace ShopNow.ViewModels
             }
 
         }
+
+        public List<WalletListItem> WalletListItems { get; set; }
+        public class WalletListItem
+        {
+            public string Description { get; set; }
+            public double Amount { get; set; }
+            public int Type { get; set; } 
+            public DateTime? Date { get; set; }
+            public DateTime? ExpiryDate { get; set; }
+            public string TypeColor
+            {
+                get
+                {
+                    switch (this.Type)
+                    {
+                        case 1:
+                            return "text-success";
+                        default:
+                            return "text-danger";
+                    }
+                }
+            }
+
+        }
     }
 
     //Api
