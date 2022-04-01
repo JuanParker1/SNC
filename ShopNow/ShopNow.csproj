@@ -701,6 +701,9 @@
     <Compile Include="Models\ProductType.cs">
       <DependentUpon>ApplicationDbContext.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\PushNotification.cs">
+      <DependentUpon>ApplicationDbContext.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\ReferralSetting.cs">
       <DependentUpon>ApplicationDbContext.tt</DependentUpon>
     </Compile>

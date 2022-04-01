@@ -280,7 +280,7 @@ namespace ShopNow.Controllers
             return Json(new { IsAdded = IsAdded, message = message, message1 = message1 }, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult AddWalletAmount(int Id, double walletamount, string description)
+        public JsonResult AddWalletAmount(int Id, double walletamount, string description, DateTime? expiryDate)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
@@ -299,10 +299,11 @@ namespace ShopNow.Controllers
                 wallethistory.Type = 1;
                 wallethistory.Description = description;
                 wallethistory.DateEncoded = DateTime.Now;
+                wallethistory.ExpiryDate = expiryDate;
                 db.CustomerWalletHistories.Add(wallethistory);
                 db.SaveChanges();
             }
-            return Json(new { message = "&#8377;" + walletamount + " Added Successfully" }, JsonRequestBehavior.AllowGet);
+            return Json(new { message = "Wallet Amount Rs." + walletamount + " Added Successfully" }, JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult VerifyAadharImage(int code,string aadharNumber,DateTime? dob)

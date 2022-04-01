@@ -156,6 +156,10 @@
                     <input type="number" name="WalletAmount" id="WalletAmount" class="form-control" required />
                 </div>
                 <div class="form-group">
+                    <label class="font-weight-bold text-secondary">Expiry Date</label>
+                    <input type="date" name="ExpiryDate" id="ExpiryDate" class="form-control" />
+                </div>
+                <div class="form-group">
                     <label class="font-weight-bold text-secondary">Description</label>
                     <textarea class="form-control" name="Description" id="Description" required></textarea>
                 </div>
@@ -208,7 +212,8 @@
                 var id = $('#Id').val();
                 var walletamount = $('#WalletAmount').val();
                 var description = $('#Description').val();
-                $.getJSON("/Customer/AddWalletAmount?Id=" + id + "&walletamount=" + walletamount + "&description=" + description, function (data) {
+                var expiryDate = $('#ExpiryDate').val();
+                $.getJSON("/Customer/AddWalletAmount?Id=" + id + "&walletamount=" + walletamount + "&description=" + description + "&expiryDate=" + expiryDate, function (data) {
                     if (data.message != null) {
                         swal({
                             title: data.message,
