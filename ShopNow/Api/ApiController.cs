@@ -2243,7 +2243,7 @@ namespace ShopNow.Controllers
                             Amount = referalAmount,
                             CustomerId = referralCustomer.Id,
                             DateEncoded = DateTime.Now,
-                            Description = "Received from referral",
+                            Description = $"Received from referral(#{customerDetails.PhoneNumber})",
                             Type = 1
                         };
                         db.CustomerWalletHistories.Add(walletHistory);
@@ -5881,7 +5881,8 @@ namespace ShopNow.Controllers
                         Amount = i.Amount,
                         Date = i.DateEncoded,
                         Description = i.Description,
-                        Type = i.Type
+                        Type = i.Type,
+                        ExpiryDate = i.ExpiryDate
                     }).ToList();
             }
             return Json(new { amount = model.WalletAmount, list = model.ListItems }, JsonRequestBehavior.AllowGet);

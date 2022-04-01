@@ -104,6 +104,16 @@ namespace ShopNow.Controllers
             model.LastPurchaseDate = model.OrderListItems.Count() > 0 ? model.OrderListItems.OrderByDescending(i => i.DateEncoded).FirstOrDefault().DateEncoded : model.LastPurchaseDate;
             model.AppVersion = db.CustomerAppInfoes.FirstOrDefault(i => i.CustomerId == customer.Id)?.Version ?? "N/A";
             model.ImagePath = model.ImagePath != null ? (model.ImagePath.Contains("https://s3.ap-south-1.amazonaws.com/shopnowchat.com/") ? model.ImagePath : "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/" + model.ImagePath) : "";
+
+            model.WalletListItems = db.CustomerWalletHistories.Where(i => i.CustomerId == dId)
+                .Select(i => new CustomerDetailsViewModel.WalletListItem
+                {
+                    Amount = i.Amount,
+                    Date = i.DateEncoded,
+                    Description = i.Description,
+                    ExpiryDate = i.ExpiryDate,
+                    Type = i.Type
+                }).ToList();
             return View(model);
         }
 
