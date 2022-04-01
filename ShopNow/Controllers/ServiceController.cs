@@ -15,7 +15,7 @@ namespace ShopNow.Controllers
     {
         private sncEntities db = new sncEntities();
 
-        [AccessPolicy(PageCode = "")]
+        [AccessPolicy(PageCode = "SNCSVL334")]
         public ActionResult List(ServiceListViewModel model)
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
@@ -39,6 +39,7 @@ namespace ShopNow.Controllers
             return View(model);
         }
 
+        [AccessPolicy(PageCode = "SNCSVC335")]
         public ActionResult Create()
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -47,6 +48,7 @@ namespace ShopNow.Controllers
         }
 
         [HttpPost]
+        [AccessPolicy(PageCode = "SNCSVC335")]
         public ActionResult Create(ServiceCreateViewModel model)
         {
             if (!db.Orders.Any(i => i.OrderNumber == model.OrderNumber))

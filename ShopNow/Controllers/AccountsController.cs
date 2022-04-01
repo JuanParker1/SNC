@@ -14,7 +14,7 @@ namespace ShopNow.Controllers
     {
         private sncEntities db = new sncEntities();
 
-        [AccessPolicy(PageCode = "")]
+        [AccessPolicy(PageCode = "SNCABWR314")]
         public ActionResult BillWiseReport(AccountsBillWiseReportViewModel model)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);

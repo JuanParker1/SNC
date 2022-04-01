@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using ShopNow.Filters;
 using ShopNow.Models;
 using System;
 using System.Collections.Generic;
@@ -23,6 +24,7 @@ namespace ShopNow.Controllers
         //    _mapper = _mapperConfiguration.CreateMapper();
         //}
 
+        [AccessPolicy(PageCode = "SNCFCL321")]
         public ActionResult List()
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["User"]);
@@ -32,6 +34,7 @@ namespace ShopNow.Controllers
             return View(list);
         }
 
+        [AccessPolicy(PageCode = "SNCFCS322")]
         public JsonResult Save(string name)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -58,6 +61,7 @@ namespace ShopNow.Controllers
             return Json(new { IsAdded = IsAdded, message = message, message1 = message1 }, JsonRequestBehavior.AllowGet);
         }
 
+        [AccessPolicy(PageCode = "SNCFCE323")]
         public JsonResult Edit(FAQCategory faqCategorymodel)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -75,6 +79,7 @@ namespace ShopNow.Controllers
             return Json(new { message = message }, JsonRequestBehavior.AllowGet);
         }
 
+        [AccessPolicy(PageCode = "SNCFCD324")]
         public JsonResult Delete(int Id)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
