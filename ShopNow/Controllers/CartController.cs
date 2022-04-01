@@ -338,7 +338,8 @@ namespace ShopNow.Controllers
                     Status = i.c.Status,
                     DateEncoded = i.c.DateEncoded,
                     DeliveredTime = i.c.DeliveredTime == null ? i.c.DateUpdated : i.c.DeliveredTime,
-                    Amount = i.c.IsPickupDrop == true ? (i.p.RefundAmount != null && i.p.RefundAmount != 0) ? i.c.NetTotal - (i.p.RefundAmount ?? 0) : i.c.TotalPrice : i.p.Amount - (i.p.RefundAmount ?? 0),
+                    //Amount = i.c.IsPickupDrop == true ? (i.p.RefundAmount != null && i.p.RefundAmount != 0) ? i.c.NetTotal - (i.p.RefundAmount ?? 0) : i.c.TotalPrice : i.p.Amount - (i.p.RefundAmount ?? 0),
+                    Amount = i.c.IsPickupDrop == true ? (i.p.RefundAmount != null && i.p.RefundAmount != 0) ? i.c.TotalPrice - (i.p.RefundAmount ?? 0) : i.c.TotalPrice : i.p.Amount - (i.p.RefundAmount ?? 0),
                     RefundAmount = i.p.RefundAmount ?? 0,
                     RefundRemark = i.p.RefundRemark ?? "",
                     PaymentMode = i.p.PaymentMode,
@@ -795,7 +796,7 @@ namespace ShopNow.Controllers
                        DeliveryBoyId = i.c.DeliveryBoyId,
                        DeliveryBoyName = i.c.DeliveryBoyName,
                        // Amount = i.p.Amount - (i.p.RefundAmount ?? 0),
-                       Amount = i.c.IsPickupDrop == true ? (i.p.RefundAmount != null && i.p.RefundAmount != 0) ? i.c.NetTotal - (i.p.RefundAmount ?? 0) : i.c.TotalPrice : i.p.Amount - (i.p.RefundAmount ?? 0),
+                       Amount = i.c.IsPickupDrop == true ? (i.p.RefundAmount != null && i.p.RefundAmount != 0) ? i.c.TotalPrice - (i.p.RefundAmount ?? 0) : i.c.TotalPrice : i.p.Amount - (i.p.RefundAmount ?? 0),
                        DateEncoded = i.p.DateEncoded,
                        DeliveryOrderPaymentStatus = i.c.DeliveryOrderPaymentStatus
                    }).OrderByDescending(i => i.DateEncoded).ToList();

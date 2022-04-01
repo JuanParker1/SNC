@@ -3,6 +3,7 @@ using ShopNow.Filters;
 using ShopNow.Models;
 using ShopNow.ViewModels;
 using System;
+using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
@@ -270,9 +271,10 @@ namespace ShopNow.Controllers
             //       ShopPaymentStatus = i.p.c.ShopPaymentStatus
             //   }).ToList();
 
-            model.ListItems = db.Payments.Where(i => DbFunctions.TruncateTime(i.DateEncoded) == DbFunctions.TruncateTime(model.EarningDate.Value) && i.OrderNumber != 0)
-              .Join(db.Shops, p => p.ShopId, s => s.Id, (p, s) => new { p, s })
-              .Join(db.Orders.Where(i => i.Status == 6), p => p.p.OrderNumber, c => c.OrderNumber, (p, c) => new { p, c })
+            // List 1 without Joyra
+            var List1 = db.Payments.Where(i => DbFunctions.TruncateTime(i.DateEncoded) == DbFunctions.TruncateTime(model.EarningDate.Value) && i.OrderNumber != 0)
+              .Join(db.Shops.Where(i=> i.Id != 123 && i.Id != 203), p => p.ShopId, s => s.Id, (p, s) => new { p, s })
+              .Join(db.Orders.Where(i => i.Status == 6 && i.ShopId != 123 && i.ShopId != 203), p => p.p.OrderNumber, c => c.OrderNumber, (p, c) => new { p, c })
               .GroupJoin(db.PaymentsDatas, p => p.p.p.ReferenceCode, pd => pd.PaymentId, (p, pd) => new { p, pd })
               .GroupBy(i => i.p.c.OrderNumber)
               .AsEnumerable()
@@ -304,6 +306,46 @@ namespace ShopNow.Controllers
                   ShopPaymentStatus = i.FirstOrDefault().p.c.ShopPaymentStatus,
                   PaymentMode = i.FirstOrDefault().p.p.s.BankName.ToUpper() == "ICICI BANK" ? "FT" : "NEFT"
               }).ToList();
+
+            // List 2 with Joyra
+            var List2 = db.Payments.Where(i => DbFunctions.TruncateTime(i.DateEncoded) == DbFunctions.TruncateTime(model.EarningDate.Value) && i.OrderNumber != 0)
+              .Join(db.Shops.Where(i => i.Id == 123 || i.Id == 203), p => p.ShopId, s => s.Id, (p, s) => new { p, s })
+              .Join(db.Orders.Where(i => i.Status == 6 &&( i.ShopId == 123 || i.ShopId == 203)), p => p.p.OrderNumber, c => c.OrderNumber, (p, c) => new { p, c })
+              .GroupJoin(db.PaymentsDatas, p => p.p.p.ReferenceCode, pd => pd.PaymentId, (p, pd) => new { p, pd })
+              .GroupJoin(db.ShopBillDetails, p=> p.p.c.OrderNumber, b => b.OrderNumber, (p, b) => new { p, b })
+              .GroupBy(i => i.p.p.c.OrderNumber)
+              .AsEnumerable()
+              .Select(i => new ShopPaymentListViewModel.ListItem
+              {
+                  AccountName = i.FirstOrDefault().p.p.p.s.AccountName ?? "Nil",
+                  AccountNumber = i.FirstOrDefault().p.p.p.s.AccountNumber ?? "Nil",
+                  AccountType = i.FirstOrDefault().p.p.p.s.AcountType,
+                  //FinalAmount = i.FirstOrDefault().p.p.p.Amount - (i.FirstOrDefault().p.p.p.RefundAmount ?? 0) - (Convert.ToDouble(i.FirstOrDefault().pd.Any() ? (i.FirstOrDefault().pd.FirstOrDefault().Fee ?? 0) : 0)) - (Convert.ToDouble(i.FirstOrDefault().pd.Any() ? (i.FirstOrDefault().pd.FirstOrDefault().Tax ?? 0) : 0)),
+                  //FinalAmount = i.FirstOrDefault().p.c.TotalShopPrice !=0 ? i.FirstOrDefault().p.p.p.Amount - Math.Abs(i.FirstOrDefault().p.c.TotalPrice - i.FirstOrDefault().p.c.TotalShopPrice - i.FirstOrDefault().p.c.NetDeliveryCharge) - (i.FirstOrDefault().p.p.p.RefundAmount ?? 0) - (Convert.ToDouble(i.FirstOrDefault().pd.Any() ? (i.FirstOrDefault().pd.FirstOrDefault().Fee ?? 0) : 0)) - (Convert.ToDouble(i.FirstOrDefault().pd.Any() ? (i.FirstOrDefault().pd.FirstOrDefault().Tax ?? 0) : 0)): i.FirstOrDefault().p.p.p.Amount - (i.FirstOrDefault().p.p.p.RefundAmount ?? 0) - (Convert.ToDouble(i.FirstOrDefault().pd.Any() ? (i.FirstOrDefault().pd.FirstOrDefault().Fee ?? 0) : 0)) - (Convert.ToDouble(i.FirstOrDefault().pd.Any() ? (i.FirstOrDefault().pd.FirstOrDefault().Tax ?? 0) : 0)),
+                  // FinalAmount = i.FirstOrDefault().p.c.TotalShopPrice != 0 ? (i.FirstOrDefault().p.c.TotalShopPrice + i.FirstOrDefault().p.c.Packingcharge) - (i.FirstOrDefault().p.p.p.RefundAmount ?? 0) - (Convert.ToDouble(i.FirstOrDefault().pd.Any() ? (i.FirstOrDefault().pd.FirstOrDefault().Fee ?? 0) : 0)) - (Convert.ToDouble(i.FirstOrDefault().pd.Any() ? (i.FirstOrDefault().pd.FirstOrDefault().Tax ?? 0) : 0)) : i.FirstOrDefault().p.p.p.Amount - (i.FirstOrDefault().p.p.p.RefundAmount ?? 0) - (Convert.ToDouble(i.FirstOrDefault().pd.Any() ? (i.FirstOrDefault().pd.FirstOrDefault().Fee ?? 0) : 0)) - (Convert.ToDouble(i.FirstOrDefault().pd.Any() ? (i.FirstOrDefault().pd.FirstOrDefault().Tax ?? 0) : 0)),
+                  //FinalAmount = i.FirstOrDefault().p.p.c.IsPickupDrop == false ? i.FirstOrDefault().p.p.c.TotalShopPrice != 0 ? (i.FirstOrDefault().p.p.c.TotalShopPrice + i.FirstOrDefault().p.p.c.Packingcharge + i.FirstOrDefault().p.p.c.WalletAmount) - (i.FirstOrDefault().p.p.p.p.RefundAmount ?? 0) - (Convert.ToDouble(i.FirstOrDefault().p.pd.Any() ? (i.FirstOrDefault().p.pd.FirstOrDefault().Fee ?? 0) : 0)) - (Convert.ToDouble(i.FirstOrDefault().p.pd.Any() ? (i.FirstOrDefault().p.pd.FirstOrDefault().Tax ?? 0) : 0)) : i.FirstOrDefault().p.p.p.p.Amount + i.FirstOrDefault().p.p.c.WalletAmount - (i.FirstOrDefault().p.p.p.p.RefundAmount ?? 0) - (Convert.ToDouble(i.FirstOrDefault().p.pd.Any() ? (i.FirstOrDefault().p.pd.FirstOrDefault().Fee ?? 0) : 0)) - (Convert.ToDouble(i.FirstOrDefault().p.pd.Any() ? (i.FirstOrDefault().p.pd.FirstOrDefault().Tax ?? 0) : 0)) : i.FirstOrDefault().p.p.c.TotalPrice,
+                  FinalAmount = i.FirstOrDefault().p.p.c.IsPickupDrop == false ? i.FirstOrDefault().b.FirstOrDefault().BillAmount : i.FirstOrDefault().p.p.c.TotalPrice,
+                  IfscCode = i.FirstOrDefault().p.p.p.s.IFSCCode,
+                  PaymentDate = i.FirstOrDefault().p.p.p.p.DateEncoded,
+                  PaymentId = "JOY" + i.FirstOrDefault().p.p.p.p.OrderNumber.ToString(),
+                  ShopName = i.FirstOrDefault().p.p.p.p.ShopName,
+                  ShopId = i.FirstOrDefault().p.p.p.p.ShopId ?? 0,
+                  ShopOwnerPhoneNumber = i.FirstOrDefault().p.p.p.s.OwnerPhoneNumber,
+                  TransactionType = i.FirstOrDefault().p.p.p.p.PaymentMode,
+                  Identifier = (i.FirstOrDefault().p.p.p.s.AcountType == "CA" && i.FirstOrDefault().p.p.p.s.BankName == "Axis Bank") ? "I" : "N",
+                  CNR = "JOY" + i.FirstOrDefault().p.p.p.p.OrderNumber,
+                  DebitAccountNo = "609505027294",
+                  EmailBody = "",
+                  EmailID = i.FirstOrDefault().p.p.p.s.Email,
+                  ReceiverIFSC = i.FirstOrDefault().p.p.p.s.IFSCCode,
+                  Remarks = "",
+                  PhoneNo = i.FirstOrDefault().p.p.p.s.OwnerPhoneNumber.ToString(),
+                  CartStatus = i.FirstOrDefault().p.p.c.Status,
+                  ShopPaymentStatus = i.FirstOrDefault().p.p.c.ShopPaymentStatus,
+                  PaymentMode = i.FirstOrDefault().p.p.p.s.BankName.ToUpper() == "ICICI BANK" ? "FT" : "NEFT"
+              }).ToList();
+
+            model.ListItems = List1.Union(List2).ToList();
             return View(model);
         }
 
@@ -354,7 +396,7 @@ namespace ShopNow.Controllers
                    DeliveryBoyPaymentStatus = i.c.c.DeliveryBoyPaymentStatus,
                    PaymentMode = i.d.BankName.ToUpper() == "ICICI BANK" ? "FT" : "NEFT",
                    ShopName = i.c.c.ShopName,
-                   COHAmount = (i.c.c.PaymentModeType == 2 && i.c.c.DeliveryBoyPaymentStatus == 0) ? i.c.p.Amount : 0,
+                   COHAmount = (i.c.c.PaymentModeType == 2 && i.c.c.DeliveryBoyPaymentStatus == 0) ? (i.c.c.TotalPrice - i.c.p.RefundAmount ?? 0) : 0,
                    TipsAmount = i.c.c.TipsAmount,
                    // TotalDeliveryBoyAmount = i.d.WorkType == 1 ? ((i.c.c.DeliveryCharge == 35 || i.c.c.DeliveryCharge == 50) ? 20 + i.c.c.TipsAmount : 20 + (i.c.c.IsPickupDrop == false ? i.c.c.DeliveryCharge - 35 : i.c.c.DeliveryCharge - 50) + i.c.c.TipsAmount) : i.c.c.DeliveryCharge + i.c.c.TipsAmount
                    TotalDeliveryBoyAmount = i.d.WorkType == 1 ? ((i.c.c.DeliveryCharge == 35 || i.c.c.DeliveryCharge == 50) ? 20 + i.c.c.TipsAmount : 20 + (i.c.c.IsPickupDrop == false ? i.c.c.DeliveryCharge - 35 : i.c.c.Distance <= 15 ? i.c.c.DeliveryCharge - 50 : (60 + ((i.c.c.Distance - 15) * 8))) + i.c.c.TipsAmount) : i.c.c.DeliveryCharge + i.c.c.TipsAmount
