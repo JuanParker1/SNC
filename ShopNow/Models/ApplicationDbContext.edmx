@@ -679,6 +679,18 @@
           <Property Name="CreatedBy" Type="nvarchar" MaxLength="100" />
           <Property Name="UpdatedBy" Type="nvarchar" MaxLength="100" />
         </EntityType>
+        <EntityType Name="DeliveryRatePercentage">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Percentage" Type="float" Nullable="false" />
+          <Property Name="StartDate" Type="datetime" Nullable="false" />
+          <Property Name="EndDate" Type="datetime" />
+          <Property Name="Status" Type="int" Nullable="false" />
+          <Property Name="EncodedDate" Type="datetime" Nullable="false" />
+          <Property Name="EncodedBy" Type="nvarchar" MaxLength="250" />
+        </EntityType>
         <EntityType Name="DiscountCategories">
           <Key>
             <PropertyRef Name="Id" />
@@ -881,6 +893,20 @@
           <Property Name="CreatedBy" Type="nvarchar(max)" />
           <Property Name="UpdatedBy" Type="nvarchar(max)" />
           <Property Name="DateEncoded" Type="datetime" Nullable="false" />
+          <Property Name="DateUpdated" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="NotificationLogin">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="500" />
+          <Property Name="PhoneNumber" Type="nvarchar" MaxLength="50" />
+          <Property Name="Password" Type="nvarchar" MaxLength="50" />
+          <Property Name="Status" Type="int" Nullable="false" />
+          <Property Name="DateEncoded" Type="datetime" Nullable="false" />
+          <Property Name="EncodedBy" Type="nvarchar" MaxLength="500" />
+          <Property Name="UpdatedBy" Type="nvarchar" MaxLength="500" />
           <Property Name="DateUpdated" Type="datetime" Nullable="false" />
         </EntityType>
         <EntityType Name="OfferProducts">
@@ -1823,6 +1849,7 @@
           <EntitySet Name="DeliveryBoys" EntityType="Self.DeliveryBoys" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DeliveryBoyShops" EntityType="Self.DeliveryBoyShops" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DeliveryCharge" EntityType="Self.DeliveryCharge" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="DeliveryRatePercentage" EntityType="Self.DeliveryRatePercentage" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DiscountCategories" EntityType="Self.DiscountCategories" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DistanceSettings" EntityType="Self.DistanceSettings" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DrugCompoundDetails" EntityType="Self.DrugCompoundDetails" Schema="dbo" store:Type="Tables" />
@@ -1834,6 +1861,7 @@
           <EntitySet Name="MasterProducts" EntityType="Self.MasterProducts" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MeasurementUnits" EntityType="Self.MeasurementUnits" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="NextSubCategories" EntityType="Self.NextSubCategories" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="NotificationLogin" EntityType="Self.NotificationLogin" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="OfferProducts" EntityType="Self.OfferProducts" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Offers" EntityType="Self.Offers" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="OfferShops" EntityType="Self.OfferShops" Schema="dbo" store:Type="Tables" />
@@ -3077,6 +3105,8 @@
           <EntitySet Name="Shops" EntityType="sncModel.Shop" />
           <EntitySet Name="CustomerWalletHistories" EntityType="sncModel.CustomerWalletHistory" />
           <EntitySet Name="PushNotifications" EntityType="sncModel.PushNotification" />
+          <EntitySet Name="DeliveryRatePercentages" EntityType="sncModel.DeliveryRatePercentage" />
+          <EntitySet Name="NotificationLogins" EntityType="sncModel.NotificationLogin" />
         </EntityContainer>
         <ComplexType Name="GetDEliveryBoyList_Result">
           <Property Type="Int32" Name="Id" Nullable="false" />
@@ -3876,6 +3906,32 @@
           <Property Name="Status" Type="Int32" Nullable="false" />
           <Property Name="DateEncoded" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="EncodedBy" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="DeliveryRatePercentage">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Percentage" Type="Double" Nullable="false" />
+          <Property Name="StartDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="EndDate" Type="DateTime" Precision="3" />
+          <Property Name="Status" Type="Int32" Nullable="false" />
+          <Property Name="EncodedDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="EncodedBy" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="NotificationLogin">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="PhoneNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Password" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="Int32" Nullable="false" />
+          <Property Name="DateEncoded" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="EncodedBy" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="UpdatedBy" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="DateUpdated" Type="DateTime" Nullable="false" Precision="3" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -5801,6 +5857,34 @@
                 <ScalarProperty Name="Title" ColumnName="Title" />
                 <ScalarProperty Name="District" ColumnName="District" />
                 <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DeliveryRatePercentages">
+            <EntityTypeMapping TypeName="sncModel.DeliveryRatePercentage">
+              <MappingFragment StoreEntitySet="DeliveryRatePercentage">
+                <ScalarProperty Name="EncodedBy" ColumnName="EncodedBy" />
+                <ScalarProperty Name="EncodedDate" ColumnName="EncodedDate" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+                <ScalarProperty Name="Percentage" ColumnName="Percentage" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="NotificationLogins">
+            <EntityTypeMapping TypeName="sncModel.NotificationLogin">
+              <MappingFragment StoreEntitySet="NotificationLogin">
+                <ScalarProperty Name="DateUpdated" ColumnName="DateUpdated" />
+                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
+                <ScalarProperty Name="EncodedBy" ColumnName="EncodedBy" />
+                <ScalarProperty Name="DateEncoded" ColumnName="DateEncoded" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

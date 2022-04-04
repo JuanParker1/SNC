@@ -584,6 +584,9 @@
     <Compile Include="Models\DeliveryCharge.cs">
       <DependentUpon>ApplicationDbContext.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\DeliveryRatePercentage.cs">
+      <DependentUpon>ApplicationDbContext.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\DiscountCategory.cs">
       <DependentUpon>ApplicationDbContext.tt</DependentUpon>
     </Compile>
@@ -639,6 +642,9 @@
     <Compile Include="Models\Messages.cs" />
     <Compile Include="Models\MessagesRepository.cs" />
     <Compile Include="Models\NextSubCategory.cs">
+      <DependentUpon>ApplicationDbContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\NotificationLogin.cs">
       <DependentUpon>ApplicationDbContext.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Offer.cs">
