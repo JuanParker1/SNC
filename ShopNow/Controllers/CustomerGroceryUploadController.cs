@@ -212,6 +212,18 @@ namespace ShopNow.Controllers
                         order.Status = 2;
                         order.UploadType = 2;               // For Grocery Upload type is 2
                         order.UploadId = model.GroceryId;
+                        var custAddress = db.CustomerAddresses.FirstOrDefault(i => i.Address == order.DeliveryAddress);
+                        if (custAddress != null)
+                        {
+                            order.CustomerAddressId = custAddress.Id;
+                        }
+                        var deliveryRatePercentage = db.DeliveryRatePercentages.OrderByDescending(i => i.Id).FirstOrDefault(i => i.Status == 0);
+                        if (deliveryRatePercentage != null)
+                        {
+                            order.DeliveryRatePercentage = deliveryRatePercentage.Percentage;
+                            order.DeliveryRatePercentageId = deliveryRatePercentage.Id;
+                        }
+
                         db.Orders.Add(order);
                         db.SaveChanges();
                         //OrderItems

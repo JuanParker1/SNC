@@ -95,6 +95,12 @@ namespace ShopNow.Controllers
                     DeliveryDate = model.DeliveryDate,
                     DeliverySlotType = model.DeliverySlotType
                 };
+                var deliveryRatePercentage = db.DeliveryRatePercentages.OrderByDescending(i => i.Id).FirstOrDefault(i => i.Status == 0);
+                if (deliveryRatePercentage != null)
+                {
+                    order.DeliveryRatePercentage = deliveryRatePercentage.Percentage;
+                    order.DeliveryRatePercentageId = deliveryRatePercentage.Id;
+                }
                 db.Orders.Add(order);
                 db.SaveChanges();
 
