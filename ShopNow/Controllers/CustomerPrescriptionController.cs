@@ -217,6 +217,9 @@ namespace ShopNow.Controllers
                         if (custAddress != null)
                         {
                             order.CustomerAddressId = custAddress.Id;
+                            customer.DistrictName = custAddress.DistrictName;
+                            db.Entry(customer).State = System.Data.Entity.EntityState.Modified;
+                            db.SaveChanges();
                         }
                         var deliveryRatePercentage = db.DeliveryRatePercentages.OrderByDescending(i => i.Id).FirstOrDefault(i => i.Status == 0);
                         if (deliveryRatePercentage != null)
