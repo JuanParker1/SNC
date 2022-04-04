@@ -19,7 +19,9 @@ namespace ShopNow.Models
         public System.DateTime StartDate { get; set; }
         public Nullable<System.DateTime> EndDate { get; set; }
         public int Status { get; set; }
-        public System.DateTime EncodedDate { get; set; }
+        public System.DateTime DateEncoded { get; set; }
         public string EncodedBy { get; set; }
+        public System.DateTime DateUpdated { get; set; }
+        public string UpdatedBy { get; set; }
     }
 }

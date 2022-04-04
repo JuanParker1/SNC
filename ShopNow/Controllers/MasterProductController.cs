@@ -1845,6 +1845,7 @@ namespace ShopNow.Controllers
                             product.ShopCategoryName = shop.ShopCategoryName;
                         }
                     }
+                    product.IsOnline = true;
                     product.UpdatedBy = user.Name;
                     product.DateUpdated = DateTime.Now;
                     product.MappedDate = DateTime.Now;
@@ -1904,6 +1905,7 @@ namespace ShopNow.Controllers
                             product.ShopCategoryName = shop.ShopCategoryName;
                         }
                     }
+                    product.IsOnline = true;
                     product.UpdatedBy = user.Name;
                     product.DateUpdated = DateTime.Now;
                     product.MappedDate = DateTime.Now;

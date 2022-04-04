@@ -903,8 +903,8 @@ namespace ShopNow.Controllers
                            DeliveryBoyId = i.o.DeliveryBoyId,
                            DeliveryBoyName = i.o.DeliveryBoyName,
                            ShopName = i.o.ShopName,
-                           // DeliveryCharge = i.d.WorkType == 1 ? (i.o.DeliveryCharge == 35 ? 20 + i.o.TipsAmount : 20 + (i.o.DeliveryCharge - 35) + i.o.TipsAmount) : i.o.DeliveryCharge + i.o.TipsAmount,
-                           DeliveryCharge = i.d.WorkType == 1 ? ((i.o.DeliveryCharge == 35 || i.o.DeliveryCharge == 50) ? 20 : 20 + (i.o.IsPickupDrop == false ? i.o.DeliveryCharge - 35 : i.o.Distance <= 15 ? i.o.DeliveryCharge - 50 : (60 + ((i.o.Distance - 15) * 8)))) : i.o.DeliveryCharge,
+                           //DeliveryCharge = i.d.WorkType == 1 ? ((i.o.DeliveryCharge == 35 || i.o.DeliveryCharge == 50) ? 20 : 20 + (i.o.IsPickupDrop == false ? i.o.DeliveryCharge - 35 : i.o.Distance <= 15 ? i.o.DeliveryCharge - 50 : (60 + ((i.o.Distance - 15) * 8)))) : i.o.DeliveryCharge,
+                           DeliveryCharge= i.d.WorkType == 1 ? ((i.o.Distance <= 5) ? 20 + ((i.o.DeliveryRatePercentage / 100) * 20) : 20 + ((i.o.DeliveryRatePercentage / 100) * 20) + (i.o.IsPickupDrop == false ? ((i.o.Distance - 5) * 6 + ((i.o.DeliveryRatePercentage / 100) * 6)) : i.o.Distance <= 15 ? i.o.DeliveryCharge - 50 : (60 + ((i.o.Distance - 15) * 8 + ((i.o.DeliveryRatePercentage / 100) * 8))))) : i.o.DeliveryCharge,
                            DeliveryBoyPaymentStatus = i.o.DeliveryBoyPaymentStatus,
                            Distance = i.o.Distance
                        }).OrderByDescending(i => i.DateEncoded).ToList();

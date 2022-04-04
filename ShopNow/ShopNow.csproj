@@ -3395,6 +3395,7 @@
     <Content Include="Views\WebAPI\TimeStampUpdate.cshtml" />
     <Content Include="Views\DailyVisitor\List.cshtml" />
     <Content Include="Views\PushNotification\NotificationLogin.cshtml" />
+    <Content Include="Views\DeliveryBoy\DeliveryRate.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

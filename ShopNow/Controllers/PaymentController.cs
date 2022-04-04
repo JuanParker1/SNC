@@ -354,34 +354,69 @@ namespace ShopNow.Controllers
             ViewBag.Name = user.Name;
             model.EarningDate = model.EarningDate == null ? DateTime.Now : model.EarningDate.Value;
 
-            model.ListItems = db.Orders.Where(i => i.Status == 6)
-               .Join(db.Payments.Where(i => (DbFunctions.TruncateTime(i.DateEncoded) == DbFunctions.TruncateTime(model.EarningDate.Value))), c => c.OrderNumber, p => p.OrderNumber, (c, p) => new { c, p })
-               .Join(db.DeliveryBoys, c => c.c.DeliveryBoyId, d => d.Id, (c, d) => new { c, d })
-               .Select(i => new DeliveryBoyPaymentListViewModel.ListItem
-               {
-                   AccountName = i.d.AccountName.Trim(),
-                   AccountNumber = i.d.AccountNumber,
-                   AccountType = "SA",
-                   //Amount = i.d.WorkType == 1 ? ((i.c.c.DeliveryCharge == 35 || i.c.c.DeliveryCharge == 50) ? 20 : 20 + (i.c.c.IsPickupDrop == false ? i.c.c.DeliveryCharge - 35 : i.c.c.Distance <= 15 ? i.c.c.DeliveryCharge - 50 : (60 + ((i.c.c.Distance - 15) * 8)))) : i.c.c.DeliveryCharge,
-                   Amount = i.d.WorkType == 1 ? ((i.c.c.Distance <= 5) ? 20 : 20 + (i.c.c.IsPickupDrop == false ? ((i.c.c.Distance - 5) * 6) : i.c.c.Distance <= 15 ? i.c.c.DeliveryCharge - 50 : (60 + ((i.c.c.Distance - 15) * 8)))) : i.c.c.DeliveryCharge,
-                   IfscCode = i.d.IFSCCode,
-                   PaymentDate = i.c.p.DateEncoded,
-                   PaymentId = "JOY" + i.c.p.OrderNumber.ToString(),
-                   DeliveryBoyId = i.d.Id,
-                   DeliveryBoyName = i.d.Name.ToString().Trim(),
-                   DeliveryBoyPhoneNumber = i.d.PhoneNumber,
-                   TransactionType = i.c.p.PaymentMode,
-                   OrderNo = i.c.p.OrderNumber,
-                   EmailBody = "",
-                   EmailID = i.d.Email,
-                   DeliveryBoyPaymentStatus = i.c.c.DeliveryBoyPaymentStatus,
-                   PaymentMode = i.d.BankName.ToUpper() == "ICICI BANK" ? "FT" : "NEFT",
-                   ShopName = i.c.c.ShopName,
-                   COHAmount = (i.c.c.PaymentModeType == 2 && i.c.c.DeliveryBoyPaymentStatus == 0) ? (i.c.c.TotalPrice - i.c.p.RefundAmount ?? 0) : 0,
-                   TipsAmount = i.c.c.TipsAmount,
-                   // TotalDeliveryBoyAmount = i.d.WorkType == 1 ? ((i.c.c.DeliveryCharge == 35 || i.c.c.DeliveryCharge == 50) ? 20 + i.c.c.TipsAmount : 20 + (i.c.c.IsPickupDrop == false ? i.c.c.DeliveryCharge - 35 : i.c.c.DeliveryCharge - 50) + i.c.c.TipsAmount) : i.c.c.DeliveryCharge + i.c.c.TipsAmount
-                   TotalDeliveryBoyAmount = i.d.WorkType == 1 ? ((i.c.c.Distance <= 5) ? 20 + i.c.c.TipsAmount : 20 + (i.c.c.IsPickupDrop == false ? ((i.c.c.Distance - 5) * 6) : i.c.c.Distance <= 15 ? i.c.c.DeliveryCharge - 50 : (60 + ((i.c.c.Distance - 15) * 8))) + i.c.c.TipsAmount) : i.c.c.DeliveryCharge + i.c.c.TipsAmount
-               }).ToList();
+            //double deliveryRatePercentage = db.DeliveryRatePercentages.FirstOrDefault(i => i.Status == 0 && (DbFunctions.TruncateTime(model.EarningDate.Value) >= DbFunctions.TruncateTime(i.StartDate) && i.EndDate !=null? DbFunctions.TruncateTime(model.EarningDate.Value) <= DbFunctions.TruncateTime(i.EndDate.Value) : DbFunctions.TruncateTime(model.EarningDate.Value) <= DbFunctions.TruncateTime(DateTime.Now))).Percentage;
+            //if (deliveryRatePercentage == 0)
+            //{
+                model.ListItems = db.Orders.Where(i => i.Status == 6)
+                   .Join(db.Payments.Where(i => (DbFunctions.TruncateTime(i.DateEncoded) == DbFunctions.TruncateTime(model.EarningDate.Value))), c => c.OrderNumber, p => p.OrderNumber, (c, p) => new { c, p })
+                   .Join(db.DeliveryBoys, c => c.c.DeliveryBoyId, d => d.Id, (c, d) => new { c, d })
+                   .Select(i => new DeliveryBoyPaymentListViewModel.ListItem
+                   {
+                       AccountName = i.d.AccountName.Trim(),
+                       AccountNumber = i.d.AccountNumber,
+                       AccountType = "SA",
+                       //  Amount = i.d.WorkType == 1 ? ((i.c.c.Distance <= 5) ? 20 : 20 + (i.c.c.IsPickupDrop == false ? ((i.c.c.Distance - 5) * 6) : i.c.c.Distance <= 15 ? i.c.c.DeliveryCharge - 50 : (60 + ((i.c.c.Distance - 15) * 8)))) : i.c.c.DeliveryCharge,
+                       Amount = i.d.WorkType == 1 ? ((i.c.c.Distance <= 5) ? 20 + ((i.c.c.DeliveryRatePercentage / 100) * 20) : 20 + ((i.c.c.DeliveryRatePercentage / 100) * 20) + (i.c.c.IsPickupDrop == false ? ((i.c.c.Distance - 5) * 6 + ((i.c.c.DeliveryRatePercentage / 100) * 6)) : i.c.c.Distance <= 15 ? i.c.c.DeliveryCharge - 50 : (60 + ((i.c.c.Distance - 15) * 8 + ((i.c.c.DeliveryRatePercentage / 100) * 8))))) : i.c.c.DeliveryCharge,
+                       IfscCode = i.d.IFSCCode,
+                       PaymentDate = i.c.p.DateEncoded,
+                       PaymentId = "JOY" + i.c.p.OrderNumber.ToString(),
+                       DeliveryBoyId = i.d.Id,
+                       DeliveryBoyName = i.d.Name.ToString().Trim(),
+                       DeliveryBoyPhoneNumber = i.d.PhoneNumber,
+                       TransactionType = i.c.p.PaymentMode,
+                       OrderNo = i.c.p.OrderNumber,
+                       EmailBody = "",
+                       EmailID = i.d.Email,
+                       DeliveryBoyPaymentStatus = i.c.c.DeliveryBoyPaymentStatus,
+                       PaymentMode = i.d.BankName.ToUpper() == "ICICI BANK" ? "FT" : "NEFT",
+                       ShopName = i.c.c.ShopName,
+                       COHAmount = (i.c.c.PaymentModeType == 2 && i.c.c.DeliveryBoyPaymentStatus == 0) ? (i.c.c.TotalPrice - i.c.p.RefundAmount ?? 0) : 0,
+                       TipsAmount = i.c.c.TipsAmount,
+                       // TotalDeliveryBoyAmount = i.d.WorkType == 1 ? ((i.c.c.Distance <= 5) ? 20 + i.c.c.TipsAmount : 20 + (i.c.c.IsPickupDrop == false ? ((i.c.c.Distance - 5) * 6) : i.c.c.Distance <= 15 ? i.c.c.DeliveryCharge - 50 : (60 + ((i.c.c.Distance - 15) * 8))) + i.c.c.TipsAmount) : i.c.c.DeliveryCharge + i.c.c.TipsAmount
+                       TotalDeliveryBoyAmount = i.d.WorkType == 1 ? ((i.c.c.Distance <= 5) ? 20 + ((i.c.c.DeliveryRatePercentage / 100) * 20) + i.c.c.TipsAmount : 20 + ((i.c.c.DeliveryRatePercentage / 100) * 20) + (i.c.c.IsPickupDrop == false ? ((i.c.c.Distance - 5) * 6 + ((i.c.c.DeliveryRatePercentage / 100) * 6)) : i.c.c.Distance <= 15 ? i.c.c.DeliveryCharge - 50 : (60 + ((i.c.c.Distance - 15) * 8 + ((i.c.c.DeliveryRatePercentage / 100) * 8)))) + i.c.c.TipsAmount) : i.c.c.DeliveryCharge + i.c.c.TipsAmount
+                   }).ToList();
+            //}
+            //else
+            //{
+            //    model.ListItems = db.Orders.Where(i => i.Status == 6)
+            //       .Join(db.Payments.Where(i => (DbFunctions.TruncateTime(i.DateEncoded) == DbFunctions.TruncateTime(model.EarningDate.Value))), c => c.OrderNumber, p => p.OrderNumber, (c, p) => new { c, p })
+            //       .Join(db.DeliveryBoys, c => c.c.DeliveryBoyId, d => d.Id, (c, d) => new { c, d })
+            //       .Select(i => new DeliveryBoyPaymentListViewModel.ListItem
+            //       {
+            //           AccountName = i.d.AccountName.Trim(),
+            //           AccountNumber = i.d.AccountNumber,
+            //           AccountType = "SA",
+            //           //Amount = i.d.WorkType == 1 ? ((i.c.c.DeliveryCharge == 35 || i.c.c.DeliveryCharge == 50) ? 20 : 20 + (i.c.c.IsPickupDrop == false ? i.c.c.DeliveryCharge - 35 : i.c.c.Distance <= 15 ? i.c.c.DeliveryCharge - 50 : (60 + ((i.c.c.Distance - 15) * 8)))) : i.c.c.DeliveryCharge,
+            //           Amount = i.d.WorkType == 1 ? ((i.c.c.Distance <= 5) ? 20 + ((deliveryRatePercentage / 100) * 20) : 20 + ((deliveryRatePercentage / 100) * 20) + (i.c.c.IsPickupDrop == false ? ((i.c.c.Distance - 5) * 6 + ((deliveryRatePercentage / 100) * 6)) : i.c.c.Distance <= 15 ? i.c.c.DeliveryCharge - 50 : (60 + ((i.c.c.Distance - 15) * 8 + ((deliveryRatePercentage / 100) * 8))))) : i.c.c.DeliveryCharge,
+            //           IfscCode = i.d.IFSCCode,
+            //           PaymentDate = i.c.p.DateEncoded,
+            //           PaymentId = "JOY" + i.c.p.OrderNumber.ToString(),
+            //           DeliveryBoyId = i.d.Id,
+            //           DeliveryBoyName = i.d.Name.ToString().Trim(),
+            //           DeliveryBoyPhoneNumber = i.d.PhoneNumber,
+            //           TransactionType = i.c.p.PaymentMode,
+            //           OrderNo = i.c.p.OrderNumber,
+            //           EmailBody = "",
+            //           EmailID = i.d.Email,
+            //           DeliveryBoyPaymentStatus = i.c.c.DeliveryBoyPaymentStatus,
+            //           PaymentMode = i.d.BankName.ToUpper() == "ICICI BANK" ? "FT" : "NEFT",
+            //           ShopName = i.c.c.ShopName,
+            //           COHAmount = (i.c.c.PaymentModeType == 2 && i.c.c.DeliveryBoyPaymentStatus == 0) ? (i.c.c.TotalPrice - i.c.p.RefundAmount ?? 0) : 0,
+            //           TipsAmount = i.c.c.TipsAmount,
+            //           // TotalDeliveryBoyAmount = i.d.WorkType == 1 ? ((i.c.c.DeliveryCharge == 35 || i.c.c.DeliveryCharge == 50) ? 20 + i.c.c.TipsAmount : 20 + (i.c.c.IsPickupDrop == false ? i.c.c.DeliveryCharge - 35 : i.c.c.DeliveryCharge - 50) + i.c.c.TipsAmount) : i.c.c.DeliveryCharge + i.c.c.TipsAmount
+            //           TotalDeliveryBoyAmount = i.d.WorkType == 1 ? ((i.c.c.Distance <= 5) ? 20 + ((deliveryRatePercentage / 100) * 20) + i.c.c.TipsAmount : 20 + ((deliveryRatePercentage / 100) * 20) + (i.c.c.IsPickupDrop == false ? ((i.c.c.Distance - 5) * 6 + ((deliveryRatePercentage / 100) * 6)) : i.c.c.Distance <= 15 ? i.c.c.DeliveryCharge - 50 : (60 + ((i.c.c.Distance - 15) * 8 + ((deliveryRatePercentage / 100) * 8)))) + i.c.c.TipsAmount) : i.c.c.DeliveryCharge + i.c.c.TipsAmount
+            //       }).ToList();
+            //}
             return View(model);
         }
 
