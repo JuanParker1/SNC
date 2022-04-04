@@ -40,53 +40,31 @@
                         </div>
                     </form>
                     @Html.Grid(Model).Columns(columns =>
-               {
-               columns.Add(c => c.Name).Titled("Name").Filterable(true).SetWidth(15);
-               columns.Add(c => c.OwnerPhoneNumber).Titled("OwnerPhoneNo").Filterable(true).SetWidth(30);
-               columns.Add(c => c.PhoneNumber).Titled("PhoneNo.").Filterable(true).SetWidth(10);
-               columns.Add(c => c.ShopCategoryName).Titled("Shop Type").Filterable(true).SetWidth(20);
-               columns.Add(c => c.Address).Titled("Address").Filterable(true).SetWidth(40);
-               columns.Add(c => c.PinCode).Titled("PinCode").Filterable(true).SetWidth(5);
-               columns.Add().Encoded(false).Sanitized(false).RenderValueAs(cs => cs.Status == 6 ?
-                Html.ActionLink("Activate", "Active", new { Id = cs.Id }, new { @class = "btn btn-success btn-vsm mb-1", @style = "padding: 3px 14px" }).ToHtmlString() :
-                Html.ActionLink("InActive", "InActiveLowBalance", new { Id = cs.Id }, new { @class = "btn btn-secondary btn-vsm mb-1", @style = "padding: 3px 14px" }).ToHtmlString()).Titled("Status").SetWidth(8);
-               columns.Add().Encoded(false).Sanitized(false)
-                .RenderValueAs(s => new HtmlString("<label class='switch'> <input type='checkbox' value='" + s.IsOnline + "' Id='Id_" + s.Id + "' class='CheckOnline' data-id='" + s.Id + "'><span class='slider round'></span></label>")).Titled("IsOnline").SetWidth(8);
-               columns.Add().Encoded(false).Sanitized(false)
-              .RenderValueAs(s => new HtmlString("<label class='switch'> <input type='checkbox' value='" + s.IsTrail + "' Id='Id_" + s.Id + "' class='check-trail' data-id='" + s.Id + "'><span class='slider round'></span></label>")).Titled("IsTrail").SetWidth(8);
-               columns.Add().Encoded(false).Sanitized(false).Titled("Action").SetWidth(5)
-                .RenderValueAs(o => @<div>
-                        <a href="~/Shop/Edit?id=@HttpUtility.UrlEncode(ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id))" class="text-info mr-4"><i class="fa fa-edit fa-2x"></i></a>
-                        <a href="javascript:void(0)" data-id="@ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id)" class="text-danger btnDelete"><i class="fa fa-trash fa-2x"></i></a>
-                    </div>);
-  }).WithPaging(20).Sortable(true)
+                    {
+                        columns.Add(c => c.Name).Titled("Name").Filterable(true).Encoded(false).Sanitized(false)
+                          .RenderValueAs(s => Html.ActionLink(s.Name, "Details", new { Id = ShopNow.Helpers.AdminHelpers.ECodeInt(s.Id) }).ToHtmlString()).SetWidth(15);
+                        columns.Add(c => c.OwnerPhoneNumber).Titled("OwnerPhoneNo").Filterable(true).SetWidth(30);
+                        columns.Add(c => c.PhoneNumber).Titled("PhoneNo.").Filterable(true).SetWidth(10);
+                        columns.Add(c => c.ShopCategoryName).Titled("Shop Type").Filterable(true).SetWidth(20);
+                        columns.Add(c => c.Address).Titled("Address").Filterable(true).SetWidth(40);
+                        columns.Add(c => c.PinCode).Titled("PinCode").Filterable(true).SetWidth(5);
+                        columns.Add().Encoded(false).Sanitized(false).RenderValueAs(cs => cs.Status == 6 ?
+                          Html.ActionLink("Activate", "Active", new { Id = cs.Id }, new { @class = "btn btn-success btn-vsm mb-1", @style = "padding: 3px 14px" }).ToHtmlString() :
+                          Html.ActionLink("InActive", "InActiveLowBalance", new { Id = cs.Id }, new { @class = "btn btn-secondary btn-vsm mb-1", @style = "padding: 3px 14px" }).ToHtmlString()).Titled("Status").SetWidth(8);
+                        columns.Add().Encoded(false).Sanitized(false)
+                          .RenderValueAs(s => new HtmlString("<label class='switch'> <input type='checkbox' value='" + s.IsOnline + "' Id='Id_" + s.Id + "' class='CheckOnline' data-id='" + s.Id + "'><span class='slider round'></span></label>")).Titled("IsOnline").SetWidth(8);
+                        columns.Add().Encoded(false).Sanitized(false)
+                          .RenderValueAs(s => new HtmlString("<label class='switch'> <input type='checkbox' value='" + s.IsTrail + "' Id='Id_" + s.Id + "' class='check-trail' data-id='" + s.Id + "'><span class='slider round'></span></label>")).Titled("IsTrail").SetWidth(8);
+                        columns.Add().Encoded(false).Sanitized(false).Titled("Action").SetWidth(5)
+                          .RenderValueAs(o => @<div>
+                             <a href="~/Shop/Edit?id=@HttpUtility.UrlEncode(ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id))" class="text-info mr-4"><i class="fa fa-edit fa-2x"></i></a>
+                             <a href="javascript:void(0)" data-id="@ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id)" class="text-danger btnDelete"><i class="fa fa-trash fa-2x"></i></a>  </div>);
+                    }).WithPaging(20).Sortable(true)
                 </div>
             </div>
         </div>
     </div>
 </div>
-
-@*<div class="modal fade" id="modal-opentime" tabindex="-1" role="dialog">
-        <div class="modal-dialog modal-sm">
-            <div class="modal-content">
-                <div class="modal-body">
-                    <form method="get" action="/Shop/UpdateNextOpeningDateTime">
-                        <input type="hidden" name="Id" />
-                        <input type="hidden" name="IsOnline" value="false"/>
-                        <h5>Next Opening DateTime</h5>
-                        <div class="form-group">
-                            <label>Choose Date & Time</label>
-                            <input class="form-control" type="datetime-local" name="NextOpeningDateTime" required />
-                        </div>
-                        <div class="text-right">
-                            <button class="btn btn-sm btn-success mr-3">Submit</button>
-                            <button class="btn btn-sm btn-danger" data-dismiss="modal">Close</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>*@
 
 @section Scripts
 {
@@ -166,23 +144,6 @@
                     dataType: 'json'
                 }
             });
-
-            //$('#Id').select2({
-            //    placeholder: "Search Shop Name",
-            //    ajax: {
-            //        url: "/Shop/GetShopListSelect2",
-            //        width: '100%',
-            //        delay: 250,
-            //        dataType: 'json'
-            //    }
-            //}).on('select2:select', function (e) {
-            //    $('input[name="Name"]').val(e.params.data.text);
-            //});
-
-            //$("#Filter").click(function () {
-            //    var shopId = $("#Id").val();
-            //    window.location.href = "/Shop/List/?shop=" + shopId;
-            //});
 
         });
     </script>
