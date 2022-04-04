@@ -670,6 +670,18 @@ namespace ShopNow.Controllers
             db.SaveChanges();
             message = "Delviery Rate " + drp.Percentage + "% Added Successfully.";
 
+            if (drp.Id != 0)
+            {
+                var deliveryCharge = db.DeliveryCharges.FirstOrDefault(i => i.Status == 0 && i.TireType == 1 && i.Type == 0 && i.VehicleType == 1);
+                if (deliveryCharge != null)
+                {
+                    deliveryCharge.ChargeUpto5Km = 35 + ((drp.Percentage / 100) * 35);
+                    deliveryCharge.ChargePerKm = 6 + ((drp.Percentage / 100) * 6);
+                    db.Entry(deliveryCharge).State = System.Data.Entity.EntityState.Modified;
+                    db.SaveChanges();
+                }
+            }
+
             return Json(new { message = message }, JsonRequestBehavior.AllowGet);
         }
 
