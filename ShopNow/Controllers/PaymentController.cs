@@ -365,8 +365,8 @@ namespace ShopNow.Controllers
                        AccountName = i.d.AccountName.Trim(),
                        AccountNumber = i.d.AccountNumber,
                        AccountType = "SA",
-                       //Amount = i.d.WorkType == 1 ? ((i.c.c.DeliveryCharge == 35 || i.c.c.DeliveryCharge == 50) ? 20 : 20 + (i.c.c.IsPickupDrop == false ? i.c.c.DeliveryCharge - 35 : i.c.c.Distance <= 15 ? i.c.c.DeliveryCharge - 50 : (60 + ((i.c.c.Distance - 15) * 8)))) : i.c.c.DeliveryCharge,
-                       Amount = i.d.WorkType == 1 ? ((i.c.c.Distance <= 5) ? 20 : 20 + (i.c.c.IsPickupDrop == false ? ((i.c.c.Distance - 5) * 6) : i.c.c.Distance <= 15 ? i.c.c.DeliveryCharge - 50 : (60 + ((i.c.c.Distance - 15) * 8)))) : i.c.c.DeliveryCharge,
+                       //  Amount = i.d.WorkType == 1 ? ((i.c.c.Distance <= 5) ? 20 : 20 + (i.c.c.IsPickupDrop == false ? ((i.c.c.Distance - 5) * 6) : i.c.c.Distance <= 15 ? i.c.c.DeliveryCharge - 50 : (60 + ((i.c.c.Distance - 15) * 8)))) : i.c.c.DeliveryCharge,
+                       Amount = i.d.WorkType == 1 ? ((i.c.c.Distance <= 5) ? 20 + ((i.c.c.DeliveryRatePercentage / 100) * 20) : 20 + ((i.c.c.DeliveryRatePercentage / 100) * 20) + (i.c.c.IsPickupDrop == false ? ((i.c.c.Distance - 5) * 6 + ((i.c.c.DeliveryRatePercentage / 100) * 6)) : i.c.c.Distance <= 15 ? i.c.c.DeliveryCharge - 50 : (60 + ((i.c.c.Distance - 15) * 8 + ((i.c.c.DeliveryRatePercentage / 100) * 8))))) : i.c.c.DeliveryCharge,
                        IfscCode = i.d.IFSCCode,
                        PaymentDate = i.c.p.DateEncoded,
                        PaymentId = "JOY" + i.c.p.OrderNumber.ToString(),
@@ -382,8 +382,8 @@ namespace ShopNow.Controllers
                        ShopName = i.c.c.ShopName,
                        COHAmount = (i.c.c.PaymentModeType == 2 && i.c.c.DeliveryBoyPaymentStatus == 0) ? (i.c.c.TotalPrice - i.c.p.RefundAmount ?? 0) : 0,
                        TipsAmount = i.c.c.TipsAmount,
-                       // TotalDeliveryBoyAmount = i.d.WorkType == 1 ? ((i.c.c.DeliveryCharge == 35 || i.c.c.DeliveryCharge == 50) ? 20 + i.c.c.TipsAmount : 20 + (i.c.c.IsPickupDrop == false ? i.c.c.DeliveryCharge - 35 : i.c.c.DeliveryCharge - 50) + i.c.c.TipsAmount) : i.c.c.DeliveryCharge + i.c.c.TipsAmount
-                       TotalDeliveryBoyAmount = i.d.WorkType == 1 ? ((i.c.c.Distance <= 5) ? 20 + i.c.c.TipsAmount : 20 + (i.c.c.IsPickupDrop == false ? ((i.c.c.Distance - 5) * 6) : i.c.c.Distance <= 15 ? i.c.c.DeliveryCharge - 50 : (60 + ((i.c.c.Distance - 15) * 8))) + i.c.c.TipsAmount) : i.c.c.DeliveryCharge + i.c.c.TipsAmount
+                       // TotalDeliveryBoyAmount = i.d.WorkType == 1 ? ((i.c.c.Distance <= 5) ? 20 + i.c.c.TipsAmount : 20 + (i.c.c.IsPickupDrop == false ? ((i.c.c.Distance - 5) * 6) : i.c.c.Distance <= 15 ? i.c.c.DeliveryCharge - 50 : (60 + ((i.c.c.Distance - 15) * 8))) + i.c.c.TipsAmount) : i.c.c.DeliveryCharge + i.c.c.TipsAmount
+                       TotalDeliveryBoyAmount = i.d.WorkType == 1 ? ((i.c.c.Distance <= 5) ? 20 + ((i.c.c.DeliveryRatePercentage / 100) * 20) + i.c.c.TipsAmount : 20 + ((i.c.c.DeliveryRatePercentage / 100) * 20) + (i.c.c.IsPickupDrop == false ? ((i.c.c.Distance - 5) * 6 + ((i.c.c.DeliveryRatePercentage / 100) * 6)) : i.c.c.Distance <= 15 ? i.c.c.DeliveryCharge - 50 : (60 + ((i.c.c.Distance - 15) * 8 + ((i.c.c.DeliveryRatePercentage / 100) * 8)))) + i.c.c.TipsAmount) : i.c.c.DeliveryCharge + i.c.c.TipsAmount
                    }).ToList();
             //}
             //else

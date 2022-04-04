@@ -86,6 +86,8 @@ namespace ShopNow.Models
         public Nullable<System.DateTime> PickupDateTime { get; set; }
         public Nullable<System.DateTime> DeliveryDate { get; set; }
         public int DeliverySlotType { get; set; }
+        public int DeliveryRatePercentageId { get; set; }
+        public double DeliveryRatePercentage { get; set; }
         public int Status { get; set; }
         public System.DateTime DateEncoded { get; set; }
         public System.DateTime DateUpdated { get; set; }
