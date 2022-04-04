@@ -94,8 +94,8 @@
         <EntityTypeShape EntityType="sncModel.Shop" Width="1.5" PointX="33.375" PointY="26.75" />
         <EntityTypeShape EntityType="sncModel.CustomerWalletHistory" Width="1.5" PointX="0.75" PointY="34.75" />
         <EntityTypeShape EntityType="sncModel.PushNotification" Width="1.5" PointX="2.75" PointY="34.75" />
-        <EntityTypeShape EntityType="sncModel.DeliveryRatePercentage" Width="1.5" PointX="29.375" PointY="34.75" />
         <EntityTypeShape EntityType="sncModel.NotificationLogin" Width="1.5" PointX="35.375" PointY="0.75" />
+        <EntityTypeShape EntityType="sncModel.DeliveryRatePercentage" Width="1.5" PointX="29.375" PointY="34.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
