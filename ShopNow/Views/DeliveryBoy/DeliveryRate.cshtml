@@ -1,0 +1,140 @@
+﻿@model IEnumerable<ShopNow.Models.DeliveryRatePercentage>
+@using GridMvc.Html
+@{
+    ViewBag.Title = "Delivery Rate List";
+}
+<title>ShopNow | @ViewBag.Title</title>
+<link href="~/Content/Gridmvc.css" rel="stylesheet" />
+<script src="~/Scripts/gridmvc.js"></script>
+
+<div class="container-fluid mb-5">
+    <div class="row">
+        <div class="col-md-4">
+            <h4 class="text-success">@ViewBag.Title</h4>
+        </div>
+        <div class="col-md-8 text-right">
+            <a data-toggle="modal" data-target="#createModal" href="createModal"><span class="fa fa-plus"></span> New Delivery Rate</a>
+        </div>
+
+        <div class="col-md-12">
+            <div class="card shadow mt-3">
+                <div class="card-body">
+                    @Html.Grid(Model).Columns(columns =>
+               {
+               columns.Add(b => b.Percentage).Titled("Percentage").Filterable(true).SetWidth(10);
+               columns.Add(b => b.StartDate).Titled("Start Date").Filterable(true).SetWidth(10);
+               columns.Add(b => b.EndDate).Titled("End Date").Filterable(true).SetWidth(10);
+               columns.Add(b => b.EncodedDate).Titled("Created Date").Filterable(true).SetWidth(10);
+               columns.Add(b => b.EncodedBy).Titled("Created By").Filterable(true).SetWidth(10);
+               columns.Add().Encoded(false).Sanitized(false).Titled("Action").SetWidth(5)
+                   .RenderValueAs(o => @<div>
+                            <a href="javascript:void(0)" data-id=@o.Id class="text-danger btnDelete"><i class="fa fa-trash fa-lg"></i></a>
+                        </div>);
+}).WithPaging(20).Sortable(true)
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="createModal" tabindex="-1" role="dialog" aria-labelledby="createModalLabel">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header alert alert-info">
+                <h5 class="modal-title" id="createModalLabel">New Delivery Rate</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group row">
+                    <div class="col-md-10">
+                        <label class="col-form-label font-weight-bold text-secondary">Percentage</label>
+                        <input type="text" name="Percentage" id="Percentage" class="form-control" />
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-md-10">
+                        <label class="col-form-label font-weight-bold text-secondary">Start Date</label>
+                        <input type="datetime-local" name="StartDate" id="StartDate" class="form-control" />
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-md-10">
+                        <label class="col-form-label font-weight-bold text-secondary">End Date</label>
+                        <input type="datetime-local" name="EndDate" id="EndDate" class="form-control" />
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <input type="button" id="Create" value="Save" class="btn btn-success float-right" />
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+    <script src="~/Scripts/ValidateRequiredFields.js"></script>
+    <script src="~/Scripts/sweetalert/sweetalert.min.js"></script>
+    <link href="~/Content/sweetalert/sweetalert.css" rel="stylesheet" />
+
+    <script>
+        $(document).ready(function () {
+
+            $('#Create').on('click', function () {
+                var isValidate = false;
+                var requiredArr = [
+                    'Percentage',
+                    'StartDate'
+                ];
+                isValidate = ValidateEmptyRequiredFiels(requiredArr);
+                if (isValidate) {
+                    var percentage = $('#Percentage').val();
+                    var startdate = $('#StartDate').val();
+                    var enddate = $('#EndDate').val();
+                    $.post("/DeliveryBoy/DeliveryRateSave", { Percentage: percentage, StartDate: startdate, EndDate: enddate }, function (data) {
+                        swal({
+                            title: data.message,
+                            text: "",
+                            type: "success"
+                        }, function () {
+                            window.location.reload();
+                        });
+                    });
+                }
+            });
+
+            $(".btnDelete").click(function () {
+                var Id = $(this).attr('data-id');
+                swal({
+                    title: "Are you sure want to delete?",
+                    text: "You will not be able to recover this file!",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "Yes, Delete it!",
+                    cancelButtonText: "No, cancel",
+                    closeOnConfirm: false,
+                    closeOnCancel: true
+                },
+                    function (isConfirm) {
+                        if (isConfirm) {
+                            $.getJSON("/DeliveryBoy/DeliveryRateDelete", { Id: Id }, function (data) {
+                                if (data == true) {
+                                    window.location.reload();
+                                }
+                            });
+                        }
+                    }
+                );
+            });
+
+        });
+    </script>
+}
+
+
+
+
+

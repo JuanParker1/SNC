@@ -641,8 +641,50 @@ namespace ShopNow.Controllers
             return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
         }
 
-        // DeliveryRatePercentage
+        // Delivery Rate Percentage
+        [AccessPolicy(PageCode = "")]
+        public ActionResult DeliveryRate()
+        {
+            var user = ((Helpers.Sessions.User)Session["USER"]);
+            ViewBag.Name = user.Name;
+            var List = (from s in db.DeliveryRatePercentages
+                        select s).OrderBy(s => s.EncodedDate).Where(i => i.Status == 0).ToList();
+            return View(List);
 
+        }
+
+        [AccessPolicy(PageCode = "")]
+        public JsonResult DeliveryRateSave(double Percentage, DateTime StartDate, DateTime EndDate)
+        {
+            var user = ((Helpers.Sessions.User)Session["USER"]);
+            string message = "";
+            DeliveryRatePercentage drp = new DeliveryRatePercentage();
+            drp.Percentage = Percentage;
+            drp.StartDate = StartDate;
+            drp.EndDate = EndDate;
+            drp.Status = 0;
+            drp.EncodedDate = DateTime.Now;
+            drp.EncodedBy = user.Name;
+            db.DeliveryRatePercentages.Add(drp);
+            db.SaveChanges();
+            message = drp.Percentage + "% Successfully Added";
+
+            return Json(new { message = message }, JsonRequestBehavior.AllowGet);
+        }
+
+        [AccessPolicy(PageCode = "")]
+        public JsonResult DeliveryRateDelete(int Id)
+        {
+            var user = ((Helpers.Sessions.User)Session["USER"]);
+            var drp = db.DeliveryRatePercentages.Where(b => b.Id == Id).FirstOrDefault();
+            if (drp != null)
+            {
+                drp.Status = 2;
+                db.Entry(drp).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+            }
+            return Json(true, JsonRequestBehavior.AllowGet);
+        }
         protected override void Dispose(bool disposing)
         {
             if (disposing)
