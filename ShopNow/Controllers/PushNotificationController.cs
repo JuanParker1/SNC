@@ -36,6 +36,25 @@ namespace ShopNow.Controllers
             return View(model);
         }
 
+        public ActionResult List()
+        {
+            var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
+            ViewBag.Name = user.Name;
+            var model = new PushNotificationListViewModel();
+            model.ListItems = db.PushNotifications
+                .Select(i => new PushNotificationListViewModel.ListItem
+                {
+                    DateEncoded = i.DateEncoded,
+                    Description = i.Description,
+                    DistrictName = i.Type == 1 ? "All Customer" : i.District,
+                    EncodedBy = i.EncodedBy,
+                    Title = i.Title
+                }).ToList();
+            int counter = 1;
+            model.ListItems.ForEach(x => x.Index = counter++);
+            return View(model);
+        }
+
         [HttpPost]
         public ActionResult SendBulk(string title, string message, string[] district, int type, string imagePath = "")
         {
