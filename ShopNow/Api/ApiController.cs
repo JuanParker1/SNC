@@ -1344,6 +1344,12 @@ namespace ShopNow.Controllers
                     {
                         order.CustomerAddressId = custAddress.Id;
                     }
+                    var deliveryRatePercentage = db.DeliveryRatePercentages.OrderByDescending(i => i.Id).FirstOrDefault(i => i.Status == 0);
+                    if (deliveryRatePercentage != null)
+                    {
+                        order.DeliveryRatePercentage = deliveryRatePercentage.Percentage;
+                        order.DeliveryRatePercentageId = deliveryRatePercentage.Id;
+                    }
                     db.Orders.Add(order);
                     db.SaveChanges();
                     foreach (var item in model.ListItems)
