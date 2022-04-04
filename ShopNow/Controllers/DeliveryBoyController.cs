@@ -648,9 +648,8 @@ namespace ShopNow.Controllers
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
             var List = (from s in db.DeliveryRatePercentages
-                        select s).OrderBy(s => s.EncodedDate).Where(i => i.Status == 0).ToList();
+                        select s).OrderBy(s => s.DateEncoded).Where(i => i.Status == 0).ToList();
             return View(List);
-
         }
 
         [AccessPolicy(PageCode = "")]
@@ -663,12 +662,32 @@ namespace ShopNow.Controllers
             drp.StartDate = StartDate;
             drp.EndDate = EndDate;
             drp.Status = 0;
-            drp.EncodedDate = DateTime.Now;
+            drp.DateEncoded = DateTime.Now;
             drp.EncodedBy = user.Name;
             db.DeliveryRatePercentages.Add(drp);
             db.SaveChanges();
-            message = drp.Percentage + "% Successfully Added";
+            message = "Delviery Rate " + drp.Percentage + "% Added Successfully.";
 
+            return Json(new { message = message }, JsonRequestBehavior.AllowGet);
+        }
+
+        [AccessPolicy(PageCode = "")]
+        public JsonResult DeliveryRateEdit(DeliveryRatePercentage drpmodel)
+        {
+            var user = ((Helpers.Sessions.User)Session["USER"]);
+            string message = "";
+            DeliveryRatePercentage drp = db.DeliveryRatePercentages.Where(b => b.Id == drpmodel.Id).FirstOrDefault();
+            if (drp != null)
+            {
+                drp.Percentage = drpmodel.Percentage;
+                drp.StartDate = drpmodel.StartDate;
+                drp.EndDate = drpmodel.EndDate;
+                drp.UpdatedBy = user.Name;
+                drp.DateUpdated = DateTime.Now;
+                db.Entry(drp).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+                message = "Delivery Rate Updated Successfully.";
+            }
             return Json(new { message = message }, JsonRequestBehavior.AllowGet);
         }
 
@@ -680,6 +699,8 @@ namespace ShopNow.Controllers
             if (drp != null)
             {
                 drp.Status = 2;
+                drp.UpdatedBy = user.Name;
+                drp.DateUpdated = DateTime.Now;
                 db.Entry(drp).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
             }

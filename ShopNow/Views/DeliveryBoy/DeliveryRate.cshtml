@@ -24,13 +24,14 @@
                columns.Add(b => b.Percentage).Titled("Percentage").Filterable(true).SetWidth(10);
                columns.Add(b => b.StartDate).Titled("Start Date").Filterable(true).SetWidth(10);
                columns.Add(b => b.EndDate).Titled("End Date").Filterable(true).SetWidth(10);
-               columns.Add(b => b.EncodedDate).Titled("Created Date").Filterable(true).SetWidth(10);
+               columns.Add(b => b.DateEncoded).Titled("Created Date").Filterable(true).SetWidth(10);
                columns.Add(b => b.EncodedBy).Titled("Created By").Filterable(true).SetWidth(10);
                columns.Add().Encoded(false).Sanitized(false).Titled("Action").SetWidth(5)
                    .RenderValueAs(o => @<div>
+                            <a href="editModal" class="text-info edit-prompt mr-5" data-id=@o.Id data-percentage="@o.Percentage" data-startdate="@o.StartDate" data-enddate="@o.EndDate" data-target="#editModal" data-toggle="modal"><i class="fa fa-edit fa-lg"></i></a>
                             <a href="javascript:void(0)" data-id=@o.Id class="text-danger btnDelete"><i class="fa fa-trash fa-lg"></i></a>
-                        </div>);
-}).WithPaging(20).Sortable(true)
+                        </div>                  );
+                  }).WithPaging(20).Sortable(true)
                 </div>
             </div>
         </div>
@@ -56,18 +57,55 @@
                 <div class="form-group row">
                     <div class="col-md-10">
                         <label class="col-form-label font-weight-bold text-secondary">Start Date</label>
-                        <input type="datetime-local" name="StartDate" id="StartDate" class="form-control" />
+                        <input type="datetime" name="StartDate" id="StartDate" class="form-control" />
                     </div>
                 </div>
                 <div class="form-group row">
                     <div class="col-md-10">
                         <label class="col-form-label font-weight-bold text-secondary">End Date</label>
-                        <input type="datetime-local" name="EndDate" id="EndDate" class="form-control" />
+                        <input type="datetime" name="EndDate" id="EndDate" class="form-control" />
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
                 <input type="button" id="Create" value="Save" class="btn btn-success float-right" />
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header alert alert-info">
+                <input type="hidden" name="Id" id="Id" />
+                <h5 class="modal-title" id="editModalLabel">Update Delivery Rate</h5>
+                <button type="button" class="btnClose close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group row">
+                    <div class="col-md-10">
+                        <label class="col-form-label font-weight-bold text-secondary">Percentage</label>
+                        <input type="text" name="Percentage" id="editPercentage" class="form-control" />
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-md-10">
+                        <label class="col-form-label font-weight-bold text-secondary">Start Date</label>
+                        <input type="datetime-local" name="StartDate" id="editStartDate" class="form-control" />
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-md-10">
+                        <label class="col-form-label font-weight-bold text-secondary">End Date</label>
+                        <input type="datetime-local" name="EndDate" id="editEndDate" class="form-control" />
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <input type="button" name="Edit" value="Save" class="btn btn-success float-right Edit" />
             </div>
         </div>
     </div>
@@ -104,6 +142,39 @@
                     });
                 }
             });
+
+            $(".edit-prompt").click(function () {
+                $("#Id").val($(this).attr('data-id'));
+                $("#editPercentage").val($(this).attr('data-percentage'));
+                $("#editStartDate").val($(this).attr('data-startdate'));
+                $("#editEndDate").val($(this).attr('data-enddate'));
+            });
+
+            $(".Edit").click(function () {
+                var drp = {
+                    Id: $('#Id').val(),
+                    Percentage: $('#editPercentage').val(),
+                    StartDate: $('#editStartDate').val(),
+                    EndDate: $('#editEndDate').val(),
+                }
+                if ($('#editPercentage').val() == "" || $('#editPercentage').val() == null) {
+                    swal("Percentage is Empty.", "Please Enter Delivery Rate Percentage", "warning");
+                }
+                else {
+                    $.post("/DeliveryBoy/DeliveryRateEdit", { drpmodel: drp }, function (data) {
+                        if (data.message != null || data.message != "") {
+                            swal({
+                                title: data.message,
+                                text: "",
+                                type: "success"
+                            }, function () {
+                                window.location.reload();
+                            });
+                        }
+                    });
+                }
+            });
+
 
             $(".btnDelete").click(function () {
                 var Id = $(this).attr('data-id');
