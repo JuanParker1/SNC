@@ -295,7 +295,7 @@ namespace ShopNow.Controllers
                                             join s in db.Shops on c.Id equals s.CustomerId
                                             where s.Id == model.ShopId
                                             select c.FcmTocken ?? "").FirstOrDefault().ToString();
-                            Helpers.PushNotification.SendbydeviceId("You have received new order.Accept Soon", "Snowch", "OwnerNewOrder","", fcmToken.ToString());
+                            Helpers.PushNotification.SendbydeviceId("You have received new order.Accept Soon", "Snowch", "OwnerNewOrder","", fcmToken.ToString(), "tune4.caf");
 
                             return Json(new { status = true, orderId = order.Id }, JsonRequestBehavior.AllowGet);
                         }

@@ -30,8 +30,9 @@ namespace ShopNow.Controllers
                     DateUpdated = i.dv.OrderByDescending(a => a.DateUpdated).FirstOrDefault().DateUpdated,
                     ShopId = i.dv.Key,
                     ShopName = i.dv.OrderByDescending(a => a.DateUpdated).FirstOrDefault().ShopName,
-                    OrderCount = i.o.Count(),
-                    ConversionRate = i.o.Count() != 0 ? Math.Round((double)i.o.Count() / i.dv.Count() * 100,2) : 0
+                    OrderCount = i.dv.Key !=0 ? i.o.Count() : db.Orders.Where(a => DbFunctions.TruncateTime(a.DateEncoded) == DbFunctions.TruncateTime(model.DateFilter) && a.Status == 6).GroupBy(a=>a.CustomerId).Count(),
+                    //ConversionRate = Math.Round((double)i.o.Count() / i.dv.Count() * 100,2)
+                    ConversionRate = Math.Round((double)(i.dv.Key != 0 ? i.o.Count() : db.Orders.Where(a => DbFunctions.TruncateTime(a.DateEncoded) == DbFunctions.TruncateTime(model.DateFilter) && a.Status == 6).GroupBy(a => a.CustomerId).Count()) / i.dv.Count() * 100,2)
                 }).OrderByDescending(i => i.Count).ToList();
             return View(model);
         }

@@ -49,7 +49,7 @@ namespace ShopNow.Controllers
                     var count = Math.Ceiling((double)fcmTokenList.Count() / 1000);
                     for (int i = 0; i < count; i++)
                     {
-                        Helpers.PushNotification.SendBulk(message, title, "SpecialOffer", imagePath, fcmTokenList.Skip(i * 1000).Take(1000).ToArray());
+                        Helpers.PushNotification.SendBulk(message, title, "SpecialOffer", imagePath, fcmTokenList.Skip(i * 1000).Take(1000).ToArray(), "tune2.caf");
                     }
                     //Helpers.PushNotification.SendBulk(message, title, "SpecialOffer", imagePath, fcmTokenList.Take(1000).ToArray());
                     //Helpers.PushNotification.SendBulk(message, title, "SpecialOffer", imagePath, fcmTokenList.Skip(1000).Take(1000).ToArray());
@@ -61,7 +61,7 @@ namespace ShopNow.Controllers
                     var count = Math.Ceiling((double)fcmTokenList.Count() / 1000);
                     for (int i = 0; i < count; i++)
                     {
-                        Helpers.PushNotification.SendBulk(message, title, "SpecialOffer", imagePath, fcmTokenList.Skip(i * 1000).Take(1000).ToArray());
+                        Helpers.PushNotification.SendBulk(message, title, "SpecialOffer", imagePath, fcmTokenList.Skip(i * 1000).Take(1000).ToArray(), "tune2.caf");
                     }
                     //Helpers.PushNotification.SendBulk(message, title, "SpecialOffer", imagePath, fcmTokenList.Take(1000).ToArray());
                     //Helpers.PushNotification.SendBulk(message, title, "SpecialOffer", imagePath, fcmTokenList.Skip(1000).Take(1000).ToArray());
@@ -76,7 +76,7 @@ namespace ShopNow.Controllers
                     var count = Math.Ceiling((double)fcmTokenList.Count() / 1000);
                     for (int i = 0; i < count; i++)
                     {
-                        Helpers.PushNotification.SendBulk(message, title, "SpecialOffer", imagePath, fcmTokenList.Skip(i * 1000).Take(1000).ToArray());
+                        Helpers.PushNotification.SendBulk(message, title, "SpecialOffer", imagePath, fcmTokenList.Skip(i * 1000).Take(1000).ToArray(), "tune2.caf");
                     }
                     //Helpers.PushNotification.SendBulk(message, title, "SpecialOffer", imagePath, fcmTokenList.Take(1000).ToArray());
                     //Helpers.PushNotification.SendBulk(message, title, "SpecialOffer", imagePath, fcmTokenList.Skip(1000).Take(1000).ToArray());
