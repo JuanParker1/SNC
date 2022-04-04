@@ -25,7 +25,7 @@
                columns.Add(c => c.PhoneNumber).Titled("Phone Number").Filterable(true).SetWidth(10);
                columns.Add(c => c.Password).Titled("Password").Filterable(true).SetWidth(30);
                columns.Add(c => c.DateEncoded).Titled("Date").Filterable(true).SetWidth(10);
-               columns.Add(c => c.EncodedBy).Titled("State").Filterable(true).SetWidth(10);
+               columns.Add(c => c.EncodedBy).Titled("Created By").Filterable(true).SetWidth(10);
                columns.Add().Encoded(false).Sanitized(false).Titled("Action").Filterable(false).SetWidth(10)
                .RenderValueAs(c => @<div>
                         <a data-toggle="modal" data-target="#updateModal" href="updateModal" data-name="@c.Name" data-phonenumber="@c.PhoneNumber" data-password="@c.Password" data-id=@c.Id class="text-info Update"><i class="fa fa-edit fa-lg"></i></a>
@@ -41,8 +41,8 @@
 <div class="modal fade" id="createModal" role="dialog" aria-labelledby="createModalLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <div class="modal-header alert alert-info">
-                <h5 class="modal-title text-primary" id="createModalLabel">New Create</h5>
+            <div class="modal-header alert alert-success">
+                <h5 class="modal-title text-primary" id="createModalLabel">New Creation</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -74,7 +74,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <input type="button" id="Create" name="Create" value="Save" class="btn btn-success float-right Save" />
+                <input type="button" id="Create" name="Create" value="Save" class="btn btn-success" />
             </div>
         </div>
     </div>
@@ -83,7 +83,7 @@
 <div class="modal fade" id="updateModal" role="dialog" aria-labelledby="updateModalLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <div class="modal-header alert alert-info">
+            <div class="modal-header alert alert-success">
                 <h5 class="modal-title text-primary" id="updateModalLabel">Update</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
@@ -117,7 +117,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <input type="button" id="btnUpdate" value="Update" class="btn btn-success float-right" />
+                <input type="button" id="btnUpdate" value="Update" class="btn btn-success" />
             </div>
         </div>
     </div>

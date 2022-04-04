@@ -142,6 +142,7 @@ namespace ShopNow.Controllers
             return View(model.NotificationLists);
         }
 
+        [HttpPost]
         public JsonResult Save(string Name, string Phonenumber, string Password)
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
@@ -160,6 +161,7 @@ namespace ShopNow.Controllers
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
+        [HttpPost]
         public JsonResult Edit(int id, string name, string phonenumber, string password)
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
