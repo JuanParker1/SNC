@@ -2,33 +2,34 @@
 @{
     ViewBag.Title = "Batch List";
     var shopList = Model.ListItems.OrderBy(i => i.ShopName).GroupBy(i => i.ShopName).ToList();
-
-
 }
-
 <div class="container-fluid">
-    <div class="row my-2">
-        <div class="col-md-3">
-            <h5 class="text-success">@ViewBag.Title</h5>
+    <div class="row mt-2">
+        <div class="col-md-3 mt-1">
+            <h4 class="text-success">@ViewBag.Title</h4>
         </div>
-        <div class="col-md-5">
+        <div class="col-md-3">
             <form method="get" action="/Cart/BatchList">
                 <div class="d-flex">
-                    <select name="ShopId" id="ShopId" class="form-control w-50">
+                    <select name="ShopId" id="ShopId" class="form-control">
                         @if (Model.ShopId != 0)
                         {
                             <option value="@Model.ShopId" selected>@Model.ShopName</option>
                         }
                     </select>
                     <input type="hidden" name="ShopName" id="ShopName" value="@Model.ShopName" />
-                    <input type="submit" class="btn btn-sm btn-success ml-4 w-25" value="Apply Filter" />
-                    <a href="/Cart/batchList" class="btn btn-sm btn-warning ml-4 w-25">Clear Filter</a>
                 </div>
             </form>
         </div>
-        <div class="col-md-4 text-right">
-            <a href="~/Cart/List" class="ml-auto" target="_self"><span class="fa fa-bars"></span> New Order List</a>
+        <div class="col-md-4">
+            <input type="submit" class="btn btn-success mr-2" value="Apply Filter" />
+            <a href="/Cart/batchList" class="btn btn-warning">Clear Filter</a>
         </div>
+        <div class="col-md-2 text-right">
+            <a href="~/Cart/List" class="ml-auto" target="_blank"><span class="fa fa-bars"></span> New Order List</a>
+        </div>
+    </div>
+    <div class="row">
         <div class="col-md-12">
             @foreach (var list in shopList)
             {
@@ -69,7 +70,6 @@
                     </div>
                 </div>
             }
-
             @if (shopList.Count() == 0)
             {
                 <h2 class="text-center text-success mt-5">No Orders Found</h2>
@@ -97,12 +97,6 @@
                 }
             }).on('select2:select', function (e) {
                 $('input[name="ShopName"]').val(e.params.data.text);
-            });
-
-            $(".btn-modal-refund").click(function () {
-                var id = $(this).data('id');
-                $('[name="Id"]').val(id);
-                $('#modal-refund').modal('show');
             });
         });
     </script>
