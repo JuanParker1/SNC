@@ -653,7 +653,7 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "")]
-        public JsonResult DeliveryRateSave(double Percentage, DateTime StartDate, DateTime EndDate)
+        public JsonResult DeliveryRateSave(double Percentage, DateTime StartDate, DateTime? EndDate)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
             string message = "";
@@ -663,7 +663,9 @@ namespace ShopNow.Controllers
             drp.EndDate = EndDate;
             drp.Status = 0;
             drp.DateEncoded = DateTime.Now;
+            drp.DateUpdated = DateTime.Now;
             drp.EncodedBy = user.Name;
+            drp.UpdatedBy = user.Name;
             db.DeliveryRatePercentages.Add(drp);
             db.SaveChanges();
             message = "Delviery Rate " + drp.Percentage + "% Added Successfully.";
@@ -672,21 +674,19 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "")]
-        public JsonResult DeliveryRateEdit(DeliveryRatePercentage drpmodel)
+        public JsonResult DeliveryRateEdit(int Id, DateTime? EndDate)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
             string message = "";
-            DeliveryRatePercentage drp = db.DeliveryRatePercentages.Where(b => b.Id == drpmodel.Id).FirstOrDefault();
+            DeliveryRatePercentage drp = db.DeliveryRatePercentages.Where(b => b.Id == Id).FirstOrDefault();
             if (drp != null)
             {
-                drp.Percentage = drpmodel.Percentage;
-                drp.StartDate = drpmodel.StartDate;
-                drp.EndDate = drpmodel.EndDate;
+                drp.EndDate = EndDate;
                 drp.UpdatedBy = user.Name;
                 drp.DateUpdated = DateTime.Now;
                 db.Entry(drp).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
-                message = "Delivery Rate Updated Successfully.";
+                message = "End Date Updated Successfully.";
             }
             return Json(new { message = message }, JsonRequestBehavior.AllowGet);
         }
