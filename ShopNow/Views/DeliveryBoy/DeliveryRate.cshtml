@@ -28,9 +28,9 @@
                columns.Add(b => b.EncodedBy).Titled("Created By").Filterable(true).SetWidth(10);
                columns.Add().Encoded(false).Sanitized(false).Titled("Action").SetWidth(5)
                    .RenderValueAs(o => @<div>
-                            <a href="editModal" class="text-info edit-prompt mr-5" data-id=@o.Id data-percentage="@o.Percentage" data-startdate="@o.StartDate" data-enddate="@o.EndDate" data-target="#editModal" data-toggle="modal"><i class="fa fa-edit fa-lg"></i></a>
+                            <a href="editModal" class="text-info edit-prompt mr-5" data-id=@o.Id data-percentage="@o.Percentage" data-startdate="@o.StartDate.ToString("yyyy-MM-dd")" data-enddate="@if (o.EndDate != null) {@o.EndDate.Value.ToString("yyyy-MM-dd")}" data-target="#editModal" data-toggle="modal"><i class="fa fa-edit fa-lg"></i></a>
                             <a href="javascript:void(0)" data-id=@o.Id class="text-danger btnDelete"><i class="fa fa-trash fa-lg"></i></a>
-                        </div>                  );
+                        </div>                  );  
                   }).WithPaging(20).Sortable(true)
                 </div>
             </div>
@@ -51,19 +51,19 @@
                 <div class="form-group row">
                     <div class="col-md-10">
                         <label class="col-form-label font-weight-bold text-secondary">Percentage</label>
-                        <input type="text" name="Percentage" id="Percentage" class="form-control" />
+                        <input type="number" name="Percentage" id="Percentage" class="form-control" />
                     </div>
                 </div>
                 <div class="form-group row">
                     <div class="col-md-10">
                         <label class="col-form-label font-weight-bold text-secondary">Start Date</label>
-                        <input type="datetime" name="StartDate" id="StartDate" class="form-control" />
+                        <input type="date" name="StartDate" id="StartDate" class="form-control" />
                     </div>
                 </div>
                 <div class="form-group row">
                     <div class="col-md-10">
                         <label class="col-form-label font-weight-bold text-secondary">End Date</label>
-                        <input type="datetime" name="EndDate" id="EndDate" class="form-control" />
+                        <input type="date" name="EndDate" id="EndDate" class="form-control" />
                     </div>
                 </div>
             </div>
@@ -88,19 +88,19 @@
                 <div class="form-group row">
                     <div class="col-md-10">
                         <label class="col-form-label font-weight-bold text-secondary">Percentage</label>
-                        <input type="text" name="Percentage" id="editPercentage" class="form-control" />
+                        <input type="number" name="Percentage" id="editPercentage" class="form-control" readonly />
                     </div>
                 </div>
                 <div class="form-group row">
                     <div class="col-md-10">
                         <label class="col-form-label font-weight-bold text-secondary">Start Date</label>
-                        <input type="datetime-local" name="StartDate" id="editStartDate" class="form-control" />
+                        <input type="date" name="StartDate" id="editStartDate" class="form-control" readonly />
                     </div>
                 </div>
                 <div class="form-group row">
                     <div class="col-md-10">
                         <label class="col-form-label font-weight-bold text-secondary">End Date</label>
-                        <input type="datetime-local" name="EndDate" id="editEndDate" class="form-control" />
+                        <input type="date" name="EndDate" id="editEndDate" class="form-control" />
                     </div>
                 </div>
             </div>
@@ -151,28 +151,19 @@
             });
 
             $(".Edit").click(function () {
-                var drp = {
-                    Id: $('#Id').val(),
-                    Percentage: $('#editPercentage').val(),
-                    StartDate: $('#editStartDate').val(),
-                    EndDate: $('#editEndDate').val(),
-                }
-                if ($('#editPercentage').val() == "" || $('#editPercentage').val() == null) {
-                    swal("Percentage is Empty.", "Please Enter Delivery Rate Percentage", "warning");
-                }
-                else {
-                    $.post("/DeliveryBoy/DeliveryRateEdit", { drpmodel: drp }, function (data) {
-                        if (data.message != null || data.message != "") {
-                            swal({
-                                title: data.message,
-                                text: "",
-                                type: "success"
-                            }, function () {
-                                window.location.reload();
-                            });
-                        }
-                    });
-                }
+                var Id = $('#Id').val();
+                var EndDate = $('#editEndDate').val();
+                $.post("/DeliveryBoy/DeliveryRateEdit", { Id: Id, EndDate: EndDate }, function (data) {
+                    if (data.message != null || data.message != "") {
+                        swal({
+                            title: data.message,
+                            text: "",
+                            type: "success"
+                        }, function () {
+                            window.location.reload();
+                        });
+                    }
+                });
             });
 
 
