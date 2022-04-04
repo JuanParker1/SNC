@@ -641,6 +641,8 @@ namespace ShopNow.Controllers
             return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
         }
 
+        // DeliveryRatePercentage
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)
