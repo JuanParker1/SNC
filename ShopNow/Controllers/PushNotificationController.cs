@@ -106,5 +106,74 @@ namespace ShopNow.Controllers
             }
         }
 
+        public ActionResult NotificationLogin()
+        {
+            var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
+            ViewBag.Name = user.Name;
+            var model = new NotificationLoginViewModel();
+            model.NotificationLists = db.NotificationLogins.Where(i => i.Status == 0).Select(i => new NotificationLoginViewModel.NotificationList
+            {
+                Id = i.Id,
+                Name = i.Name,
+                PhoneNumber = i.PhoneNumber,
+                Password = i.Password,
+                EncodedBy = i.EncodedBy,
+                DateEncoded = i.DateEncoded
+            }).ToList();
+            return View(model.NotificationLists);
+        }
+
+        public JsonResult Save(string Name, string Phonenumber, string Password)
+        {
+            var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
+            ViewBag.Name = user.Name;
+            var notificationlogin = new NotificationLogin();
+            notificationlogin.Name = Name;
+            notificationlogin.PhoneNumber = Phonenumber;
+            notificationlogin.Password = Password;
+            notificationlogin.Status = 0;
+            notificationlogin.DateEncoded = DateTime.Now;
+            notificationlogin.DateUpdated = DateTime.Now;
+            notificationlogin.EncodedBy = user.Name;
+            notificationlogin.UpdatedBy = user.Name;
+            db.NotificationLogins.Add(notificationlogin);
+            db.SaveChanges();
+            return Json(true, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult Edit(int id, string name, string phonenumber, string password)
+        {
+            var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
+            ViewBag.Name = user.Name;
+            NotificationLogin notification = db.NotificationLogins.Where(n => n.Id == id).FirstOrDefault();
+            if (notification != null)
+            {
+                notification.Name = name;
+                notification.Password = password;
+                notification.PhoneNumber = phonenumber;
+                notification.EncodedBy = user.Name;
+                notification.UpdatedBy = user.Name;
+                notification.DateEncoded = DateTime.Now;
+                notification.DateUpdated = DateTime.Now;
+                db.Entry(notification).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+            }
+            return Json(true, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult Delete(int id)
+        {
+            var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
+            var notification = db.NotificationLogins.FirstOrDefault(i => i.Id == id && i.Status == 0);
+            if (notification != null)
+            {
+                notification.Status = 2;
+                notification.UpdatedBy = user.Name;
+                notification.DateUpdated = DateTime.Now;
+                db.Entry(notification).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+            }
+            return Json(true, JsonRequestBehavior.AllowGet);
+        }
     }
 }

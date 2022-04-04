@@ -17,6 +17,7 @@ namespace ShopNow.ViewModels
         }
     }
 
+
     public class PushNotificationListViewModel
     {
         public List<ListItem> ListItems { get; set; }
@@ -28,6 +29,20 @@ namespace ShopNow.ViewModels
             public string Description { get; set; }
             public string EncodedBy { get; set; }
             public DateTime DateEncoded { get; set; }
+        }
+    }
+
+    public class NotificationLoginViewModel
+    {
+        public List<NotificationList> NotificationLists { get; set; }
+        public class NotificationList
+        {
+            public int Id { get; set; }
+            public string Name { get; set; }
+            public string PhoneNumber { get; set; }
+            public string Password { get; set; }
+            public System.DateTime DateEncoded { get; set; }
+            public string EncodedBy { get; set; }
         }
     }
 }

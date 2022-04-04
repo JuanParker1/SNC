@@ -1,0 +1,224 @@
+﻿@model IEnumerable<ShopNow.ViewModels.NotificationLoginViewModel.NotificationList>
+@using GridMvc.Html
+@{
+    ViewBag.Title = "Notification Login";
+}
+<title>ShopNow | @ViewBag.Title</title>
+<link href="~/Content/Gridmvc.css" rel="stylesheet" />
+<script src="~/Scripts/gridmvc.js"></script>
+<div class="container-fluid">
+    <div class="row my-2">
+        <div class="col-md-8">
+            <h4 class="text-success">Notification List</h4>
+        </div>
+        <div class="col-md-4 text-right">
+            <a data-toggle="modal" data-target="#createModal" href="createModal"><span class="fa fa-plus"></span> Create New</a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card shadow">
+                <div class="card-body">
+                    @Html.Grid(Model).Columns(columns =>
+               {
+               columns.Add(c => c.Name).Titled("Name").Filterable(true).SetWidth(10);
+               columns.Add(c => c.PhoneNumber).Titled("Phone Number").Filterable(true).SetWidth(10);
+               columns.Add(c => c.Password).Titled("Password").Filterable(true).SetWidth(30);
+               columns.Add(c => c.DateEncoded).Titled("Date").Filterable(true).SetWidth(10);
+               columns.Add(c => c.EncodedBy).Titled("State").Filterable(true).SetWidth(10);
+               columns.Add().Encoded(false).Sanitized(false).Titled("Action").Filterable(false).SetWidth(10)
+               .RenderValueAs(c => @<div>
+                        <a data-toggle="modal" data-target="#updateModal" href="updateModal" data-name="@c.Name" data-phonenumber="@c.PhoneNumber" data-password="@c.Password" data-id=@c.Id class="text-info Update"><i class="fa fa-edit fa-lg"></i></a>
+                        <a href="javascript:void(0)" data-id=@c.Id class="text-danger btnDelete ml-3"><i class="fa fa-trash fa-lg"></i></a>
+                    </div>);
+            }).WithPaging(20).Sortable(true)
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="createModal" role="dialog" aria-labelledby="createModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header alert alert-info">
+                <h5 class="modal-title text-primary" id="createModalLabel">New Create</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group row">
+                    <div class="col-md-4">
+                        <label class="control-label text-secondary font-weight-bold" for="Name">Name</label>
+                    </div>
+                    <div class="col-md-8">
+                        <input type="text" name="Name" id="Name" class="form-control" />
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-md-4">
+                        <label class="control-label text-secondary font-weight-bold" for="PhoneNumber">Phone Number</label>
+                    </div>
+                    <div class="col-md-8">
+                        <input type="text" name="PhoneNumber" id="PhoneNumber" class="form-control" />
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-md-4">
+                        <label class="control-label text-secondary font-weight-bold" for="Password">Password</label>
+                    </div>
+                    <div class="col-md-8">
+                        <input type="text" name="Password" id="Password" class="form-control" />
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <input type="button" id="Create" name="Create" value="Save" class="btn btn-success float-right Save" />
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="updateModal" role="dialog" aria-labelledby="updateModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header alert alert-info">
+                <h5 class="modal-title text-primary" id="updateModalLabel">Update</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group row">
+                    <input type="hidden" name="Id" id="editId" />
+                    <div class="col-md-4">
+                        <label class="control-label text-secondary font-weight-bold" for="Name">Name</label>
+                    </div>
+                    <div class="col-md-8">
+                        <input type="text" class="form-control" name="Name" id="editName" />
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-md-4">
+                        <label class="control-label text-secondary font-weight-bold" for="PhoneNumber">Phone Number</label>
+                    </div>
+                    <div class="col-md-8">
+                        <input type="text" class="form-control" name="PhoneNumber" id="editPhoneNumber" required />
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-md-4">
+                        <label class="control-label text-secondary font-weight-bold" for="Password">Password</label>
+                    </div>
+                    <div class="col-md-8">
+                        <input type="text" class="form-control" name="Password" id="editPassword" required />
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <input type="button" id="btnUpdate" value="Update" class="btn btn-success float-right" />
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+    <!--Select2-->
+    <script src="~/Scripts/select2/js/select2.js"></script>
+    <link href="~/Scripts/select2/css/select2.css" rel="stylesheet" />
+    <link href="~/Content/select2/select2.custom.css" rel="stylesheet" />
+    <!--Select2 End-->
+    <script src="~/Scripts/ValidateRequiredFields.js"></script>
+    <script src="~/Scripts/sweetalert/sweetalert.min.js"></script>
+    <link href="~/Content/sweetalert/sweetalert.css" rel="stylesheet" />
+    <script>
+        $(document).ready(function () {
+
+            $('#Create').on('click', function () {
+                var name = $('#Name').val();
+                var phonenumber = $('#PhoneNumber').val();
+                var password = $('#Password').val();
+                var isValidate = false;
+                var requiredArr = [
+                    'Name',
+                    'PhoneNumber',
+                    'Password'
+                ];
+                isValidate = ValidateEmptyRequiredFiels(requiredArr);
+                if (isValidate) {
+                    $.getJSON("/PushNotification/Save", { Name: name, Phonenumber: phonenumber, Password: password }, function (data) {
+                        if (data == true) {
+                            swal({
+                                title: "",
+                                text: "Notication Added Successfully",
+                                type: "success"
+                            }, function () {
+                                window.location.reload();
+                            });
+                        }
+                    });
+                }
+            });
+
+            $(".Update").on('click', function () {
+                var id = $(this).data('id');
+                var name = $(this).data('name');
+                var phonenumber = $(this).data('phonenumber')
+                var password = $(this).data('password');
+                $("#editId").val(id);
+                $("#editName").val(name);
+                $("#editPhoneNumber").val(phonenumber);
+                $("#editPassword").val(password);
+            });
+
+            $("#btnUpdate").on('click', function () {
+                var id = $("#editId").val();
+                var Name = $('#editName').val();
+                var PhoneNumber = $("#editPhoneNumber").val();
+                var Password = $("#editPassword").val();
+                if (Name != null || Name == "") {
+                    $.getJSON("/PushNotification/Edit?id=" + id + "&name=" + Name + "&phonenumber=" + PhoneNumber + "&password=" + Password, function (data) {
+                        if (data == true) {
+                            swal({
+                                title: "",
+                                text: "Notification Updated Successfully",
+                                type: "success"
+                            }, function () {
+                                window.location.reload();
+                            });
+                        }
+                    });
+                }
+            });
+
+            $(".btnDelete").click(function () {
+                var Id = $(this).attr('data-id');
+                swal({
+                    title: "Are you sure want to delete?",
+                    text: "You will not be able to recover this file!",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "Yes, Delete it!",
+                    cancelButtonText: "No, cancel",
+                    closeOnConfirm: false,
+                    closeOnCancel: true
+                },
+                    function (isConfirm) {
+                        if (isConfirm) {
+                            $.getJSON("/PushNotification/Delete", { id: Id }, function (data) {
+                                if (data == true) {
+                                    window.location.reload();
+                                }
+                            });
+                        }
+                    }
+                );
+            });
+
+        });
+    </script>
+}
+

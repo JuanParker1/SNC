@@ -3394,6 +3394,7 @@
     <Content Include="Views\DistanceSetting\Index.cshtml" />
     <Content Include="Views\WebAPI\TimeStampUpdate.cshtml" />
     <Content Include="Views\DailyVisitor\List.cshtml" />
+    <Content Include="Views\PushNotification\NotificationLogin.cshtml" />
     <Content Include="Views\DeliveryBoy\DeliveryRate.cshtml" />
     <Content Include="Views\PushNotification\List.cshtml" />
     <None Include="Web.Debug.config">
