@@ -1301,11 +1301,18 @@ namespace ShopNow.Controllers
                     if (model.CustomerId != 0)
                     {
                         var customer = db.Customers.FirstOrDefault(i => i.Id == model.CustomerId);
+                        var custAddress = db.CustomerAddresses.FirstOrDefault(i => i.Address == order.DeliveryAddress);
                         order.CustomerId = customer.Id;
                         order.CreatedBy = customer.Name;
                         order.UpdatedBy = customer.Name;
                         order.CustomerName = customer.Name;
                         order.CustomerPhoneNumber = customer.PhoneNumber;
+
+                        if (custAddress != null)
+                        {
+                            order.CustomerAddressId = custAddress.Id;
+                            customer.DistrictName = custAddress.DistrictName;
+                        }
 
                         //Store Referral Number
                         if (!string.IsNullOrEmpty(model.ReferralNumber))
@@ -1339,11 +1346,7 @@ namespace ShopNow.Controllers
                     order.DateUpdated = DateTime.Now;
                     order.Status = 0;
                     order.PaymentModeType = model.PaymentMode == "Online Payment" ? 1 : 2;
-                    var custAddress = db.CustomerAddresses.FirstOrDefault(i => i.Address == order.DeliveryAddress);
-                    if (custAddress != null)
-                    {
-                        order.CustomerAddressId = custAddress.Id;
-                    }
+                   
                     var deliveryRatePercentage = db.DeliveryRatePercentages.OrderByDescending(i => i.Id).FirstOrDefault(i => i.Status == 0);
                     if (deliveryRatePercentage != null)
                     {
@@ -1393,8 +1396,6 @@ namespace ShopNow.Controllers
                             }
                         }
                     }
-
-
                     db.Entry(order).State = EntityState.Modified;
                     db.SaveChanges();
 
