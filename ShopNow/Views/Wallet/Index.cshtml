@@ -1,0 +1,102 @@
+﻿
+@*@using GridMvc.Html*@
+@{
+    ViewBag.Title = "Wallet";
+}
+<title>ShopNow | @ViewBag.Title</title>
+<link href="~/Content/Gridmvc.css" rel="stylesheet" />
+<script src="~/Scripts/gridmvc.js"></script>
+<div class="container-fluid">
+    <div class="row mt-3 mx-auto">
+        <div class="offset-md-1 col-md-6">
+            <div class="card shadow h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <h5 class="text-success" style="letter-spacing:1px">@ViewBag.Title</h5>
+                        @*<a href="/Wallet/List"><u>Go to List</u></a>*@
+                    </div>
+                    <form action="/Wallet/SendWalletAmount" method="post">
+                        <div class="form-group">
+                            <label class="col-form-label">Select Customer Group</label>
+                            <select id="select-customergroup" class="form-control" name="CustomerGroup" required>
+                                <option disabled selected>Select Customer Group</option>
+                                <option value="1">Medical Group</option>
+                                <option value="2">Grocery Group</option>
+                                <option value="3">Restaurant Group</option>
+                                <option value="4">Supermarket Group</option>
+                                <option value="4">No Order Group</option>
+                                <option value="5">Last 10 days No Order Group</option>
+                                <option value="6">Last 10 days only Medical order Group</option>
+                                <option value="7">Last 10 days only Grocery order Group</option>
+                                <option value="8">Last 10 days only Restaurant order Group</option>
+                                <option value="9">Last 10 days only Supermarket order Group</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-form-label">Amount</label>
+                            <input type="number" name="Amount" class="form-control" required />
+                        </div>
+                        <div class="form-group">
+                            <label class="col-form-label">Expiry Date</label>
+                            <input type="date" name="ExpiryDate" class="form-control" />
+                        </div>
+                        <div class="mx-auto col-6"> <input type="submit" value="Send" class="btn btn-success btn-block" /></div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        @*<div class="col-md-4">
+            <div class="card shadow h-100">
+                <div class="card-body">
+                    <h5 class="text-success" style="letter-spacing:1px">Customer Count</h5>
+                    <div style="height:530px;overflow-y:auto;">
+                        @Html.Grid(Model.ListItems).Columns(columns =>
+                              {
+                             columns.Add(s => s.DistrictName).Titled("District Name").Filterable(true).SetWidth(30);
+                             columns.Add(s => s.Count).Titled("Count").Filterable(true).SetWidth(8);
+                         }).Sortable(true)
+                    </div>
+                </div>
+            </div>
+        </div>*@
+    </div>
+</div>
+
+@section Scripts
+{
+    <!--Select2-->
+    <script src="~/Scripts/select2/js/select2.js"></script>
+    <link href="~/Scripts/select2/css/select2.css" rel="stylesheet" />
+    <link href="~/Content/select2/select2.custom.css" rel="stylesheet" />
+    <script src="~/Scripts/sweetalert/sweetalert.min.js"></script>
+    <link href="~/Content/sweetalert/sweetalert.css" rel="stylesheet" />
+    <!--Select2 End-->
+    <script>
+        $(document).ready(function () {
+              var errormsg = "@ViewBag.ErrorMessage";
+                var msg = "@ViewBag.Message";
+                if (errormsg != "") {
+                    swal("Notice!", errormsg, "warning")
+                }
+                if (msg != "") {
+                    swal("Success!", msg, "success")
+                }
+            
+
+            $('#select-district').select2({
+                placeholder: "Search District",
+                ajax: {
+                    url: "/Customer/GetDistrictSelect2",
+                    width: '100%',
+                    delay: 250,
+                    dataType: 'json'
+                }
+            });
+            //    .on('select2:select', function (e) {
+            //    $('input[name="ShopName"]').val(e.params.data.text);
+            //});
+
+        });
+    </script>
+}
+

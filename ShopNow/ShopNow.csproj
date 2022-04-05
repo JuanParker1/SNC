@@ -430,6 +430,7 @@
     <Compile Include="Controllers\StockUpdateController.cs" />
     <Compile Include="Controllers\SubCategoryController.cs" />
     <Compile Include="Controllers\SupportController.cs" />
+    <Compile Include="Controllers\WalletController.cs" />
     <Compile Include="Controllers\WebApiController.cs" />
     <Compile Include="Filters\AccessPolicyFilter.cs" />
     <Compile Include="Filters\Cors.cs" />
@@ -771,6 +772,9 @@
     <Compile Include="Models\UserEnquiry.cs">
       <DependentUpon>ApplicationDbContext.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Wallet.cs">
+      <DependentUpon>ApplicationDbContext.tt</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -836,6 +840,7 @@
     <Compile Include="ViewModels\StockViewModel.cs" />
     <Compile Include="ViewModels\SubCategoryViewModel.cs" />
     <Compile Include="ViewModels\SupportViewModel.cs" />
+    <Compile Include="ViewModels\WalletViewModels.cs" />
     <Compile Include="ViewModels\WebAPIViewModel.cs" />
     <Compile Include="ViewModels\StaffViewModel.cs" />
     <Compile Include="ViewModels\GoogleViewModel .cs" />
@@ -3397,6 +3402,7 @@
     <Content Include="Views\PushNotification\NotificationLogin.cshtml" />
     <Content Include="Views\DeliveryBoy\DeliveryRate.cshtml" />
     <Content Include="Views\PushNotification\List.cshtml" />
+    <Content Include="Views\Wallet\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
