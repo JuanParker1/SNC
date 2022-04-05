@@ -22,9 +22,9 @@
                     @Html.Grid(Model).Columns(columns =>
                {
                columns.Add(b => b.Percentage).Titled("Percentage").Filterable(true).SetWidth(10);
-               columns.Add(b => b.StartDate).Titled("Start Date").Filterable(true).SetWidth(10);
-               columns.Add(b => b.EndDate).Titled("End Date").Filterable(true).SetWidth(10);
-               columns.Add(b => b.DateEncoded).Titled("Created Date").Filterable(true).SetWidth(10);
+               columns.Add(b => b.StartDate).Titled("Start Date").Filterable(true).SetWidth(10).Format("{0:dd-MMM-yyyy}");
+               columns.Add(b => b.EndDate).Titled("End Date").Filterable(true).SetWidth(10).Format("{0:dd-MMM-yyyy}");
+               columns.Add(b => b.DateEncoded).Titled("Created Date").Filterable(true).SetWidth(10).Format("{0:dd-MMM-yyyy}");
                columns.Add(b => b.EncodedBy).Titled("Created By").Filterable(true).SetWidth(10);
                columns.Add().Encoded(false).Sanitized(false).Titled("Action").SetWidth(5)
                    .RenderValueAs(o => @<div>
