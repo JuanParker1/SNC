@@ -459,6 +459,12 @@ namespace ShopNow.Controllers
             return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
         }
 
+        public JsonResult MedicalOrderCustomer()
+        {
+            int[] shop = db.Shops.Where(i => i.ShopCategoryId == 4 && i.Status == 0).Select(s=> s.Id).ToArray();
+            int[] customer = db.Orders.Where(i=> shop.Contains(i.ShopId)).GroupBy(i=> i.CustomerId).Select(i=> i.FirstOrDefault().CustomerId).ToArray();
+            return Json(customer, JsonRequestBehavior.AllowGet);
+        }
         protected override void Dispose(bool disposing)
         {
             if (disposing)
