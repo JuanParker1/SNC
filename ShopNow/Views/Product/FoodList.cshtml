@@ -50,8 +50,16 @@
            .RenderValueAs(s => new HtmlString("<label class='switch'> <input type='checkbox' value='" + s.IsOnline + "' Id='Id_" + s.Id + "' class='CheckOnline' data-id='" + s.Id + "'><span class='slider round'></span></label>")).Titled("IsOnline").SetWidth(5);
                columns.Add().Encoded(false).Sanitized(false).Titled("Action").SetWidth(5)
            .RenderValueAs(o => @<div>
-                        <a href="~/Product/FoodEdit?id=@ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id)" class="text-info mr-5"><i class="fa fa-edit fa-lg"></i></a>
-                        <a href="javascript:void(0)" data-id="@ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id)" class="text-danger btnDelete" redirectPage=1><i class="fa fa-trash fa-lg"></i></a>
+                    @if (o.Status == 0)
+                         {
+                            <a href="javascript:void(0)" data-id="@o.Id" class="btn btn-sm btn-secondary mr-3 btnInActive" style="vertical-align: text-bottom">InActive</a>
+                         }
+                         else
+                         {
+                            <a href="javascript:void(0)" data-id="@o.Id" class="btn btn-sm btn-success mr-3 btnActive" style="vertical-align: text-bottom"> Active</a>
+                         }
+                        <a href="~/Product/FoodEdit?id=@ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id)" class="text-info mr-3"><i class="fa fa-edit fa-2x"></i></a>
+                        <a href="javascript:void(0)" data-id="@ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id)" class="text-danger btnDelete" redirectPage=1><i class="fa fa-trash fa-2x"></i></a>
                     </div>);
 }).WithPaging(20).Sortable(true)
                 </div>
@@ -126,6 +134,57 @@
                     }
                 );
             });
+
+            $(".btnInActive").click(function () {
+                var Id = $(this).attr('data-id');
+                swal({
+                    title: "Are you sure want to InActive?",
+                    // text: "You will not be able to recover this file!",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "Yes, InActive it!",
+                    cancelButtonText: "No, cancel",
+                    closeOnConfirm: false,
+                    closeOnCancel: true
+                },
+                    function (isConfirm) {
+                        if (isConfirm) {
+                            $.getJSON("/Product/InActive", { Id: Id }, function (data) {
+                                if (data == true) {
+                                    window.location.reload();
+                                }
+                            });
+                        }
+                    }
+                );
+            });
+
+            $(".btnActive").click(function () {
+                var Id = $(this).attr('data-id');
+                swal({
+                    title: "Are you sure want to Active?",
+                    // text: "You will not be able to recover this file!",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "Yes, Active it!",
+                    cancelButtonText: "No, cancel",
+                    closeOnConfirm: false,
+                    closeOnCancel: true
+                },
+                    function (isConfirm) {
+                        if (isConfirm) {
+                            $.getJSON("/Product/Active", { Id: Id }, function (data) {
+                                if (data == true) {
+                                    window.location.reload();
+                                }
+                            });
+                        }
+                    }
+                );
+            });
+
         });
     </script>
 }

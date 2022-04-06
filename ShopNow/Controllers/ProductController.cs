@@ -67,7 +67,7 @@ namespace ShopNow.Controllers
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
-            model.ListItems = db.Products.Where(i => i.Status == 0 && (model.ShopId != 0 ? i.ShopId == model.ShopId : false))
+            model.ListItems = db.Products.Where(i => (i.Status == 0 || i.Status == 1) && (model.ShopId != 0 ? i.ShopId == model.ShopId : false))
                 .Join(db.MasterProducts, p => p.MasterProductId, m => m.Id, (p, m) => new { p, m })
                 .Join(db.Categories, p => p.p.CategoryId, c => c.Id, (p, c) => new { p, c })
                 .Select(i => new ProductItemListViewModel.ListItem
@@ -81,8 +81,9 @@ namespace ShopNow.Controllers
                     ShopId = i.p.p.ShopId,
                     ShopName = i.p.p.ShopName,
                     Percentage = i.p.p.Percentage,
-                    IsOnline = i.p.p.IsOnline
-                }).OrderBy(i=>i.Name).ToList();
+                    IsOnline = i.p.p.IsOnline,
+                    Status = i.p.p.Status
+                }).OrderBy(i => i.Name).ToList();
 
             return View(model);
         }
@@ -294,7 +295,7 @@ namespace ShopNow.Controllers
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
-            model.ListItems = db.Products.Where(i => i.Status == 0 && i.ProductTypeId == 3 && (model.ShopId != 0 ? i.ShopId == model.ShopId : false))
+            model.ListItems = db.Products.Where(i => (i.Status == 0 || i.Status == 1) && i.ProductTypeId == 3 && (model.ShopId != 0 ? i.ShopId == model.ShopId : false))
               .Join(db.MasterProducts, p => p.MasterProductId, m => m.Id, (p, m) => new { p, m })
               .Join(db.Categories, p => p.p.CategoryId, c => c.Id, (p, c) => new { p, c })
               .Join(db.DiscountCategories, p => p.p.p.DiscountCategoryId, dc => dc.Id, (p, dc) => new { p, dc })
@@ -306,7 +307,8 @@ namespace ShopNow.Controllers
                 Percentage = i.dc.Percentage,
                 ShopId = i.p.p.p.ShopId,
                 ShopName = i.p.p.p.ShopName,
-                IsOnline = i.p.p.p.IsOnline
+                IsOnline = i.p.p.p.IsOnline,
+                Status = i.p.p.p.Status
             }).ToList();
             return View(model);
         }
@@ -316,7 +318,7 @@ namespace ShopNow.Controllers
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
-            model.ListItems = db.Products.Where(i => i.Status == 0 && i.ProductTypeId == 1 && (model.ShopId != 0 ? i.ShopId == model.ShopId : false))
+            model.ListItems = db.Products.Where(i => (i.Status == 0 || i.Status == 1) && i.ProductTypeId == 1 && (model.ShopId != 0 ? i.ShopId == model.ShopId : false))
              .Join(db.MasterProducts, p => p.MasterProductId, m => m.Id, (p, m) => new { p, m })
             .Select(i => new FoodListViewModel.ListItem
             {
@@ -326,7 +328,8 @@ namespace ShopNow.Controllers
                 Percentage = i.p.Percentage,
                 ShopId = i.p.ShopId,
                 ShopName = i.p.ShopName,
-                IsOnline = i.p.IsOnline
+                IsOnline = i.p.IsOnline,
+                Status = i.p.Status
             }).ToList();
             return View(model);
         }
@@ -579,7 +582,7 @@ namespace ShopNow.Controllers
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
-            model.ListItems = db.Products.Where(i => i.Status == 0 && i.ProductTypeId == 2 && (model.ShopId != 0 ? i.ShopId == model.ShopId : false))
+            model.ListItems = db.Products.Where(i => (i.Status == 0 || i.Status == 1) && i.ProductTypeId == 2 && (model.ShopId != 0 ? i.ShopId == model.ShopId : false))
                 .Join(db.MasterProducts, p => p.MasterProductId, m => m.Id, (p, m) => new { p, m })
                 .Join(db.Categories, p => p.p.CategoryId, c => c.Id, (p, c) => new { p, c })
                 .Join(db.DiscountCategories, p => p.p.p.DiscountCategoryId, dc => dc.Id, (p, dc) => new { p, dc })
@@ -591,7 +594,8 @@ namespace ShopNow.Controllers
                 Percentage = i.dc.Percentage,
                 ShopId = i.p.p.p.ShopId,
                 ShopName = i.p.p.p.ShopName,
-                IsOnline = i.p.p.p.IsOnline
+                IsOnline = i.p.p.p.IsOnline,
+                Status = i.p.p.p.Status
             }).ToList();
             return View(model);
         }
@@ -957,7 +961,7 @@ namespace ShopNow.Controllers
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
-            model.ListItems = db.Products.Where(i => i.Status == 0 && i.ProductTypeId == 4 && (model.ShopId != 0 ? i.ShopId == model.ShopId : false))
+            model.ListItems = db.Products.Where(i => (i.Status == 0 || i.Status == 1) && i.ProductTypeId == 4 && (model.ShopId != 0 ? i.ShopId == model.ShopId : false))
                 .Join(db.MasterProducts, p => p.MasterProductId, m => m.Id, (p, m) => new { p, m })
             .Select(i => new ElectronicListViewModel.ListItem
             {
@@ -967,7 +971,8 @@ namespace ShopNow.Controllers
                 Percentage = i.p.Percentage,
                 ShopId = i.p.ShopId,
                 ShopName = i.p.ShopName,
-                IsOnline = i.p.IsOnline
+                IsOnline = i.p.IsOnline,
+                Status = i.p.Status
             }).ToList();
             return View(model);
         }
@@ -1932,6 +1937,32 @@ namespace ShopNow.Controllers
                 db.Entry(shop).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
             }
+        }
+
+        public JsonResult InActive(int id)
+        {
+            var product = db.Products.FirstOrDefault(i => i.Id == id);
+            if (product != null)
+            {
+                product.Status = 1;
+                product.IsOnline = false;
+                db.Entry(product).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+            }
+            return Json(true, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult Active(int id)
+        {
+            var product = db.Products.FirstOrDefault(i => i.Id == id);
+            if (product != null)
+            {
+                product.Status = 0;
+                product.IsOnline = true;
+                db.Entry(product).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+            }
+            return Json(true, JsonRequestBehavior.AllowGet);
         }
 
         protected override void Dispose(bool disposing)
