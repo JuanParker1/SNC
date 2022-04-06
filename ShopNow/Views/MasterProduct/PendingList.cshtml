@@ -30,6 +30,7 @@
                                         <th class="text-nowrap">Name</th>
                                         <th>Item Id</th>
                                         <th>Product Type</th>
+                                        <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -40,6 +41,7 @@
                                             <td class="text-nowrap">@item.Name</td>
                                             <td>@item.ItemId</td>
                                             <td>@item.ProductTypeName</td>
+                                            <td><a href="/MasterProduct/SingleItemMapping?ShopId=@Model.ShopId&prodcutId=@item.Id&prodcutName=@item.Name" class="btn btn-sm btn-primary">Map</a></td>
                                         </tr>
                                     }
                                 </tbody>

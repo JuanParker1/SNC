@@ -36,6 +36,7 @@ namespace ShopNow.ViewModels
         public int ItemCount { get; set; }
         public int PageCount { get; set; }
         public int maxRows { get; set; }
+        public int ShopId { get; set; }
         public class MasterProductList
         {
             public long Id { get; set; }

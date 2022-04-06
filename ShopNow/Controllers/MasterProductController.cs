@@ -1615,6 +1615,7 @@ namespace ShopNow.Controllers
                          ItemId = i.ItemId,
                          ProductTypeName = i.ProductTypeName
                      }).ToList();
+            model.ShopId = shopId;
             return View(model);
         }
 
@@ -1968,9 +1969,10 @@ namespace ShopNow.Controllers
                     text = i.Name,
                     type = i.ProductTypeName
                 }).ToListAsync();
-
+           
             return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
         }
+
 
         public async Task<JsonResult> GetPendingProductItemSelect2(int shopId)
         {

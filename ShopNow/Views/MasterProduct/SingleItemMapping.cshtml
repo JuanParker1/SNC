@@ -34,7 +34,7 @@
                                     <div class="col-md-6">
                                         <label class="col-form-label"><strong class="text-secondary">Shop Item Name</strong></label>
                                         <select name="ProductId" id="ProductId" class="form-control"></select>
-                                        <input type="hidden" name="ProductName" id="ProductName" />
+                                        <input type="hidden" name="ProductName" id="ProductName"/>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="row">
@@ -120,7 +120,23 @@
 
     <script>
         $(document).ready(function () {
+            var getUrlParameter = function getUrlParameter(sParam) {
+                var sPageURL = window.location.search.substring(1),
+                    sURLVariables = sPageURL.split('&'),
+                    sParameterName,
+                    i;
 
+                for (i = 0; i < sURLVariables.length; i++) {
+                    sParameterName = sURLVariables[i].split('=');
+
+                    if (sParameterName[0] === sParam) {
+                        return sParameterName[1] === undefined ? true : decodeURIComponent(sParameterName[1]);
+                    }
+                }
+                return false;
+            };
+           
+           
             $(document).on('click', '.Save', function () {
                 var MasterProductId = $('#MasterProductId').val();
                 var ProductId = $('#ProductId').val();
@@ -190,6 +206,12 @@
                 $('input[name="ProductName"]').val(e.params.data.text);
                
             });
+            var productId = parseInt(getUrlParameter('prodcutId'));
+            var prodcutName = getUrlParameter('prodcutName');
+            if (productId != 0) {
+                $("#ProductId").append("<option value=" + productId + " selected>" + prodcutName+"</option>").trigger('change');
+                $("#ProductName").val(prodcutName);
+            }
             function getURL() {
                 return "/MasterProduct/GetMasterItemSelect2";
             }
