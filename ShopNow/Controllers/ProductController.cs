@@ -161,8 +161,10 @@ namespace ShopNow.Controllers
             if (model.ShopId != 0)
             {
                 var sh = db.Shops.FirstOrDefault(i => i.Id == model.ShopId);
-                if (prod.DiscountCategoryId != 0)
-                    UpdateMedicalShopMaxOfferPercentage(sh.Id);
+                if (model.ShopId == 322)
+                    UpdateShopMaxOfferPercentage(model.ShopId);
+                else
+                    UpdateMedicalShopMaxOfferPercentage(model.ShopId);
                 var productcount = db.Products.Where(i => i.ShopId == model.ShopId && i.Status == 0).Count();
                 if (productcount >= 10 && sh.Status == 1)
                 {
@@ -279,9 +281,11 @@ namespace ShopNow.Controllers
             prod.DateUpdated = DateTime.Now;
             db.Entry(prod).State = System.Data.Entity.EntityState.Modified;
             db.SaveChanges();
-
-            //if (prod.DiscountCategoryId != 0)
+            if (prod.ShopId == 322)
+                UpdateShopMaxOfferPercentage(prod.ShopId);
+            else
                 UpdateMedicalShopMaxOfferPercentage(prod.ShopId);
+           
             return RedirectToAction("MedicalEdit", new { id = AdminHelpers.ECodeLong(prod.Id) });
         }
 
