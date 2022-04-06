@@ -41,20 +41,23 @@ namespace ShopNow.Controllers
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
             var model = new CustomerListViewModel();
-            model.List = db.Customers.OrderByDescending(i => i.DateEncoded).Where(i => i.Status == 0)
+            model.List = db.Customers.Where(i => i.Status == 0)
                 .GroupJoin(db.CustomerAppInfoes, c => c.Id, ca => ca.CustomerId, (c, ca) => new { c, ca })
-                .AsEnumerable().Select((i, index) => new CustomerListViewModel.CustomerList
+                .GroupJoin(db.CustomerDeviceInfoes, c => c.c.Id, cd => cd.CustomerId, (c, cd) => new { c, cd })
+                .AsEnumerable().Select(i => new CustomerListViewModel.CustomerList
                 {
-                    No = index + 1,
-                    Id = i.c.Id,
-                    Name = i.c.Name,
-                    PhoneNumber = i.c.PhoneNumber,
-                    AlternateNumber = i.c.AlternateNumber,
-                    Address = i.c.Address,
-                    DistrictName = i.c.DistrictName,
-                    DateEncoded = i.c.DateEncoded,
-                    AppInfo = i.ca.FirstOrDefault()?.Version ?? "N/A"
-                }).ToList();
+                   // No = index + 1,
+                    Id = i.c.c.Id,
+                    Name = i.c.c.Name,
+                    PhoneNumber = i.c.c.PhoneNumber,
+                    AlternateNumber = i.c.c.AlternateNumber,
+                    Address = i.c.c.Address,
+                    DistrictName = i.c.c.DistrictName,
+                    DateEncoded = i.c.c.DateEncoded,
+                    AppInfo = i.c.ca.FirstOrDefault()?.Version + $" ({i.cd.FirstOrDefault()?.Platform})" ?? "N/A"
+                }).OrderByDescending(i => i.DateEncoded).ToList();
+            int counter = 1;
+            model.List.ForEach(x => x.No = counter++);
             return View(model.List);
         }
 
