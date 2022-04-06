@@ -462,12 +462,21 @@ namespace ShopNow.Controllers
             return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult MedicalOrderCustomer()
-        {
-            int[] shop = db.Shops.Where(i => i.ShopCategoryId == 4 && i.Status == 0).Select(s=> s.Id).ToArray();
-            int[] customer = db.Orders.Where(i=> shop.Contains(i.ShopId)).GroupBy(i=> i.CustomerId).Select(i=> i.FirstOrDefault().CustomerId).ToArray();
-            return Json(customer, JsonRequestBehavior.AllowGet);
-        }
+        //public JsonResult MedicalOrderCustomer()
+        //{
+        //    int[] Medicalshop = db.Shops.Where(i => i.ShopCategoryId == 4 && i.Status == 0).Select(s=> s.Id).ToArray();
+        //    int[] Othershop = db.Shops.Where(i => (i.ShopCategoryId == 1 || i.ShopCategoryId == 2 || i.ShopCategoryId == 3) && i.Status == 0).Select(s=> s.Id).ToArray();
+        //    int[] Medicalcustomer = db.Orders.Where(i=> Medicalshop.Contains(i.ShopId) && i.Status == 6).GroupBy(i=> i.CustomerId).Select(i=> i.FirstOrDefault().CustomerId).ToArray();
+        //    int[] othercustomer = db.Orders.Where(i=> Othershop.Contains(i.ShopId) && i.Status == 6).GroupBy(i=> i.CustomerId).Select(i=> i.FirstOrDefault().CustomerId).ToArray();
+        //    int[] OnlyMedicalcustomer = db.Orders.Where(i => i.Status == 6).GroupBy(i => i.CustomerId).Select(i => i.FirstOrDefault().CustomerId).ToArray();
+
+        //    var ss = db.Shops.Where(i => i.ShopCategoryId == 4 && i.Status == 0)
+        //        .Join(db.Orders.Where(i => i.Status == 6), s => s.Id, o => o.ShopId, (s, o) => new { s, o })
+        //        .Join(db.Customers.Where(i => i.Position == 0), p => p.o.CustomerId, c => c.Id, (p, c) => new { p, c })
+        //        .AsEnumerable().GroupBy(i=> i.c.Id).ToList();
+
+        //    return Json(OnlyMedicalcustomer, JsonRequestBehavior.AllowGet);
+        //}
         protected override void Dispose(bool disposing)
         {
             if (disposing)
