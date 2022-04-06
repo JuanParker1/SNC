@@ -1,10 +1,12 @@
-﻿using AutoMapper;
+﻿using Amazon.S3;
+using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using ShopNow.Filters;
 using ShopNow.Helpers;
 using ShopNow.Models;
 using ShopNow.ViewModels;
 using System;
+using System.Configuration;
 using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
@@ -18,7 +20,8 @@ namespace ShopNow.Controllers
         private IMapper _mapper;
         private MapperConfiguration _mapperConfiguration;
         UploadContent uc = new UploadContent();
-
+        private static readonly string accesskey = ConfigurationManager.AppSettings["AWSAccessKey"];
+        private static readonly string secretkey = ConfigurationManager.AppSettings["AWSSecretKey"];
         public CustomerController()
         {
             _mapperConfiguration = new MapperConfiguration(config =>
@@ -41,20 +44,23 @@ namespace ShopNow.Controllers
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
             var model = new CustomerListViewModel();
-            model.List = db.Customers.OrderByDescending(i => i.DateEncoded).Where(i => i.Status == 0)
+            model.List = db.Customers.Where(i => i.Status == 0)
                 .GroupJoin(db.CustomerAppInfoes, c => c.Id, ca => ca.CustomerId, (c, ca) => new { c, ca })
-                .AsEnumerable().Select((i, index) => new CustomerListViewModel.CustomerList
+                .GroupJoin(db.CustomerDeviceInfoes, c => c.c.Id, cd => cd.CustomerId, (c, cd) => new { c, cd })
+                .AsEnumerable().Select(i => new CustomerListViewModel.CustomerList
                 {
-                    No = index + 1,
-                    Id = i.c.Id,
-                    Name = i.c.Name,
-                    PhoneNumber = i.c.PhoneNumber,
-                    AlternateNumber = i.c.AlternateNumber,
-                    Address = i.c.Address,
-                    DistrictName = i.c.DistrictName,
-                    DateEncoded = i.c.DateEncoded,
-                    AppInfo = i.ca.FirstOrDefault()?.Version ?? "N/A"
-                }).ToList();
+                   // No = index + 1,
+                    Id = i.c.c.Id,
+                    Name = i.c.c.Name,
+                    PhoneNumber = i.c.c.PhoneNumber,
+                    AlternateNumber = i.c.c.AlternateNumber,
+                    Address = i.c.c.Address,
+                    DistrictName = i.c.c.DistrictName,
+                    DateEncoded = i.c.c.DateEncoded,
+                    AppInfo = i.c.ca.FirstOrDefault()?.Version + $" ({i.cd.FirstOrDefault()?.Platform})" ?? "N/A"
+                }).OrderByDescending(i => i.DateEncoded).ToList();
+            int counter = 1;
+            model.List.ForEach(x => x.No = counter++);
             return View(model.List);
         }
 
@@ -103,6 +109,7 @@ namespace ShopNow.Controllers
             model.DeliveredOrderCount = model.OrderListItems.Where(i => i.Status == 6).Count();
             model.LastPurchaseDate = model.OrderListItems.Count() > 0 ? model.OrderListItems.OrderByDescending(i => i.DateEncoded).FirstOrDefault().DateEncoded : model.LastPurchaseDate;
             model.AppVersion = db.CustomerAppInfoes.FirstOrDefault(i => i.CustomerId == customer.Id)?.Version ?? "N/A";
+            model.Platform = db.CustomerDeviceInfoes.FirstOrDefault(i => i.CustomerId == customer.Id)?.Platform ?? "N/A";
             model.ImagePath = model.ImagePath != null ? (model.ImagePath.Contains("https://s3.ap-south-1.amazonaws.com/shopnowchat.com/") ? model.ImagePath : "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/" + model.ImagePath) : "";
 
             model.WalletListItems = db.CustomerWalletHistories.Where(i => i.CustomerId == dId)
@@ -113,6 +120,17 @@ namespace ShopNow.Controllers
                     Description = i.Description,
                     ExpiryDate = i.ExpiryDate,
                     Type = i.Type
+                }).ToList();
+
+            model.AddressListItems = db.CustomerAddresses.Where(i => i.CustomerId == dId && i.Status == 0)
+                .Select(i => new CustomerDetailsViewModel.AddressListItem
+                {
+                    Address = i.Address,
+                    Flat = i.FlatNo,
+                    Id = i.Id,
+                    Landmark = i.LandMark,
+                    RouteAddioPath = i.RouteAudioPath,
+                    Type = i.Name
                 }).ToList();
             return View(model);
         }
@@ -420,6 +438,40 @@ namespace ShopNow.Controllers
                 db.SaveChanges();
             }
             return Json(true, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult SaveAddressAudioPath(SaveAddressAudioPathViewModel model)
+        {
+            try
+            {
+                var user = ((Helpers.Sessions.User)Session["USER"]);
+                var customerAddress = db.CustomerAddresses.FirstOrDefault(i => i.Id == model.Id);
+                string filename = DateTime.Now.Ticks + ".mp3";
+                if (model.AudioUpload != null)
+                {
+                    uc.UploadFiles(model.AudioUpload.InputStream, filename, accesskey, secretkey, "audio");
+                    customerAddress.RouteAudioPath = filename;
+                }
+                customerAddress.RouteAudioUploadedBy = user.Name;
+                customerAddress.RouteAudioUploadedDateTime = DateTime.Now;
+                db.Entry(customerAddress).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+            }
+            catch (AmazonS3Exception amazonS3Exception)
+            {
+                if (amazonS3Exception.ErrorCode != null &&
+                    (amazonS3Exception.ErrorCode.Equals("InvalidAccessKeyId")
+                    ||
+                    amazonS3Exception.ErrorCode.Equals("InvalidSecurity")))
+                {
+                    ViewBag.Message = "Check the provided AWS Credentials.";
+                }
+                else
+                {
+                    ViewBag.Message = "Error occurred: " + amazonS3Exception.Message;
+                }
+            }
+            return RedirectToAction("Details", new { id = AdminHelpers.ECodeInt(model.CustomerId) });
         }
 
         public async Task<JsonResult> GetCustomerSelect2(string q = "")

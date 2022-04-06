@@ -91,6 +91,7 @@ namespace ShopNow.ViewModels
         public int CancelOrderCount { get; set; }
         public DateTime? LastPurchaseDate { get; set; }
         public string AppVersion { get; set; }
+        public string Platform { get; set; }
 
         public List<OrderListItem> OrderListItems { get; set; }
         public class OrderListItem
@@ -161,6 +162,25 @@ namespace ShopNow.ViewModels
             }
 
         }
+
+        public List<AddressListItem> AddressListItems { get; set; }
+        public class AddressListItem
+        {
+            public int Id { get; set; }
+            public string Type { get; set; }
+            public string Address { get; set; }
+            public string Landmark { get; set; }
+            public string Flat { get; set; }
+            public string RouteAddioPath { get; set; }
+
+        }
+    }
+
+    public class SaveAddressAudioPathViewModel
+    {
+        public int Id { get; set; }
+        public int CustomerId { get; set; }
+        public HttpPostedFileBase AudioUpload { get; set; }
     }
 
     //Api
