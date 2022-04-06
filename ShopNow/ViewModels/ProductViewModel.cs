@@ -133,6 +133,7 @@ namespace ShopNow.ViewModels
             public string ShopName { get; set; }
             public double Percentage { get; set; }
             public bool IsOnline { get; set; }
+            public int Status { get; set; }
         }
     }
 
@@ -150,6 +151,7 @@ namespace ShopNow.ViewModels
             public string ShopName { get; set; }
             public double Percentage { get; set; }
             public bool IsOnline { get; set; }
+            public int Status { get; set; }
         }
     }
 
@@ -167,6 +169,7 @@ namespace ShopNow.ViewModels
             public string ShopName { get; set; }
             public double Percentage { get; set; }
             public bool IsOnline { get; set; }
+            public int Status { get; set; }
         }
     }
 

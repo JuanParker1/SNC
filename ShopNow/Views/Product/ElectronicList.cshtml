@@ -41,16 +41,24 @@
                 <div class="card-body">
                     @Html.Grid(Model.ListItems).Columns(columns =>
                {
-               columns.Add(b => b.Name).Encoded(false).Sanitized(false).RenderValueAs(model => Html.ActionLink(model.Name, "Details", new { id = @ShopNow.Helpers.AdminHelpers.ECodeLong(model.Id) }).ToHtmlString()).Filterable(true).SetWidth(25);
-               columns.Add(b => b.CategoryName).Titled("Category Name").Filterable(true).SetWidth(15);
-               columns.Add(b => b.ShopName).Titled("Shop Name").Filterable(true).SetWidth(25);
-               columns.Add(b => b.Percentage).Titled("Discount %").Filterable(true).SetWidth(15);
+               columns.Add(b => b.Name).Encoded(false).Sanitized(false).RenderValueAs(model => Html.ActionLink(model.Name, "Details", new { id = @ShopNow.Helpers.AdminHelpers.ECodeLong(model.Id) }).ToHtmlString()).Filterable(true).SetWidth(30);
+               columns.Add(b => b.CategoryName).Titled("Category Name").Filterable(true).SetWidth(20);
+               columns.Add(b => b.ShopName).Titled("Shop Name").Filterable(true).SetWidth(30);
+               columns.Add(b => b.Percentage).Titled("Discount %").Filterable(true).SetWidth(5);
                columns.Add().Encoded(false).Sanitized(false)
                 .RenderValueAs(b => new HtmlString("<label class='switch'> <input type='checkbox' value='" + b.IsOnline + "' Id='Id_" + b.Id + "' class='CheckOnline' data-id='" + b.Id + "'><span class='slider round'></span></label>")).Titled("IsOnline").SetWidth(5);
-               columns.Add().Encoded(false).Sanitized(false).Titled("Action").SetWidth(5)
+               columns.Add().Encoded(false).Sanitized(false).Titled("Action").SetWidth(10)
                 .RenderValueAs(o => @<div>
-                    <a href="~/Product/ElectronicEdit?id=@ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id)" class="text-info mr-5"><i class="fa fa-edit fa-lg"></i></a>
-                    <a href="javascript:void(0)" data-id="@ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id)" class="text-danger btnDelete" redirectPage=4><i class="fa fa-trash fa-lg"></i></a>
+                    @if (o.Status == 0)
+                         {
+                            <a href="javascript:void(0)" data-id="@o.Id" class="btn btn-sm btn-secondary mr-3 btnInActive" style="vertical-align: text-bottom">InActive</a>
+                         }
+                         else
+                         {
+                            <a href="javascript:void(0)" data-id="@o.Id" class="btn btn-sm btn-success mr-3 btnActive" style="vertical-align: text-bottom"> Active</a>
+                         }
+                    <a href="~/Product/ElectronicEdit?id=@ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id)" class="text-info mr-3"><i class="fa fa-edit fa-2x"></i></a>
+                    <a href="javascript:void(0)" data-id="@ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id)" class="text-danger btnDelete" redirectPage=4><i class="fa fa-trash fa-2x"></i></a>
                 </div>);
              }).WithPaging(20).Sortable(true)
                 </div>
@@ -125,6 +133,57 @@
                     }
                 );
             });
+
+            $(".btnInActive").click(function () {
+                var Id = $(this).attr('data-id');
+                swal({
+                    title: "Are you sure want to InActive?",
+                    // text: "You will not be able to recover this file!",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "Yes, InActive it!",
+                    cancelButtonText: "No, cancel",
+                    closeOnConfirm: false,
+                    closeOnCancel: true
+                },
+                    function (isConfirm) {
+                        if (isConfirm) {
+                            $.getJSON("/Product/InActive", { Id: Id }, function (data) {
+                                if (data == true) {
+                                    window.location.reload();
+                                }
+                            });
+                        }
+                    }
+                );
+            });
+
+            $(".btnActive").click(function () {
+                var Id = $(this).attr('data-id');
+                swal({
+                    title: "Are you sure want to Active?",
+                    // text: "You will not be able to recover this file!",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "Yes, Active it!",
+                    cancelButtonText: "No, cancel",
+                    closeOnConfirm: false,
+                    closeOnCancel: true
+                },
+                    function (isConfirm) {
+                        if (isConfirm) {
+                            $.getJSON("/Product/Active", { Id: Id }, function (data) {
+                                if (data == true) {
+                                    window.location.reload();
+                                }
+                            });
+                        }
+                    }
+                );
+            });
+
         });
     </script>
 }
