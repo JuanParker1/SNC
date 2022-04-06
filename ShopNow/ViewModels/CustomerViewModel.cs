@@ -91,6 +91,7 @@ namespace ShopNow.ViewModels
         public int CancelOrderCount { get; set; }
         public DateTime? LastPurchaseDate { get; set; }
         public string AppVersion { get; set; }
+        public string Platform { get; set; }
 
         public List<OrderListItem> OrderListItems { get; set; }
         public class OrderListItem
