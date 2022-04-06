@@ -283,13 +283,13 @@ namespace ShopNow.Controllers
                     OrderNumber = i.c.OrderNumber.ToString(),
                     DeliveryBoyPhoneNumber = i.c.DeliveryBoyPhoneNumber,
                     Status = i.c.Status,
-                    DateEncoded = i.c.DateEncoded,
+                    OrderPickupTime = i.c.OrderPickupTime,
                     Amount = i.c.IsPickupDrop == true ? (i.p.RefundAmount != null && i.p.RefundAmount != 0) ? i.c.NetTotal - (i.p.RefundAmount ?? 0) : i.c.TotalPrice : i.p.Amount - (i.p.RefundAmount ?? 0),
                     RefundAmount = i.p.RefundAmount ?? 0,
                     RefundRemark = i.p.RefundRemark ?? "",
                     PaymentMode = i.p.PaymentMode,
                     IsPickupDrop = i.c.IsPickupDrop
-                }).OrderByDescending(i => i.DateEncoded).ToList();
+                }).OrderByDescending(i => i.OrderPickupTime).ToList();
             int counter = 1;
             model.OntheWayLists.ForEach(x => x.No = counter++);
             return View(model);
@@ -300,7 +300,7 @@ namespace ShopNow.Controllers
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
-            model.OntheWayLists = db.Orders.Where(i => (model.ShopId != 0 ? i.ShopId == model.ShopId : true) && i.Status == 5 && SqlFunctions.DateDiff("minute", i.DateUpdated, DateTime.Now) >= 15)
+            model.OntheWayLists = db.Orders.Where(i => (model.ShopId != 0 ? i.ShopId == model.ShopId : true) && i.Status == 5 && SqlFunctions.DateDiff("minute", i.OrderPickupTime, DateTime.Now) >= 15)
                 .Join(db.Payments, c => c.OrderNumber, p => p.OrderNumber, (c, p) => new { c, p })
                 .Select(i => new CartListViewModel.OntheWayList
                 {
@@ -309,13 +309,13 @@ namespace ShopNow.Controllers
                     OrderNumber = i.c.OrderNumber.ToString(),
                     DeliveryBoyPhoneNumber = i.c.DeliveryBoyPhoneNumber,
                     Status = i.c.Status,
-                    DateEncoded = i.c.DateEncoded,
+                    OrderPickupTime = i.c.OrderPickupTime,
                     RefundAmount = i.p.RefundAmount ?? 0,
                     RefundRemark = i.p.RefundRemark ?? "",
                     PaymentMode = i.p.PaymentMode,
                     Amount = i.c.IsPickupDrop == true ? (i.p.RefundAmount != null && i.p.RefundAmount != 0) ? i.c.NetTotal - (i.p.RefundAmount ?? 0) : i.c.TotalPrice : i.p.Amount - (i.p.RefundAmount ?? 0),
                     IsPickupDrop = i.c.IsPickupDrop
-                }).OrderByDescending(i => i.DateEncoded).ToList();
+                }).OrderByDescending(i => i.OrderPickupTime).ToList();
             int counter = 1;
             model.OntheWayLists.ForEach(x => x.No = counter++);
             return View(model);

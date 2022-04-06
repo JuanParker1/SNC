@@ -43,34 +43,42 @@
                     @Html.Grid(Model.ListItems).Columns(columns =>
                {
                columns.Add(c => c.ProductTypeName).Titled("Item Type").Filterable(true).SetWidth(5);
-               columns.Add(c => c.Name).Titled("Name").Encoded(false).Sanitized(false).RenderValueAs(model => Html.ActionLink(model.Name, "Details", new { id = @ShopNow.Helpers.AdminHelpers.ECodeLong(model.Id) }).ToHtmlString()).Filterable(true).SetWidth(40);
+               columns.Add(c => c.Name).Titled("Name").Encoded(false).Sanitized(false).RenderValueAs(model => Html.ActionLink(model.Name, "Details", new { id = @ShopNow.Helpers.AdminHelpers.ECodeLong(model.Id) }).ToHtmlString()).Filterable(true).SetWidth(20);
                columns.Add(c => c.CategoryName).Titled("Category Name").Filterable(true).SetWidth(12);/*.RenderValueAs(c=> c.CategoryName == null ? "N/A" : c.CategoryName);*/
                columns.Add(c => c.BrandName).Titled("Brand Name").Filterable(true).SetWidth(18);/*.RenderValueAs(c => c.BrandName == null ? "N/A" : c.BrandName);*/
                columns.Add(c => c.ShopName).Titled("Shop Name").Filterable(true).SetWidth(10);
                columns.Add(c => c.Percentage).Titled("Discount %").Filterable(true).SetWidth(10);
                columns.Add().Encoded(false).Sanitized(false)
                   .RenderValueAs(s => new HtmlString("<label class='switch'> <input type='checkbox' value='" + s.IsOnline + "' Id='Id_" + s.Id + "' class='CheckOnline' data-id='" + s.Id + "'><span class='slider round'></span></label>")).Titled("IsOnline").SetWidth(5);
-               columns.Add().Encoded(false).Sanitized(false).Titled("Action").SetWidth(10)
+               columns.Add().Encoded(false).Sanitized(false).Titled("Action").SetWidth(30)
                .RenderValueAs(o => @<div>
+                        @if (o.Status == 0)
+                         {
+                            <a href="javascript:void(0)" data-id="@o.Id" class="btn btn-sm btn-secondary mr-2 btnInActive" style="vertical-align:text-bottom">InActive</a>
+                         }
+                         else
+                         {
+                            <a href="javascript:void(0)" data-id="@o.Id" class="btn btn-sm btn-success mr-2 btnActive" style="vertical-align:text-bottom"> Active</a>
+                         }
                        @if (o.ProductTypeId == 1)
                         {
-                           <a href="~/Product/FoodEdit?Id=@ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id)" class="text-info mr-4"><i class="fa fa-edit fa-2x"></i></a>
+                           <a href="~/Product/FoodEdit?Id=@ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id)" class="text-info mr-2"><i class="fa fa-edit fa-2x"></i></a>
                         }
                        else if (@o.ProductTypeId == 2)
                        {
-                           <a href="~/Product/FMCGEdit?Id=@ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id)" class="text-info mr-4"><i class="fa fa-edit fa-2x"></i></a>
+                           <a href="~/Product/FMCGEdit?Id=@ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id)" class="text-info mr-2"><i class="fa fa-edit fa-2x"></i></a>
                        }
                        else if (@o.ProductTypeId == 3)
                        {
-                           <a href="~/Product/MedicalEdit?Id=@ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id)" class="text-info mr-4"><i class="fa fa-edit fa-2x"></i></a>
+                           <a href="~/Product/MedicalEdit?Id=@ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id)" class="text-info mr-2"><i class="fa fa-edit fa-2x"></i></a>
                        }
                        else if (@o.ProductTypeId == 4)
                        {
-                           <a href="~/Product/ElectronicEdit?Id=@ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id)" class="text-info mr-4"><i class="fa fa-edit fa-2x"></i></a>
+                           <a href="~/Product/ElectronicEdit?Id=@ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id)" class="text-info mr-2"><i class="fa fa-edit fa-2x"></i></a>
                        }
                        else
                        {
-                           <a href="~/Product/ServiceEdit?Id=@ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id)" class="text-info mr-4"><i class="fa fa-edit fa-2x"></i></a>
+                           <a href="~/Product/ServiceEdit?Id=@ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id)" class="text-info mr-2"><i class="fa fa-edit fa-2x"></i></a>
                        }
                            <a href="javascript:void(0)" data-id="@ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id)" class="text-danger btnDelete"><i class="fa fa-trash fa-2x"></i></a> 
                    </div> );
@@ -149,6 +157,56 @@
                     function (isConfirm) {
                         if (isConfirm) {
                             $.getJSON("/Product/Delete", { Id: Id }, function (data) {
+                                if (data == true) {
+                                    window.location.reload();
+                                }
+                            });
+                        }
+                    }
+                );
+            });
+
+            $(".btnInActive").click(function () {
+                var Id = $(this).attr('data-id');
+                swal({
+                    title: "Are you sure want to InActive?",
+                    // text: "You will not be able to recover this file!",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "Yes, InActive it!",
+                    cancelButtonText: "No, cancel",
+                    closeOnConfirm: false,
+                    closeOnCancel: true
+                },
+                    function (isConfirm) {
+                        if (isConfirm) {
+                            $.getJSON("/Product/InActive", { Id: Id }, function (data) {
+                                if (data == true) {
+                                    window.location.reload();
+                                }
+                            });
+                        }
+                    }
+                );
+            });
+
+            $(".btnActive").click(function () {
+                var Id = $(this).attr('data-id');
+                swal({
+                    title: "Are you sure want to Active?",
+                    // text: "You will not be able to recover this file!",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "Yes, Active it!",
+                    cancelButtonText: "No, cancel",
+                    closeOnConfirm: false,
+                    closeOnCancel: true
+                },
+                    function (isConfirm) {
+                        if (isConfirm) {
+                            $.getJSON("/Product/Active", { Id: Id }, function (data) {
                                 if (data == true) {
                                     window.location.reload();
                                 }

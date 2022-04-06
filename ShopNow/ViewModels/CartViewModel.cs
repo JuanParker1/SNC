@@ -329,13 +329,13 @@ namespace ShopNow.ViewModels
             public string ShopName { get; set; }
             public string DeliveryBoyPhoneNumber { get; set; }
             public int Status { get; set; }
-            public DateTime DateEncoded { get; set; }
             public string PaymentMode { get; set; }
             public double Price { get; set; }
             public double Amount { get; set; }
             public double? RefundAmount { get; set; }
             public string RefundRemark { get; set; }
             public bool IsPickupDrop { get; set; }
+            public Nullable<System.DateTime> OrderPickupTime { get; set; }
         }
 
         public List<DeliveredList> DeliveredLists { get; set; }
