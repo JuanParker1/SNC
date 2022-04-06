@@ -82,6 +82,12 @@ namespace ShopNow.Controllers
                     var supermarketLast10DaysCustomerlist = GetCustomerList(3,-10);
                     SaveWalletHistory(model.CustomerGroup, supermarketLast10DaysCustomerlist, model.Amount, model.ExpiryDate);
                     break;
+                case 11:
+                    var iosCustomer = db.CustomerDeviceInfoes.Where(i => i.Platform == "ios")
+                        .Join(db.Customers.Where(i => i.Status == 0), cd => cd.CustomerId, c => c.Id, (cd, c) => new { c, cd })
+                        .Select(i => i.c.Id).ToList();
+                    SaveWalletHistory(model.CustomerGroup, iosCustomer, model.Amount, model.ExpiryDate);
+                    break;
                 default:
                     break;
             }
@@ -137,7 +143,7 @@ namespace ShopNow.Controllers
                 db.CustomerWalletHistories.Add(customerWalletHistory);
                 db.SaveChanges();
             }
-            
+
             var fcmTokenList = db.Customers.Where(i=>customerIds.Contains(i.Id)).OrderBy(i => i.Id).Where(i => !string.IsNullOrEmpty(i.FcmTocken) && i.FcmTocken != "NULL").Select(i => i.FcmTocken).ToArray();
             var count = Math.Ceiling((double)fcmTokenList.Count() / 1000);
             var message = "";

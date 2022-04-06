@@ -1301,7 +1301,7 @@ namespace ShopNow.Controllers
                     if (model.CustomerId != 0)
                     {
                         var customer = db.Customers.FirstOrDefault(i => i.Id == model.CustomerId);
-                        var custAddress = db.CustomerAddresses.FirstOrDefault(i => i.Address == order.DeliveryAddress);
+                        var custAddress = db.CustomerAddresses.FirstOrDefault(i => i.Address == order.DeliveryAddress && i.CustomerId == customer.Id && i.Status==0);
                         order.CustomerId = customer.Id;
                         order.CreatedBy = customer.Name;
                         order.UpdatedBy = customer.Name;
