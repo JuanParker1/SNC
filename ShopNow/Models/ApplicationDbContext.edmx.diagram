@@ -96,6 +96,7 @@
         <EntityTypeShape EntityType="sncModel.NotificationLogin" Width="1.5" PointX="35.375" PointY="0.75" />
         <EntityTypeShape EntityType="sncModel.DeliveryRatePercentage" Width="1.5" PointX="29.375" PointY="34.75" />
         <EntityTypeShape EntityType="sncModel.Order" Width="1.5" PointX="35.375" PointY="4.75" />
+        <EntityTypeShape EntityType="sncModel.Wallet" Width="1.5" PointX="7.375" PointY="35.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

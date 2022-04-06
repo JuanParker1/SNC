@@ -142,7 +142,6 @@ namespace ShopNow.Controllers
             return View(model.NotificationLists);
         }
 
-        [HttpPost]
         public JsonResult Save(string Name, string Phonenumber, string Password)
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
@@ -161,7 +160,6 @@ namespace ShopNow.Controllers
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
-        [HttpPost]
         public JsonResult Edit(int id, string name, string phonenumber, string password)
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
@@ -174,7 +172,6 @@ namespace ShopNow.Controllers
                 notification.PhoneNumber = phonenumber;
                 notification.EncodedBy = user.Name;
                 notification.UpdatedBy = user.Name;
-                notification.DateEncoded = DateTime.Now;
                 notification.DateUpdated = DateTime.Now;
                 db.Entry(notification).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
