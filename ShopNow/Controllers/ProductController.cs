@@ -1907,18 +1907,25 @@ namespace ShopNow.Controllers
 
         public void UpdateShopMaxOfferPercentage(int shopid)
         {
-            //var shop = db.Shops.FirstOrDefault(i => i.Id == shopid);
-            //if (percentage > shop.MaxOfferPercentage)
-            //{
-            //    shop.MaxOfferPercentage = percentage;
-            //    db.Entry(shop).State = System.Data.Entity.EntityState.Modified;
-            //    db.SaveChanges();
-            //}
             var shop = db.Shops.FirstOrDefault(i => i.Id == shopid);
             if (shop != null)
             {
                 double maxPercentage = db.Products.Where(b => b.ShopId == shopid && b.Status == 0).Select(b => b.Percentage)?.Max(b => b) ?? 0;
-                shop.MaxOfferPercentage = maxPercentage;
+                //shop.MaxOfferPercentage = maxPercentage;
+                //db.Entry(shop).State = System.Data.Entity.EntityState.Modified;
+                //db.SaveChanges();
+
+                var offerPercentage = db.Offers.Where(i => i.Status == 0 && i.Type == 1) //now only for cart offer
+                  .Join(db.OfferShops.Where(i => i.ShopId == shopid), o => o.Id, oShp => oShp.OfferId, (o, oShp) => new { o, oShp })
+                  .Select(i => i.o.Percentage).ToList();
+                double offPercentage = 0;
+                if (offerPercentage.Count() > 0)
+                    offPercentage= offerPercentage.Max(a => a);
+
+                if (maxPercentage > offPercentage)
+                    shop.MaxOfferPercentage = maxPercentage;
+                else
+                    shop.MaxOfferPercentage = offPercentage;
                 db.Entry(shop).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
             }
