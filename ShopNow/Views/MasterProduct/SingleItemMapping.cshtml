@@ -133,7 +133,7 @@
                         return sParameterName[1] === undefined ? true : decodeURIComponent(sParameterName[1]);
                     }
                 }
-                return false;
+                return "Search Items";
             };
            
            
@@ -206,15 +206,18 @@
                 $('input[name="ProductName"]').val(e.params.data.text);
                
             });
+
             var productId = parseInt(getUrlParameter('prodcutId'));
             var prodcutName = getUrlParameter('prodcutName');
             if (productId != 0) {
-                $("#ProductId").append("<option value=" + productId + " selected>" + prodcutName+"</option>").trigger('change');
+                $("#ProductId").append("<option value=" + productId + " selected>" + prodcutName + "</option>").trigger('change');
                 $("#ProductName").val(prodcutName);
             }
+
             function getURL() {
                 return "/MasterProduct/GetMasterItemSelect2";
             }
+
            // url: "/MasterProduct/GetMasterItemSelect2?type=" + $('input[name="ProductName"]').val(),
             $('#MasterProductId').select2({
                 placeholder: "Search Items",
