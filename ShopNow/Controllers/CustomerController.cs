@@ -1,10 +1,12 @@
-﻿using AutoMapper;
+﻿using Amazon.S3;
+using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using ShopNow.Filters;
 using ShopNow.Helpers;
 using ShopNow.Models;
 using ShopNow.ViewModels;
 using System;
+using System.Configuration;
 using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
@@ -18,7 +20,8 @@ namespace ShopNow.Controllers
         private IMapper _mapper;
         private MapperConfiguration _mapperConfiguration;
         UploadContent uc = new UploadContent();
-
+        private static readonly string accesskey = ConfigurationManager.AppSettings["AWSAccessKey"];
+        private static readonly string secretkey = ConfigurationManager.AppSettings["AWSSecretKey"];
         public CustomerController()
         {
             _mapperConfiguration = new MapperConfiguration(config =>
@@ -117,6 +120,17 @@ namespace ShopNow.Controllers
                     Description = i.Description,
                     ExpiryDate = i.ExpiryDate,
                     Type = i.Type
+                }).ToList();
+
+            model.AddressListItems = db.CustomerAddresses.Where(i => i.CustomerId == dId && i.Status == 0)
+                .Select(i => new CustomerDetailsViewModel.AddressListItem
+                {
+                    Address = i.Address,
+                    Flat = i.FlatNo,
+                    Id = i.Id,
+                    Landmark = i.LandMark,
+                    RouteAddioPath = i.RouteAudioPath,
+                    Type = i.Name
                 }).ToList();
             return View(model);
         }
@@ -424,6 +438,40 @@ namespace ShopNow.Controllers
                 db.SaveChanges();
             }
             return Json(true, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult SaveAddressAudioPath(SaveAddressAudioPathViewModel model)
+        {
+            try
+            {
+                var user = ((Helpers.Sessions.User)Session["USER"]);
+                var customerAddress = db.CustomerAddresses.FirstOrDefault(i => i.Id == model.Id);
+                string filename = DateTime.Now.Ticks + ".mp3";
+                if (model.AudioUpload != null)
+                {
+                    uc.UploadFiles(model.AudioUpload.InputStream, filename, accesskey, secretkey, "audio");
+                    customerAddress.RouteAudioPath = filename;
+                }
+                customerAddress.RouteAudioUploadedBy = user.Name;
+                customerAddress.RouteAudioUploadedDateTime = DateTime.Now;
+                db.Entry(customerAddress).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+            }
+            catch (AmazonS3Exception amazonS3Exception)
+            {
+                if (amazonS3Exception.ErrorCode != null &&
+                    (amazonS3Exception.ErrorCode.Equals("InvalidAccessKeyId")
+                    ||
+                    amazonS3Exception.ErrorCode.Equals("InvalidSecurity")))
+                {
+                    ViewBag.Message = "Check the provided AWS Credentials.";
+                }
+                else
+                {
+                    ViewBag.Message = "Error occurred: " + amazonS3Exception.Message;
+                }
+            }
+            return RedirectToAction("Details", new { id = AdminHelpers.ECodeInt(model.CustomerId) });
         }
 
         public async Task<JsonResult> GetCustomerSelect2(string q = "")

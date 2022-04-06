@@ -77,7 +77,7 @@ namespace ShopNow.Helpers
                                 else
                                     putRequest.BucketName = "shopnowchat.com/Large";
 
-                                 PutObjectResponse putResponse = s3.PutObject(putRequest);
+                                PutObjectResponse putResponse = s3.PutObject(putRequest);
                             }
                         }
                     }
@@ -89,6 +89,12 @@ namespace ShopNow.Helpers
             {
                 putRequest.BucketName = "shopnowchat.com/Uploads";
                 putRequest.ContentType = "application/pdf";
+                PutObjectResponse putResponse = s3.PutObject(putRequest);
+            }
+            else if (type == "audio")
+            {
+                putRequest.BucketName = "shopnowchat.com/Audio";
+                putRequest.ContentType = "audio/mpeg";
                 PutObjectResponse putResponse = s3.PutObject(putRequest);
             }
             else
