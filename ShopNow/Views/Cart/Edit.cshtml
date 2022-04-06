@@ -122,6 +122,7 @@
                             }
                             else if (Model.Status == 5)
                             {
+                                <label class="font-weight-bold text-secondary">Pick Up Time:<span class="text-dark"> @Model.OrderPickupTime.Value.ToString("dd-MM-yyyy hh:mm tt")</span></label><br />
                                 <span class="text-success">On the Way to Delivery</span>
                                 <button type="button" class="btn btn-danger mt-2" data-toggle="modal" data-target="#modal-add-cancel-remark">Cancel</button>
                                 <a href="/Cart/MarkAsDelivered?OrderNumber=@Model.OrderNumber&id=@Model.Id" class="btn btn-info mt-2">Mark as Delivered</a>

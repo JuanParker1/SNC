@@ -673,6 +673,7 @@ namespace ShopNow.Controllers
                 model.OnWork = cart.DeliveryBoyOnWork;
                 model.Latitude = cart.Latitude;
                 model.Longitude = cart.Longitude;
+                model.OrderPickupTime = cart.OrderPickupTime;
                 //var refundamount = db.Payments.FirstOrDefault(i => i.RefundAmount == model.RefundAmount);
                 //if(refundamount != null)
                 //{
