@@ -3508,8 +3508,8 @@ namespace ShopNow.Controllers
         //{
         public double GetStockQty(int itemid, int outletid)
         {
-            try
-            {
+            //try
+            //{
                 using (WebClient myData = new WebClient())
                 {
 
@@ -3532,15 +3532,15 @@ namespace ShopNow.Controllers
                         }
                     }
                 }
-            } catch
-            {
+            //} catch
+            //{
 
-                var product = db.Products.FirstOrDefault(i => i.ItemId == itemid && i.OutletId == outletid);
-                if (product != null)
-                {
-                    return product.Qty;
-                }
-            }
+            //    var product = db.Products.FirstOrDefault(i => i.ItemId == itemid && i.OutletId == outletid);
+            //    if (product != null)
+            //    {
+            //        return product.Qty;
+            //    }
+            //}
             return 0;
         }
 
@@ -8232,6 +8232,28 @@ namespace ShopNow.Controllers
                     var order = db.Orders.FirstOrDefault(i => i.Id == item.Id);
                     order.CustomerAddressId = customerAddress.Id;
                     db.Entry(order).State = System.Data.Entity.EntityState.Modified;
+                    db.SaveChanges();
+                }
+            }
+            return Json(true, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult UpdateWalletExpiryDate()
+        {
+            var customerWalletList = db.CustomerWalletHistories.Where(i => i.Status == 0 && i.ExpiryDate != null).ToList();
+            foreach (var item in customerWalletList)
+            {
+                if (item.ExpiryDate.Value.Date < DateTime.Now.Date)
+                {
+                    var customerWallet = db.CustomerWalletHistories.FirstOrDefault(i => i.Id == item.Id);
+                    customerWallet.Status = 2;
+                    db.Entry(customerWallet).State = System.Data.Entity.EntityState.Modified;
+                    db.SaveChanges();
+
+                    var customer = db.Customers.FirstOrDefault(i => i.Id == item.CustomerId);
+                    customer.WalletAmount -= item.Amount;
+                    customer.WalletAmount = Math.Max(0, customer.WalletAmount);
+                    db.Entry(customerWallet).State = System.Data.Entity.EntityState.Modified;
                     db.SaveChanges();
                 }
             }
