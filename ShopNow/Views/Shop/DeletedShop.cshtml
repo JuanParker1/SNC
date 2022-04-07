@@ -21,7 +21,7 @@
                 <div class="card-body">
                     @Html.Grid(Model).Columns(columns =>
                {
-                   columns.Add(s => s.Name).Titled("Name").Filterable(true).Encoded(false).Sanitized(false)
+                   columns.Add(s => s.Name).Filterable(true).Encoded(false).Sanitized(false)
                    .RenderValueAs(s => Html.ActionLink(s.Name, "Details", new { Id = ShopNow.Helpers.AdminHelpers.ECodeInt(s.Id) }).ToHtmlString()).SetWidth(10);
                    columns.Add(s => s.OwnerPhoneNumber).Titled("Owner PhoneNo.").Filterable(true).SetWidth(10);
                    columns.Add(s => s.PhoneNumber).Titled("Phone Number").Filterable(true).SetWidth(10);

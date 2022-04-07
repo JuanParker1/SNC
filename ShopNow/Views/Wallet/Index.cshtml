@@ -23,42 +23,16 @@
                    columns.Add(s => s.DateEncoded).Titled("Date Created").Filterable(true).SetWidth(8);
                    columns.Add(s => s.Encodedby).Titled("Created By").Filterable(true).SetWidth(8);
                }).Sortable(true)
-                    @*<form action="/Wallet/SendWalletAmount" method="post">
-            <div class="form-group">
-                <label class="col-form-label">Select Customer Group</label>
-                <select id="select-customergroup" class="form-control" name="CustomerGroup" required>
-                    <option disabled selected>Select Customer Group</option>
-                    <option value="1">Medical Group</option>
-                    <option value="2">Grocery Group</option>
-                    <option value="3">Restaurant Group</option>
-                    <option value="4">Supermarket Group</option>
-                    <option value="5">No Order Group</option>
-                    <option value="6">Last 10 days No Order Group</option>
-                    <option value="7">Last 10 days only Medical order Group</option>
-                    <option value="8">Last 10 days only Grocery order Group</option>
-                    <option value="9">Last 10 days only Restaurant order Group</option>
-                    <option value="10">Last 10 days only Supermarket order Group</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label class="col-form-label">Amount</label>
-                <input type="number" name="Amount" class="form-control" required />
-            </div>
-            <div class="form-group">
-                <label class="col-form-label">Expiry Date</label>
-                <input type="date" name="ExpiryDate" class="form-control" />
-            </div>
-            <div class="mx-auto col-6"> <input type="submit" value="Send" class="btn btn-success btn-block" /></div>
-        </form>*@
                 </div>
             </div>
         </div>
     </div>
 </div>
+
 <div class="modal fade" id="modal-wallet-entry" role="dialog" aria-labelledby="createModalLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <div class="modal-header alert alert-success">
+            <div class="modal-header alert alert-info">
                 <h5 class="modal-title text-success" id="createModalLabel">New Wallet Entry</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
@@ -95,7 +69,7 @@
                 <div class="modal-footer">
                     <input type="submit" id="Create" name="Create" value="Send" class="btn btn-success" />
                 </div>
-                </form>
+            </form>
         </div>
     </div>
 </div>
