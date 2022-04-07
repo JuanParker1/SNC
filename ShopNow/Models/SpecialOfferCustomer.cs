@@ -12,17 +12,11 @@ namespace ShopNow.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Wallet
+    public partial class SpecialOfferCustomer
     {
         public int Id { get; set; }
-        public string ReferenceCode { get; set; }
-        public int CustomerGroup { get; set; }
-        public double Amount { get; set; }
-        public Nullable<System.DateTime> ExpiryDate { get; set; }
-        public string Description { get; set; }
-        public int Month { get; set; }
-        public int Status { get; set; }
+        public int CustomerId { get; set; }
+        public int SpecialOfferId { get; set; }
         public System.DateTime DateEncoded { get; set; }
-        public string EncodedBy { get; set; }
     }
 }

@@ -4,12 +4,12 @@
 }
 <title>ShopNow | Cart Details</title>
 <div class="container-fluid">
-    <div class="row">
+    <div class="row mb-2">
         <div class="col-md-6">
             <h5 class="text-success" style="letter-spacing:1px">CART DETAILS</h5>
         </div>
         <div class="col-md-6 text-right">
-            <a href="~/Cart/List" class="ml-auto" target="_self"><span class="fa fa-bars"></span> New Order List</a>
+            <a href="~/Cart/List" class="btn btn-sm btn-info ml-auto" target="_self"><span class="fa fa-bars"></span> New Order List</a>
         </div>
     </div>
     <div class="row bg-green-200">
@@ -123,7 +123,7 @@
                             else if (Model.Status == 5)
                             {
                                 <label class="font-weight-bold text-secondary">Pick Up Time:<span class="text-dark"> @Model.OrderPickupTime.Value.ToString("dd-MM-yyyy hh:mm tt")</span></label><br />
-                                <span class="text-success">On the Way to Delivery</span>
+                                <span class="text-success">On the Way to Delivery  &nbsp;</span>
                                 <button type="button" class="btn btn-danger mt-2" data-toggle="modal" data-target="#modal-add-cancel-remark">Cancel</button>
                                 <a href="/Cart/MarkAsDelivered?OrderNumber=@Model.OrderNumber&id=@Model.Id" class="btn btn-info mt-2">Mark as Delivered</a>
                                 <a href="/Cart/CustomerNotPickUp?OrderNumber=@Model.OrderNumber&id=@Model.Id" class="btn btn-info mt-2">Customer Not Pickup</a>

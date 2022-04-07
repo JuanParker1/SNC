@@ -170,7 +170,6 @@ namespace ShopNow.Controllers
                 notification.Name = name;
                 notification.Password = password;
                 notification.PhoneNumber = phonenumber;
-                notification.EncodedBy = user.Name;
                 notification.UpdatedBy = user.Name;
                 notification.DateUpdated = DateTime.Now;
                 db.Entry(notification).State = System.Data.Entity.EntityState.Modified;
