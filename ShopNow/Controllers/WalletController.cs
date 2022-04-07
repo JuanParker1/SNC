@@ -37,56 +37,56 @@ namespace ShopNow.Controllers
             switch (model.CustomerGroup)
             {
                 case 1:
-                    var medicalCustomerlist = GetCustomerList(4);
-                    SaveWalletHistory(model.CustomerGroup, medicalCustomerlist, model.Amount, model.ExpiryDate);
+                    var medicalCustomerlist = GetCustomerList(4,0,model.Month);
+                    SaveWalletHistory(model.CustomerGroup, medicalCustomerlist, model.Amount, model.ExpiryDate,model.Description,model.ReferenceCode,model.Month);
                     break;
                 case 2:
-                    var groceryCustomerlist = GetCustomerList(2);
-                    SaveWalletHistory(model.CustomerGroup, groceryCustomerlist, model.Amount, model.ExpiryDate);
+                    var groceryCustomerlist = GetCustomerList(2, 0, model.Month);
+                    SaveWalletHistory(model.CustomerGroup, groceryCustomerlist, model.Amount, model.ExpiryDate, model.Description, model.ReferenceCode, model.Month);
                     break;
                 case 3:
-                    var restaurantCustomerlist = GetCustomerList(1);
-                    SaveWalletHistory(model.CustomerGroup, restaurantCustomerlist, model.Amount, model.ExpiryDate);
+                    var restaurantCustomerlist = GetCustomerList(1, 0, model.Month);
+                    SaveWalletHistory(model.CustomerGroup, restaurantCustomerlist, model.Amount, model.ExpiryDate, model.Description, model.ReferenceCode, model.Month);
                     break;
                 case 4:
-                    var supermarketCustomerlist = GetCustomerList(3);
-                    SaveWalletHistory(model.CustomerGroup, supermarketCustomerlist, model.Amount, model.ExpiryDate);
+                    var supermarketCustomerlist = GetCustomerList(3, 0, model.Month);
+                    SaveWalletHistory(model.CustomerGroup, supermarketCustomerlist, model.Amount, model.ExpiryDate, model.Description, model.ReferenceCode, model.Month);
                     break;
                 case 5: //No Order
                     var customer = db.Customers.Select(i=>i.Id).ToList();
-                    var order = db.Orders.Where(i => i.Status == 6).Select(i=>i.CustomerId).ToList();
+                    var order = db.Orders.Where(i => i.Status == 6 && (model.Month != 0 ? i.DateEncoded.Month == model.Month : true)).Select(i=>i.CustomerId).ToList();
                     var result = customer.Where(i => !order.Select(a => a).ToArray().Contains(i)).OrderBy(i => i)
                 .GroupBy(i => i).Select(i => i.FirstOrDefault()).ToList();
-                    SaveWalletHistory(model.CustomerGroup, result, model.Amount, model.ExpiryDate);
+                    SaveWalletHistory(model.CustomerGroup, result, model.Amount, model.ExpiryDate, model.Description, model.ReferenceCode, model.Month);
                     break;
                 case 6: //No Order Last 10days
                     var allcustomer = db.Customers.Select(i => i.Id).ToList();
                     var orderLast10days = db.Orders.Where(i => (DbFunctions.TruncateTime(DbFunctions.AddDays(DateTime.Now, -10)) <= DbFunctions.TruncateTime(i.DateEncoded)) && i.Status == 6).Select(i => i.CustomerId).ToList();
                     var result1 = allcustomer.Where(i => !orderLast10days.Select(a => a).ToArray().Contains(i)).OrderBy(i => i)
                 .GroupBy(i => i).Select(i => i.FirstOrDefault()) .ToList();
-                    SaveWalletHistory(model.CustomerGroup, result1, model.Amount, model.ExpiryDate);
+                    SaveWalletHistory(model.CustomerGroup, result1, model.Amount, model.ExpiryDate, model.Description, model.ReferenceCode, model.Month);
                     break;
                 case 7:
                     var medicalLast10DaysCustomerlist = GetCustomerList(4,-10);
-                    SaveWalletHistory(model.CustomerGroup, medicalLast10DaysCustomerlist, model.Amount, model.ExpiryDate);
+                    SaveWalletHistory(model.CustomerGroup, medicalLast10DaysCustomerlist, model.Amount, model.ExpiryDate, model.Description, model.ReferenceCode, model.Month);
                     break;
                 case 8:
                     var groceryLast10DaysCustomerlist = GetCustomerList(2,-10);
-                    SaveWalletHistory(model.CustomerGroup, groceryLast10DaysCustomerlist, model.Amount, model.ExpiryDate);
+                    SaveWalletHistory(model.CustomerGroup, groceryLast10DaysCustomerlist, model.Amount, model.ExpiryDate, model.Description, model.ReferenceCode, model.Month);
                     break;
                 case 9:
                     var restaurantLast10DaysCustomerlist = GetCustomerList(1,-10);
-                    SaveWalletHistory(model.CustomerGroup, restaurantLast10DaysCustomerlist, model.Amount, model.ExpiryDate);
+                    SaveWalletHistory(model.CustomerGroup, restaurantLast10DaysCustomerlist, model.Amount, model.ExpiryDate, model.Description, model.ReferenceCode, model.Month);
                     break;
                 case 10:
                     var supermarketLast10DaysCustomerlist = GetCustomerList(3,-10);
-                    SaveWalletHistory(model.CustomerGroup, supermarketLast10DaysCustomerlist, model.Amount, model.ExpiryDate);
+                    SaveWalletHistory(model.CustomerGroup, supermarketLast10DaysCustomerlist, model.Amount, model.ExpiryDate, model.Description, model.ReferenceCode, model.Month);
                     break;
                 case 11:
                     var iosCustomer = db.CustomerDeviceInfoes.Where(i => i.Platform == "ios")
                         .Join(db.Customers.Where(i => i.Status == 0), cd => cd.CustomerId, c => c.Id, (cd, c) => new { c, cd })
                         .Select(i => i.c.Id).ToList();
-                    SaveWalletHistory(model.CustomerGroup, iosCustomer, model.Amount, model.ExpiryDate);
+                    SaveWalletHistory(model.CustomerGroup, iosCustomer, model.Amount, model.ExpiryDate, model.Description, model.ReferenceCode, model.Month);
                     break;
                 default:
                     break;
@@ -94,14 +94,14 @@ namespace ShopNow.Controllers
             return RedirectToAction("Index");
         }
 
-        public List<int> GetCustomerList(int shopCategoryId,int lastdays=0)
+        public List<int> GetCustomerList(int shopCategoryId,int lastdays=0,int month=0)
         {
-            var allOrders = db.Orders.Where(i => i.Status == 6 && lastdays !=0 ? (DbFunctions.TruncateTime(DbFunctions.AddDays(DateTime.Now, lastdays)) <= DbFunctions.TruncateTime(i.DateEncoded)):true)
+            var allOrders = db.Orders.Where(i => i.Status == 6 && (lastdays != 0 ? (DbFunctions.TruncateTime(DbFunctions.AddDays(DateTime.Now, lastdays)) <= DbFunctions.TruncateTime(i.DateEncoded)) : true) && (month != 0 ? i.DateEncoded.Month == month : true))
                       .GroupBy(i => new { i.ShopId, i.CustomerId }).Select(i => new { ShopId = i.FirstOrDefault().ShopId, CustomerId = i.FirstOrDefault().CustomerId })
               .Join(db.Shops.Where(i => i.ShopCategoryId == shopCategoryId).Select(i => new { Id = i.Id, ShopCategoryId = i.ShopCategoryId }), o => o.ShopId, s => s.Id, (o, s) => new { o, s })
               .Select(i => new { CustomerId = i.o.CustomerId, ShopId = i.s.Id, ShopCatId = i.s.ShopCategoryId }).ToList();
 
-            var otherOrders = db.Orders.Where(i => i.Status == 6 && lastdays != 0 ? (DbFunctions.TruncateTime(DbFunctions.AddDays(DateTime.Now, lastdays)) <= DbFunctions.TruncateTime(i.DateEncoded)) : true)
+            var otherOrders = db.Orders.Where(i => i.Status == 6 && lastdays != 0 ? (DbFunctions.TruncateTime(DbFunctions.AddDays(DateTime.Now, lastdays)) <= DbFunctions.TruncateTime(i.DateEncoded)) : true && (month != 0 ? i.DateEncoded.Month == month : true))
                .GroupBy(i => new { i.ShopId, i.CustomerId }).Select(i => new { ShopId = i.FirstOrDefault().ShopId, CustomerId = i.FirstOrDefault().CustomerId })
                .Join(db.Shops.Where(i => i.ShopCategoryId != shopCategoryId).Select(i => new { Id = i.Id, ShopCategoryId = i.ShopCategoryId }), o => o.ShopId, s => s.Id, (o, s) => new { o, s })
                .Select(i => new { CustomerId = i.o.CustomerId, ShopId = i.s.Id, ShopCatId = i.s.ShopCategoryId }).ToList();
@@ -112,7 +112,7 @@ namespace ShopNow.Controllers
             return result;
         }
 
-        public void SaveWalletHistory(int customerGroup, List<int> customerIds,double amount,DateTime? expiryDate)
+        public void SaveWalletHistory(int customerGroup, List<int> customerIds,double amount,DateTime? expiryDate, string description, string reference,int month)
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
@@ -124,7 +124,10 @@ namespace ShopNow.Controllers
                 DateEncoded = DateTime.Now,
                 EncodedBy = user.Name,
                 ExpiryDate = expiryDate,
-                Status = 0
+                Status = 0,
+                Description = description,
+                Month = month,
+                ReferenceCode = reference
             };
             db.Wallets.Add(wallet);
             db.SaveChanges();
@@ -136,24 +139,43 @@ namespace ShopNow.Controllers
                     Amount = amount,
                     CustomerId = id,
                     DateEncoded = DateTime.Now,
-                    Description = $"Received from Snowch(#{wallet.Id})",
+                    Description = wallet.ReferenceCode,
                     ExpiryDate = expiryDate,
-                    Type = 1
+                    Type = 1,
+                    Status = 0,
+                    WalletId = wallet.Id
                 };
                 db.CustomerWalletHistories.Add(customerWalletHistory);
                 db.SaveChanges();
             }
 
-            var fcmTokenList = db.Customers.Where(i=>customerIds.Contains(i.Id)).OrderBy(i => i.Id).Where(i => !string.IsNullOrEmpty(i.FcmTocken) && i.FcmTocken != "NULL").Select(i => i.FcmTocken).ToArray();
-            var count = Math.Ceiling((double)fcmTokenList.Count() / 1000);
+            var customerList = db.Customers.Where(i=>customerIds.Contains(i.Id)).OrderBy(i => i.Id).Select(i =>new {Id = i.Id, FcmToken = i.FcmTocken,Name = i.Name}).ToList();
+            //var fcmTokenList = customerList.Select(i => i.FcmToken).ToArray();
+            //var count = Math.Ceiling((double)fcmTokenList.Count() / 1000);
+            //var message = "";
+            //if (expiryDate != null)
+            //    message = $"Hi, Rs.{wallet.Amount} has been added to your wallet. (With Expiry - {expiryDate.Value.ToString("dd-MMM-yyyy")}). Happy Shopping.";
+            //else
+            //    message = $"Hi, Rs.{wallet.Amount} has been added to your wallet. Happy Shopping.";
+            //for (int i = 0; i < count; i++)
+            //{
+            //    Helpers.PushNotification.SendBulk(message, "Wallet Amount Received", "SpecialOffer", "", fcmTokenList.Skip(i * 1000).Take(1000).ToArray(), "tune2.caf");
+            //}
             var message = "";
-            if (expiryDate != null)
-                message = $"You have Received Rs.{wallet.Amount} from Snowch. Hurry up it will expire at {expiryDate.Value.ToString("dd-MMM-yyyy")}.";
-            else
-                message = $"You have Received Rs.{wallet.Amount} from Snowch.";
-            for (int i = 0; i < count; i++)
+            foreach (var item in customerList)
             {
-                Helpers.PushNotification.SendBulk(message, "Wallet amount Received", "SpecialOffer", "", fcmTokenList.Skip(i * 1000).Take(1000).ToArray(), "tune2.caf");
+                var customer = db.Customers.FirstOrDefault(i => i.Id == item.Id);
+                customer.WalletAmount += wallet.Amount;
+                db.Entry(customer).State = EntityState.Modified;
+                db.SaveChanges();
+
+                if (!string.IsNullOrEmpty(item.Name) && item.Name != "Null")
+                    message = $"Hi {item.Name}, Rs.{wallet.Amount} 💵 has been added to your wallet. (With Expiry 🗓️ {expiryDate.Value.ToString("dd-MMM-yyyy")}). Happy Shopping 😎.";
+                else
+                  message=  $"Hi, Rs.{wallet.Amount} 💵 has been added to your wallet. (With Expiry 🗓️ {expiryDate.Value.ToString("dd-MMM-yyyy")}). Happy Shopping 😎.";
+
+                if (!string.IsNullOrEmpty(item.FcmToken) && item.FcmToken != "NULL")
+                    Helpers.PushNotification.SendbydeviceId(message, $"You have won Rs.{wallet.Amount} 💵 in wallet.", "SpecialOffer", "", item.FcmToken, "tune2.caf");
             }
         }
     }
