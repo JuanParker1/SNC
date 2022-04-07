@@ -2902,66 +2902,71 @@ namespace ShopNow.Controllers
             }
             if (shop.ShopCategoryId == 1 || shop.ShopCategoryId == 3)
             {
-                //model.ProductLists = (from pl in db.Products
-                //                      join m in db.MasterProducts on pl.MasterProductId equals m.Id
-                //                      join c in db.Categories on m.CategoryId equals c.Id
-                //                      where pl.ShopId == shopId && pl.Status == 0 && pl.Price != 0 && (categoryId != 0 ? m.CategoryId == categoryId : true)
-                //                      select new ShopDetails.ProductList
-                //                      {
-                //                          Id = pl.Id,
-                //                          Name = m.Name,
-                //                          ShopId = pl.ShopId,
-                //                          ShopName = pl.ShopName,
-                //                          CategoryId = c.Id,
-                //                          CategoryName = c.Name,
-                //                          ColorCode = m.ColorCode,
-                //                          Price = pl.MenuPrice,
-                //                          ImagePath = ((!string.IsNullOrEmpty(m.ImagePath1)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + m.ImagePath1.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/noimageres.svg"),
-                //                          Status = pl.Status,
-                //                          Customisation = pl.Customisation,
-                //                          DiscountCategoryPercentage = pl.Percentage,
-                //                          IsOnline = pl.IsOnline,
-                //                          NextOnTime = pl.NextOnTime,
-                //                          Size = m.SizeLWH,
-                //                          Weight = m.Weight,
-                //                          IsPreorder = pl.IsPreorder,
-                //                          PreorderHour = pl.PreorderHour,
-                //                          OfferQuantityLimit = pl.OfferQuantityLimit
-                //                      }).Where(i => i.Price != 0 && (str != "" ? i.Name.ToLower().Contains(str) : true)).ToList();
-                //model.count1 = model.ProductLists.Count();
-
+                //model.ProductLists = db.Products.Where(i => i.ShopId == shopId && i.Status == 0 && i.Price != 0 && i.MenuPrice != 0 && (categoryId != 0 ? i.CategoryId == categoryId : true))
+                //    .Join(db.MasterProducts.Where(i => str != "" ? i.Name.ToLower().Contains(str.ToLower()) : true), p => p.MasterProductId, m => m.Id, (p, m) => new { p, m })
+                //    .Join(db.Categories, p => p.p.CategoryId, c => c.Id, (p, c) => new { p, c })
+                //    .GroupJoin(db.CustomerFavorites, p => p.p.p.Id, cf => cf.ProductId, (p, cf) => new { p, cf })
+                //    .Select(i => new ShopDetails.ProductList
+                //    {
+                //        Id = i.p.p.p.Id,
+                //        Name = i.p.p.m.Name,
+                //        ShopId = i.p.p.p.ShopId,
+                //        ShopName = i.p.p.p.ShopName,
+                //        CategoryId = i.p.c.Id,
+                //        CategoryName = i.p.c.Name,
+                //        ColorCode = i.p.p.m.ColorCode,
+                //        Price = i.p.p.p.MenuPrice,
+                //        ImagePath = ((!string.IsNullOrEmpty(i.p.p.m.ImagePath1)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.p.p.m.ImagePath1.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/noimageres.svg"),
+                //        Status = i.p.p.p.Status,
+                //        Customisation = i.p.p.p.Customisation,
+                //        DiscountCategoryPercentage = i.p.p.p.Percentage,
+                //        IsOnline = i.p.p.p.IsOnline,
+                //        NextOnTime = i.p.p.p.NextOnTime,
+                //        Size = i.p.p.m.SizeLWH,
+                //        Weight = i.p.p.m.Weight,
+                //        IsPreorder = i.p.p.p.IsPreorder,
+                //        PreorderHour = i.p.p.p.PreorderHour,
+                //        OfferQuantityLimit = i.p.p.p.OfferQuantityLimit,
+                //        IsLiked = i.cf.Any(a => a.CustomerId == customerId && a.IsFavorite == true && a.ProductId == i.p.p.p.Id),
+                //        LikeText = (i.cf.Any(a => a.CustomerId == customerId && a.IsFavorite == true && a.ProductId == i.p.p.p.Id) == true && i.cf.Where(a => a.ProductId == i.p.p.p.Id && a.IsFavorite == true).Count() == 1) ? "You Liked" : i.cf.Any(a => a.CustomerId == customerId && a.IsFavorite == true && a.ProductId == i.p.p.p.Id) == true ? "You & " + (i.cf.Where(a => a.ProductId == i.p.p.p.Id && a.IsFavorite == true).Count() - 1) + " more" : i.cf.Where(a => a.ProductId == i.p.p.p.Id && a.IsFavorite == true).Count() > 0 ? i.cf.Where(a => a.ProductId == i.p.p.p.Id && a.IsFavorite == true).Count() + " like" : "",
+                //        ShopPrice = i.p.p.p.ShopPrice,
+                //        MaxAddonSelectionLimit = i.p.p.p.MaxSelectionLimit,
+                //        MinAddonSelectionLimit = i.p.p.p.MinSelectionLimit
+                //    }).OrderByDescending(i => i.IsOnline).ToList();
 
                 model.ProductLists = db.Products.Where(i => i.ShopId == shopId && i.Status == 0 && i.Price != 0 && i.MenuPrice != 0 && (categoryId != 0 ? i.CategoryId == categoryId : true))
-                    .Join(db.MasterProducts.Where(i => str != "" ? i.Name.ToLower().Contains(str.ToLower()) : true), p => p.MasterProductId, m => m.Id, (p, m) => new { p, m })
-                    .Join(db.Categories, p => p.p.CategoryId, c => c.Id, (p, c) => new { p, c })
-                    .GroupJoin(db.CustomerFavorites, p => p.p.p.Id, cf => cf.ProductId, (p, cf) => new { p, cf })
-                    .Select(i => new ShopDetails.ProductList
-                    {
-                        Id = i.p.p.p.Id,
-                        Name = i.p.p.m.Name,
-                        ShopId = i.p.p.p.ShopId,
-                        ShopName = i.p.p.p.ShopName,
-                        CategoryId = i.p.c.Id,
-                        CategoryName = i.p.c.Name,
-                        ColorCode = i.p.p.m.ColorCode,
-                        Price = i.p.p.p.MenuPrice,
-                        ImagePath = ((!string.IsNullOrEmpty(i.p.p.m.ImagePath1)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.p.p.m.ImagePath1.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/noimageres.svg"),
-                        Status = i.p.p.p.Status,
-                        Customisation = i.p.p.p.Customisation,
-                        DiscountCategoryPercentage = i.p.p.p.Percentage,
-                        IsOnline = i.p.p.p.IsOnline,
-                        NextOnTime = i.p.p.p.NextOnTime,
-                        Size = i.p.p.m.SizeLWH,
-                        Weight = i.p.p.m.Weight,
-                        IsPreorder = i.p.p.p.IsPreorder,
-                        PreorderHour = i.p.p.p.PreorderHour,
-                        OfferQuantityLimit = i.p.p.p.OfferQuantityLimit,
-                        IsLiked = i.cf.Any(a => a.CustomerId == customerId && a.IsFavorite == true && a.ProductId == i.p.p.p.Id),
-                        LikeText = (i.cf.Any(a => a.CustomerId == customerId && a.IsFavorite == true && a.ProductId == i.p.p.p.Id) == true && i.cf.Where(a => a.ProductId == i.p.p.p.Id && a.IsFavorite == true).Count() == 1) ? "You Liked" : i.cf.Any(a => a.CustomerId == customerId && a.IsFavorite == true && a.ProductId == i.p.p.p.Id) == true ? "You & " + (i.cf.Where(a => a.ProductId == i.p.p.p.Id && a.IsFavorite == true).Count() - 1) + " more" : i.cf.Where(a => a.ProductId == i.p.p.p.Id && a.IsFavorite == true).Count() > 0 ? i.cf.Where(a => a.ProductId == i.p.p.p.Id && a.IsFavorite == true).Count() + " like" : "",
-                        ShopPrice = i.p.p.p.ShopPrice,
-                        MaxAddonSelectionLimit = i.p.p.p.MaxSelectionLimit,
-                        MinAddonSelectionLimit = i.p.p.p.MinSelectionLimit
-                    }).OrderByDescending(i => i.IsOnline).ToList();
+                   .Join(db.MasterProducts.Where(i => str != "" ? i.Name.ToLower().Contains(str.ToLower()) : true), p => p.MasterProductId, m => m.Id, (p, m) => new { p, m })
+                   .Join(db.Categories, p => p.p.CategoryId, c => c.Id, (p, c) => new { p, c })
+                   .GroupJoin(db.CustomerFavorites, p => p.p.p.Id, cf => cf.ProductId, (p, cf) => new { p, cf })
+                   .GroupJoin(db.SpecialOffers.Where(i => i.ShopId == shopId && i.Status ==0), p => p.p.p.p.Id, so => so.ProductId, (p, so) => new { p, so })
+                   .GroupJoin(db.SpecialOfferCustomers.Where(i => i.CustomerId == customerId), p => p.so.FirstOrDefault().Id, soc => soc.Id, (p, soc) => new { p, soc })
+                   .Select(i => new ShopDetails.ProductList
+                   {
+                       Id = i.p.p.p.p.p.Id,
+                       Name = i.p.p.p.p.m.Name,
+                       ShopId = i.p.p.p.p.p.ShopId,
+                       ShopName = i.p.p.p.p.p.ShopName,
+                       CategoryId = i.p.p.p.c.Id,
+                       CategoryName = i.p.p.p.c.Name,
+                       ColorCode = i.p.p.p.p.m.ColorCode,
+                       Price = i.p.p.p.p.p.MenuPrice,
+                       ImagePath = ((!string.IsNullOrEmpty(i.p.p.p.p.m.ImagePath1)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.p.p.p.p.m.ImagePath1.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/noimageres.svg"),
+                       Status = i.p.p.p.p.p.Status,
+                       Customisation = i.p.p.p.p.p.Customisation,
+                       DiscountCategoryPercentage = (i.p.so.Any() && i.soc.Any()) ? i.p.so.FirstOrDefault().Percentage : i.p.p.p.p.p.Percentage,
+                       IsOnline = i.p.p.p.p.p.IsOnline,
+                       NextOnTime = i.p.p.p.p.p.NextOnTime,
+                       Size = i.p.p.p.p.m.SizeLWH,
+                       Weight = i.p.p.p.p.m.Weight,
+                       IsPreorder = i.p.p.p.p.p.IsPreorder,
+                       PreorderHour = i.p.p.p.p.p.PreorderHour,
+                       OfferQuantityLimit = i.p.p.p.p.p.OfferQuantityLimit,
+                       IsLiked = i.p.p.cf.Any(a => a.CustomerId == customerId && a.IsFavorite == true && a.ProductId == i.p.p.p.p.p.Id),
+                       LikeText = (i.p.p.cf.Any(a => a.CustomerId == customerId && a.IsFavorite == true && a.ProductId == i.p.p.p.p.p.Id) == true && i.p.p.cf.Where(a => a.ProductId == i.p.p.p.p.p.Id && a.IsFavorite == true).Count() == 1) ? "You Liked" : i.p.p.cf.Any(a => a.CustomerId == customerId && a.IsFavorite == true && a.ProductId == i.p.p.p.p.p.Id) == true ? "You & " + (i.p.p.cf.Where(a => a.ProductId == i.p.p.p.p.p.Id && a.IsFavorite == true).Count() - 1) + " more" : i.p.p.cf.Where(a => a.ProductId == i.p.p.p.p.p.Id && a.IsFavorite == true).Count() > 0 ? i.p.p.cf.Where(a => a.ProductId == i.p.p.p.p.p.Id && a.IsFavorite == true).Count() + " like" : "",
+                       ShopPrice = i.p.p.p.p.p.ShopPrice,
+                       MaxAddonSelectionLimit = i.p.p.p.p.p.MaxSelectionLimit,
+                       MinAddonSelectionLimit = i.p.p.p.p.p.MinSelectionLimit
+                   }).OrderByDescending(i => i.IsOnline).ToList();
 
                 if (!string.IsNullOrEmpty(str))
                 {
@@ -2976,35 +2981,6 @@ namespace ShopNow.Controllers
             }
             else if (shop.ShopCategoryId == 2)
             {
-                //model.ProductLists = (from pl in db.Products
-                //                      join m in db.MasterProducts on pl.MasterProductId equals m.Id
-                //                      join nsc in db.NextSubCategories on m.NextSubCategoryId equals nsc.Id into cat
-                //                      from nsc in cat.DefaultIfEmpty()
-                //                      where pl.ShopId == shopId && pl.Status == 0 && pl.Price != 0 && m.Name.ToLower().Contains(str) && (categoryId != 0 ? nsc.Id == categoryId : true)
-                //                      select new ShopDetails.ProductList
-                //                      {
-                //                          Id = pl.Id,
-                //                          Name = m.Name,
-                //                          ShopId = pl.ShopId,
-                //                          ShopName = pl.ShopName,
-                //                          CategoryId = nsc.Id,
-                //                          CategoryName = nsc.Name,
-                //                          ColorCode = m.ColorCode,
-                //                          Price = pl.MenuPrice,
-                //                          ImagePath = ((!string.IsNullOrEmpty(m.ImagePath1)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + m.ImagePath1.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/noimageres.svg"),
-                //                          Status = pl.Status,
-                //                          Customisation = pl.Customisation,
-                //                          DiscountCategoryPercentage = pl.Percentage,
-                //                          IsOnline = pl.IsOnline,
-                //                          NextOnTime = pl.NextOnTime,
-                //                          Size = m.SizeLWH,
-                //                          Weight = m.Weight,
-                //                          IsPreorder = pl.IsPreorder,
-                //                          PreorderHour = pl.PreorderHour,
-                //                          OfferQuantityLimit = pl.OfferQuantityLimit,
-                //                          //LikeText = GetProductFavorites(customerId, pl.Id)
-                //                      }).Where(i => i.Price != 0).ToList();
-
                 model.ProductLists = db.Products.Where(i => i.ShopId == shopId && i.Status == 0 && i.Price != 0 && i.MenuPrice != 0)
                     .Join(db.MasterProducts.Where(i => str != "" ? i.Name.ToLower().Contains(str.ToLower()) : true), p => p.MasterProductId, m => m.Id, (p, m) => new { p, m })
                     .GroupJoin(db.NextSubCategories.Where(i => categoryId != 0 ? i.Id == categoryId : true), p => p.m.NextSubCategoryId, c => c.Id, (p, c) => new { p, c })
@@ -8242,6 +8218,23 @@ namespace ShopNow.Controllers
         {
             double a = GetStockQty(2, 2);
             return Json(a, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult UpdateCustomerAddressId()
+        {
+            var orderList = db.Orders.Where(i => i.Status == 6).OrderBy(i => i.Id).ToList();
+            foreach (var item in orderList)
+            {
+                var customerAddress = db.CustomerAddresses.FirstOrDefault(i => i.CustomerId == item.CustomerId && i.Address == item.DeliveryAddress);
+                if (customerAddress != null)
+                {
+                    var order = db.Orders.FirstOrDefault(i => i.Id == item.Id);
+                    order.CustomerAddressId = customerAddress.Id;
+                    db.Entry(order).State = System.Data.Entity.EntityState.Modified;
+                    db.SaveChanges();
+                }
+            }
+            return Json(true, JsonRequestBehavior.AllowGet);
         }
     }
 }

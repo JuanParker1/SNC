@@ -119,6 +119,8 @@ namespace ShopNow.Models
         public virtual DbSet<DeliveryRatePercentage> DeliveryRatePercentages { get; set; }
         public virtual DbSet<Order> Orders { get; set; }
         public virtual DbSet<Wallet> Wallets { get; set; }
+        public virtual DbSet<SpecialOfferCustomer> SpecialOfferCustomers { get; set; }
+        public virtual DbSet<SpecialOffer> SpecialOffers { get; set; }
     
         [DbFunction("sncEntities", "GetTableVAlueString")]
         public virtual IQueryable<GetTableVAlueString_Result> GetTableVAlueString(string key)

@@ -1627,6 +1627,27 @@
           <Property Name="StaffId" Type="int" Nullable="false" />
           <Property Name="StaffCustomerId" Type="int" Nullable="false" />
         </EntityType>
+        <EntityType Name="SpecialOfferCustomer">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CustomerId" Type="int" Nullable="false" />
+          <Property Name="SpecialOfferId" Type="int" Nullable="false" />
+          <Property Name="DateEncoded" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="SpecialOffers">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ShopId" Type="int" Nullable="false" />
+          <Property Name="ProductId" Type="int" Nullable="false" />
+          <Property Name="Percentage" Type="float" Nullable="false" />
+          <Property Name="Status" Type="int" Nullable="false" />
+          <Property Name="DateEncoded" Type="datetime" Nullable="false" />
+          <Property Name="EncodedBy" Type="nvarchar" MaxLength="500" />
+        </EntityType>
         <EntityType Name="Specifications">
           <Key>
             <PropertyRef Name="Id" />
@@ -1911,6 +1932,8 @@
           <EntitySet Name="Shops" EntityType="Self.Shops" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ShopSchedules" EntityType="Self.ShopSchedules" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ShopStaffs" EntityType="Self.ShopStaffs" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SpecialOfferCustomer" EntityType="Self.SpecialOfferCustomer" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SpecialOffers" EntityType="Self.SpecialOffers" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Specifications" EntityType="Self.Specifications" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Staffs" EntityType="Self.Staffs" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SubCategories" EntityType="Self.SubCategories" Schema="dbo" store:Type="Tables" />
@@ -3125,6 +3148,8 @@
           <EntitySet Name="DeliveryRatePercentages" EntityType="sncModel.DeliveryRatePercentage" />
           <EntitySet Name="Orders" EntityType="sncModel.Order" />
           <EntitySet Name="Wallets" EntityType="sncModel.Wallet" />
+          <EntitySet Name="SpecialOfferCustomers" EntityType="sncModel.SpecialOfferCustomer" />
+          <EntitySet Name="SpecialOffers" EntityType="sncModel.SpecialOffer" />
         </EntityContainer>
         <ComplexType Name="GetDEliveryBoyList_Result">
           <Property Type="Int32" Name="Id" Nullable="false" />
@@ -3963,6 +3988,27 @@
           <Property Name="CustomerGroup" Type="Int32" Nullable="false" />
           <Property Name="Amount" Type="Double" Nullable="false" />
           <Property Name="ExpiryDate" Type="DateTime" Precision="3" />
+          <Property Name="Status" Type="Int32" Nullable="false" />
+          <Property Name="DateEncoded" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="EncodedBy" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="SpecialOfferCustomer">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CustomerId" Type="Int32" Nullable="false" />
+          <Property Name="SpecialOfferId" Type="Int32" Nullable="false" />
+          <Property Name="DateEncoded" Type="DateTime" Nullable="false" Precision="3" />
+        </EntityType>
+        <EntityType Name="SpecialOffer">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ShopId" Type="Int32" Nullable="false" />
+          <Property Name="ProductId" Type="Int32" Nullable="false" />
+          <Property Name="Percentage" Type="Double" Nullable="false" />
           <Property Name="Status" Type="Int32" Nullable="false" />
           <Property Name="DateEncoded" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="EncodedBy" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
@@ -5936,6 +5982,29 @@
                 <ScalarProperty Name="ExpiryDate" ColumnName="ExpiryDate" />
                 <ScalarProperty Name="Amount" ColumnName="Amount" />
                 <ScalarProperty Name="CustomerGroup" ColumnName="CustomerGroup" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SpecialOfferCustomers">
+            <EntityTypeMapping TypeName="sncModel.SpecialOfferCustomer">
+              <MappingFragment StoreEntitySet="SpecialOfferCustomer">
+                <ScalarProperty Name="DateEncoded" ColumnName="DateEncoded" />
+                <ScalarProperty Name="SpecialOfferId" ColumnName="SpecialOfferId" />
+                <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SpecialOffers">
+            <EntityTypeMapping TypeName="sncModel.SpecialOffer">
+              <MappingFragment StoreEntitySet="SpecialOffers">
+                <ScalarProperty Name="EncodedBy" ColumnName="EncodedBy" />
+                <ScalarProperty Name="DateEncoded" ColumnName="DateEncoded" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Percentage" ColumnName="Percentage" />
+                <ScalarProperty Name="ProductId" ColumnName="ProductId" />
+                <ScalarProperty Name="ShopId" ColumnName="ShopId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
