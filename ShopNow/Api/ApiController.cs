@@ -7735,7 +7735,7 @@ namespace ShopNow.Controllers
         //test apis
         public JsonResult SendTestNotification(string deviceId = "", string title = "", string body = "", string imagepath="")
         {
-            Helpers.PushNotification.SendbydeviceId(body, title, "SpecialOffer",imagepath, deviceId, "tune2.caf");
+            Helpers.PushNotification.SendbydeviceId("Hi Beno, Rs.100 💵 has been added to your wallet. (With Expiry 🗓️ 20-April-2022). Happy Shopping.😎", "You have won Rs.100 💵 in wallet.", "SpecialOffer",imagepath, deviceId);
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 

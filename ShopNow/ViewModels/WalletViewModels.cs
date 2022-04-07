@@ -55,5 +55,8 @@ namespace ShopNow.ViewModels
         public int CustomerGroup { get; set; }
         public double Amount { get; set; }
         public DateTime? ExpiryDate { get; set; }
+        public int Month { get; set; }
+        public string Description { get; set; }
+        public string ReferenceCode { get; set; }
     }
 }

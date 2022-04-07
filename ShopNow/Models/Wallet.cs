@@ -15,9 +15,12 @@ namespace ShopNow.Models
     public partial class Wallet
     {
         public int Id { get; set; }
+        public string ReferenceCode { get; set; }
         public int CustomerGroup { get; set; }
         public double Amount { get; set; }
         public Nullable<System.DateTime> ExpiryDate { get; set; }
+        public string Description { get; set; }
+        public int Month { get; set; }
         public int Status { get; set; }
         public System.DateTime DateEncoded { get; set; }
         public string EncodedBy { get; set; }
