@@ -5879,7 +5879,8 @@ namespace ShopNow.Controllers
                         Date = i.DateEncoded,
                         Description = i.Description,
                         Type = i.Type,
-                        ExpiryDate = i.ExpiryDate
+                        ExpiryDate = i.ExpiryDate,
+                        Status =i.Status
                     }).ToList();
             }
             return Json(new { amount = model.WalletAmount, list = model.ListItems }, JsonRequestBehavior.AllowGet);
