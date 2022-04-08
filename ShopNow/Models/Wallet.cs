@@ -21,6 +21,8 @@ namespace ShopNow.Models
         public Nullable<System.DateTime> ExpiryDate { get; set; }
         public string Description { get; set; }
         public int Month { get; set; }
+        public Nullable<System.DateTime> DateStart { get; set; }
+        public Nullable<System.DateTime> EndDate { get; set; }
         public int Status { get; set; }
         public System.DateTime DateEncoded { get; set; }
         public string EncodedBy { get; set; }

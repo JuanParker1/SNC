@@ -119,8 +119,8 @@ namespace ShopNow.Models
         public virtual DbSet<Order> Orders { get; set; }
         public virtual DbSet<SpecialOfferCustomer> SpecialOfferCustomers { get; set; }
         public virtual DbSet<SpecialOffer> SpecialOffers { get; set; }
-        public virtual DbSet<Wallet> Wallets { get; set; }
         public virtual DbSet<CustomerWalletHistory> CustomerWalletHistories { get; set; }
+        public virtual DbSet<Wallet> Wallets { get; set; }
     
         [DbFunction("sncEntities", "GetTableVAlueString")]
         public virtual IQueryable<GetTableVAlueString_Result> GetTableVAlueString(string key)

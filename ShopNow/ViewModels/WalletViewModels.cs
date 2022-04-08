@@ -58,5 +58,7 @@ namespace ShopNow.ViewModels
         public int Month { get; set; }
         public string Description { get; set; }
         public string ReferenceCode { get; set; }
+        public DateTime? DateStart { get; set; }
+        public DateTime? DateEnd { get; set; }
     }
 }

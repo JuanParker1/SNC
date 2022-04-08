@@ -37,24 +37,24 @@ namespace ShopNow.Controllers
             switch (model.CustomerGroup)
             {
                 case 1:
-                    var medicalCustomerlist = GetCustomerList(4,0,model.Month);
-                    SaveWalletHistory(model.CustomerGroup, medicalCustomerlist, model.Amount, model.ExpiryDate,model.Description,model.ReferenceCode,model.Month);
+                    var medicalCustomerlist = GetCustomerList(4, model.DateStart, model.DateEnd, 0, model.Month);
+                    //SaveWalletHistory(model.CustomerGroup, medicalCustomerlist, model.Amount, model.ExpiryDate,model.Description,model.ReferenceCode,model.Month);
                     break;
                 case 2:
-                    var groceryCustomerlist = GetCustomerList(2, 0, model.Month);
+                    var groceryCustomerlist = GetCustomerList(2, model.DateStart, model.DateEnd, 0, model.Month);
                     SaveWalletHistory(model.CustomerGroup, groceryCustomerlist, model.Amount, model.ExpiryDate, model.Description, model.ReferenceCode, model.Month);
                     break;
                 case 3:
-                    var restaurantCustomerlist = GetCustomerList(1, 0, model.Month);
+                    var restaurantCustomerlist = GetCustomerList(1, model.DateStart, model.DateEnd, 0, model.Month);
                     SaveWalletHistory(model.CustomerGroup, restaurantCustomerlist, model.Amount, model.ExpiryDate, model.Description, model.ReferenceCode, model.Month);
                     break;
                 case 4:
-                    var supermarketCustomerlist = GetCustomerList(3, 0, model.Month);
+                    var supermarketCustomerlist = GetCustomerList(3, model.DateStart, model.DateEnd, 0, model.Month);
                     SaveWalletHistory(model.CustomerGroup, supermarketCustomerlist, model.Amount, model.ExpiryDate, model.Description, model.ReferenceCode, model.Month);
                     break;
                 case 5: //No Order
-                    var customer = db.Customers.Select(i=>i.Id).ToList();
-                    var order = db.Orders.Where(i => i.Status == 6 && (model.Month != 0 ? i.DateEncoded.Month == model.Month : true)).Select(i=>i.CustomerId).ToList();
+                    var customer = db.Customers.Select(i => i.Id).ToList();
+                    var order = db.Orders.Where(i => i.Status == 6 && (model.Month != 0 ? i.DateEncoded.Month == model.Month : true) && ((model.DateStart != null && model.DateEnd != null) ? (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(model.DateStart.Value) && DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(model.DateEnd.Value)) : true)).Select(i => i.CustomerId).ToList();
                     var result = customer.Where(i => !order.Select(a => a).ToArray().Contains(i)).OrderBy(i => i)
                 .GroupBy(i => i).Select(i => i.FirstOrDefault()).ToList();
                     SaveWalletHistory(model.CustomerGroup, result, model.Amount, model.ExpiryDate, model.Description, model.ReferenceCode, model.Month);
@@ -63,30 +63,44 @@ namespace ShopNow.Controllers
                     var allcustomer = db.Customers.Select(i => i.Id).ToList();
                     var orderLast10days = db.Orders.Where(i => (DbFunctions.TruncateTime(DbFunctions.AddDays(DateTime.Now, -10)) <= DbFunctions.TruncateTime(i.DateEncoded)) && i.Status == 6).Select(i => i.CustomerId).ToList();
                     var result1 = allcustomer.Where(i => !orderLast10days.Select(a => a).ToArray().Contains(i)).OrderBy(i => i)
-                .GroupBy(i => i).Select(i => i.FirstOrDefault()) .ToList();
+                .GroupBy(i => i).Select(i => i.FirstOrDefault()).ToList();
                     SaveWalletHistory(model.CustomerGroup, result1, model.Amount, model.ExpiryDate, model.Description, model.ReferenceCode, model.Month);
                     break;
                 case 7:
-                    var medicalLast10DaysCustomerlist = GetCustomerList(4,-10);
+                    var medicalLast10DaysCustomerlist = GetCustomerList(4, model.DateStart, model.DateEnd, -10, 0);
                     SaveWalletHistory(model.CustomerGroup, medicalLast10DaysCustomerlist, model.Amount, model.ExpiryDate, model.Description, model.ReferenceCode, model.Month);
                     break;
                 case 8:
-                    var groceryLast10DaysCustomerlist = GetCustomerList(2,-10);
+                    var groceryLast10DaysCustomerlist = GetCustomerList(2, model.DateStart, model.DateEnd, -10, 0);
                     SaveWalletHistory(model.CustomerGroup, groceryLast10DaysCustomerlist, model.Amount, model.ExpiryDate, model.Description, model.ReferenceCode, model.Month);
                     break;
                 case 9:
-                    var restaurantLast10DaysCustomerlist = GetCustomerList(1,-10);
+                    var restaurantLast10DaysCustomerlist = GetCustomerList(1, model.DateStart, model.DateEnd, -10, 0);
                     SaveWalletHistory(model.CustomerGroup, restaurantLast10DaysCustomerlist, model.Amount, model.ExpiryDate, model.Description, model.ReferenceCode, model.Month);
                     break;
                 case 10:
-                    var supermarketLast10DaysCustomerlist = GetCustomerList(3,-10);
+                    var supermarketLast10DaysCustomerlist = GetCustomerList(3, model.DateStart, model.DateEnd, -10, 0);
                     SaveWalletHistory(model.CustomerGroup, supermarketLast10DaysCustomerlist, model.Amount, model.ExpiryDate, model.Description, model.ReferenceCode, model.Month);
                     break;
                 case 11:
                     var iosCustomer = db.CustomerDeviceInfoes.Where(i => i.Platform == "ios")
-                        .Join(db.Customers.Where(i => i.Status == 0), cd => cd.CustomerId, c => c.Id, (cd, c) => new { c, cd })
-                        .Select(i => i.c.Id).ToList();
+                        .Join(db.Customers.Where(i => i.Status == 0 && ((model.DateStart != null && model.DateEnd != null) ? (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(model.DateStart.Value) && DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(model.DateEnd.Value)) : true)), cd => cd.CustomerId, c => c.Id, (cd, c) => new { c, cd })
+                        .Join(db.CustomerAddresses.GroupBy(i => i.CustomerId), cd => cd.c.Id, ca => ca.FirstOrDefault().CustomerId, (cd, ca) => new { cd, ca })
+                        .Select(i => i.cd.cd.CustomerId).ToList();
                     SaveWalletHistory(model.CustomerGroup, iosCustomer, model.Amount, model.ExpiryDate, model.Description, model.ReferenceCode, model.Month);
+                    break;
+                case 12:
+                    var androidCustomer = db.CustomerDeviceInfoes.Where(i => i.Platform == "android")
+                        .Join(db.Customers.Where(i => i.Status == 0 && ((model.DateStart != null && model.DateEnd != null) ? (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(model.DateStart.Value) && DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(model.DateEnd.Value)) : true)), cd => cd.CustomerId, c => c.Id, (cd, c) => new { c, cd })
+                        .Join(db.CustomerAddresses.GroupBy(i => i.CustomerId), cd => cd.c.Id, ca => ca.FirstOrDefault().CustomerId, (cd, ca) => new { cd, ca })
+                        .Select(i => i.cd.cd.CustomerId).ToList();
+                    SaveWalletHistory(model.CustomerGroup, androidCustomer, model.Amount, model.ExpiryDate, model.Description, model.ReferenceCode, model.Month);
+                    break;
+                case 13:
+                    var allNewCustomer = db.Customers.Where(i => i.Status == 0 && ((model.DateStart != null && model.DateEnd != null) ? (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(model.DateStart.Value) && DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(model.DateEnd.Value)) : true))
+                       .Join(db.CustomerAddresses.GroupBy(i => i.CustomerId), c => c.Id, ca => ca.FirstOrDefault().CustomerId, (c, ca) => new { c, ca })
+                       .Select(i => i.c.Id).ToList();
+                    SaveWalletHistory(model.CustomerGroup, allNewCustomer, model.Amount, model.ExpiryDate, model.Description, model.ReferenceCode, model.Month);
                     break;
                 default:
                     break;
@@ -94,14 +108,14 @@ namespace ShopNow.Controllers
             return RedirectToAction("Index");
         }
 
-        public List<int> GetCustomerList(int shopCategoryId,int lastdays=0,int month=0)
+        public List<int> GetCustomerList(int shopCategoryId,DateTime? startDate,DateTime? endDate, int lastdays=0,int month=0)
         {
-            var allOrders = db.Orders.Where(i => i.Status == 6 && (lastdays != 0 ? (DbFunctions.TruncateTime(DbFunctions.AddDays(DateTime.Now, lastdays)) <= DbFunctions.TruncateTime(i.DateEncoded)) : true) && (month != 0 ? i.DateEncoded.Month == month : true))
+            var allOrders = db.Orders.Where(i => i.Status == 6 && (lastdays != 0 ? (DbFunctions.TruncateTime(DbFunctions.AddDays(DateTime.Now, lastdays)) <= DbFunctions.TruncateTime(i.DateEncoded)) : true) && (month != 0 ? i.DateEncoded.Month == month : true) && ((startDate != null && endDate != null) ? (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(startDate.Value) && DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(endDate.Value)) : true))
                       .GroupBy(i => new { i.ShopId, i.CustomerId }).Select(i => new { ShopId = i.FirstOrDefault().ShopId, CustomerId = i.FirstOrDefault().CustomerId })
               .Join(db.Shops.Where(i => i.ShopCategoryId == shopCategoryId).Select(i => new { Id = i.Id, ShopCategoryId = i.ShopCategoryId }), o => o.ShopId, s => s.Id, (o, s) => new { o, s })
               .Select(i => new { CustomerId = i.o.CustomerId, ShopId = i.s.Id, ShopCatId = i.s.ShopCategoryId }).ToList();
 
-            var otherOrders = db.Orders.Where(i => i.Status == 6 && lastdays != 0 ? (DbFunctions.TruncateTime(DbFunctions.AddDays(DateTime.Now, lastdays)) <= DbFunctions.TruncateTime(i.DateEncoded)) : true && (month != 0 ? i.DateEncoded.Month == month : true))
+            var otherOrders = db.Orders.Where(i => i.Status == 6 && lastdays != 0 ? (DbFunctions.TruncateTime(DbFunctions.AddDays(DateTime.Now, lastdays)) <= DbFunctions.TruncateTime(i.DateEncoded)) : true && (month != 0 ? i.DateEncoded.Month == month : true) && ((startDate != null && endDate != null) ? (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(startDate.Value) && DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(endDate.Value)) : true))
                .GroupBy(i => new { i.ShopId, i.CustomerId }).Select(i => new { ShopId = i.FirstOrDefault().ShopId, CustomerId = i.FirstOrDefault().CustomerId })
                .Join(db.Shops.Where(i => i.ShopCategoryId != shopCategoryId).Select(i => new { Id = i.Id, ShopCategoryId = i.ShopCategoryId }), o => o.ShopId, s => s.Id, (o, s) => new { o, s })
                .Select(i => new { CustomerId = i.o.CustomerId, ShopId = i.s.Id, ShopCatId = i.s.ShopCategoryId }).ToList();
