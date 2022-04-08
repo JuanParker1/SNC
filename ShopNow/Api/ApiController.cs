@@ -7767,7 +7767,7 @@ namespace ShopNow.Controllers
         //test apis
         public JsonResult SendTestNotification(string deviceId = "", string title = "", string body = "", string imagepath="")
         {
-            Helpers.PushNotification.SendbydeviceId("Hi Beno, Rs.100 💵 has been added to your wallet. (With Expiry 🗓️ 20-April-2022). Happy Shopping.😎", "You have won Rs.100 💵 in wallet.", "SpecialOffer",imagepath, deviceId, "mywallet");
+            Helpers.PushNotification.SendbydeviceId("Hi Beno, Rs.100 💵 has been added to your wallet. (With Expiry 🗓️ 20-April-2022). Happy Shopping.😎", "You have won Rs.100 💵 in wallet.", "SpecialOffer",imagepath, deviceId,"", "viewallshop", "0");
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
@@ -8294,7 +8294,7 @@ namespace ShopNow.Controllers
         public JsonResult TestFirstOrder(int customerid=0)
         {
             bool orderExist = db.Orders.Any(i => i.CustomerId == customerid && i.Status == 6);
-            if (orderExist)
+            if (!orderExist)
             {
                 string notificationmessage = "";
                 var customerWalletHistory = new CustomerWalletHistory

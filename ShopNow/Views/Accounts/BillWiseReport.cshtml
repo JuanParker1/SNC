@@ -87,6 +87,7 @@
                    columns.Add(c => c.PriceDifference).Titled("Price Difference").Filterable(true).SetWidth(10);
                    columns.Add(c => c.CustomerPaidAmount).Titled("Customer PaidAmount").Filterable(true).SetWidth(8).Format("{0:#,##}");
                    columns.Add(c => c.RefundAmount).Titled("Refund Amount").Filterable(true).SetWidth(10);
+                   columns.Add(c => c.WalletUsed).Titled("Wallet Used").Filterable(true).SetWidth(10).Format("{0:#,##,0.00}");
                    columns.Add(c => c.FinalAmount).Titled("Final Amount").Filterable(true).SetWidth(10).Format("{0:#,##}");
                    columns.Add(c => c.DeliveryAmountFromCustomer).Titled("DeliveryAmount From Customer").Filterable(true).SetWidth(10).Format("{0:#,##,0.00}");
                    columns.Add(c => c.DeliveryDiscount).Titled("Delivery Discount").Filterable(true).SetWidth(10).Format("{0:#,##.00}");
