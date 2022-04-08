@@ -14,7 +14,7 @@ namespace ShopNow.Helpers
     public  class PushNotification
     {
 
-        public static string SendbydeviceId(string body, string title, string channelId,string imgPath, string deviceId = "",string sound="")
+        public static string SendbydeviceId(string body, string title, string channelId,string imgPath, string deviceId = "",string sound="",string type="",string shopcategories="")
         {
             string res = "";
             try
@@ -33,7 +33,12 @@ namespace ShopNow.Helpers
                         body = body,
                         title = title,
                         image = imgPath,
-                        sound=sound
+                        sound = sound
+                    },
+                    data = new
+                    {
+                        type = type,
+                        Shopcategories = shopcategories
                     }
                 };
                 var serializer = new JavaScriptSerializer();
@@ -163,7 +168,7 @@ namespace ShopNow.Helpers
         //}
 
 
-        public static string SendBulk(string body, string title, string channelId, string imgPath, string[] deviceId, string sound = "")
+        public static string SendBulk(string body, string title, string channelId, string imgPath, string[] deviceId, string sound = "", string type = "", string shopcategories = "")
         {
             string res = "";
             try
@@ -183,6 +188,11 @@ namespace ShopNow.Helpers
                         title = title,
                         image = imgPath,
                         sound=sound
+                    },
+                    data = new
+                    {
+                        type = type,
+                        Shopcategories = shopcategories
                     }
                 };
                 var serializer = new JavaScriptSerializer();

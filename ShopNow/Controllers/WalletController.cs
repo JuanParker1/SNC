@@ -189,7 +189,7 @@ namespace ShopNow.Controllers
                   message=  $"Hi, Rs.{wallet.Amount} 💵 has been added to your wallet. (With Expiry 🗓️ {expiryDate.Value.ToString("dd-MMM-yyyy")}). Happy Shopping 😎.";
 
                 if (!string.IsNullOrEmpty(item.FcmToken) && item.FcmToken != "NULL")
-                    Helpers.PushNotification.SendbydeviceId(message, $"You have won Rs.{wallet.Amount} 💵 in wallet.", "SpecialOffer", "", item.FcmToken, "tune2.caf");
+                    Helpers.PushNotification.SendbydeviceId(message, $"You have won Rs.{wallet.Amount} 💵 in wallet.", "SpecialOffer", "", item.FcmToken, "tune2.caf", "mywallet");
             }
         }
     }
