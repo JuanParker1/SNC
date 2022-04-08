@@ -91,12 +91,14 @@
         <EntityTypeShape EntityType="sncModel.DailyVisitor" Width="1.5" PointX="21.375" PointY="27.75" />
         <EntityTypeShape EntityType="sncModel.AppDetail" Width="1.5" PointX="21.375" PointY="33.75" />
         <EntityTypeShape EntityType="sncModel.Shop" Width="1.5" PointX="33.375" PointY="26.75" />
-        <EntityTypeShape EntityType="sncModel.CustomerWalletHistory" Width="1.5" PointX="0.75" PointY="34.75" />
         <EntityTypeShape EntityType="sncModel.PushNotification" Width="1.5" PointX="2.75" PointY="34.75" />
         <EntityTypeShape EntityType="sncModel.NotificationLogin" Width="1.5" PointX="35.375" PointY="0.75" />
         <EntityTypeShape EntityType="sncModel.DeliveryRatePercentage" Width="1.5" PointX="29.375" PointY="34.75" />
         <EntityTypeShape EntityType="sncModel.Order" Width="1.5" PointX="35.375" PointY="4.75" />
-        <EntityTypeShape EntityType="sncModel.Wallet" Width="1.5" PointX="7.375" PointY="35.75" />
+        <EntityTypeShape EntityType="sncModel.SpecialOfferCustomer" Width="1.5" PointX="29.375" PointY="31.75" />
+        <EntityTypeShape EntityType="sncModel.SpecialOffer" Width="1.5" PointX="9.375" PointY="35.75" />
+        <EntityTypeShape EntityType="sncModel.CustomerWalletHistory" Width="1.5" PointX="35.375" PointY="21.75" />
+        <EntityTypeShape EntityType="sncModel.Wallet" Width="1.5" PointX="11.375" PointY="35.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

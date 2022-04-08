@@ -1,0 +1,36 @@
+﻿@model IEnumerable<ShopNow.Models.Shop>
+@using GridMvc.Html
+@{
+    ViewBag.Title = "Deleted Shop List";
+}
+<title>ShopNow | @ViewBag.Title</title>
+<script src="~/Scripts/gridmvc.js"></script>
+<link href="~/Content/Gridmvc.css" rel="stylesheet" />
+<div class="container-fluid mb-3">
+    <div class="row my-2">
+        <div class="col-md-8">
+            <h5 class="text-success"> Deleted Shop List</h5>
+        </div>
+        <div class="col-md-4 text-right">
+            <a href="~/Shop/List" class="btn btn-sm btn-info" target="_blank"><i class="fa fa-bars"></i> Shop List</a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card shadow">
+                <div class="card-body">
+                    @Html.Grid(Model).Columns(columns =>
+               {
+                   columns.Add(s => s.Name).Filterable(true).Encoded(false).Sanitized(false)
+                   .RenderValueAs(s => Html.ActionLink(s.Name, "Details", new { Id = ShopNow.Helpers.AdminHelpers.ECodeInt(s.Id) }).ToHtmlString()).SetWidth(10);
+                   columns.Add(s => s.OwnerPhoneNumber).Titled("Owner PhoneNo.").Filterable(true).SetWidth(10);
+                   columns.Add(s => s.PhoneNumber).Titled("Phone Number").Filterable(true).SetWidth(10);
+                   columns.Add(s => s.ShopCategoryName).Titled("Shop Type").Filterable(true).SetWidth(10);
+                   columns.Add(s => s.Address).Filterable(true).SetWidth(10);
+                   columns.Add(s => s.PinCode).Filterable(true).SetWidth(10);
+               }).WithPaging(10).Sortable(true)
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

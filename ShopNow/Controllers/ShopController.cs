@@ -684,6 +684,15 @@ namespace ShopNow.Controllers
             return RedirectToAction("List", "Shop");
         }
 
+        public ActionResult DeletedShop()
+        {
+            var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
+            ViewBag.Name = user.Name;
+            var list = (from s in db.Shops
+                        select s).Where(s => s.Status == 2).OrderBy(s => s.DateUpdated).ToList();
+            return View(list);
+        }
+
         public ActionResult UpdateShopOnline(int Id, bool isOnline)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);

@@ -747,6 +747,12 @@
     <Compile Include="Models\ShopStaff.cs">
       <DependentUpon>ApplicationDbContext.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\SpecialOffer.cs">
+      <DependentUpon>ApplicationDbContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SpecialOfferCustomer.cs">
+      <DependentUpon>ApplicationDbContext.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Specification.cs">
       <DependentUpon>ApplicationDbContext.tt</DependentUpon>
     </Compile>
@@ -3403,6 +3409,7 @@
     <Content Include="Views\DeliveryBoy\DeliveryRate.cshtml" />
     <Content Include="Views\PushNotification\List.cshtml" />
     <Content Include="Views\Wallet\Index.cshtml" />
+    <Content Include="Views\Shop\DeletedShop.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -19,7 +19,9 @@ namespace ShopNow.Models
         public double Amount { get; set; }
         public int Type { get; set; }
         public Nullable<System.DateTime> ExpiryDate { get; set; }
-        public Nullable<System.DateTime> DateEncoded { get; set; }
         public string Description { get; set; }
+        public int WalletId { get; set; }
+        public int Status { get; set; }
+        public Nullable<System.DateTime> DateEncoded { get; set; }
     }
 }

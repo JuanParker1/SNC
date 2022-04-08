@@ -21,7 +21,7 @@
                 <div class="card-body">
                     @Html.Grid(Model).Columns(columns =>
                {
-               columns.Add(c => c.Name).Titled("Name").Filterable(true).SetWidth(10);
+               columns.Add(c => c.Name).Filterable(true).SetWidth(10);
                columns.Add(c => c.PhoneNumber).Titled("Phone Number").Filterable(true).SetWidth(10);
                columns.Add(c => c.Password).Titled("Password").Filterable(true).SetWidth(30);
                columns.Add(c => c.DateEncoded).Titled("Date").Filterable(true).SetWidth(10);
@@ -38,7 +38,7 @@
     </div>
 </div>
 
-<div class="modal fade" id="createModal" role="dialog" aria-labelledby="createModalLabel">
+<div class="modal fade" id="createModal" tabindex="-1" role="dialog" aria-labelledby="createModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header alert alert-success">
@@ -75,12 +75,13 @@
             </div>
             <div class="modal-footer">
                 <input type="button" id="Create" name="Create" value="Save" class="btn btn-success" />
+                <button class="btn btn-danger" data-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
 </div>
 
-<div class="modal fade" id="updateModal" role="dialog" aria-labelledby="updateModalLabel">
+<div class="modal fade" id="updateModal" tabindex="-1" role="dialog" aria-labelledby="updateModalLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header alert alert-success">
@@ -118,6 +119,7 @@
             </div>
             <div class="modal-footer">
                 <input type="button" id="btnUpdate" value="Update" class="btn btn-success" />
+                <button class="btn btn-danger" data-dismiss="modal">Close</button>
             </div>
         </div>
     </div>

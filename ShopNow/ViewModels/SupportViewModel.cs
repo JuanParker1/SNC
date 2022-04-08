@@ -37,6 +37,8 @@ namespace ShopNow.ViewModels
         public int ProductUnMappedCount { get; set; }
 
         public int ServiceCount { get; set; }
+        public string JoyraNagercoil { get; set; }
+        public string JoyraPalai { get; set; }
 
 
     }
