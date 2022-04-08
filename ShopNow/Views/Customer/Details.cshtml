@@ -26,13 +26,13 @@
 <div class="container-fluid my-0">
     <div class="row">
         <div class="col-md-6">
-            <h5 class="mt-1 text-theme" style="letter-spacing:1px">CUSTOMER DETAILS</h5>
+            <h5 class="text-success" style="letter-spacing:1px">CUSTOMER DETAILS</h5>
         </div>
         <div class="col-md-6 text-right">
-            <a href="~/Customer/List" target="_blank"><span class="fa fa-bars"></span>&nbsp;Customer List</a>
+            <a href="~/Customer/List" class="btn btn-sm btn-primary" target="_blank"><span class="fa fa-bars"></span>&nbsp;Customer List</a>
         </div>
     </div>
-    <div class="row mt-3 mb-4">
+    <div class="row mt-2 mb-4">
         <div class="col-md-3">
             <div class="card h-100">
                 <div class="card-body">
@@ -41,29 +41,29 @@
                     <div class="text-center">
                         <h5 class="text-success text-uppercase">@Model.Name</h5>
                         <h5>@Model.PhoneNumber</h5>
-                        <p>@(Model.Address != "NULL" ? @Model.Address : "N/A")</p>
+                        <span>@(Model.Address != "NULL" ? @Model.Address : "N/A")</span>
                     </div>
                     <div class="border-bottom border-success mb-3"></div>
                     <div class="d-flex">
                         <label class="mr-3">Wallet Amount:</label>
-                        <b>₹@Model.WalletAmount</b>
+                        <span class="font-weight-bold">₹@Model.WalletAmount</span>
                         <a href="#modal-update-walletamount" data-target="#modal-update-walletamount" data-toggle="modal" class="ml-3"><i class="fa fa-edit"></i></a>
                     </div>
                     <div class="d-flex">
                         <label class="mr-3">Penalty Charge:</label>
-                        <b>₹@Model.PenaltyAmount</b>
+                        <span class="font-weight-bold">₹@Model.PenaltyAmount</span>
                     </div>
                     <div class="d-flex">
                         <label class="mr-3">Waiting Charge:</label>
-                        <b>₹@Model.DeliveryWaitingCharge</b>
+                        <span class="font-weight-bold">₹@Model.DeliveryWaitingCharge</span>
                     </div>
                     <div class="d-flex">
                         <label class="mr-3">Last Purchase:</label>
-                        <b>@(Model.LastPurchaseDate != null ? Model.LastPurchaseDate.Value.ToString("dd-MMM-yyyy") : "N/A")</b>
+                        <span class="font-weight-bold">@(Model.LastPurchaseDate != null ? Model.LastPurchaseDate.Value.ToString("dd-MMM-yyyy") : "N/A")</span>
                     </div>
                     <div class="d-flex">
                         <label class="mr-3">App Version:</label>
-                        <b>@Model.AppVersion (@Model.Platform)</b>
+                        <span class="font-weight-bold">@Model.AppVersion (@Model.Platform)</span>
                     </div>
                 </div>
             </div>
@@ -73,31 +73,29 @@
                 <div class=" card-body">
                     <ul class="nav nav-tabs mb-3">
                         <li class="nav-item">
-                            <a class="nav-link active text-success" href="#orders" data-toggle="tab">Order Details</a>
+                            <a class="nav-link active font-weight-bold text-success" style="letter-spacing:1px" href="#orders" data-toggle="tab">Order Details</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-success" href="#wallet" data-toggle="tab">Wallet History</a>
+                            <a class="nav-link font-weight-bold text-success" style="letter-spacing:1px" href="#wallet" data-toggle="tab">Wallet History</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-success" href="#address" data-toggle="tab">Addresses</a>
+                            <a class="nav-link font-weight-bold text-success" style="letter-spacing:1px" href="#address" data-toggle="tab">Addresses</a>
                         </li>
                     </ul>
-
-                    @*<label class="font-weight-bold text-muted"><u>Order Details:</u></label>*@
                     <div class="tab-content">
                         <div class="tab-pane active" id="orders">
                             <div class="d-flex justify-content-between">
                                 <div>
                                     <label class="mr-3">Total Orders:</label>
-                                    <b class="text-primary h3">@Model.TotalOrderCount</b>
+                                    <span class="font-weight-bold text-primary h3">@Model.TotalOrderCount</span>
                                 </div>
                                 <div>
                                     <label class="mr-3">Delivered Orders:</label>
-                                    <b class="text-success h3">@Model.DeliveredOrderCount</b>
+                                    <span class="font-weight-bold text-success h3">@Model.DeliveredOrderCount</span>
                                 </div>
                                 <div>
                                     <label class="mr-3">Cancel Orders:</label>
-                                    <b class="text-danger h3">@Model.CancelOrderCount</b>
+                                    <span class="font-weight-bold text-danger h3">@Model.CancelOrderCount</span>
                                 </div>
                             </div>
                             <div style="height:500px;overflow:auto;" id="order-div">
@@ -129,7 +127,7 @@
                                                 count++;
                                                 <tr>
                                                     <td>@count</td>
-                                                    <td><b class="@item.StatusTextColor">@item.StatusText</b></td>
+                                                    <td><span class="font-weight-bold @item.StatusTextColor">@item.StatusText</span></td>
                                                     <td>@item.DateEncoded.ToString("dd-MMM-yyyy hh:mm tt")</td>
                                                     <td><a href="~/Cart/Details?id=@ShopNow.Helpers.AdminHelpers.ECodeLong(item.Id)"><span class="font-weight-bold">@item.OrderNumber</span></a></td>
                                                     <td>@item.ShopName</td>
@@ -154,7 +152,6 @@
                                 </table>
                             </div>
                         </div>
-
                         <div class="tab-pane fade" id="wallet">
                             <table class="table table-striped table-borderless">
                                 <thead>
@@ -191,7 +188,6 @@
                                 </tbody>
                             </table>
                         </div>
-
                         <div class="tab-pane fade" id="address">
                             <table class="table table-striped table-borderless">
                                 <thead>
@@ -288,7 +284,7 @@
                     <h5 class="text-success">Save Address Audio Path</h5>
                     <hr />
                     <h5>@Model.PhoneNumber</h5>
-                    <p id="address-text"></p>
+                    <span id="address-text"></span>
                     <div class="form-group">
                         <label class="font-weight-bold text-secondary">Upload Audio</label>
                         <input type="file" name="AudioUpload" class="form-control" required />
