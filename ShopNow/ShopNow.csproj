@@ -3410,6 +3410,7 @@
     <Content Include="Views\PushNotification\List.cshtml" />
     <Content Include="Views\Wallet\Index.cshtml" />
     <Content Include="Views\Shop\DeletedShop.cshtml" />
+    <Content Include="Views\Wallet\DispatchReport.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
