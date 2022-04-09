@@ -61,4 +61,20 @@ namespace ShopNow.ViewModels
         public DateTime? DateStart { get; set; }
         public DateTime? DateEnd { get; set; }
     }
+
+    public class WalletDispatchReportViewModel
+    {
+        public List<ListItem> ListItems { get; set; }
+        public class ListItem
+        {
+            public DateTime? DateEncoded { get; set; }
+            public string CustomerName { get; set; }
+            public string CustomerPhoneNumber { get; set; }
+            public string Description { get; set; }
+            public double WalletAmountSent { get; set; }
+            public double WalletAmountUsed { get; set; }
+            public double TotalWalletBalance { get; set; }
+            public DateTime? ExpiryDate { get; set; }
+        }
+    }
 }

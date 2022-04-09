@@ -2306,8 +2306,8 @@ namespace ShopNow.Controllers
                 Helpers.PushNotification.SendbydeviceId($"Your order on shop({order.ShopName}) has been delivered by delivery partner {order.DeliveryBoyName}.", "Snowch", "Orderstatus", "", fcmtocken.ToString(), "tune1.caf", "liveorder");
 
                 //For Successfull First Order
-                bool orderExist = db.Orders.Any(i => i.CustomerId == order.CustomerId);
-                if (!orderExist)
+                var orderExist = db.Orders.Where(i => i.CustomerId == order.CustomerId && i.Status == 6).ToList();
+                if (orderExist.Count() == 1)
                 {
                     string notificationmessage = "";
                     var customerWalletHistory = new CustomerWalletHistory
@@ -8301,8 +8301,8 @@ namespace ShopNow.Controllers
 
         public JsonResult TestFirstOrder(int customerid=0)
         {
-            bool orderExist = db.Orders.Any(i => i.CustomerId == customerid && i.Status == 6);
-            if (!orderExist)
+            var orderExist = db.Orders.Where(i => i.CustomerId == customerid && i.Status == 6).ToList();
+            if (orderExist.Count() == 1)
             {
                 string notificationmessage = "";
                 var customerWalletHistory = new CustomerWalletHistory
@@ -8315,8 +8315,16 @@ namespace ShopNow.Controllers
                     Status = 0,
                     ExpiryDate = DateTime.Now.AddDays(20)
                 };
-                //db.CustomerWalletHistories.Add(customerWalletHistory);
-                //db.SaveChanges();
+                db.CustomerWalletHistories.Add(customerWalletHistory);
+                db.SaveChanges();
+
+                var newcustomer = db.Customers.FirstOrDefault(i => i.Id == customerid);
+                if (newcustomer != null)
+                {
+                    newcustomer.WalletAmount += 100;
+                    db.Entry(newcustomer).State = System.Data.Entity.EntityState.Modified;
+                    db.SaveChanges();
+                }
 
                 var customer = db.Customers.FirstOrDefault(i => i.Id == customerid);
                 if (!string.IsNullOrEmpty(customer.Name) && customer.Name != "Null")

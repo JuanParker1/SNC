@@ -1357,8 +1357,8 @@ namespace ShopNow.Controllers
                 Helpers.PushNotification.SendbydeviceId($"Your order on shop({ order.ShopName}) has been delivered by delivery partner { order.DeliveryBoyName}.", "Snowch", "Orderstatus", "", fcmtocken, "tune1.caf", "liveorder");
 
                 //For Successfull First Order
-                bool orderExist = db.Orders.Any(i => i.CustomerId == order.CustomerId);
-                if (!orderExist)
+                var orderExist = db.Orders.Where(i => i.CustomerId == order.CustomerId && i.Status == 6).ToList();
+                if (orderExist.Count() == 1)
                 {
                     string notificationmessage = "";
                     var customerWalletHistory = new CustomerWalletHistory
