@@ -184,9 +184,9 @@ namespace ShopNow.Controllers
                 db.SaveChanges();
 
                 if (!string.IsNullOrEmpty(item.Name) && item.Name != "Null")
-                    message = $"Hi {item.Name}, Rs.{wallet.Amount} 💵 has been added to your wallet. (With Expiry 🗓️ {expiryDate.Value.ToString("dd-MMM-yyyy")}). Happy Shopping 😎.";
+                    message = $"Hi {item.Name}, Rs.{wallet.Amount} 💵 has been added to your wallet. (Expires 🗓️ {expiryDate.Value.ToString("dd-MMM-yyyy")}). Happy Shopping 😎.";
                 else
-                  message=  $"Hi, Rs.{wallet.Amount} 💵 has been added to your wallet. (With Expiry 🗓️ {expiryDate.Value.ToString("dd-MMM-yyyy")}). Happy Shopping 😎.";
+                  message=  $"Hi, Rs.{wallet.Amount} 💵 has been added to your wallet. (Expires 🗓️ {expiryDate.Value.ToString("dd-MMM-yyyy")}). Happy Shopping 😎.";
 
                 if (!string.IsNullOrEmpty(item.FcmToken) && item.FcmToken != "NULL")
                     Helpers.PushNotification.SendbydeviceId(message, $"You have won Rs.{wallet.Amount} 💵 in wallet.", "SpecialOffer", "", item.FcmToken, "tune2.caf", "mywallet");

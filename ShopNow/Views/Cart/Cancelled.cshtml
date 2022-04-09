@@ -10,6 +10,13 @@
     table > thead > tr > th:first-child {
         padding: 12px 5px;
     }
+    .grid-mvc {
+        overflow-x: scroll;
+    }
+
+        .grid-mvc table {
+            width: auto;
+        }
 </style>
 <div class="container-fluid">
     <form method="get" action="/Cart/Cancelled">
@@ -49,6 +56,7 @@
                    columns.Add(c => c.DateEncoded).Titled("Order Time").Filterable(true).SetWidth(10);
                    columns.Add(c => c.ShopCancelledTime).Titled("Cancelled Time").Filterable(true).SetWidth(30);
                    columns.Add(c => c.ShopCancelPeriod).Titled("Shop Cancel Period").Filterable(true).SetWidth(40);
+                   columns.Add(c => c.CancelledRemark).Titled("Cancelled Remarks").Filterable(true).SetWidth(40);
                    columns.Add().Encoded(false).Sanitized(false)
                   .RenderValueAs(o => Html.ActionLink("View", "Edit", new { OrderNumber = o.OrderNumber, id = @ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id) }, new { @class = "btn btn-sm btn-info btn-block mt-2", }).ToHtmlString()).Titled("Action").SetWidth(10);
                }).WithPaging(20).Sortable(true)

@@ -2250,7 +2250,7 @@ namespace ShopNow.Controllers
                             Amount = referalAmount,
                             CustomerId = referralCustomer.Id,
                             DateEncoded = DateTime.Now,
-                            Description = $"Received from referral(#{customerDetails.PhoneNumber})",
+                            Description = $"Received from referral(#{referralCustomer.PhoneNumber})",
                             Type = 1
                         };
                         db.CustomerWalletHistories.Add(walletHistory);
@@ -2303,7 +2303,40 @@ namespace ShopNow.Controllers
 
                 string fcmtocken = customerDetails.FcmTocken ?? "";
 
-                Helpers.PushNotification.SendbydeviceId($"Your order on shop({order.ShopName}) has been delivered by delivery partner {order.DeliveryBoyName}.", "Snowch", "Orderstatus", "", fcmtocken.ToString(),"tune1.caf", "liveorder");
+                Helpers.PushNotification.SendbydeviceId($"Your order on shop({order.ShopName}) has been delivered by delivery partner {order.DeliveryBoyName}.", "Snowch", "Orderstatus", "", fcmtocken.ToString(), "tune1.caf", "liveorder");
+
+                //For Successfull First Order
+                bool orderExist = db.Orders.Any(i => i.CustomerId == order.CustomerId);
+                if (!orderExist)
+                {
+                    string notificationmessage = "";
+                    var customerWalletHistory = new CustomerWalletHistory
+                    {
+                        Amount = 100,
+                        CustomerId = order.CustomerId,
+                        DateEncoded = DateTime.Now,
+                        Description = "Successful first order",
+                        Type = 1,
+                        Status = 0,
+                        ExpiryDate = DateTime.Now.AddDays(20)
+                    };
+                    db.CustomerWalletHistories.Add(customerWalletHistory);
+                    db.SaveChanges();
+
+                    var newcustomer = db.Customers.FirstOrDefault(i => i.Id == order.CustomerId);
+                    if (newcustomer != null)
+                    {
+                        newcustomer.WalletAmount += 100;
+                        db.Entry(newcustomer).State = System.Data.Entity.EntityState.Modified;
+                        db.SaveChanges();
+                    }
+
+                    if (!string.IsNullOrEmpty(customerDetails.Name) && customerDetails.Name != "Null")
+                        notificationmessage = $"Hi {customerDetails.Name}, Rs.100 💵 has been added to your wallet for Successful first order (Expires 🗓️ {customerWalletHistory.ExpiryDate.Value.ToString("dd-MMM-yyyy")}). Happy Snowching 😎.";
+                    else
+                        notificationmessage = $"Hi, Rs.100 💵 has been added to your wallet for Successful first order (Expires 🗓️ {customerWalletHistory.ExpiryDate.Value.ToString("dd-MMM-yyyy")}). Happy Snowching 😎.";
+                    Helpers.PushNotification.SendbydeviceId(notificationmessage, "You won 100rs 💵 for Snowching.", "Orderstatus", "", fcmtocken.ToString(), "tune1.caf", "mywallet");
+                }
             }
             return Json(new { message = "Successfully DelivaryBoy Delivered!" }, JsonRequestBehavior.AllowGet);
         }
@@ -7742,7 +7775,7 @@ namespace ShopNow.Controllers
         //test apis
         public JsonResult SendTestNotification(string deviceId = "", string title = "", string body = "", string imagepath="")
         {
-            Helpers.PushNotification.SendbydeviceId("Hi Beno, Rs.100 💵 has been added to your wallet. (With Expiry 🗓️ 20-April-2022). Happy Shopping.😎", "You have won Rs.100 💵 in wallet.", "SpecialOffer",imagepath, deviceId, "mywallet");
+            Helpers.PushNotification.SendbydeviceId("Hi Beno, Rs.100 💵 has been added to your wallet. (With Expiry 🗓️ 20-April-2022). Happy Shopping.😎", "You have won Rs.100 💵 in wallet.", "SpecialOffer",imagepath, deviceId,"", "viewallshop", "0");
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
@@ -8262,6 +8295,35 @@ namespace ShopNow.Controllers
                     db.Entry(customerWallet).State = System.Data.Entity.EntityState.Modified;
                     db.SaveChanges();
                 }
+            }
+            return Json(true, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult TestFirstOrder(int customerid=0)
+        {
+            bool orderExist = db.Orders.Any(i => i.CustomerId == customerid && i.Status == 6);
+            if (!orderExist)
+            {
+                string notificationmessage = "";
+                var customerWalletHistory = new CustomerWalletHistory
+                {
+                    Amount = 100,
+                    CustomerId = customerid,
+                    DateEncoded = DateTime.Now,
+                    Description = "Successful first order",
+                    Type = 1,
+                    Status = 0,
+                    ExpiryDate = DateTime.Now.AddDays(20)
+                };
+                //db.CustomerWalletHistories.Add(customerWalletHistory);
+                //db.SaveChanges();
+
+                var customer = db.Customers.FirstOrDefault(i => i.Id == customerid);
+                if (!string.IsNullOrEmpty(customer.Name) && customer.Name != "Null")
+                    notificationmessage = $"Hi {customer.Name}, Rs.100 💵 has been added to your wallet for Successful first order (Expires 🗓️ {customerWalletHistory.ExpiryDate.Value.ToString("dd-MMM-yyyy")}). Happy Snowching 😎.";
+                else
+                    notificationmessage = $"Hi, Rs.100 💵 has been added to your wallet for Successful first order (Expires 🗓️ {customerWalletHistory.ExpiryDate.Value.ToString("dd-MMM-yyyy")}). Happy Snowching 😎.";
+                Helpers.PushNotification.SendbydeviceId(notificationmessage, "You won 100rs 💵 for Snowching.", "Orderstatus", "", customer.FcmTocken.ToString(), "tune1.caf", "mywallet");
             }
             return Json(true, JsonRequestBehavior.AllowGet);
         }

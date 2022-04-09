@@ -24,7 +24,7 @@ namespace ShopNow.Helpers
                 WebRequest tRequest = WebRequest.Create("https://fcm.googleapis.com/fcm/send");
                 tRequest.Method = "post";
                 tRequest.ContentType = "application/json";
-                var data = new
+                var notificationdata = new
                 {
                     to = deviceId,
                     notification = new
@@ -33,16 +33,18 @@ namespace ShopNow.Helpers
                         body = body,
                         title = title,
                         image = imgPath,
-                        sound = sound
+                        sound = sound,
+                        
                     },
                     data = new
                     {
+                        queryParams ="",
                         type = type,
                         Shopcategories = shopcategories
                     }
                 };
                 var serializer = new JavaScriptSerializer();
-                var json = serializer.Serialize(data);
+                var json = serializer.Serialize(notificationdata);
                 Byte[] byteArray = Encoding.UTF8.GetBytes(json);
                 tRequest.Headers.Add(string.Format("Authorization: key={0}", applicationID));
                 tRequest.Headers.Add(string.Format("Sender: id={0}", senderId));
@@ -191,6 +193,7 @@ namespace ShopNow.Helpers
                     },
                     data = new
                     {
+                        queryParams = "",
                         type = type,
                         Shopcategories = shopcategories
                     }

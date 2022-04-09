@@ -29,6 +29,7 @@ namespace ShopNow.ViewModels
             public double DeliveryChargePaidToDeliveryBoy { get; set; }
             public double DeliveryChargeProfit { get; set; }
             public double AmountProfit { get; set; }
+            public double WalletUsed { get; set; }
         }
     }
 }
