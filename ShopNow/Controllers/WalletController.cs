@@ -196,6 +196,7 @@ namespace ShopNow.Controllers
             }
         }
 
+        [AccessPolicy(PageCode = "SNCWDR343")]
         public ActionResult DispatchReport()
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
