@@ -116,14 +116,18 @@ namespace ShopNow.Controllers
             model.ListItems = db.Customers
                 .Join(db.CustomerWalletHistories.Where(i=> i.Status == 0),c=> c.Id, cw=> cw.CustomerId,(c,cw)=> new {c,cw})
                 .GroupJoin(db.Wallets.Where(i => i.Status == 0), c=> c.cw.WalletId, w=> w.Id, (c,w)=> new {c,w})
+                .AsEnumerable().GroupBy(i=> i.c.c.Id)
                 .Select(i => new WalletDispatchReportViewModel.ListItem
                 {
-                    DateEncoded = i.c.cw.DateEncoded,
-                    CustomerName = i.c.c.Name,
-                    CustomerPhoneNumber = i.c.c.PhoneNumber,
-                    Description = i.c.cw.Description,
-
-                }).ToList();
+                    DateEncoded = i.FirstOrDefault().c.cw.DateEncoded,
+                    CustomerName = i.FirstOrDefault().c.c.Name,
+                    CustomerPhoneNumber = i.FirstOrDefault().c.c.PhoneNumber,
+                    //  Description =  i.FirstOrDefault().w.FirstOrDefault().ReferenceCode != null ?i.FirstOrDefault().w.FirstOrDefault().ReferenceCode:"N/A",
+                    WalletAmountSent = i.Any() ? i.FirstOrDefault().c.cw.Type == 1 ? i.Sum(m => m.c.cw.Amount) : 0 : 0,
+                    WalletAmountUsed = i.Any() ? i.FirstOrDefault().c.cw.Type == 2 ? i.Sum(m => m.c.cw.Amount) : 0 : 0,
+                    TotalWalletBalance = i.FirstOrDefault().c.c.WalletAmount,
+                    ExpiryDate = i.FirstOrDefault().c.cw.ExpiryDate
+                }).OrderByDescending(i=> i.DateEncoded).ToList();
             return View(model);
         }
         public List<int> GetCustomerList(int shopCategoryId,DateTime? startDate,DateTime? endDate, int lastdays=0,int month=0)
