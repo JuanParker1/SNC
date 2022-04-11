@@ -6,6 +6,19 @@
 <title>ShopNow | @ViewBag.Title</title>
 <link href="~/Content/Gridmvc.css" rel="stylesheet" />
 <script src="~/Scripts/gridmvc.js"></script>
+<style>
+    .grid-mvc {
+        overflow-x: scroll;
+    }
+
+        .grid-mvc table {
+            width: auto;
+        }
+
+    table > thead > tr > th:first-child {
+        padding: 12px 5px;
+    }
+</style>
 <div class="container-fluid">
     <div class="row mt-3">
         <div class="col-md-12">
@@ -16,12 +29,14 @@
                     </div>
                     @Html.Grid(Model.ListItems).Columns(columns =>
                {
-                   columns.Add(s => s.DateEncoded).Titled("Date").Filterable(true).SetWidth(10).Format("{0:dd-MMM-yyyy}");
+                   columns.Add(s => s.SiNo).Titled("Si No").Filterable(true).SetWidth(10);
+                   columns.Add(s => s.DateEncoded).Titled("Created Date").Filterable(true).SetWidth(10).Format("{0:dd-MMM-yyyy}");
                    columns.Add(s => s.CustomerName).Titled("Customer Name").Filterable(true).SetWidth(10);
                    columns.Add(s => s.CustomerPhoneNumber).Titled("Customer PhoneNo.").Filterable(true).SetWidth(10);
-                   //columns.Add(s => s.Description).Titled("Description").Filterable(true).SetWidth(10);
-                   columns.Add(s => s.WalletAmountSent).Titled("WalletAmount Sent").Filterable(true).SetWidth(10);
-                   columns.Add(s => s.WalletAmountUsed).Titled("WalletAmount Used").Filterable(true).SetWidth(10);
+                   columns.Add(s => s.Title).Titled("Title").Filterable(true).SetWidth(10);
+                   columns.Add(s => s.Description).Titled("Description").Filterable(true).SetWidth(10);
+                   columns.Add(s => s.WalletAmountSent).Titled("Wallet Amount Sent").Filterable(true).SetWidth(10);
+                   columns.Add(s => s.WalletAmountUsed).Titled("Wallet Amount Used").Filterable(true).SetWidth(10);
                    columns.Add(s => s.ExpiryDate).Titled("Expirty Date").Filterable(true).SetWidth(10).Format("{0:dd-MMM-yyyy}");
                    columns.Add(s => s.TotalWalletBalance).Titled("Total Wallet Balance").Filterable(true).SetWidth(10);
                }).WithPaging(20).Sortable(true)

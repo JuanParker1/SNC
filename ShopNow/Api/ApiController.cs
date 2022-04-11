@@ -8335,5 +8335,18 @@ namespace ShopNow.Controllers
             }
             return Json(true, JsonRequestBehavior.AllowGet);
         }
+
+        public JsonResult UpdateReferalExpiryDate()
+        {
+            var cwhList = db.CustomerWalletHistories.Where(i => i.Amount == 20 && i.Type == 1).ToList();
+            foreach (var item in cwhList)
+            {
+                var cwh = db.CustomerWalletHistories.FirstOrDefault(i => i.Id == item.Id);
+                cwh.ExpiryDate = cwh.DateEncoded.Value.AddDays(60);
+                db.Entry(cwh).State = EntityState.Modified;
+                db.SaveChanges();
+            }
+            return Json(true, JsonRequestBehavior.AllowGet);
+        }
     }
 }

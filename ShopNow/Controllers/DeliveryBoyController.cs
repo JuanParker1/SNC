@@ -680,6 +680,15 @@ namespace ShopNow.Controllers
                     db.Entry(deliveryCharge).State = System.Data.Entity.EntityState.Modified;
                     db.SaveChanges();
                 }
+
+                var deliveryChargeSpecial = db.DeliveryCharges.FirstOrDefault(i => i.Status == 0 && i.TireType == 1 && i.Type == 1 && i.VehicleType == 1);
+                if (deliveryChargeSpecial != null)
+                {
+                    deliveryChargeSpecial.ChargeUpto5Km = 40 + ((drp.Percentage / 100) * 40);
+                    deliveryChargeSpecial.ChargePerKm = 8 + ((drp.Percentage / 100) * 8);
+                    db.Entry(deliveryChargeSpecial).State = System.Data.Entity.EntityState.Modified;
+                    db.SaveChanges();
+                }
             }
 
             return Json(new { message = message }, JsonRequestBehavior.AllowGet);

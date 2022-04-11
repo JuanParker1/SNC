@@ -111,29 +111,6 @@ namespace ShopNow.Controllers
             return RedirectToAction("Index");
         }
 
-
-        public ActionResult DispatchReport()
-        {
-            var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
-            ViewBag.Name = user.Name;
-            var model = new WalletDispatchReportViewModel();
-            model.ListItems = db.Customers
-                .Join(db.CustomerWalletHistories.Where(i=> i.Status == 0),c=> c.Id, cw=> cw.CustomerId,(c,cw)=> new {c,cw})
-                .GroupJoin(db.Wallets.Where(i => i.Status == 0), c=> c.cw.WalletId, w=> w.Id, (c,w)=> new {c,w})
-                .AsEnumerable().GroupBy(i=> i.c.c.Id)
-                .Select(i => new WalletDispatchReportViewModel.ListItem
-                {
-                    DateEncoded = i.FirstOrDefault().c.cw.DateEncoded,
-                    CustomerName = i.FirstOrDefault().c.c.Name,
-                    CustomerPhoneNumber = i.FirstOrDefault().c.c.PhoneNumber,
-                    //  Description =  i.FirstOrDefault().w.FirstOrDefault().ReferenceCode != null ?i.FirstOrDefault().w.FirstOrDefault().ReferenceCode:"N/A",
-                    WalletAmountSent = i.Any() ? i.FirstOrDefault().c.cw.Type == 1 ? i.Sum(m => m.c.cw.Amount) : 0 : 0,
-                    WalletAmountUsed = i.Any() ? i.FirstOrDefault().c.cw.Type == 2 ? i.Sum(m => m.c.cw.Amount) : 0 : 0,
-                    TotalWalletBalance = i.FirstOrDefault().c.c.WalletAmount,
-                    ExpiryDate = i.FirstOrDefault().c.cw.ExpiryDate
-                }).OrderByDescending(i=> i.DateEncoded).ToList();
-            return View(model);
-        }
         public List<int> GetCustomerList(int shopCategoryId,DateTime? startDate,DateTime? endDate, int lastdays=0,int month=0)
         {
             var allOrders = db.Orders.Where(i => i.Status == 6 && (lastdays != 0 ? (DbFunctions.TruncateTime(DbFunctions.AddDays(DateTime.Now, lastdays)) <= DbFunctions.TruncateTime(i.DateEncoded)) : true) && (month != 0 ? i.DateEncoded.Month == month : true) && ((startDate != null && endDate != null) ? (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(startDate.Value) && DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(endDate.Value)) : true))
@@ -217,6 +194,46 @@ namespace ShopNow.Controllers
                 if (!string.IsNullOrEmpty(item.FcmToken) && item.FcmToken != "NULL")
                     Helpers.PushNotification.SendbydeviceId(message, $"You have won Rs.{wallet.Amount} 💵 in wallet.", "SpecialOffer", "", item.FcmToken, "tune2.caf", "mywallet");
             }
+        }
+
+        public ActionResult DispatchReport()
+        {
+            var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
+            ViewBag.Name = user.Name;
+            var model = new WalletDispatchReportViewModel();
+            model.ListItems = db.Customers
+                .Join(db.CustomerWalletHistories.Where(i => i.Status == 0 && i.Type == 1), c => c.Id, cw => cw.CustomerId, (c, cw) => new { c, cw })
+                .GroupJoin(db.Wallets, c => c.cw.WalletId, w => w.Id, (c, w) => new { c, w })
+                .AsEnumerable()
+                .Select(i => new WalletDispatchReportViewModel.ListItem
+                {
+                    CustomerName = i.c.c.Name,
+                    CustomerPhoneNumber = i.c.c.PhoneNumber,
+                    DateEncoded = i.c.cw.DateEncoded,
+                    Description = i.c.cw.Description,
+                    ExpiryDate = i.c.cw.ExpiryDate,
+                    Title = i.w.Any() ? i.w.FirstOrDefault().ReferenceCode : "N/A",
+                    //TotalWalletBalance = i.c.cw.Amount - GetWalletAmountUsed(i.c.cw.DateEncoded, i.c.cw.ExpiryDate, i.c.c.Id),
+                    TotalWalletBalance = i.c.cw.Amount - (GetWalletAmountUsed(i.c.cw.DateEncoded, i.c.cw.ExpiryDate, i.c.c.Id) < i.c.cw.Amount ? GetWalletAmountUsed(i.c.cw.DateEncoded, i.c.cw.ExpiryDate, i.c.c.Id) : i.c.cw.Amount),
+                    WalletAmountSent = i.c.cw.Amount,
+                    WalletAmountUsed = GetWalletAmountUsed(i.c.cw.DateEncoded, i.c.cw.ExpiryDate, i.c.c.Id) < i.c.cw.Amount ? GetWalletAmountUsed(i.c.cw.DateEncoded, i.c.cw.ExpiryDate, i.c.c.Id) : i.c.cw.Amount
+                }).OrderBy(i => i.DateEncoded).ToList();
+            int counter = 1;
+            model.ListItems.ForEach(x => x.SiNo = counter++);
+            return View(model);
+        }
+
+        public double GetWalletAmountSent(int id)
+        {
+            var customerWallet = db.CustomerWalletHistories.FirstOrDefault(i => i.Id == id && i.Type == 1);
+            return customerWallet != null ? customerWallet.Amount : 0;
+        }
+
+        public double GetWalletAmountUsed(DateTime? startDate, DateTime? endDate, int customerId)
+        {
+            var orders = db.Orders.Where(i => i.CustomerId == customerId && i.Status == 6 && ((startDate != null && endDate != null) ? (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(startDate.Value) && DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(endDate.Value)) : true))
+               .Select(i => i.WalletAmount).ToList();
+            return orders != null ? orders.Sum(i => i) : 0;
         }
     }
 }
