@@ -308,6 +308,7 @@ namespace ShopNow.Controllers
             return Json(new { IsAdded = IsAdded, message = message, message1 = message1 }, JsonRequestBehavior.AllowGet);
         }
 
+        [AccessPolicy(PageCode = "SNCCAW341")]
         public JsonResult AddWalletAmount(int Id, double walletamount, string description, DateTime? expiryDate)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
