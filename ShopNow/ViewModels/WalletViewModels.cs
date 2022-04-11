@@ -67,9 +67,11 @@ namespace ShopNow.ViewModels
         public List<ListItem> ListItems { get; set; }
         public class ListItem
         {
+            public int SiNo { get; set; }
             public DateTime? DateEncoded { get; set; }
             public string CustomerName { get; set; }
             public string CustomerPhoneNumber { get; set; }
+            public string Title { get; set; }
             public string Description { get; set; }
             public double WalletAmountSent { get; set; }
             public double WalletAmountUsed { get; set; }
