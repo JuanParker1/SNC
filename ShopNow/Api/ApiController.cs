@@ -111,6 +111,10 @@ namespace ShopNow.Controllers
                 config.CreateMap<Product, MedicalProductDetailsApiViewModel>();
                 config.CreateMap<CustomerBankDetailsCreateViewModel, CustomerBankDetail>();
                 config.CreateMap<SavePrescriptionViewModel, CustomerGroceryUpload>();
+
+                config.CreateMap<Product, Product>();
+                config.CreateMap<ShopDishAddOn, ShopDishAddOn>();
+
             });
 
             _mapper = _mapperConfiguration.CreateMapper();
@@ -8361,6 +8365,40 @@ namespace ShopNow.Controllers
                 cwh.ExpiryDate = cwh.DateEncoded.Value.AddDays(60);
                 db.Entry(cwh).State = EntityState.Modified;
                 db.SaveChanges();
+            }
+            return Json(true, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult AddDominosTVLProducts()
+        {
+            var NglDominosList = db.Products.Where(i => i.ShopId == 243 && i.Status == 0).ToList();
+            foreach (var item in NglDominosList)
+            {
+                var nglProduct = db.Products.FirstOrDefault(i => i.Id == item.Id);
+                var tvlProduct = _mapper.Map<Product, Product>(nglProduct);
+                tvlProduct.ShopId = 264;
+                tvlProduct.DateEncoded = DateTime.Now;
+                tvlProduct.DateUpdated = DateTime.Now;
+                tvlProduct.MappedDate = DateTime.Now;
+                tvlProduct.CreatedBy = "Admin";
+                tvlProduct.UpdatedBy = "Admin";
+                db.Products.Add(tvlProduct);
+                db.SaveChanges();
+
+                var nglProductDishAddon = db.ShopDishAddOns.Where(i => i.ProductId == item.Id).ToList();
+                foreach (var addon in nglProductDishAddon)
+                {
+                    var nglAddon = db.ShopDishAddOns.FirstOrDefault(i => i.Id == addon.Id);
+                    var tvlAddon = _mapper.Map<ShopDishAddOn, ShopDishAddOn>(nglAddon);
+                    tvlAddon.DateEncoded = DateTime.Now;
+                    tvlAddon.DateUpdated = DateTime.Now;
+                    tvlAddon.CreatedBy = "Admin";
+                    tvlAddon.UpdatedBy = "Admin";
+                    tvlAddon.ShopId = 264;
+                    tvlAddon.ProductId = tvlProduct.Id;
+                    db.ShopDishAddOns.Add(tvlAddon);
+                    db.SaveChanges();
+                }
             }
             return Json(true, JsonRequestBehavior.AllowGet);
         }
