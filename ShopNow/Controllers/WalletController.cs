@@ -1,4 +1,5 @@
-﻿using ShopNow.Models;
+﻿using ShopNow.Filters;
+using ShopNow.Models;
 using ShopNow.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -12,6 +13,8 @@ namespace ShopNow.Controllers
     public class WalletController : Controller
     {
         private sncEntities db = new sncEntities();
+
+        [AccessPolicy(PageCode = "SNCWAI342")]
         public ActionResult Index()
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
@@ -193,6 +196,7 @@ namespace ShopNow.Controllers
             }
         }
 
+        [AccessPolicy(PageCode = "SNCWDR343")]
         public ActionResult DispatchReport()
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
