@@ -1,0 +1,73 @@
+﻿@model IEnumerable<ShopNow.ViewModels.ParcelDropDeliveryListViewModel.ParcelDropDeliveryList>
+@using GridMvc.Html
+@{
+    ViewBag.Title = "Parcel Drop Delivery Charge List";
+}
+<title>ShopNow | @ViewBag.Title</title>
+<link href="~/Content/Gridmvc.css" rel="stylesheet" />
+<script src="~/Scripts/gridmvc.js"></script>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-6">
+            <h5 class="text-success text-uppercase">Parcel Drop Delivery Charge Setting List</h5>
+        </div>
+        <div class="col-md-6 text-right">
+            <a href="~/Bill/ParcelDropDeliveryCharge" class="btn btn-sm btn-primary"><i class="fa fa-plus"></i> New Entry</a>
+        </div>
+    </div>
+    <div class="row my-3">
+        <div class="col-md-12">
+            <div class="card shadow">
+                <div class="card-body">
+                    @Html.Grid(Model).Columns(columns =>
+               {
+                   columns.Add(p => p.TypeText).Titled("Delivery Mode").Filterable(true).SetWidth(10);
+                   columns.Add(p => p.VehicleTypeText).Titled("Vehicle Type").Filterable(true).SetWidth(10);
+                   columns.Add(b => b.ChargeUpto5Kms).Titled("Upto 5Km").Filterable(true).SetWidth(10);
+                   columns.Add(b => b.ChargePerKm).Titled("After 5 (Rate per Km)").Filterable(true).SetWidth(10);
+                   columns.Add(b => b.ChargeAbove15Kms).Titled("Above 15Km").Filterable(true).SetWidth(10);
+                      columns.Add().Encoded(false).Sanitized(false).Titled("Action").SetWidth(15)
+                 .RenderValueAs(o => @<div>
+                        <a href="~/Bill/ParcelDropDeliveryUpdate?Id=@ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id)" class="text-info mr-5"><i class="fa fa-edit fa-lg"></i></a>
+                        <a href="javascript:void(0)" data-id=@o.Id class="text-danger btnDelete"><i class="fa fa-trash fa-lg"></i></a>
+                    </div>);
+}).WithPaging(10).Sortable(true)
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+    <script src="~/Scripts/sweetalert/sweetalert.min.js"></script>
+    <link href="~/Content/sweetalert/sweetalert.css" rel="stylesheet" />
+    <script>
+        $(document).ready(function () {
+            $(".btnDelete").click(function () {
+                var Id = $(this).attr('data-id');
+                swal({
+                    title: "Are you sure want to delete?",
+                    text: "You will not be able to recover this file!",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "Yes, Delete it!",
+                    cancelButtonText: "No, cancel",
+                    closeOnConfirm: false,
+                    closeOnCancel: true
+                },
+                    function (isConfirm) {
+                        if (isConfirm) {
+                            $.getJSON("/Bill/ParcelDropDeliveryDelete", { id: Id }, function (data) {
+                                if (data == true) {
+                                    window.location.reload();
+                                }
+                            });
+                        }
+                    }
+                );
+            });
+        });
+    </script>
+}

@@ -1,0 +1,182 @@
+﻿@model ShopNow.ViewModels.ParcelDropDeliveryEditViewModel
+@{
+    ViewBag.Title = "Parcel Drop Delivery Charge";
+}
+<title>ShopNow | @ViewBag.Title</title>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-6">
+            <h4 class="text-success"> Parcel Drop Delivery Charge Settings Update</h4>
+        </div>
+        <div class="col-md-6 text-right">
+            <a href="~/Bill/ParcelDropDeliveryList" class="btn btn-primary btn-sm"><i class="fa fa-bars"></i> Parcel Drop Delivery Charge List</a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card shadow">
+                <div class="card-body">
+                    @using (Html.BeginForm("ParcelDropDeliveryUpdate", "Bill", FormMethod.Post, new { id = "ParcelUpdateForm" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="Id" id="Id" value="@Model.Id" />
+                        <input type="hidden" name="Type" id="Type" value="@Model.Type" />
+                        <input type="hidden" name="VehicleType" id="VehicleType" value="@Model.VehicleType" />
+                        <div class="row">
+                            <div class="col-md-12 mt-3">
+                                <div class="row">
+                                    <div class="col-md-2 text-center text-theme_dark">
+                                        <h5>Delivery Mode</h5>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-check-inline mr-3">
+                                            <label class="form-check-label">
+                                                <input type="radio" class="form-check-input" name="TypeRadio" value="0" disabled> General
+                                            </label>
+                                        </div>
+                                        <div class="form-check-inline">
+                                            <label class="form-check-label">
+                                                <input type="radio" class="form-check-input" name="TypeRadio" value="1" disabled> Special
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row mt-3">
+                                    <div class="col-md-2 text-center text-theme_dark">
+                                        <h6>Vehicle Type</h6>
+                                    </div>
+                                    <div class="col-md-8">
+                                        @if (Model.VehicleType == 1)
+                                        {
+                                            <label>Bike</label>}
+                                        @if (Model.VehicleType == 2)
+                                        {
+                                            <label> Carrier Bike</label>}
+                                        @if (Model.VehicleType == 3)
+                                        {
+                                            <label> Auto</label>}
+                                    </div>
+                                </div>
+                                <hr class="sn_theme-gradient" />
+                            </div>
+                        </div>
+                        <div id="GeneralEntry">
+                            <div class="row">
+                                <h5 class="col-md-12 text-theme my-3">General Delivery Charge</h5>
+                                <div class="col-md-12">
+                                    <div class="form-group row">
+                                        <div class="col-md-3 text-md-left">
+                                            <strong class="text-secondary">Rate upto 5 Km. <span class="text-danger">*</span></strong>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <input type="number" name="ChargeUpto5Kms" id="ChargeUpto5Kms" class="form-control" value="@Model.ChargeUpto5Kms" min="25" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-md-3 text-md-left">
+                                            <strong class="text-secondary">After 5 Km. (Rate per Km.) <span class="text-danger">*</span></strong>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <input type="number" name="ChargePerKm" id="ChargePerKm" class="form-control" value="@Model.ChargePerKm" min="5" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-md-3 text-md-left">
+                                            <strong class="text-secondary">Above 15Km. <span class="text-danger">*</span></strong>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <input type="number" name="ChargeAbove15Kms" id="ChargeAbove15Kms" class="form-control" value="@Model.ChargeAbove15Kms" min="5" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="d-none" id="SpecialEntry">
+                            <div class="row">
+                                <h5 class="col-md-12 text-theme my-3">Special Delivery Charge</h5>
+                                <div class="col-md-12">
+                                    <div class="form-group row">
+                                        <div class="col-md-3 text-md-left">
+                                            <strong class="text-secondary">Rate upto 5 Km. <span class="text-danger">*</span></strong>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <input type="number" name="ChargeUpto5Km1" id="ChargeUpto5Km1" class="form-control" value="@Model.ChargeUpto5Kms1" min="30" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-md-3 text-md-left">
+                                            <strong class="text-secondary">After 5 Km. (Rate per Km.) <span class="text-danger">*</span></strong>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <input type="number" name="ChargePerKm1" id="ChargePerKm1" class="form-control" value="@Model.ChargePerKm1" min="10" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-md-3 text-md-left">
+                                            <strong class="text-secondary">Above 15Km. <span class="text-danger">*</span></strong>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <input type="number" name="ChargeAbove15Kms1" id="ChargeAbove15Kms1" class="form-control" value="@Model.ChargeAbove15Kms1" min="5" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-2 my-2 mx-auto">
+                                <button type="button" class="btn btn-block btn-success" id="Update"><span class="glyphicon glyphicon-file"></span> Update</button>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+    <script src="~/Scripts/sweetalert/sweetalert.min.js"></script>
+    <link href="~/Content/sweetalert/sweetalert.css" rel="stylesheet" />
+    <script>
+        $(document).ready(function () {
+            jQuery(document).ready(function ($) {
+                var drs = $("#Type").val();
+                $("input[name=TypeRadio][value=" + drs + "]").attr('checked', 'checked');
+                if (drs == 0) {
+                    $("#GeneralEntry").removeClass("d-none");
+                    $("#SpecialEntry").addClass("d-none");
+                } else {
+                    $("#GeneralEntry").addClass("d-none");
+                    $("#SpecialEntry").removeClass("d-none");
+                }
+            });
+
+            $('#Update').on('click', function () {
+                var generalChargeUpto5Kms = $('#ChargeUpto5Kms').val();
+                var generalChargePerKm = $('#ChargePerKm').val();
+                var generalChargeAbove15Kms = $('#ChargeAbove15Kms').val();
+                var specialChargeUpto5Kms1 = $('#ChargeUpto5Kms1').val();
+                var specialChargePerKm1 = $('#ChargePerKm1').val();
+                var specialChargeAbove15Kms1 = $('#ChargeAbove15Kms1').val();
+                var type = $("#Type").val();
+                if (type == 0) {
+                    if (generalChargeUpto5Kms == null || generalChargePerKm == null || generalChargeAbove15Kms == null || generalChargeUpto5Kms == "" || generalChargePerKm == "" || generalChargeAbove15Kms == "") {
+                        swal("Notice!", "Please Enter General Delivery Charge Amount!", "warning");
+                    }
+                    else {
+                        $('#ParcelUpdateForm').submit();
+                    }
+                } else if (type == 1) {
+                    if (specialChargeUpto5Kms1 == null || specialChargePerKm1 == null || specialChargeAbove15Kms1 == null || specialChargeUpto5Kms1 == "" || specialChargePerKm1 == "" || specialChargeAbove15Kms1 == "") {
+                        swal("Notice!", "Please Enter Special Delivery Charge Amount!", "warning");
+                    }
+                    else {
+                        $('#ParcelUpdateForm').submit();
+                    }
+                }
+            });
+
+        });
+    </script>
+}
