@@ -1078,6 +1078,10 @@
           <Property Name="DeliverySlotType" Type="int" Nullable="false" />
           <Property Name="DeliveryRatePercentageId" Type="int" Nullable="false" />
           <Property Name="DeliveryRatePercentage" Type="float" Nullable="false" />
+          <Property Name="DeliveryChargeUpto5Km" Type="float" Nullable="false" />
+          <Property Name="DeliveryChargePerKm" Type="float" Nullable="false" />
+          <Property Name="DeliveryChargeAbove15Kms" Type="float" Nullable="false" />
+          <Property Name="DeliveryChargeRemarks" Type="nvarchar(max)" />
           <Property Name="Status" Type="int" Nullable="false" />
           <Property Name="DateEncoded" Type="datetime" Nullable="false" />
           <Property Name="DateUpdated" Type="datetime" Nullable="false" />
@@ -1127,6 +1131,22 @@
           <Property Name="DateUpdated" Type="datetime" Nullable="false" />
           <Property Name="CreatedBy" Type="nvarchar(max)" />
           <Property Name="UpdatedBy" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="ParcelDropDeliveryCharge">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ChargePerKm" Type="float" Nullable="false" />
+          <Property Name="ChargeUpto5Kms" Type="float" Nullable="false" />
+          <Property Name="ChargeAbove15Kms" Type="float" Nullable="false" />
+          <Property Name="Type" Type="int" Nullable="false" />
+          <Property Name="VehicleType" Type="int" Nullable="false" />
+          <Property Name="Status" Type="int" Nullable="false" />
+          <Property Name="DateEncoded" Type="datetime" Nullable="false" />
+          <Property Name="DateUpdated" Type="datetime" Nullable="false" />
+          <Property Name="CreatedBy" Type="nvarchar" MaxLength="250" />
+          <Property Name="UpdatedBy" Type="nvarchar" MaxLength="250" />
         </EntityType>
         <EntityType Name="Payments">
           <Key>
@@ -1915,6 +1935,7 @@
           <EntitySet Name="OtpVerifications" EntityType="Self.OtpVerifications" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Packages" EntityType="Self.Packages" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Pages" EntityType="Self.Pages" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ParcelDropDeliveryCharge" EntityType="Self.ParcelDropDeliveryCharge" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Payments" EntityType="Self.Payments" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PaymentsData" EntityType="Self.PaymentsData" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PincodeRates" EntityType="Self.PincodeRates" Schema="dbo" store:Type="Tables" />
@@ -3152,11 +3173,12 @@
           <EntitySet Name="PushNotifications" EntityType="sncModel.PushNotification" />
           <EntitySet Name="NotificationLogins" EntityType="sncModel.NotificationLogin" />
           <EntitySet Name="DeliveryRatePercentages" EntityType="sncModel.DeliveryRatePercentage" />
-          <EntitySet Name="Orders" EntityType="sncModel.Order" />
           <EntitySet Name="SpecialOfferCustomers" EntityType="sncModel.SpecialOfferCustomer" />
           <EntitySet Name="SpecialOffers" EntityType="sncModel.SpecialOffer" />
           <EntitySet Name="CustomerWalletHistories" EntityType="sncModel.CustomerWalletHistory" />
           <EntitySet Name="Wallets" EntityType="sncModel.Wallet" />
+          <EntitySet Name="Orders" EntityType="sncModel.Order" />
+          <EntitySet Name="ParcelDropDeliveryCharges" EntityType="sncModel.ParcelDropDeliveryCharge" />
         </EntityContainer>
         <ComplexType Name="GetDEliveryBoyList_Result">
           <Property Type="Int32" Name="Id" Nullable="false" />
@@ -3891,6 +3913,58 @@
           <Property Name="DateUpdated" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="UpdatedBy" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
         </EntityType>
+        <EntityType Name="SpecialOfferCustomer">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CustomerId" Type="Int32" Nullable="false" />
+          <Property Name="SpecialOfferId" Type="Int32" Nullable="false" />
+          <Property Name="DateEncoded" Type="DateTime" Nullable="false" Precision="3" />
+        </EntityType>
+        <EntityType Name="SpecialOffer">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ShopId" Type="Int32" Nullable="false" />
+          <Property Name="ProductId" Type="Int32" Nullable="false" />
+          <Property Name="Percentage" Type="Double" Nullable="false" />
+          <Property Name="Status" Type="Int32" Nullable="false" />
+          <Property Name="DateEncoded" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="EncodedBy" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="CustomerWalletHistory">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CustomerId" Type="Int32" Nullable="false" />
+          <Property Name="Amount" Type="Double" Nullable="false" />
+          <Property Name="Type" Type="Int32" Nullable="false" />
+          <Property Name="ExpiryDate" Type="DateTime" Precision="3" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="WalletId" Type="Int32" Nullable="false" />
+          <Property Name="Status" Type="Int32" Nullable="false" />
+          <Property Name="DateEncoded" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="Wallet">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ReferenceCode" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CustomerGroup" Type="Int32" Nullable="false" />
+          <Property Name="Amount" Type="Double" Nullable="false" />
+          <Property Name="ExpiryDate" Type="DateTime" Precision="3" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Month" Type="Int32" Nullable="false" />
+          <Property Name="DateStart" Type="DateTime" Precision="3" />
+          <Property Name="EndDate" Type="DateTime" Precision="3" />
+          <Property Name="Status" Type="Int32" Nullable="false" />
+          <Property Name="DateEncoded" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="EncodedBy" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+        </EntityType>
         <EntityType Name="Order">
           <Key>
             <PropertyRef Name="Id" />
@@ -3969,63 +4043,31 @@
           <Property Name="DeliverySlotType" Type="Int32" Nullable="false" />
           <Property Name="DeliveryRatePercentageId" Type="Int32" Nullable="false" />
           <Property Name="DeliveryRatePercentage" Type="Double" Nullable="false" />
+          <Property Name="DeliveryChargeUpto5Km" Type="Double" Nullable="false" />
+          <Property Name="DeliveryChargePerKm" Type="Double" Nullable="false" />
+          <Property Name="DeliveryChargeAbove15Kms" Type="Double" Nullable="false" />
+          <Property Name="DeliveryChargeRemarks" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="Status" Type="Int32" Nullable="false" />
           <Property Name="DateEncoded" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="DateUpdated" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="CreatedBy" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="UpdatedBy" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
         </EntityType>
-        <EntityType Name="SpecialOfferCustomer">
+        <EntityType Name="ParcelDropDeliveryCharge">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="CustomerId" Type="Int32" Nullable="false" />
-          <Property Name="SpecialOfferId" Type="Int32" Nullable="false" />
-          <Property Name="DateEncoded" Type="DateTime" Nullable="false" Precision="3" />
-        </EntityType>
-        <EntityType Name="SpecialOffer">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="ShopId" Type="Int32" Nullable="false" />
-          <Property Name="ProductId" Type="Int32" Nullable="false" />
-          <Property Name="Percentage" Type="Double" Nullable="false" />
-          <Property Name="Status" Type="Int32" Nullable="false" />
-          <Property Name="DateEncoded" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="EncodedBy" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-        </EntityType>
-        <EntityType Name="CustomerWalletHistory">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="CustomerId" Type="Int32" Nullable="false" />
-          <Property Name="Amount" Type="Double" Nullable="false" />
+          <Property Name="ChargePerKm" Type="Double" Nullable="false" />
+          <Property Name="ChargeUpto5Kms" Type="Double" Nullable="false" />
+          <Property Name="ChargeAbove15Kms" Type="Double" Nullable="false" />
           <Property Name="Type" Type="Int32" Nullable="false" />
-          <Property Name="ExpiryDate" Type="DateTime" Precision="3" />
-          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="WalletId" Type="Int32" Nullable="false" />
-          <Property Name="Status" Type="Int32" Nullable="false" />
-          <Property Name="DateEncoded" Type="DateTime" Precision="3" />
-        </EntityType>
-        <EntityType Name="Wallet">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="ReferenceCode" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="CustomerGroup" Type="Int32" Nullable="false" />
-          <Property Name="Amount" Type="Double" Nullable="false" />
-          <Property Name="ExpiryDate" Type="DateTime" Precision="3" />
-          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="Month" Type="Int32" Nullable="false" />
-          <Property Name="DateStart" Type="DateTime" Precision="3" />
-          <Property Name="EndDate" Type="DateTime" Precision="3" />
+          <Property Name="VehicleType" Type="Int32" Nullable="false" />
           <Property Name="Status" Type="Int32" Nullable="false" />
           <Property Name="DateEncoded" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="EncodedBy" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="DateUpdated" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CreatedBy" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="UpdatedBy" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -5889,6 +5931,62 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="SpecialOfferCustomers">
+            <EntityTypeMapping TypeName="sncModel.SpecialOfferCustomer">
+              <MappingFragment StoreEntitySet="SpecialOfferCustomer">
+                <ScalarProperty Name="DateEncoded" ColumnName="DateEncoded" />
+                <ScalarProperty Name="SpecialOfferId" ColumnName="SpecialOfferId" />
+                <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SpecialOffers">
+            <EntityTypeMapping TypeName="sncModel.SpecialOffer">
+              <MappingFragment StoreEntitySet="SpecialOffers">
+                <ScalarProperty Name="EncodedBy" ColumnName="EncodedBy" />
+                <ScalarProperty Name="DateEncoded" ColumnName="DateEncoded" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Percentage" ColumnName="Percentage" />
+                <ScalarProperty Name="ProductId" ColumnName="ProductId" />
+                <ScalarProperty Name="ShopId" ColumnName="ShopId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CustomerWalletHistories">
+            <EntityTypeMapping TypeName="sncModel.CustomerWalletHistory">
+              <MappingFragment StoreEntitySet="CustomerWalletHistory">
+                <ScalarProperty Name="DateEncoded" ColumnName="DateEncoded" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="WalletId" ColumnName="WalletId" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="ExpiryDate" ColumnName="ExpiryDate" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Wallets">
+            <EntityTypeMapping TypeName="sncModel.Wallet">
+              <MappingFragment StoreEntitySet="Wallet">
+                <ScalarProperty Name="EncodedBy" ColumnName="EncodedBy" />
+                <ScalarProperty Name="DateEncoded" ColumnName="DateEncoded" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+                <ScalarProperty Name="DateStart" ColumnName="DateStart" />
+                <ScalarProperty Name="Month" ColumnName="Month" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="ExpiryDate" ColumnName="ExpiryDate" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="CustomerGroup" ColumnName="CustomerGroup" />
+                <ScalarProperty Name="ReferenceCode" ColumnName="ReferenceCode" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="Orders">
             <EntityTypeMapping TypeName="sncModel.Order">
               <MappingFragment StoreEntitySet="Orders">
@@ -5897,6 +5995,10 @@
                 <ScalarProperty Name="DateUpdated" ColumnName="DateUpdated" />
                 <ScalarProperty Name="DateEncoded" ColumnName="DateEncoded" />
                 <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="DeliveryChargeRemarks" ColumnName="DeliveryChargeRemarks" />
+                <ScalarProperty Name="DeliveryChargeAbove15Kms" ColumnName="DeliveryChargeAbove15Kms" />
+                <ScalarProperty Name="DeliveryChargePerKm" ColumnName="DeliveryChargePerKm" />
+                <ScalarProperty Name="DeliveryChargeUpto5Km" ColumnName="DeliveryChargeUpto5Km" />
                 <ScalarProperty Name="DeliveryRatePercentage" ColumnName="DeliveryRatePercentage" />
                 <ScalarProperty Name="DeliveryRatePercentageId" ColumnName="DeliveryRatePercentageId" />
                 <ScalarProperty Name="DeliverySlotType" ColumnName="DeliverySlotType" />
@@ -5974,58 +6076,19 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="SpecialOfferCustomers">
-            <EntityTypeMapping TypeName="sncModel.SpecialOfferCustomer">
-              <MappingFragment StoreEntitySet="SpecialOfferCustomer">
-                <ScalarProperty Name="DateEncoded" ColumnName="DateEncoded" />
-                <ScalarProperty Name="SpecialOfferId" ColumnName="SpecialOfferId" />
-                <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="SpecialOffers">
-            <EntityTypeMapping TypeName="sncModel.SpecialOffer">
-              <MappingFragment StoreEntitySet="SpecialOffers">
-                <ScalarProperty Name="EncodedBy" ColumnName="EncodedBy" />
+          <EntitySetMapping Name="ParcelDropDeliveryCharges">
+            <EntityTypeMapping TypeName="sncModel.ParcelDropDeliveryCharge">
+              <MappingFragment StoreEntitySet="ParcelDropDeliveryCharge">
+                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="DateUpdated" ColumnName="DateUpdated" />
                 <ScalarProperty Name="DateEncoded" ColumnName="DateEncoded" />
                 <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="Percentage" ColumnName="Percentage" />
-                <ScalarProperty Name="ProductId" ColumnName="ProductId" />
-                <ScalarProperty Name="ShopId" ColumnName="ShopId" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="CustomerWalletHistories">
-            <EntityTypeMapping TypeName="sncModel.CustomerWalletHistory">
-              <MappingFragment StoreEntitySet="CustomerWalletHistory">
-                <ScalarProperty Name="DateEncoded" ColumnName="DateEncoded" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="WalletId" ColumnName="WalletId" />
-                <ScalarProperty Name="Description" ColumnName="Description" />
-                <ScalarProperty Name="ExpiryDate" ColumnName="ExpiryDate" />
+                <ScalarProperty Name="VehicleType" ColumnName="VehicleType" />
                 <ScalarProperty Name="Type" ColumnName="Type" />
-                <ScalarProperty Name="Amount" ColumnName="Amount" />
-                <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Wallets">
-            <EntityTypeMapping TypeName="sncModel.Wallet">
-              <MappingFragment StoreEntitySet="Wallet">
-                <ScalarProperty Name="EncodedBy" ColumnName="EncodedBy" />
-                <ScalarProperty Name="DateEncoded" ColumnName="DateEncoded" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="EndDate" ColumnName="EndDate" />
-                <ScalarProperty Name="DateStart" ColumnName="DateStart" />
-                <ScalarProperty Name="Month" ColumnName="Month" />
-                <ScalarProperty Name="Description" ColumnName="Description" />
-                <ScalarProperty Name="ExpiryDate" ColumnName="ExpiryDate" />
-                <ScalarProperty Name="Amount" ColumnName="Amount" />
-                <ScalarProperty Name="CustomerGroup" ColumnName="CustomerGroup" />
-                <ScalarProperty Name="ReferenceCode" ColumnName="ReferenceCode" />
+                <ScalarProperty Name="ChargeAbove15Kms" ColumnName="ChargeAbove15Kms" />
+                <ScalarProperty Name="ChargeUpto5Kms" ColumnName="ChargeUpto5Kms" />
+                <ScalarProperty Name="ChargePerKm" ColumnName="ChargePerKm" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

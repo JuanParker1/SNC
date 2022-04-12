@@ -227,6 +227,13 @@ namespace ShopNow.Controllers
                             order.DeliveryRatePercentage = deliveryRatePercentage.Percentage;
                             order.DeliveryRatePercentageId = deliveryRatePercentage.Id;
                         }
+                        var deliveryCharge = db.DeliveryCharges.FirstOrDefault(i => i.Type == shop.DeliveryType && i.TireType == shop.DeliveryTierType && i.VehicleType == 1 && i.Status == 0);
+                        if (deliveryCharge != null)
+                        {
+                            order.DeliveryChargeUpto5Km = deliveryCharge.ChargeUpto5Km;
+                            order.DeliveryChargePerKm = deliveryCharge.ChargePerKm;
+                            order.DeliveryChargeRemarks = db.PincodeRates.FirstOrDefault(i => i.Id == shop.PincodeRateId && i.Status == 0)?.Remarks;
+                        }
                         db.Orders.Add(order);
                         db.SaveChanges();
                         //OrderItems

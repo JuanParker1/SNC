@@ -675,6 +675,9 @@
     <Compile Include="Models\Page.cs">
       <DependentUpon>ApplicationDbContext.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ParcelDropDeliveryCharge.cs">
+      <DependentUpon>ApplicationDbContext.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Payment.cs">
       <DependentUpon>ApplicationDbContext.tt</DependentUpon>
     </Compile>

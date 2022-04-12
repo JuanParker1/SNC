@@ -88,6 +88,10 @@ namespace ShopNow.Models
         public int DeliverySlotType { get; set; }
         public int DeliveryRatePercentageId { get; set; }
         public double DeliveryRatePercentage { get; set; }
+        public double DeliveryChargeUpto5Km { get; set; }
+        public double DeliveryChargePerKm { get; set; }
+        public double DeliveryChargeAbove15Kms { get; set; }
+        public string DeliveryChargeRemarks { get; set; }
         public int Status { get; set; }
         public System.DateTime DateEncoded { get; set; }
         public System.DateTime DateUpdated { get; set; }
