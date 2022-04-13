@@ -85,6 +85,7 @@ namespace ShopNow.Controllers
                     shop.PincodeRateId = id;
                     shop.DeliveryTierType = tier;
                     shop.DeliveryType = type;
+                    shop.ParcelDropDeliveryType = type;
                     db.Entry(shop).State = System.Data.Entity.EntityState.Modified;
                     db.SaveChanges();
                 }

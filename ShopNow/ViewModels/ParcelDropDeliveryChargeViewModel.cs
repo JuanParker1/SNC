@@ -37,11 +37,11 @@ namespace ShopNow.ViewModels
                 {
                     switch (this.VehicleType)
                     {
-                        case 0:
-                            return "Bike";
                         case 1:
-                            return "Carrier Bike";
+                            return "Bike";
                         case 2:
+                            return "Carrier Bike";
+                        case 3:
                             return "Auto";
                         default:
                             return "N/A";

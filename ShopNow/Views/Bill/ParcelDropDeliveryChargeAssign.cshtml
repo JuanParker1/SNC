@@ -39,7 +39,7 @@
                             <div class="col-md-6 mt-2">
                                 <div class="form-check-inline mr-3">
                                     <label class="form-check-label">
-                                        <input type="radio" class="form-check-input" name="Type" value="0" checked> General
+                                        <input type="radio" class="form-check-input" name="Type" value="0"> General
                                     </label>
                                 </div>
                                 <div class="form-check-inline">
@@ -98,50 +98,7 @@
             }
 
             $('input[type=radio][name=Type]').change(function () {
-                $.getJSON("/Bill/GetParcelDropDeliveryChargeType?type=" + type, function (data) {
-                    //debugger;
-                    $.each(data, function (key, v) {
-                        $.each(v, function (index, list) {
-                            if (list.Type == 0) {
-                                if (list.VehicleType == 1) {
-                                    $("#BikeChargeUpto5Kms").text(list.ChargeUpto5Kms);
-                                    $("#BikeChargePerKm").text(list.ChargePerKm);
-                                    $("#BikeChargeAbove15Kms").text(list.ChargeAbove15Kms);
-                                }
-                                if (list.VehicleType == 2) {
-                                    $("#CarrierBikeChargeUpto5Kms").text(list.ChargeUpto5Kms);
-                                    $("#CarrierBikeChargePerKm").text(list.ChargePerKm);
-                                    $("#CarrierBikeChargeAbove15Kms").text(list.ChargeAbove15Kms);
-                                }
-                                if (list.VehicleType == 3) {
-                                    $("#AutoChargeUpto5Kms").text(list.ChargeUpto5Kms);
-                                    $("#AutoChargePerKm").text(list.ChargePerKm);
-                                    $("#AutoChargeAbove15Kms").text(list.ChargeAbove15Kms);
-                                }
-                            }
-                            if (list.Type == 1) {
-                                if (list.VehicleType == 1) {
-                                    $("#BikeChargeUpto5Kms").text(list.ChargeUpto5Kms);
-                                    $("#BikeChargePerKm").text(list.ChargePerKm);
-                                    $("#BikeChargeAbove15Kms").text(list.ChargeAbove15Kms);
-                                }
-                                if (list.VehicleType == 2) {
-                                    $("#CarrierBikeChargeUpto5Kms").text(list.ChargeUpto5Kms);
-                                    $("#CarrierBikeChargePerKm").text(list.ChargePerKm);
-                                    $("#CarrierBikeChargeAbove15Kms").text(list.ChargeAbove15Kms);
-                                }
-                                if (list.VehicleType == 3) {
-                                    $("#AutoChargeUpto5Kms").text(list.ChargeUpto5Kms);
-                                    $("#AutoChargePerKm").text(list.ChargePerKm);
-                                    $("#AutoChargeAbove15Kms").text(list.ChargeAbove15Kms);
-                                }
-                            }
-                        });
-                    });
-                });
-            });
-
-            $('input[type=radio][name=Type]').change(function () {
+                var type = $('input[name="Type"]:checked').val();
                 $.getJSON("/Bill/GetParcelDropDeliveryChargeType?type=" + type, function (data) {
                     $.each(data, function (key, v) {
                         $.each(v, function (index, list) {
