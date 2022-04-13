@@ -84,6 +84,53 @@ namespace ShopNow.Controllers
             model.JoyraNagercoil = datengl.ToString("dd-MM-yyyy hh:mm tt");
             model.JoyraPalai = datepalai.ToString("dd-MM-yyyy hh:mm tt");
             //model.ServiceCount = db.Services.Where(i => i.Status == 0).Count();
+
+            //Send PushNotification
+            var pushNotificationList = db.PushNotifications.Where(i => i.Status == 1 && DbFunctions.TruncateTime(i.ScheduleDateTime.Value) == DbFunctions.TruncateTime(DateTime.Now)).ToList();
+            if (pushNotificationList.Count() > 0)
+            {
+                foreach (var item in pushNotificationList)
+                {
+                    if (item.Type == 1 && item.ScheduleDateTime.Value.ToString("hh:mm") == DateTime.Now.ToString("hh:mm"))
+                    {
+                        var fcmTokenList = db.Customers.OrderBy(i => i.Id).Where(i => !string.IsNullOrEmpty(i.FcmTocken) && i.FcmTocken != "NULL").Select(i => i.FcmTocken).ToArray();
+                        var count = Math.Ceiling((double)fcmTokenList.Count() / 1000);
+                        for (int i = 0; i < count; i++)
+                        {
+                            Helpers.PushNotification.SendBulk(item.Description, item.Title, "SpecialOffer", item.ImageUrl, fcmTokenList.Skip(i * 1000).Take(1000).ToArray(), "tune2.caf");
+                        }
+                    }
+                    if (item.Type == 2 && item.ScheduleDateTime.Value.ToString("hh:mm") == DateTime.Now.ToString("hh:mm"))
+                    {
+                        var fcmTokenList = db.Customers.Where(i => !string.IsNullOrEmpty(i.FcmTocken) && i.FcmTocken != "NULL" && item.District.Contains(i.DistrictName)).Select(i => i.FcmTocken).ToArray();
+                        var count = Math.Ceiling((double)fcmTokenList.Count() / 1000);
+                        for (int i = 0; i < count; i++)
+                        {
+                            Helpers.PushNotification.SendBulk(item.Description, item.Title, "SpecialOffer", item.ImageUrl, fcmTokenList.Skip(i * 1000).Take(1000).ToArray(), "tune2.caf");
+                        }
+                    }
+                    if (item.Type == 3 && item.ScheduleDateTime.Value.ToString("hh:mm") == DateTime.Now.ToString("hh:mm"))
+                    {
+                        var latestVersion = db.AppDetails.FirstOrDefault().Version;
+                        var fcmTokenList = db.Customers.Where(i => !string.IsNullOrEmpty(i.FcmTocken))
+                            .Join(db.CustomerAppInfoes.Where(i => i.Version != latestVersion), c => c.Id, ca => ca.CustomerId, (c, ca) => new { c, ca })
+                            .Select(i => i.c.FcmTocken).ToArray();
+                        var count = Math.Ceiling((double)fcmTokenList.Count() / 1000);
+                        for (int i = 0; i < count; i++)
+                        {
+                            Helpers.PushNotification.SendBulk(item.Description, item.Title, "SpecialOffer", item.ImageUrl, fcmTokenList.Skip(i * 1000).Take(1000).ToArray(), "tune2.caf");
+                        }
+                    }
+
+                    if (item.ScheduleDateTime.Value.ToString("hh:mm") == DateTime.Now.ToString("hh:mm"))
+                    {
+                        var pushnotification = db.PushNotifications.FirstOrDefault(i => i.Id == item.Id);
+                        pushnotification.Status = 0;
+                        db.Entry(pushnotification).State = EntityState.Modified;
+                        db.SaveChanges();
+                    }
+                }
+            }
             return View(model);
         }
 

@@ -7,7 +7,7 @@
 <link href="~/Content/Gridmvc.css" rel="stylesheet" />
 <script src="~/Scripts/gridmvc.js"></script>
 <div class="container-fluid">
-    <div class="row mt-3 mx-auto">
+    <div class="row mt-3 mx-auto mb-5">
         <div class="offset-md-1 col-md-6">
             <div class="card shadow h-100">
                 <div class="card-body">
@@ -38,13 +38,17 @@
                             <label class="col-form-label">Select District</label>
                             <select id="select-district" class="form-control" name="District" multiple></select>
                         </div>
-                        <div class="form-group divClass">
+                        <div class="form-group">
                             <label class="col-form-label">Title</label>
                             <input type="text" name="Title" class="form-control" placeholder="Enter Title" required />
                         </div>
-                        <div class="form-group divClass">
+                        <div class="form-group">
                             <label class="col-form-label">Image Url</label>
                             <input type="text" name="ImagePath" class="form-control" placeholder="Image Url" />
+                        </div>
+                        <div class="form-group">
+                            <label class="col-form-label">Schedule Date/Time</label>
+                            <input type="datetime-local" name="ScheduleDateTime" class="form-control"  />
                         </div>
                         <div class="form-group divClass">
                             <label class="col-form-label">Message</label>
@@ -59,7 +63,7 @@
             <div class="card shadow h-100">
                 <div class="card-body">
                     <h5 class="text-success" style="letter-spacing:1px">Customer Count</h5>
-                    <div style="height:530px;overflow-y:auto;">
+                    <div style="height:600px;overflow-y:auto;">
                         @Html.Grid(Model.ListItems).Columns(columns =>
                               {
                              columns.Add(s => s.DistrictName).Titled("District Name").Filterable(true).SetWidth(30);
