@@ -7379,6 +7379,10 @@ namespace ShopNow.Controllers
                         order.DeliveryRatePercentage = deliveryRatePercentage.Percentage;
                         order.DeliveryRatePercentageId = deliveryRatePercentage.Id;
                     }
+                    order.DeliveryChargeUpto5Km = (shop.ParcelDropDeliveryType == 0) ? 50 : 50;
+                    order.DeliveryChargePerKm = (shop.ParcelDropDeliveryType == 0) ? 6 : 6;
+                    order.DeliveryChargeAbove15Kms = (shop.ParcelDropDeliveryType == 0) ? 12 : 12;
+                    order.DeliveryChargeRemarks = db.PincodeRates.FirstOrDefault(i => i.Id == shop.PincodeRateId && i.Status == 0)?.Remarks;
                     db.Orders.Add(order);
                     db.SaveChanges();
 
