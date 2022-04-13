@@ -12,18 +12,18 @@ namespace ShopNow.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class PushNotification
+    public partial class ParcelDropDeliveryCharge
     {
         public int Id { get; set; }
+        public double ChargePerKm { get; set; }
+        public double ChargeUpto5Kms { get; set; }
+        public double ChargeAbove15Kms { get; set; }
         public int Type { get; set; }
-        public string District { get; set; }
-        public string Title { get; set; }
-        public string ImageUrl { get; set; }
-        public string Description { get; set; }
-        public string RedirectUrl { get; set; }
-        public Nullable<System.DateTime> ScheduleDateTime { get; set; }
+        public int VehicleType { get; set; }
         public int Status { get; set; }
         public System.DateTime DateEncoded { get; set; }
-        public string EncodedBy { get; set; }
+        public System.DateTime DateUpdated { get; set; }
+        public string CreatedBy { get; set; }
+        public string UpdatedBy { get; set; }
     }
 }

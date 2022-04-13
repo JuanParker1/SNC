@@ -675,6 +675,9 @@
     <Compile Include="Models\Page.cs">
       <DependentUpon>ApplicationDbContext.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ParcelDropDeliveryCharge.cs">
+      <DependentUpon>ApplicationDbContext.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Payment.cs">
       <DependentUpon>ApplicationDbContext.tt</DependentUpon>
     </Compile>
@@ -827,6 +830,7 @@
     <Compile Include="ViewModels\PackageViewModel.cs" />
     <Compile Include="ViewModels\NextSubCategoryViewModel.cs" />
     <Compile Include="ViewModels\PageViewModel.cs" />
+    <Compile Include="ViewModels\ParcelDropDeliveryChargeViewModel.cs" />
     <Compile Include="ViewModels\PincodeRateViewModel.cs" />
     <Compile Include="ViewModels\PlatFormCreditRateViewModel.cs" />
     <Compile Include="ViewModels\PortionViewModel.cs" />
@@ -3411,6 +3415,11 @@
     <Content Include="Views\Wallet\Index.cshtml" />
     <Content Include="Views\Shop\DeletedShop.cshtml" />
     <Content Include="Views\Wallet\DispatchReport.cshtml" />
+    <Content Include="Views\Bill\ParcelDropDeliveryList.cshtml" />
+    <Content Include="Views\Bill\ParcelDropDeliveryCharge.cshtml" />
+    <Content Include="Views\Bill\ParcelDropDeliveryUpdate.cshtml" />
+    <Content Include="Views\Bill\ParcelDropDeliveryChargeAssignList.cshtml" />
+    <Content Include="Views\Bill\ParcelDropDeliveryChargeAssign.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

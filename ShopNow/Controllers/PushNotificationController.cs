@@ -56,13 +56,13 @@ namespace ShopNow.Controllers
         }
 
         [HttpPost]
-        public ActionResult SendBulk(string title, string message, string[] district, int type, string imagePath = "")
+        public ActionResult SendBulk(string title, string message, string[] district, int type,DateTime? scheduleDateTime, string imagePath = "")
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
             try
             {
-                if (type == 1)
+                if (type == 1 && scheduleDateTime == null)
                 {
                     var fcmTokenList = db.Customers.OrderBy(i => i.Id).Where(i => !string.IsNullOrEmpty(i.FcmTocken) && i.FcmTocken != "NULL").Select(i => i.FcmTocken).ToArray();
                     var count = Math.Ceiling((double)fcmTokenList.Count() / 1000);
@@ -74,7 +74,7 @@ namespace ShopNow.Controllers
                     //Helpers.PushNotification.SendBulk(message, title, "SpecialOffer", imagePath, fcmTokenList.Skip(1000).Take(1000).ToArray());
                     //Helpers.PushNotification.SendBulk(message, title, "SpecialOffer", imagePath, fcmTokenList.Skip(2000).Take(1000).ToArray());
                 }
-                if (type == 2)
+                if (type == 2 && scheduleDateTime == null)
                 {
                     var fcmTokenList = db.Customers.Where(i => !string.IsNullOrEmpty(i.FcmTocken) && i.FcmTocken != "NULL" && district.Contains(i.DistrictName)).Select(i => i.FcmTocken).ToArray();
                     var count = Math.Ceiling((double)fcmTokenList.Count() / 1000);
@@ -86,7 +86,7 @@ namespace ShopNow.Controllers
                     //Helpers.PushNotification.SendBulk(message, title, "SpecialOffer", imagePath, fcmTokenList.Skip(1000).Take(1000).ToArray());
                     //Helpers.PushNotification.SendBulk(message, title, "SpecialOffer", imagePath, fcmTokenList.Skip(2000).Take(1000).ToArray());
                 }
-                if (type == 3)
+                if (type == 3 && scheduleDateTime == null)
                 {
                     var latestVersion = db.AppDetails.FirstOrDefault().Version;
                     var fcmTokenList = db.Customers.Where(i => !string.IsNullOrEmpty(i.FcmTocken))
@@ -110,14 +110,16 @@ namespace ShopNow.Controllers
                     EncodedBy = user.Name,
                     ImageUrl = imagePath,
                     RedirectUrl = "",
-                    Status = 0,
+                    Status = scheduleDateTime == null? 0 : 1,
                     Title = title,
-                    Type = type
+                    Type = type,
+                    ScheduleDateTime = scheduleDateTime
                 };
                 db.PushNotifications.Add(pushNotification);
                 db.SaveChanges();
-
-                return RedirectToAction("Index", new { message = "Notification Send Successfully!", type = 1 });
+                string alertmessage = "";
+                alertmessage = scheduleDateTime == null ? "Notification Send Successfully!" : "Notification Scheduled Successfully!";
+                return RedirectToAction("Index", new { message = alertmessage, type = 1 });
             }
             catch
             {

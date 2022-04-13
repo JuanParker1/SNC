@@ -111,6 +111,10 @@ namespace ShopNow.Controllers
                 config.CreateMap<Product, MedicalProductDetailsApiViewModel>();
                 config.CreateMap<CustomerBankDetailsCreateViewModel, CustomerBankDetail>();
                 config.CreateMap<SavePrescriptionViewModel, CustomerGroceryUpload>();
+
+                config.CreateMap<Product, Product>();
+                config.CreateMap<ShopDishAddOn, ShopDishAddOn>();
+
             });
 
             _mapper = _mapperConfiguration.CreateMapper();
@@ -1353,6 +1357,14 @@ namespace ShopNow.Controllers
                         order.DeliveryRatePercentage = deliveryRatePercentage.Percentage;
                         order.DeliveryRatePercentageId = deliveryRatePercentage.Id;
                     }
+
+                    //var deliveryCharge = db.DeliveryCharges.FirstOrDefault(i => i.Type == shop.DeliveryType && i.TireType == shop.DeliveryTierType && i.VehicleType == 1 && i.Status == 0);
+                    //if (deliveryCharge != null)
+                    //{
+                        order.DeliveryChargeUpto5Km = (shop.DeliveryTierType == 1 && shop.DeliveryType == 0) ? 35 : 40;
+                        order.DeliveryChargePerKm = (shop.DeliveryTierType == 1 && shop.DeliveryType == 0) ? 6 : 8;
+                        order.DeliveryChargeRemarks = db.PincodeRates.FirstOrDefault(i => i.Id == shop.PincodeRateId && i.Status == 0)?.Remarks;
+                    //}
                     db.Orders.Add(order);
                     db.SaveChanges();
                     foreach (var item in model.ListItems)
@@ -4603,7 +4615,8 @@ namespace ShopNow.Controllers
                        //GrossDeliveryCharge = i.d.WorkType == 1 ? (((i.scc.scc.DeliveryCharge == 35 || i.scc.scc.DeliveryCharge == 50) ? 20 : 20 + (i.scc.scc.IsPickupDrop == false ? i.scc.scc.DeliveryCharge - 35 : i.scc.scc.DeliveryCharge - 50)) + i.scc.scc.TipsAmount) : i.scc.scc.DeliveryCharge + i.scc.scc.TipsAmount,
                        //GrossDeliveryCharge = i.d.WorkType == 1 ? (((i.scc.scc.DeliveryCharge == 35 || i.scc.scc.DeliveryCharge == 50) ? 20 : 20 + (i.scc.scc.IsPickupDrop == false ? i.scc.scc.DeliveryCharge - 35 : i.scc.scc.Distance <= 15 ? i.scc.scc.DeliveryCharge - 50 : (60 + ((i.scc.scc.Distance - 15) * 8)))) + i.scc.scc.TipsAmount) : i.scc.scc.DeliveryCharge + i.scc.scc.TipsAmount,
                        //GrossDeliveryCharge = i.d.WorkType == 1 ? (((i.scc.scc.Distance <= 5) ? 20 : 20 + (i.scc.scc.IsPickupDrop == false ? ((i.scc.scc.Distance - 5) * 6) : i.scc.scc.Distance <= 15 ? i.scc.scc.DeliveryCharge - 50 : (60 + ((i.scc.scc.Distance - 15) * 8)))) + i.scc.scc.TipsAmount) : i.scc.scc.DeliveryCharge + i.scc.scc.TipsAmount,
-                       GrossDeliveryCharge = i.d.WorkType == 1 ? ((i.scc.scc.Distance <= 5) ? 20 + ((i.scc.scc.DeliveryRatePercentage / 100) * 20) : 20 + ((i.scc.scc.DeliveryRatePercentage / 100) * 20) + (i.scc.scc.IsPickupDrop == false ? ((i.scc.scc.Distance - 5) * 6 + ((i.scc.scc.DeliveryRatePercentage / 100) * 6)) : i.scc.scc.Distance <= 15 ? i.scc.scc.DeliveryCharge - 50 : (60 + ((i.scc.scc.Distance - 15) * 8 /*+ ((i.scc.scc.DeliveryRatePercentage / 100) * 8)*/)))) : i.scc.scc.DeliveryCharge + i.scc.scc.TipsAmount,
+                       //GrossDeliveryCharge = i.d.WorkType == 1 ? ((i.scc.scc.Distance <= 5) ? 20 + ((i.scc.scc.DeliveryRatePercentage / 100) * 20) : 20 + ((i.scc.scc.DeliveryRatePercentage / 100) * 20) + (i.scc.scc.IsPickupDrop == false ? ((i.scc.scc.Distance - 5) * 6 + ((i.scc.scc.DeliveryRatePercentage / 100) * 6)) : i.scc.scc.Distance <= 15 ? i.scc.scc.DeliveryCharge - 50 : (60 + ((i.scc.scc.Distance - 15) * 8 /*+ ((i.scc.scc.DeliveryRatePercentage / 100) * 8)*/)))) : i.scc.scc.DeliveryCharge + i.scc.scc.TipsAmount,
+                       GrossDeliveryCharge = i.d.WorkType == 2 ? i.scc.scc.DeliveryCharge + i.scc.scc.TipsAmount : i.scc.scc.IsPickupDrop == false ? i.scc.scc.Distance <= 5 ? (i.scc.scc.DeliveryChargeUpto5Km - 15) + ((i.scc.scc.DeliveryRatePercentage / 100) * (i.scc.scc.DeliveryChargeUpto5Km - 15)) + i.scc.scc.TipsAmount : (i.scc.scc.DeliveryChargeUpto5Km - 15) + ((i.scc.scc.DeliveryRatePercentage / 100) * (i.scc.scc.DeliveryChargeUpto5Km - 15)) + ((i.scc.scc.Distance - 5) * i.scc.scc.DeliveryChargePerKm + ((i.scc.scc.DeliveryRatePercentage / 100) * 6)) + i.scc.scc.TipsAmount : i.scc.scc.Distance <= 5 ? (i.scc.scc.DeliveryChargeUpto5Km - 30) + ((i.scc.scc.DeliveryRatePercentage / 100) * (i.scc.scc.DeliveryChargeUpto5Km - 30)) + i.scc.scc.TipsAmount : i.scc.scc.Distance < 15 ? (i.scc.scc.DeliveryChargeUpto5Km - 30) + ((i.scc.scc.DeliveryRatePercentage / 100) * (i.scc.scc.DeliveryChargeUpto5Km - 30)) + ((i.scc.scc.Distance - 5) * 6 + i.scc.scc.TipsAmount/*+ ((i.c.c.DeliveryRatePercentage / 100) * 6)*/) : (i.scc.scc.DeliveryChargeUpto5Km - 30) + ((i.scc.scc.DeliveryRatePercentage / 100) * (i.scc.scc.DeliveryChargeUpto5Km - 30)) + (60 + ((i.scc.scc.Distance - 15) * 8)) + i.scc.scc.TipsAmount,
                        CustomerLatitude = i.scc.scc.Latitude,
                        CustomerLongitude = i.scc.scc.Longitude,
                        ShopLatitude = i.scc.s.Latitude,
@@ -4613,7 +4626,8 @@ namespace ShopNow.Controllers
                        //DeliveryCharge = i.d.WorkType == 1 ? ((i.scc.scc.DeliveryCharge == 35 || i.scc.scc.DeliveryCharge == 50) ? 20 : 20 + (i.scc.scc.IsPickupDrop == false ? i.scc.scc.DeliveryCharge - 35 : i.scc.scc.DeliveryCharge - 50)) : i.scc.scc.DeliveryCharge,
                        //DeliveryCharge = i.d.WorkType == 1 ? ((i.scc.scc.DeliveryCharge == 35 || i.scc.scc.DeliveryCharge == 50) ? 20 : 20 + (i.scc.scc.IsPickupDrop == false ? i.scc.scc.DeliveryCharge - 35 : i.scc.scc.Distance <= 15 ? i.scc.scc.DeliveryCharge - 50 : (60 + ((i.scc.scc.Distance - 15) * 8)))) : i.scc.scc.DeliveryCharge,
                        //DeliveryCharge = i.d.WorkType == 1 ? ((i.scc.scc.Distance <= 5) ? 20 : 20 + (i.scc.scc.IsPickupDrop == false ? ((i.scc.scc.Distance - 5) * 6) : i.scc.scc.Distance <= 15 ? i.scc.scc.DeliveryCharge - 50 : (60 + ((i.scc.scc.Distance - 15) * 8)))) : i.scc.scc.DeliveryCharge,
-                       DeliveryCharge = i.d.WorkType == 1 ? ((i.scc.scc.Distance <= 5) ? 20 + ((i.scc.scc.DeliveryRatePercentage / 100) * 20) : 20 + ((i.scc.scc.DeliveryRatePercentage / 100) * 20) + (i.scc.scc.IsPickupDrop == false ? ((i.scc.scc.Distance - 5) * 6 + ((i.scc.scc.DeliveryRatePercentage / 100) * 6)) : i.scc.scc.Distance <= 15 ? i.scc.scc.DeliveryCharge - 50 : (60 + ((i.scc.scc.Distance - 15) * 8 /*+ ((i.scc.scc.DeliveryRatePercentage / 100) * 8)*/)))) : i.scc.scc.DeliveryCharge,
+                       //DeliveryCharge = i.d.WorkType == 1 ? ((i.scc.scc.Distance <= 5) ? 20 + ((i.scc.scc.DeliveryRatePercentage / 100) * 20) : 20 + ((i.scc.scc.DeliveryRatePercentage / 100) * 20) + (i.scc.scc.IsPickupDrop == false ? ((i.scc.scc.Distance - 5) * 6 + ((i.scc.scc.DeliveryRatePercentage / 100) * 6)) : i.scc.scc.Distance <= 15 ? i.scc.scc.DeliveryCharge - 50 : (60 + ((i.scc.scc.Distance - 15) * 8 /*+ ((i.scc.scc.DeliveryRatePercentage / 100) * 8)*/)))) : i.scc.scc.DeliveryCharge,
+                       DeliveryCharge = i.d.WorkType == 2 ? i.scc.scc.DeliveryCharge : i.scc.scc.IsPickupDrop == false ? i.scc.scc.Distance <= 5 ? (i.scc.scc.DeliveryChargeUpto5Km - 15) + ((i.scc.scc.DeliveryRatePercentage / 100) * (i.scc.scc.DeliveryChargeUpto5Km - 15)) : (i.scc.scc.DeliveryChargeUpto5Km - 15) + ((i.scc.scc.DeliveryRatePercentage / 100) * (i.scc.scc.DeliveryChargeUpto5Km - 15)) + ((i.scc.scc.Distance - 5) * i.scc.scc.DeliveryChargePerKm + ((i.scc.scc.DeliveryRatePercentage / 100) * 6)) : i.scc.scc.Distance <= 5 ? (i.scc.scc.DeliveryChargeUpto5Km - 30) + ((i.scc.scc.DeliveryRatePercentage / 100) * (i.scc.scc.DeliveryChargeUpto5Km - 30)) : i.scc.scc.Distance < 15 ? (i.scc.scc.DeliveryChargeUpto5Km - 30) + ((i.scc.scc.DeliveryRatePercentage / 100) * (i.scc.scc.DeliveryChargeUpto5Km - 30)) + ((i.scc.scc.Distance - 5) * 6 /*+ ((i.c.c.DeliveryRatePercentage / 100) * 6)*/) : (i.scc.scc.DeliveryChargeUpto5Km - 30) + ((i.scc.scc.DeliveryRatePercentage / 100) * (i.scc.scc.DeliveryChargeUpto5Km - 30)) + (60 + ((i.scc.scc.Distance - 15) * 8)),
                        Distance = i.scc.scc.Distance == 0 ? Math.Round((double)(GetMeters(i.scc.s.Latitude, i.scc.s.Longitude, i.scc.scc.Latitude, i.scc.scc.Longitude) / 1000), 2) : i.scc.scc.Distance
                    }).OrderByDescending(j => j.DateEncoded).ToList();
                 if (model.List.Count() != 0)
@@ -4636,7 +4650,8 @@ namespace ShopNow.Controllers
                        CartStatus = i.scc.scc.Status,
                        //GrossDeliveryCharge = i.d.WorkType == 1 ? (((i.scc.scc.DeliveryCharge == 35 || i.scc.scc.DeliveryCharge == 50) ? 20 : 20 + (i.scc.scc.IsPickupDrop == false ? i.scc.scc.DeliveryCharge - 35 : i.scc.scc.Distance <= 15 ? i.scc.scc.DeliveryCharge - 50 : (60 + ((i.scc.scc.Distance - 15) * 8)))) + i.scc.scc.TipsAmount) : i.scc.scc.DeliveryCharge + i.scc.scc.TipsAmount,
                        //GrossDeliveryCharge = i.d.WorkType == 1 ? (((i.scc.scc.Distance <= 5) ? 20 : 20 + (i.scc.scc.IsPickupDrop == false ? ((i.scc.scc.Distance - 5) * 6) : i.scc.scc.Distance <= 15 ? i.scc.scc.DeliveryCharge - 50 : (60 + ((i.scc.scc.Distance - 15) * 8)))) + i.scc.scc.TipsAmount) : i.scc.scc.DeliveryCharge + i.scc.scc.TipsAmount,
-                       GrossDeliveryCharge = i.d.WorkType == 1 ? ((i.scc.scc.Distance <= 5) ? 20 + ((i.scc.scc.DeliveryRatePercentage / 100) * 20) : 20 + ((i.scc.scc.DeliveryRatePercentage / 100) * 20) + (i.scc.scc.IsPickupDrop == false ? ((i.scc.scc.Distance - 5) * 6 + ((i.scc.scc.DeliveryRatePercentage / 100) * 6)) : i.scc.scc.Distance <= 15 ? i.scc.scc.DeliveryCharge - 50 : (60 + ((i.scc.scc.Distance - 15) * 8 /*+ ((i.scc.scc.DeliveryRatePercentage / 100) * 8)*/)))) : i.scc.scc.DeliveryCharge + i.scc.scc.TipsAmount,
+                       //GrossDeliveryCharge = i.d.WorkType == 1 ? ((i.scc.scc.Distance <= 5) ? 20 + ((i.scc.scc.DeliveryRatePercentage / 100) * 20) : 20 + ((i.scc.scc.DeliveryRatePercentage / 100) * 20) + (i.scc.scc.IsPickupDrop == false ? ((i.scc.scc.Distance - 5) * 6 + ((i.scc.scc.DeliveryRatePercentage / 100) * 6)) : i.scc.scc.Distance <= 15 ? i.scc.scc.DeliveryCharge - 50 : (60 + ((i.scc.scc.Distance - 15) * 8 /*+ ((i.scc.scc.DeliveryRatePercentage / 100) * 8)*/)))) : i.scc.scc.DeliveryCharge + i.scc.scc.TipsAmount,
+                       GrossDeliveryCharge = i.d.WorkType == 2 ? i.scc.scc.DeliveryCharge + i.scc.scc.TipsAmount : i.scc.scc.IsPickupDrop == false ? i.scc.scc.Distance <= 5 ? (i.scc.scc.DeliveryChargeUpto5Km - 15) + ((i.scc.scc.DeliveryRatePercentage / 100) * (i.scc.scc.DeliveryChargeUpto5Km - 15)) + i.scc.scc.TipsAmount : (i.scc.scc.DeliveryChargeUpto5Km - 15) + ((i.scc.scc.DeliveryRatePercentage / 100) * (i.scc.scc.DeliveryChargeUpto5Km - 15)) + ((i.scc.scc.Distance - 5) * i.scc.scc.DeliveryChargePerKm + ((i.scc.scc.DeliveryRatePercentage / 100) * 6)) + i.scc.scc.TipsAmount : i.scc.scc.Distance <= 5 ? (i.scc.scc.DeliveryChargeUpto5Km - 30) + ((i.scc.scc.DeliveryRatePercentage / 100) * (i.scc.scc.DeliveryChargeUpto5Km - 30)) + i.scc.scc.TipsAmount : i.scc.scc.Distance < 15 ? (i.scc.scc.DeliveryChargeUpto5Km - 30) + ((i.scc.scc.DeliveryRatePercentage / 100) * (i.scc.scc.DeliveryChargeUpto5Km - 30)) + ((i.scc.scc.Distance - 5) * 6 + i.scc.scc.TipsAmount/*+ ((i.c.c.DeliveryRatePercentage / 100) * 6)*/) : (i.scc.scc.DeliveryChargeUpto5Km - 30) + ((i.scc.scc.DeliveryRatePercentage / 100) * (i.scc.scc.DeliveryChargeUpto5Km - 30)) + (60 + ((i.scc.scc.Distance - 15) * 8)) + i.scc.scc.TipsAmount,
                        CustomerLatitude = i.scc.scc.Latitude,
                        CustomerLongitude = i.scc.scc.Longitude,
                        ShopLatitude = i.scc.s.Latitude,
@@ -4645,7 +4660,8 @@ namespace ShopNow.Controllers
                        TipAmount = i.scc.scc.TipsAmount,
                        //DeliveryCharge = i.d.WorkType == 1 ? ((i.scc.scc.DeliveryCharge == 35 || i.scc.scc.DeliveryCharge == 50) ? 20 : 20 + (i.scc.scc.IsPickupDrop == false ? i.scc.scc.DeliveryCharge - 35 : i.scc.scc.Distance <= 15 ? i.scc.scc.DeliveryCharge - 50 : (60 + ((i.scc.scc.Distance - 15) * 8)))) : i.scc.scc.DeliveryCharge,
                        //DeliveryCharge = i.d.WorkType == 1 ? ((i.scc.scc.Distance <= 5) ? 20 : 20 + (i.scc.scc.IsPickupDrop == false ? ((i.scc.scc.Distance - 5) * 6) : i.scc.scc.Distance <= 15 ? i.scc.scc.DeliveryCharge - 50 : (60 + ((i.scc.scc.Distance - 15) * 8)))) : i.scc.scc.DeliveryCharge,
-                       DeliveryCharge = i.d.WorkType == 1 ? ((i.scc.scc.Distance <= 5) ? 20 + ((i.scc.scc.DeliveryRatePercentage / 100) * 20) : 20 + ((i.scc.scc.DeliveryRatePercentage / 100) * 20) + (i.scc.scc.IsPickupDrop == false ? ((i.scc.scc.Distance - 5) * 6 + ((i.scc.scc.DeliveryRatePercentage / 100) * 6)) : i.scc.scc.Distance <= 15 ? i.scc.scc.DeliveryCharge - 50 : (60 + ((i.scc.scc.Distance - 15) * 8 /*+ ((i.scc.scc.DeliveryRatePercentage / 100) * 8)*/)))) : i.scc.scc.DeliveryCharge,
+                       //DeliveryCharge = i.d.WorkType == 1 ? ((i.scc.scc.Distance <= 5) ? 20 + ((i.scc.scc.DeliveryRatePercentage / 100) * 20) : 20 + ((i.scc.scc.DeliveryRatePercentage / 100) * 20) + (i.scc.scc.IsPickupDrop == false ? ((i.scc.scc.Distance - 5) * 6 + ((i.scc.scc.DeliveryRatePercentage / 100) * 6)) : i.scc.scc.Distance <= 15 ? i.scc.scc.DeliveryCharge - 50 : (60 + ((i.scc.scc.Distance - 15) * 8 /*+ ((i.scc.scc.DeliveryRatePercentage / 100) * 8)*/)))) : i.scc.scc.DeliveryCharge,
+                       DeliveryCharge = i.d.WorkType == 2 ? i.scc.scc.DeliveryCharge : i.scc.scc.IsPickupDrop == false ? i.scc.scc.Distance <= 5 ? (i.scc.scc.DeliveryChargeUpto5Km - 15) + ((i.scc.scc.DeliveryRatePercentage / 100) * (i.scc.scc.DeliveryChargeUpto5Km - 15)) : (i.scc.scc.DeliveryChargeUpto5Km - 15) + ((i.scc.scc.DeliveryRatePercentage / 100) * (i.scc.scc.DeliveryChargeUpto5Km - 15)) + ((i.scc.scc.Distance - 5) * i.scc.scc.DeliveryChargePerKm + ((i.scc.scc.DeliveryRatePercentage / 100) * 6)) : i.scc.scc.Distance <= 5 ? (i.scc.scc.DeliveryChargeUpto5Km - 30) + ((i.scc.scc.DeliveryRatePercentage / 100) * (i.scc.scc.DeliveryChargeUpto5Km - 30)) : i.scc.scc.Distance < 15 ? (i.scc.scc.DeliveryChargeUpto5Km - 30) + ((i.scc.scc.DeliveryRatePercentage / 100) * (i.scc.scc.DeliveryChargeUpto5Km - 30)) + ((i.scc.scc.Distance - 5) * 6 /*+ ((i.c.c.DeliveryRatePercentage / 100) * 6)*/) : (i.scc.scc.DeliveryChargeUpto5Km - 30) + ((i.scc.scc.DeliveryRatePercentage / 100) * (i.scc.scc.DeliveryChargeUpto5Km - 30)) + (60 + ((i.scc.scc.Distance - 15) * 8)),
                        Distance = i.scc.scc.Distance == 0 ? Math.Round((double)(GetMeters(i.scc.s.Latitude, i.scc.s.Longitude, i.scc.scc.Latitude, i.scc.scc.Longitude) / 1000), 2) : i.scc.scc.Distance
                    }).OrderByDescending(j => j.DateEncoded).ToList();
                 if (model.List.Count() != 0)
@@ -4665,7 +4681,8 @@ namespace ShopNow.Controllers
                        CartStatus = i.scc.scc.Status,
                        //GrossDeliveryCharge = i.d.WorkType == 1 ? (((i.scc.scc.DeliveryCharge == 35 || i.scc.scc.DeliveryCharge == 50) ? 20 : 20 + (i.scc.scc.IsPickupDrop == false ? i.scc.scc.DeliveryCharge - 35 : i.scc.scc.Distance <= 15 ? i.scc.scc.DeliveryCharge - 50 : (60 + ((i.scc.scc.Distance - 15) * 8)))) + i.scc.scc.TipsAmount) : i.scc.scc.DeliveryCharge + i.scc.scc.TipsAmount,
                        //GrossDeliveryCharge = i.d.WorkType == 1 ? (((i.scc.scc.Distance <= 5) ? 20 : 20 + (i.scc.scc.IsPickupDrop == false ? ((i.scc.scc.Distance - 5) * 6) : i.scc.scc.Distance <= 15 ? i.scc.scc.DeliveryCharge - 50 : (60 + ((i.scc.scc.Distance - 15) * 8)))) + i.scc.scc.TipsAmount) : i.scc.scc.DeliveryCharge + i.scc.scc.TipsAmount,
-                       GrossDeliveryCharge = i.d.WorkType == 1 ? ((i.scc.scc.Distance <= 5) ? 20 + ((i.scc.scc.DeliveryRatePercentage / 100) * 20) : 20 + ((i.scc.scc.DeliveryRatePercentage / 100) * 20) + (i.scc.scc.IsPickupDrop == false ? ((i.scc.scc.Distance - 5) * 6 + ((i.scc.scc.DeliveryRatePercentage / 100) * 6)) : i.scc.scc.Distance <= 15 ? i.scc.scc.DeliveryCharge - 50 : (60 + ((i.scc.scc.Distance - 15) * 8 /*+ ((i.scc.scc.DeliveryRatePercentage / 100) * 8)*/)))) : i.scc.scc.DeliveryCharge + i.scc.scc.TipsAmount,
+                       // GrossDeliveryCharge = i.d.WorkType == 1 ? ((i.scc.scc.Distance <= 5) ? 20 + ((i.scc.scc.DeliveryRatePercentage / 100) * 20) : 20 + ((i.scc.scc.DeliveryRatePercentage / 100) * 20) + (i.scc.scc.IsPickupDrop == false ? ((i.scc.scc.Distance - 5) * 6 + ((i.scc.scc.DeliveryRatePercentage / 100) * 6)) : i.scc.scc.Distance <= 15 ? i.scc.scc.DeliveryCharge - 50 : (60 + ((i.scc.scc.Distance - 15) * 8 /*+ ((i.scc.scc.DeliveryRatePercentage / 100) * 8)*/)))) : i.scc.scc.DeliveryCharge + i.scc.scc.TipsAmount,
+                       GrossDeliveryCharge = i.d.WorkType == 2 ? i.scc.scc.DeliveryCharge + i.scc.scc.TipsAmount : i.scc.scc.IsPickupDrop == false ? i.scc.scc.Distance <= 5 ? (i.scc.scc.DeliveryChargeUpto5Km - 15) + ((i.scc.scc.DeliveryRatePercentage / 100) * (i.scc.scc.DeliveryChargeUpto5Km - 15)) + i.scc.scc.TipsAmount : (i.scc.scc.DeliveryChargeUpto5Km - 15) + ((i.scc.scc.DeliveryRatePercentage / 100) * (i.scc.scc.DeliveryChargeUpto5Km - 15)) + ((i.scc.scc.Distance - 5) * i.scc.scc.DeliveryChargePerKm + ((i.scc.scc.DeliveryRatePercentage / 100) * 6)) + i.scc.scc.TipsAmount : i.scc.scc.Distance <= 5 ? (i.scc.scc.DeliveryChargeUpto5Km - 30) + ((i.scc.scc.DeliveryRatePercentage / 100) * (i.scc.scc.DeliveryChargeUpto5Km - 30)) + i.scc.scc.TipsAmount : i.scc.scc.Distance < 15 ? (i.scc.scc.DeliveryChargeUpto5Km - 30) + ((i.scc.scc.DeliveryRatePercentage / 100) * (i.scc.scc.DeliveryChargeUpto5Km - 30)) + ((i.scc.scc.Distance - 5) * 6 + i.scc.scc.TipsAmount/*+ ((i.c.c.DeliveryRatePercentage / 100) * 6)*/) : (i.scc.scc.DeliveryChargeUpto5Km - 30) + ((i.scc.scc.DeliveryRatePercentage / 100) * (i.scc.scc.DeliveryChargeUpto5Km - 30)) + (60 + ((i.scc.scc.Distance - 15) * 8)) + i.scc.scc.TipsAmount,
                        CustomerLatitude = i.scc.scc.Latitude,
                        CustomerLongitude = i.scc.scc.Longitude,
                        ShopLatitude = i.scc.s.Latitude,
@@ -4674,7 +4691,8 @@ namespace ShopNow.Controllers
                        TipAmount = i.scc.scc.TipsAmount,
                        //DeliveryCharge = i.d.WorkType == 1 ? ((i.scc.scc.DeliveryCharge == 35 || i.scc.scc.DeliveryCharge == 50) ? 20 : 20 + (i.scc.scc.IsPickupDrop == false ? i.scc.scc.DeliveryCharge - 35 : i.scc.scc.Distance <= 15 ? i.scc.scc.DeliveryCharge - 50 : (60 + ((i.scc.scc.Distance - 15) * 8)))) : i.scc.scc.DeliveryCharge,
                        //DeliveryCharge = i.d.WorkType == 1 ? ((i.scc.scc.Distance <= 5) ? 20 : 20 + (i.scc.scc.IsPickupDrop == false ? ((i.scc.scc.Distance - 5) * 6) : i.scc.scc.Distance <= 15 ? i.scc.scc.DeliveryCharge - 50 : (60 + ((i.scc.scc.Distance - 15) * 8)))) : i.scc.scc.DeliveryCharge,
-                       DeliveryCharge = i.d.WorkType == 1 ? ((i.scc.scc.Distance <= 5) ? 20 + ((i.scc.scc.DeliveryRatePercentage / 100) * 20) : 20 + ((i.scc.scc.DeliveryRatePercentage / 100) * 20) + (i.scc.scc.IsPickupDrop == false ? ((i.scc.scc.Distance - 5) * 6 + ((i.scc.scc.DeliveryRatePercentage / 100) * 6)) : i.scc.scc.Distance <= 15 ? i.scc.scc.DeliveryCharge - 50 : (60 + ((i.scc.scc.Distance - 15) * 8 /*+ ((i.scc.scc.DeliveryRatePercentage / 100) * 8)*/)))) : i.scc.scc.DeliveryCharge,
+                       // DeliveryCharge = i.d.WorkType == 1 ? ((i.scc.scc.Distance <= 5) ? 20 + ((i.scc.scc.DeliveryRatePercentage / 100) * 20) : 20 + ((i.scc.scc.DeliveryRatePercentage / 100) * 20) + (i.scc.scc.IsPickupDrop == false ? ((i.scc.scc.Distance - 5) * 6 + ((i.scc.scc.DeliveryRatePercentage / 100) * 6)) : i.scc.scc.Distance <= 15 ? i.scc.scc.DeliveryCharge - 50 : (60 + ((i.scc.scc.Distance - 15) * 8 /*+ ((i.scc.scc.DeliveryRatePercentage / 100) * 8)*/)))) : i.scc.scc.DeliveryCharge,
+                       DeliveryCharge = i.d.WorkType == 2 ? i.scc.scc.DeliveryCharge : i.scc.scc.IsPickupDrop == false ? i.scc.scc.Distance <= 5 ? (i.scc.scc.DeliveryChargeUpto5Km - 15) + ((i.scc.scc.DeliveryRatePercentage / 100) * (i.scc.scc.DeliveryChargeUpto5Km - 15)) : (i.scc.scc.DeliveryChargeUpto5Km - 15) + ((i.scc.scc.DeliveryRatePercentage / 100) * (i.scc.scc.DeliveryChargeUpto5Km - 15)) + ((i.scc.scc.Distance - 5) * i.scc.scc.DeliveryChargePerKm + ((i.scc.scc.DeliveryRatePercentage / 100) * 6)) : i.scc.scc.Distance <= 5 ? (i.scc.scc.DeliveryChargeUpto5Km - 30) + ((i.scc.scc.DeliveryRatePercentage / 100) * (i.scc.scc.DeliveryChargeUpto5Km - 30)) : i.scc.scc.Distance < 15 ? (i.scc.scc.DeliveryChargeUpto5Km - 30) + ((i.scc.scc.DeliveryRatePercentage / 100) * (i.scc.scc.DeliveryChargeUpto5Km - 30)) + ((i.scc.scc.Distance - 5) * 6 /*+ ((i.c.c.DeliveryRatePercentage / 100) * 6)*/) : (i.scc.scc.DeliveryChargeUpto5Km - 30) + ((i.scc.scc.DeliveryRatePercentage / 100) * (i.scc.scc.DeliveryChargeUpto5Km - 30)) + (60 + ((i.scc.scc.Distance - 15) * 8)),
                        Distance = i.scc.scc.Distance == 0 ? Math.Round((double)(GetMeters(i.scc.s.Latitude, i.scc.s.Longitude, i.scc.scc.Latitude, i.scc.scc.Longitude) / 1000), 2) : i.scc.scc.Distance
                    }).OrderByDescending(j => j.DateEncoded).ToList();
                 if (model.List.Count() != 0)
@@ -5080,7 +5098,8 @@ namespace ShopNow.Controllers
                 TipAmount = i.Sum(a => a.c.TipsAmount),
                 //TotalAmount = i.FirstOrDefault().d.WorkType == 1 ? i.Sum(a => ((a.c.DeliveryCharge == 35 || a.c.DeliveryCharge == 50) ? 20 : 20 + (a.c.IsPickupDrop == false ? a.c.DeliveryCharge - 35 : a.c.DeliveryCharge - 50))) + i.Sum(a => a.c.TipsAmount) : i.Sum(a => a.c.DeliveryCharge) + i.Sum(a => a.c.TipsAmount),
                 //TotalAmount = i.FirstOrDefault().d.WorkType == 1 ? i.Sum(a => ((a.c.DeliveryCharge == 35 || a.c.DeliveryCharge == 50) ? 20 : 20 + (a.c.IsPickupDrop == false ? a.c.DeliveryCharge - 35 : a.c.Distance <= 15 ? a.c.DeliveryCharge - 50 : (60 + ((a.c.Distance - 15) * 8))))) + i.Sum(a => a.c.TipsAmount) : i.Sum(a => a.c.DeliveryCharge) + i.Sum(a => a.c.TipsAmount),
-                TotalAmount = i.FirstOrDefault().d.WorkType == 1 ? i.Sum(a => ((a.c.Distance <= 5) ? 20 + ((a.c.DeliveryRatePercentage / 100) * 20) : 20 + ((a.c.DeliveryRatePercentage / 100) * 20) + (a.c.IsPickupDrop == false ? ((a.c.Distance - 5) * 6 + ((a.c.DeliveryRatePercentage / 100) * 6)) : a.c.Distance <= 15 ? a.c.DeliveryCharge - 50 : (60 + ((a.c.Distance - 15) * 8 /*+ ((a.c.DeliveryRatePercentage / 100) * 8)*/))))) + i.Sum(a => a.c.TipsAmount) : i.Sum(a => a.c.DeliveryCharge) + i.Sum(a => a.c.TipsAmount),
+                //TotalAmount = i.FirstOrDefault().d.WorkType == 1 ? i.Sum(a => ((a.c.Distance <= 5) ? 20 + ((a.c.DeliveryRatePercentage / 100) * 20) : 20 + ((a.c.DeliveryRatePercentage / 100) * 20) + (a.c.IsPickupDrop == false ? ((a.c.Distance - 5) * 6 + ((a.c.DeliveryRatePercentage / 100) * 6)) : a.c.Distance <= 15 ? a.c.DeliveryCharge - 50 : (60 + ((a.c.Distance - 15) * 8 /*+ ((a.c.DeliveryRatePercentage / 100) * 8)*/))))) + i.Sum(a => a.c.TipsAmount) : i.Sum(a => a.c.DeliveryCharge) + i.Sum(a => a.c.TipsAmount),
+                TotalAmount = i.FirstOrDefault().d.WorkType == 2 ? i.Sum(a=> a.c.DeliveryCharge + a.c.TipsAmount) : i.Sum(a=> a.c.IsPickupDrop == false ? a.c.Distance <= 5 ? (a.c.DeliveryChargeUpto5Km - 15) + ((a.c.DeliveryRatePercentage / 100) * (a.c.DeliveryChargeUpto5Km - 15)) + a.c.TipsAmount : (a.c.DeliveryChargeUpto5Km - 15) + ((a.c.DeliveryRatePercentage / 100) * (a.c.DeliveryChargeUpto5Km - 15)) + ((a.c.Distance - 5) * a.c.DeliveryChargePerKm + ((a.c.DeliveryRatePercentage / 100) * 6)) + a.c.TipsAmount : a.c.Distance <= 5 ? (a.c.DeliveryChargeUpto5Km - 30) + ((a.c.DeliveryRatePercentage / 100) * (a.c.DeliveryChargeUpto5Km - 30)) + a.c.TipsAmount : a.c.Distance < 15 ? (a.c.DeliveryChargeUpto5Km - 30) + ((a.c.DeliveryRatePercentage / 100) * (a.c.DeliveryChargeUpto5Km - 30)) + ((a.c.Distance - 5) * 6 + a.c.TipsAmount/*+ ((i.c.c.DeliveryRatePercentage / 100) * 6)*/) : (a.c.DeliveryChargeUpto5Km - 30) + ((a.c.DeliveryRatePercentage / 100) * (a.c.DeliveryChargeUpto5Km - 30)) + (60 + ((a.c.Distance - 15) * 8)) + a.c.TipsAmount),
                 PaidAmount = GetPaidAmount(i.Key.Value, phoneNo),
             }).OrderByDescending(j => j.Date).ToList();
             int count = model.List.Count();
@@ -5101,7 +5120,8 @@ namespace ShopNow.Controllers
            {
                //amount = i.Any() ? i.Sum(a => ((a.c.DeliveryCharge == 35 || a.c.DeliveryCharge == 50) ? 20 : 20 + (a.c.IsPickupDrop == false ? a.c.DeliveryCharge - 35 : a.c.DeliveryCharge - 50))) + i.Sum(a => a.c.TipsAmount) : 0
                //amount = i.Any() ? i.Sum(a => ((a.c.DeliveryCharge == 35 || a.c.DeliveryCharge == 50) ? 20 : 20 + (a.c.IsPickupDrop == false ? a.c.DeliveryCharge - 35 : a.c.Distance <= 15 ? a.c.DeliveryCharge - 50 : (60 + ((a.c.Distance - 15) * 8))))) + i.Sum(a => a.c.TipsAmount) : 0
-               amount = i.Any() ? i.Sum(a => ((a.c.Distance <= 5) ? 20 + ((a.c.DeliveryRatePercentage / 100) * 20) : 20 + ((a.c.DeliveryRatePercentage / 100) * 20) + (a.c.IsPickupDrop == false ? ((a.c.Distance - 5) * 6 + ((a.c.DeliveryRatePercentage / 100) * 6)) : a.c.Distance <= 15 ? a.c.DeliveryCharge - 50 : (60 + ((a.c.Distance - 15) * 8 /*+ ((a.c.DeliveryRatePercentage / 100) * 8)*/))))) + i.Sum(a => a.c.TipsAmount) : 0
+               //amount = i.Any() ? i.Sum(a => ((a.c.Distance <= 5) ? 20 + ((a.c.DeliveryRatePercentage / 100) * 20) : 20 + ((a.c.DeliveryRatePercentage / 100) * 20) + (a.c.IsPickupDrop == false ? ((a.c.Distance - 5) * 6 + ((a.c.DeliveryRatePercentage / 100) * 6)) : a.c.Distance <= 15 ? a.c.DeliveryCharge - 50 : (60 + ((a.c.Distance - 15) * 8 /*+ ((a.c.DeliveryRatePercentage / 100) * 8)*/))))) + i.Sum(a => a.c.TipsAmount) : 0
+               amount = i.Any() ? i.Sum(a => a.c.IsPickupDrop == false ? a.c.Distance <= 5 ? (a.c.DeliveryChargeUpto5Km - 15) + ((a.c.DeliveryRatePercentage / 100) * (a.c.DeliveryChargeUpto5Km - 15)) + a.c.TipsAmount : (a.c.DeliveryChargeUpto5Km - 15) + ((a.c.DeliveryRatePercentage / 100) * (a.c.DeliveryChargeUpto5Km - 15)) + ((a.c.Distance - 5) * a.c.DeliveryChargePerKm + ((a.c.DeliveryRatePercentage / 100) * 6)) + a.c.TipsAmount : a.c.Distance <= 5 ? (a.c.DeliveryChargeUpto5Km - 30) + ((a.c.DeliveryRatePercentage / 100) * (a.c.DeliveryChargeUpto5Km - 30)) + a.c.TipsAmount : a.c.Distance < 15 ? (a.c.DeliveryChargeUpto5Km - 30) + ((a.c.DeliveryRatePercentage / 100) * (a.c.DeliveryChargeUpto5Km - 30)) + ((a.c.Distance - 5) * 6 + a.c.TipsAmount/*+ ((i.c.c.DeliveryRatePercentage / 100) * 6)*/) : (a.c.DeliveryChargeUpto5Km - 30) + ((a.c.DeliveryRatePercentage / 100) * (a.c.DeliveryChargeUpto5Km - 30)) + (60 + ((a.c.Distance - 15) * 8)) + a.c.TipsAmount) : 0
            }).FirstOrDefault();
             if (list != null)
                 return Convert.ToDouble(list.amount);
@@ -8332,6 +8352,53 @@ namespace ShopNow.Controllers
                 else
                     notificationmessage = $"Hi, Rs.100 💵 has been added to your wallet for Successful first order (Expires 🗓️ {customerWalletHistory.ExpiryDate.Value.ToString("dd-MMM-yyyy")}). Happy Snowching 😎.";
                 Helpers.PushNotification.SendbydeviceId(notificationmessage, "You won 100rs 💵 for Snowching.", "Orderstatus", "", customer.FcmTocken.ToString(), "tune1.caf", "mywallet");
+            }
+            return Json(true, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult UpdateReferalExpiryDate()
+        {
+            var cwhList = db.CustomerWalletHistories.Where(i => i.Amount == 20 && i.Type == 1).ToList();
+            foreach (var item in cwhList)
+            {
+                var cwh = db.CustomerWalletHistories.FirstOrDefault(i => i.Id == item.Id);
+                cwh.ExpiryDate = cwh.DateEncoded.Value.AddDays(60);
+                db.Entry(cwh).State = EntityState.Modified;
+                db.SaveChanges();
+            }
+            return Json(true, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult AddDominosTVLProducts()
+        {
+            var NglDominosList = db.Products.Where(i => i.ShopId == 243 && i.Status == 0).ToList();
+            foreach (var item in NglDominosList)
+            {
+                var nglProduct = db.Products.FirstOrDefault(i => i.Id == item.Id);
+                var tvlProduct = _mapper.Map<Product, Product>(nglProduct);
+                tvlProduct.ShopId = 264;
+                tvlProduct.DateEncoded = DateTime.Now;
+                tvlProduct.DateUpdated = DateTime.Now;
+                tvlProduct.MappedDate = DateTime.Now;
+                tvlProduct.CreatedBy = "Admin";
+                tvlProduct.UpdatedBy = "Admin";
+                db.Products.Add(tvlProduct);
+                db.SaveChanges();
+
+                var nglProductDishAddon = db.ShopDishAddOns.Where(i => i.ProductId == item.Id).ToList();
+                foreach (var addon in nglProductDishAddon)
+                {
+                    var nglAddon = db.ShopDishAddOns.FirstOrDefault(i => i.Id == addon.Id);
+                    var tvlAddon = _mapper.Map<ShopDishAddOn, ShopDishAddOn>(nglAddon);
+                    tvlAddon.DateEncoded = DateTime.Now;
+                    tvlAddon.DateUpdated = DateTime.Now;
+                    tvlAddon.CreatedBy = "Admin";
+                    tvlAddon.UpdatedBy = "Admin";
+                    tvlAddon.ShopId = 264;
+                    tvlAddon.ProductId = tvlProduct.Id;
+                    db.ShopDishAddOns.Add(tvlAddon);
+                    db.SaveChanges();
+                }
             }
             return Json(true, JsonRequestBehavior.AllowGet);
         }

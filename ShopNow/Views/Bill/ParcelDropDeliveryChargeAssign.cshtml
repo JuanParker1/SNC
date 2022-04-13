@@ -1,0 +1,214 @@
+﻿@model ShopNow.ViewModels.ParcelDropDeliveryChargeAssignCreateViewModel
+@{
+    ViewBag.Title = "Parcel Drop Delivery Charge Assign";
+}
+<title>ShopNow | @ViewBag.Title</title>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-4">
+            <h5 class="mt-1 text-success" style="letter-spacing:1px">@ViewBag.Title</h5>
+        </div>
+        <div class="col-md-8 text-right">
+            <a href="~/Bill/ParcelDropDeliveryChargeAssignList" class="btn btn-sm btn-primary" target="_self"><span class="fa fa-bars"></span> Parcel Drop Delivery Charge Assign List</a>
+        </div>
+    </div>
+    <div class="row mt-2">
+        <div class="col-md-12">
+            @using (Html.BeginForm("ParcelDropDeliveryChargeAssign", "Bill", FormMethod.Post, new { id = "ParcelDeliveryForm" }))
+            {
+                @Html.AntiForgeryToken()
+                <div class="card mb-3 shadow">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group row">
+                                    <div class="col-md-2">
+                                        <label class="col-form-label text-secondary font-weight-bold">Shop Name</label>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <select id="ShopId" name="ShopId" class="form-control"></select>
+                                        <input type="hidden" name="ShopName" id="ShopName" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-2">
+                                <label class="col-form-label text-secondary font-weight-bold">Delivery Mode</label>
+                            </div>
+                            <div class="col-md-6 mt-2">
+                                <div class="form-check-inline mr-3">
+                                    <label class="form-check-label">
+                                        <input type="radio" class="form-check-input" name="Type" value="0" checked> General
+                                    </label>
+                                </div>
+                                <div class="form-check-inline">
+                                    <label class="form-check-label">
+                                        <input type="radio" class="form-check-input" name="Type" value="1"> Special
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3 border-right">
+                                <label class="col-form-label text-secondary font-weight-bold">Bike</label><br />
+                                <label class="text-secondary">Rate upto 5 Km. : <span class="font-weight-bold" id="BikeChargeUpto5Kms"></span></label><br />
+                                <label class="text-secondary">After 5 Km. (Rate per Km.) : <span class="font-weight-bold" id="BikeChargePerKm"></span></label>
+                                <label class="text-secondary"> Above 15 Km. : <span class="font-weight-bold" id="BikeChargeAbove15Kms"></span></label>
+                            </div>
+                            <div class="col-md-3 border-right">
+                                <label class="col-form-label text-secondary font-weight-bold">Carrier Bike</label><br />
+                                <label class="text-secondary">Rate upto 5 Km. : <span class="font-weight-bold" id="CarrierBikeChargeUpto5Kms"></span></label><br />
+                                <label class="text-secondary">After 5 Km. (Rate per Km.) : <span class="font-weight-bold" id="CarrierBikeChargePerKm"></span></label>
+                                <label class="text-secondary"> Above 15 Km. : <span class="font-weight-bold" id="CarrierBikeChargeAbove15Kms"></span></label>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="col-form-label text-secondary font-weight-bold">Auto</label><br />
+                                <label class="text-secondary">Rate upto 5 Km. : <span class="font-weight-bold" id="AutoChargeUpto5Kms"></span></label><br />
+                                <label class="text-secondary">After 5 Km. (Rate per Km.) : <span class="font-weight-bold" id="AutoChargePerKm"></span></label>
+                                <label class="text-secondary"> Above 15 Km. : <span class="font-weight-bold" id="AutoChargeAbove15Kms"></span></label>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-2 my-5 mx-auto">
+                                <button type="button" class="btn btn-block btn-success" id="Create"><span class="glyphicon glyphicon-file"></span> Update</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+    <!--Select2-->
+    <script src="~/Scripts/select2/js/select2.js"></script>
+    <link href="~/Scripts/select2/css/select2.css" rel="stylesheet" />
+    <link href="~/Content/select2/select2.custom.css" rel="stylesheet" />
+    <!--Select2 End-->
+    <script src="~/Scripts/sweetalert/sweetalert.min.js"></script>
+    <link href="~/Content/sweetalert/sweetalert.css" rel="stylesheet" />
+    <script>
+        $(document).ready(function () {
+            var msg = "@ViewBag.Message";
+            if (msg != "") {
+                swal("Notice!", msg, "warning")
+            }
+
+            $('input[type=radio][name=Type]').change(function () {
+                $.getJSON("/Bill/GetParcelDropDeliveryChargeType?type=" + type, function (data) {
+                    //debugger;
+                    $.each(data, function (key, v) {
+                        $.each(v, function (index, list) {
+                            if (list.Type == 0) {
+                                if (list.VehicleType == 1) {
+                                    $("#BikeChargeUpto5Kms").text(list.ChargeUpto5Kms);
+                                    $("#BikeChargePerKm").text(list.ChargePerKm);
+                                    $("#BikeChargeAbove15Kms").text(list.ChargeAbove15Kms);
+                                }
+                                if (list.VehicleType == 2) {
+                                    $("#CarrierBikeChargeUpto5Kms").text(list.ChargeUpto5Kms);
+                                    $("#CarrierBikeChargePerKm").text(list.ChargePerKm);
+                                    $("#CarrierBikeChargeAbove15Kms").text(list.ChargeAbove15Kms);
+                                }
+                                if (list.VehicleType == 3) {
+                                    $("#AutoChargeUpto5Kms").text(list.ChargeUpto5Kms);
+                                    $("#AutoChargePerKm").text(list.ChargePerKm);
+                                    $("#AutoChargeAbove15Kms").text(list.ChargeAbove15Kms);
+                                }
+                            }
+                            if (list.Type == 1) {
+                                if (list.VehicleType == 1) {
+                                    $("#BikeChargeUpto5Kms").text(list.ChargeUpto5Kms);
+                                    $("#BikeChargePerKm").text(list.ChargePerKm);
+                                    $("#BikeChargeAbove15Kms").text(list.ChargeAbove15Kms);
+                                }
+                                if (list.VehicleType == 2) {
+                                    $("#CarrierBikeChargeUpto5Kms").text(list.ChargeUpto5Kms);
+                                    $("#CarrierBikeChargePerKm").text(list.ChargePerKm);
+                                    $("#CarrierBikeChargeAbove15Kms").text(list.ChargeAbove15Kms);
+                                }
+                                if (list.VehicleType == 3) {
+                                    $("#AutoChargeUpto5Kms").text(list.ChargeUpto5Kms);
+                                    $("#AutoChargePerKm").text(list.ChargePerKm);
+                                    $("#AutoChargeAbove15Kms").text(list.ChargeAbove15Kms);
+                                }
+                            }
+                        });
+                    });
+                });
+            });
+
+            $('input[type=radio][name=Type]').change(function () {
+                $.getJSON("/Bill/GetParcelDropDeliveryChargeType?type=" + type, function (data) {
+                    $.each(data, function (key, v) {
+                        $.each(v, function (index, list) {
+                            if (list.Type == 0) {
+                                if (list.VehicleType == 1) {
+                                    $("#BikeChargeUpto5Kms").text(list.ChargeUpto5Kms);
+                                    $("#BikeChargePerKm").text(list.ChargePerKm);
+                                    $("#BikeChargeAbove15Kms").text(list.ChargeAbove15Kms);
+                                }
+                                if (list.VehicleType == 2) {
+                                    $("#CarrierBikeChargeUpto5Kms").text(list.ChargeUpto5Kms);
+                                    $("#CarrierBikeChargePerKm").text(list.ChargePerKm);
+                                    $("#CarrierBikeChargeAbove15Kms").text(list.ChargeAbove15Kms);
+                                }
+                                if (list.VehicleType == 3) {
+                                    $("#AutoChargeUpto5Kms").text(list.ChargeUpto5Kms);
+                                    $("#AutoChargePerKm").text(list.ChargePerKm);
+                                    $("#AutoChargeAbove15Kms").text(list.ChargeAbove15Kms);
+                                }
+                            }
+                            if (list.Type == 1) {
+                                if (list.VehicleType == 1) {
+                                    $("#BikeChargeUpto5Kms").text(list.ChargeUpto5Kms);
+                                    $("#BikeChargePerKm").text(list.ChargePerKm);
+                                    $("#BikeChargeAbove15Kms").text(list.ChargeAbove15Kms);
+                                }
+                                if (list.VehicleType == 2) {
+                                    $("#CarrierBikeChargeUpto5Kms").text(list.ChargeUpto5Kms);
+                                    $("#CarrierBikeChargePerKm").text(list.ChargePerKm);
+                                    $("#CarrierBikeChargeAbove15Kms").text(list.ChargeAbove15Kms);
+                                }
+                                if (list.VehicleType == 3) {
+                                    $("#AutoChargeUpto5Kms").text(list.ChargeUpto5Kms);
+                                    $("#AutoChargePerKm").text(list.ChargePerKm);
+                                    $("#AutoChargeAbove15Kms").text(list.ChargeAbove15Kms);
+                                }
+                            }
+                        });
+                    });
+                });
+            });
+
+            $('#ShopId').select2({
+                placeholder: "Search Shop",
+                ajax: {
+                    url: "/Bill/GetBillShopSelect2",
+                    width: '100%',
+                    delay: 250,
+                    dataType: 'json'
+                }
+            }).on('select2:select', function (e) {
+                $('input[name="ShopName"]').val(e.params.data.textSave);
+            });
+
+            $('#Create').on('click', function () {
+                var shop = $("#ShopId").val();
+                var type = $('input[name="Type"]:checked').val();
+                if (shop != null) {
+                    if (type == '0' || type == '1') {
+                        $('#ParcelDeliveryForm').submit();
+                    }
+                }
+                else {
+                    swal("Notice!", "Please Select Shop Name!", "warning");
+                }
+            });
+        });
+    </script>
+}
+

@@ -30,13 +30,22 @@ namespace ShopNow.Controllers
                 //config.CreateMap<DeliveryChargeAssignCreateViewModel, DeliveryCharge>();
                 config.CreateMap<DeliveryChargeEditViewModel, DeliveryCharge>();
                 config.CreateMap<DeliveryCharge, DeliveryChargeEditViewModel>();
-
+                
                 // Billing Charge
                 config.CreateMap<BillingChargeCreateViewModel, BillingCharge>();
                 config.CreateMap<BillingChargeEditViewModel, BillingCharge>();
                 config.CreateMap<BillingCharge, BillingChargeEditViewModel>();
                 config.CreateMap<BillingCharge, BillingChargeListViewModel.BillList>();
 
+                //Parcel Drop Delivery Charge
+                config.CreateMap<ParcelDropDeliveryCreateViewModel, ParcelDropDeliveryCharge>();
+                config.CreateMap<ParcelDropDeliveryEditViewModel, ParcelDropDeliveryCharge>();
+                config.CreateMap<ParcelDropDeliveryCharge, ParcelDropDeliveryEditViewModel>();
+                config.CreateMap<ParcelDropDeliveryCharge, ParcelDropDeliveryListViewModel.ParcelDropDeliveryList>();
+
+                //Parcel Drop Delivery Charge Assign 
+                config.CreateMap<ParcelDropDeliveryChargeAssignCreateViewModel, ParcelDropDeliveryCharge>();
+                config.CreateMap<ParcelDropDeliveryCharge, ParcelDropDeliveryChargeAssignCreateViewModel>();
             });
             _mapper = _mapperConfiguration.CreateMapper();
         }
@@ -256,13 +265,12 @@ namespace ShopNow.Controllers
             _mapper.Map(model, deliverycharge);
             if (deliverycharge != null)
             {
-                deliverycharge.DateUpdated = DateTime.Now;
-                deliverycharge.UpdatedBy = user.Name;
                 if (model.Type == 1)
                 {
                     deliverycharge.ChargeUpto5Km = model.ChargeUpto5Km1;
                     deliverycharge.ChargePerKm = model.ChargePerKm1;
                 }
+                deliverycharge.UpdatedBy = user.Name;
                 deliverycharge.DateUpdated = DateTime.Now;
                 db.Entry(deliverycharge).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
@@ -329,21 +337,150 @@ namespace ShopNow.Controllers
             return RedirectToAction("DeliveryChargeAssignList");
         }
 
-        //[AccessPolicy(PageCode = "SHNBILDD008")]
-        //public JsonResult DeliveryChargeDelete(int id)
-        //{
-        //    var user = ((Helpers.Sessions.User)Session["USER"]);
-        //    var deliverycharge = db.DeliveryCharges.Where(b => b.Id == id && b.Status == 0).FirstOrDefault();
-        //    if (deliverycharge != null)
-        //    {
-        //        deliverycharge.Status = 2;
-        //        deliverycharge.DateUpdated = DateTime.Now;
-        //        deliverycharge.UpdatedBy = user.Name;
-        //        db.Entry(deliverycharge).State = System.Data.Entity.EntityState.Modified;
-        //        db.SaveChanges();
-        //    }
-        //    return Json(true, JsonRequestBehavior.AllowGet);
-        //}
+        public ActionResult ParcelDropDeliveryList()
+        {
+            var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
+            ViewBag.Name = user.Name;
+            var model = new ParcelDropDeliveryListViewModel();
+            model.List = db.ParcelDropDeliveryCharges.Where(i => i.Status == 0)
+                .Select(i => new ParcelDropDeliveryListViewModel.ParcelDropDeliveryList
+                {
+                    Id = i.Id,
+                    Type = i.Type,
+                    VehicleType = i.VehicleType,
+                    ChargePerKm = i.ChargePerKm,
+                    ChargeUpto5Kms = i.ChargeUpto5Kms,
+                    ChargeAbove15Kms = i.ChargeAbove15Kms
+
+                }).ToList();
+            return View(model.List);
+        }
+
+        public ActionResult ParcelDropDeliveryCharge()
+        {
+            var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
+            ViewBag.Name = user.Name;
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult ParcelDropDeliveryCharge(ParcelDropDeliveryCreateViewModel model)
+        {
+            var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
+            ViewBag.Name = user.Name;
+            var isExist = db.ParcelDropDeliveryCharges.Any(i => i.Type == model.Type && i.VehicleType == model.VehicleType && i.Status == 0);
+            if (isExist)
+            {
+                ViewBag.Message = "Already Exist";
+                return View();
+            }
+            var parceldropDeliveryCharge = _mapper.Map<ParcelDropDeliveryCreateViewModel, ParcelDropDeliveryCharge>(model);
+            if (model.Type == 1)
+            {
+                parceldropDeliveryCharge.ChargeUpto5Kms = model.ChargeUpto5Kms1;
+                parceldropDeliveryCharge.ChargePerKm = model.ChargePerKm1;
+                parceldropDeliveryCharge.ChargeAbove15Kms = model.ChargeAbove15Kms1;
+            }
+            parceldropDeliveryCharge.Status = 0;
+            parceldropDeliveryCharge.CreatedBy = user.Name;
+            parceldropDeliveryCharge.UpdatedBy = user.Name;
+            parceldropDeliveryCharge.DateEncoded = DateTime.Now;
+            parceldropDeliveryCharge.DateUpdated = DateTime.Now;
+            db.ParcelDropDeliveryCharges.Add(parceldropDeliveryCharge);
+            db.SaveChanges();
+            return RedirectToAction("ParcelDropDeliveryList");
+        }
+
+        public ActionResult ParcelDropDeliveryUpdate(string Id)
+        {
+            var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
+            ViewBag.Name = user.Name;
+            var dId = AdminHelpers.DCodeInt(Id);
+            var parcelDeliveryCharge = db.ParcelDropDeliveryCharges.Where(p => p.Id == dId && p.Status == 0).FirstOrDefault();
+            var model = _mapper.Map<ParcelDropDeliveryCharge, ParcelDropDeliveryEditViewModel>(parcelDeliveryCharge);
+            if (parcelDeliveryCharge.Type == 1)
+            {
+                model.ChargePerKm1 = parcelDeliveryCharge.ChargePerKm;
+                model.ChargeUpto5Kms1 = parcelDeliveryCharge.ChargeUpto5Kms;
+                model.ChargeAbove15Kms1 = parcelDeliveryCharge.ChargeAbove15Kms;
+            }
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult ParcelDropDeliveryUpdate(ParcelDropDeliveryEditViewModel model)
+        {
+            var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
+            ViewBag.Name = user.Name;
+            ParcelDropDeliveryCharge parcelDropDeliveryCharge = db.ParcelDropDeliveryCharges.Where(i => i.Id == model.Id && i.Status == 0).FirstOrDefault();
+            _mapper.Map(model, parcelDropDeliveryCharge);
+            if (model.Type == 1)
+            {
+                parcelDropDeliveryCharge.ChargeUpto5Kms = model.ChargeUpto5Kms1;
+                parcelDropDeliveryCharge.ChargePerKm = model.ChargePerKm1;
+                parcelDropDeliveryCharge.ChargeAbove15Kms = model.ChargeAbove15Kms1;
+            }
+            parcelDropDeliveryCharge.UpdatedBy = user.Name;
+            parcelDropDeliveryCharge.DateUpdated = DateTime.Now;
+            db.Entry(parcelDropDeliveryCharge).State = System.Data.Entity.EntityState.Modified;
+            db.SaveChanges();
+            return RedirectToAction("ParcelDropDeliveryList");
+        }
+
+        public JsonResult ParcelDropDeliveryDelete(int id)
+        {
+            var user = ((Helpers.Sessions.User)Session["USER"]);
+            var parceldeliverycharge = db.ParcelDropDeliveryCharges.Where(b => b.Id == id && b.Status == 0).FirstOrDefault();
+            if (parceldeliverycharge != null)
+            {
+                parceldeliverycharge.Status = 2;
+                parceldeliverycharge.DateUpdated = DateTime.Now;
+                parceldeliverycharge.UpdatedBy = user.Name;
+                db.Entry(parceldeliverycharge).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+            }
+            return Json(true, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult ParcelDropDeliveryChargeAssignList()
+        {
+            var user = ((Helpers.Sessions.User)Session["USER"]);
+            ViewBag.Name = user.Name;
+            var model = new ParcelDropDeliveryChargeAssignListViewModel();
+            model.List = db.Shops.Where(i => i.Status == 0)
+                .Select(i => new ParcelDropDeliveryChargeAssignListViewModel.ParcelDropDeliveryAssignList
+                {
+                    ShopId = i.Id,
+                    ShopName = i.Name,
+                    Type = i.DeliveryType
+                }).ToList();
+
+            return View(model.List);
+        }
+
+        public ActionResult ParcelDropDeliveryChargeAssign()
+        {
+            var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
+            ViewBag.Name = user.Name;
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult ParcelDropDeliveryChargeAssign(ParcelDropDeliveryChargeAssignCreateViewModel model)
+        {
+            var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
+            var shop = db.Shops.Where(i => i.Id == model.ShopId).FirstOrDefault();
+
+            shop.DeliveryType = model.Type;
+            shop.UpdatedBy = user.Name;
+            shop.DateUpdated = DateTime.Now;
+            db.Entry(shop).State = System.Data.Entity.EntityState.Modified;
+            db.SaveChanges();
+            return RedirectToAction("ParcelDropDeliveryChargeAssignList");
+        }
 
         public async Task<JsonResult> GetBillShopSelect2(string q = "")
         {
@@ -383,6 +520,32 @@ namespace ShopNow.Controllers
             return Json(new { IsAdded = IsAdded, message = message }, JsonRequestBehavior.AllowGet);
         }
 
+        public JsonResult ParcelDeliveryChargeExist(int vehicletype)
+        {
+            var GeneralCount = db.ParcelDropDeliveryCharges.Where(i => i.Type == 0 && i.VehicleType == vehicletype && i.Status == 0).Count();
+            var SpecialCount = db.ParcelDropDeliveryCharges.Where(i => i.Type == 1 && i.VehicleType == vehicletype && i.Status == 0).Count();
+            bool IsAdded = false;
+            string message = "";
+            if (GeneralCount == 0)
+            {
+                IsAdded = true;
+            }
+            else
+            {
+                message = "General Entry Already Exist";
+            }
+            if (SpecialCount == 0)
+            {
+                IsAdded = true;
+            }
+            else
+            {
+                IsAdded = false;
+                message = "Special Entry Already Exist";
+            }
+            return Json(new { IsAdded = IsAdded, message = message }, JsonRequestBehavior.AllowGet);
+        }
+
         public async Task<JsonResult> GetDeliveryChargeType(int type, int tiretype)
         {
             var model = new DeliveryChargeListViewModel();
@@ -392,6 +555,22 @@ namespace ShopNow.Controllers
                 ChargeUpto5Km = i.ChargeUpto5Km,
                 ChargePerKm = i.ChargePerKm,
                 TireType = i.TireType,
+                Type = i.Type,
+                VehicleType = i.VehicleType
+            }).ToListAsync();
+
+            return Json(new { model.List, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
+        }
+
+        public async Task<JsonResult> GetParcelDropDeliveryChargeType(int type)
+        {
+            var model = new ParcelDropDeliveryListViewModel();
+            model.List = await db.ParcelDropDeliveryCharges.Where(a => a.Type == type && a.Status == 0).Select(i => new ParcelDropDeliveryListViewModel.ParcelDropDeliveryList
+            {
+                Id = i.Id,
+                ChargeUpto5Kms = i.ChargeUpto5Kms,
+                ChargePerKm = i.ChargePerKm,
+                ChargeAbove15Kms = i.ChargeAbove15Kms,
                 Type = i.Type,
                 VehicleType = i.VehicleType
             }).ToListAsync();

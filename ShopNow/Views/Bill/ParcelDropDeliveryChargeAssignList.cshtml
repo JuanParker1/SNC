@@ -1,0 +1,32 @@
+﻿@model IEnumerable<ShopNow.ViewModels.ParcelDropDeliveryChargeAssignListViewModel.ParcelDropDeliveryAssignList>
+@using GridMvc.Html
+@{
+    ViewBag.Title = "Parcel Drop Delivery Charge Assign List";
+}
+<title>ShopNow | @ViewBag.Title</title>
+<link href="~/Content/Gridmvc.css" rel="stylesheet" />
+<script src="~/Scripts/gridmvc.js"></script>
+<div class="container-fluid">
+    <div class="row my-2">
+        <div class="col-md-6">
+            <h5 class="text-success" style="letter-spacing:1px">@ViewBag.Title</h5>
+        </div>
+        <div class="col-md-6 text-right">
+            <a href="~/Bill/ParcelDropDeliveryChargeAssign" class="btn btn-sm btn-primary"><span class="fa fa-plus"></span> Parcel Drop Delivery Charge Assign</a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card shadow mt-3">
+                <div class="card-body">
+                    @Html.Grid(Model).Columns(columns =>
+               {
+               columns.Add(b => b.ShopName).Titled("Shop Name").Filterable(true).SetWidth(20);
+               columns.Add(b => b.TypeText).Filterable(true).Titled("Delivery Mode").SetWidth(20);
+             }).WithPaging(20).Sortable(true)
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
