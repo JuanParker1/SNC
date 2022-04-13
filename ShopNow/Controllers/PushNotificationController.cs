@@ -118,7 +118,7 @@ namespace ShopNow.Controllers
                 db.PushNotifications.Add(pushNotification);
                 db.SaveChanges();
                 string alertmessage = "";
-                message = scheduleDateTime == null ? "Notification Send Successfully!" : "Notification Scheduled Successfully!";
+                alertmessage = scheduleDateTime == null ? "Notification Send Successfully!" : "Notification Scheduled Successfully!";
                 return RedirectToAction("Index", new { message = alertmessage, type = 1 });
             }
             catch
