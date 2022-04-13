@@ -454,7 +454,7 @@ namespace ShopNow.Controllers
                 {
                     ShopId = i.Id,
                     ShopName = i.Name,
-                    Type = i.DeliveryType
+                    Type = i.ParcelDropDeliveryType
                 }).ToList();
 
             return View(model.List);
@@ -474,7 +474,7 @@ namespace ShopNow.Controllers
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             var shop = db.Shops.Where(i => i.Id == model.ShopId).FirstOrDefault();
 
-            shop.DeliveryType = model.Type;
+            shop.ParcelDropDeliveryType = model.Type;
             shop.UpdatedBy = user.Name;
             shop.DateUpdated = DateTime.Now;
             db.Entry(shop).State = System.Data.Entity.EntityState.Modified;
