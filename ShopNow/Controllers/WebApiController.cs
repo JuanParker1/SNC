@@ -55,7 +55,7 @@ namespace ShopNow.Controllers
                                                        orderby p.ItemTimeStamp descending
                                                        select p.ItemTimeStamp).FirstOrDefault();
                         string s = "";
-                        string Url = api.Url + "items?q=itemTimeStamp>="+ model.TimeStamp+ ",status==R,outletId==" + api.OutletId + "&limit=200000&selectAll=true";
+                        string Url = api.Url + "items?q=itemTimeStamp>="+ model.TimeStamp+ ",status==R,locationId==1,outletId==" + api.OutletId + "&limit=200000&selectAll=true";
                         using (WebClient client = new WebClient())
                         {
                             client.Headers["X-Auth-Token"] = api.AuthKey; //"62AA1F4C9180EEE6E27B00D2F4F79E5FB89C18D693C2943EA171D54AC7BD4302BE3D88E679706F8C";
