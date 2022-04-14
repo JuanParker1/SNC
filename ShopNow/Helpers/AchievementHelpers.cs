@@ -437,6 +437,71 @@ namespace ShopNow.Helpers
                                 }
                             }
                             break;
+                        case 7:
+                            if (item.HasAccept == true)
+                            {
+                                var customerAcceptedAchievements = db.CustomerAchievements.FirstOrDefault(i => i.Status == 1 && i.CustomerId == customer.Id && i.AchievementId == item.Id);
+                                if (customerAcceptedAchievements != null)
+                                {
+                                    if (item.DayLimit > 0)
+                                    {
+                                        DateTime achievementExpirydate = customerAcceptedAchievements.DateEncoded.AddDays(item.DayLimit);
+                                        var orderListCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(customerAcceptedAchievements.DateEncoded) && DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(achievementExpirydate))).Count();
+                                        if (orderListCount == item.CountValue)
+                                        {
+                                            customer.WalletAmount += item.Amount;
+                                            db.Entry(customer).State = EntityState.Modified;
+                                            db.SaveChanges();
+
+                                            //Wallet History
+                                            AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        var orderListCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(achievementStartDateTime)).Count();
+                                        if (orderListCount == item.CountValue)
+                                        {
+                                            customer.WalletAmount += item.Amount;
+                                            db.Entry(customer).State = EntityState.Modified;
+                                            db.SaveChanges();
+
+                                            //Wallet History
+                                            AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name);
+                                        }
+                                    }
+
+                                }
+                            }
+                            else
+                            {
+                                if (item.DayLimit > 0)
+                                {
+                                    DateTime achievementExpirydate = achievementStartDateTime.AddDays(item.DayLimit);
+                                    var orderListCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(achievementStartDateTime) && DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(achievementExpirydate))).Count();
+                                    if (orderListCount == item.CountValue)
+                                    {
+                                        customer.WalletAmount += item.Amount;
+                                        db.Entry(customer).State = EntityState.Modified;
+                                        db.SaveChanges();
+                                        //Wallet History
+                                        AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name);
+                                    }
+                                }
+                                else
+                                {
+                                    var orderListCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(achievementStartDateTime)).Count();
+                                    if (orderListCount == item.CountValue)
+                                    {
+                                        customer.WalletAmount += item.Amount;
+                                        db.Entry(customer).State = EntityState.Modified;
+                                        db.SaveChanges();
+                                        //Wallet History
+                                        AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name);
+                                    }
+                                }
+                            }
+                            break;
                         default:
                             break;
                     }
@@ -448,14 +513,13 @@ namespace ShopNow.Helpers
         public static void AddAchievementCustomerWalletHistory(int custId, double amount, string achievementName)
         {
             sncEntities db = new sncEntities();
-            var walletHistory = new CustomerWalletHistory
-            {
-                Amount = amount,
-                CustomerId = custId,
-                DateEncoded = DateTime.Now,
-                Description = $"Received from Achievement({achievementName})",
-                Type = 1
-            };
+            var walletHistory = new CustomerWalletHistory();
+            walletHistory.Amount = amount;
+            walletHistory.CustomerId = custId;
+            walletHistory.DateEncoded = DateTime.Now;
+            walletHistory.Description = $"Received from Achievement({achievementName})";
+            walletHistory.Type = 1;
+             //walletHistory.ExpiryDate = DateTime.Now.AddDays(dayLimit);
             db.CustomerWalletHistories.Add(walletHistory);
             db.SaveChanges();
         }

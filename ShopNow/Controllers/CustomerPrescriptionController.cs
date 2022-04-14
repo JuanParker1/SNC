@@ -232,7 +232,7 @@ namespace ShopNow.Controllers
                         //{
                             order.DeliveryChargeUpto5Km = (shop.DeliveryTierType == 1 && shop.DeliveryType == 0) ? 35 : 40;
                             order.DeliveryChargePerKm = (shop.DeliveryTierType == 1 && shop.DeliveryType == 0) ? 6 : 8;
-                            order.DeliveryChargeRemarks = db.PincodeRates.FirstOrDefault(i => i.Id == shop.PincodeRateId && i.Status == 0)?.Remarks;
+                        order.DeliveryChargeRemarks = (shop.DeliveryTierType == 1 && shop.DeliveryType == 0) ? "" : db.PincodeRates.FirstOrDefault(i => i.Id == shop.PincodeRateId && i.Status == 0)?.Remarks;
                         //}
                         db.Orders.Add(order);
                         db.SaveChanges();
