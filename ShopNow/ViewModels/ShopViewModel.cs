@@ -212,6 +212,7 @@ namespace ShopNow.ViewModels
         public double ShopPricePercentage { get; set; }
         public bool IsShopRate { get; set; }
         public double MaxOfferPercentage { get; set; }
+        public int ParcelDropDeliveryType { get; set; }
     }
 
     public class ShopListViewModel

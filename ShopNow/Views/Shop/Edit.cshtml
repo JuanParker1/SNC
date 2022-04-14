@@ -953,6 +953,24 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <label class="col-form-label text-secondary font-weight-bold">Parcel Drop Delivery Mode</label>
+                                            <input type="hidden" id="DeliveryType" value="@Model.ParcelDropDeliveryType" />
+                                        </div>
+                                        <div class="col-md-6 mt-2">
+                                            <div class="form-check-inline mr-3">
+                                                <label class="form-check-label">
+                                                    <input type="radio" class="form-check-input" name="ParcelDropDeliveryType" value="0"> General
+                                                </label>
+                                            </div>
+                                            <div class="form-check-inline">
+                                                <label class="form-check-label">
+                                                    <input type="radio" class="form-check-input" name="ParcelDropDeliveryType" value="1"> Special
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -1318,8 +1336,10 @@
 
         $(document).ready(function () {
             var type = $("#DeliveryType").val();
+            var parceldroptype = $("#ParcelDropDeliveryType").val();
             var tiertype = $("#DeliveryTierType").val();
             $("input[name=DeliveryType][value=" + type + "]").attr('checked', 'checked');
+            $("input[name=ParcelDropDeliveryType][value=" + parceldroptype + "]").attr('checked', 'checked');
             $("input[name=DeliveryTierType][value=" + tiertype + "]").attr('checked', 'checked');
 
             var Id = $('#Id').val();
