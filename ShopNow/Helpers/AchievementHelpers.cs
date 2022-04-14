@@ -39,7 +39,7 @@ namespace ShopNow.Helpers
                                             db.SaveChanges();
 
                                             //Wallet History
-                                            AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name,item.DayLimit);
+                                            AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name);
                                         }
                                     }
                                     else
@@ -53,7 +53,7 @@ namespace ShopNow.Helpers
                                             db.SaveChanges();
 
                                             //Wallet History
-                                            AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name, item.DayLimit);
+                                            AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name);
                                         }
                                     }
 
@@ -72,7 +72,7 @@ namespace ShopNow.Helpers
                                         db.Entry(customer).State = EntityState.Modified;
                                         db.SaveChanges();
                                         //Wallet History
-                                        AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name, item.DayLimit);
+                                        AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name);
                                     }
                                 }
                                 else
@@ -85,7 +85,7 @@ namespace ShopNow.Helpers
                                         db.Entry(customer).State = EntityState.Modified;
                                         db.SaveChanges();
                                         //Wallet History
-                                        AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name, item.DayLimit);
+                                        AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name);
                                     }
                                 }
                             }
@@ -107,7 +107,7 @@ namespace ShopNow.Helpers
                                             db.SaveChanges();
 
                                             //Wallet History
-                                            AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name, item.DayLimit);
+                                            AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name);
                                         }
                                     }
                                     else
@@ -120,7 +120,7 @@ namespace ShopNow.Helpers
                                             db.SaveChanges();
 
                                             //Wallet History
-                                            AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name, item.DayLimit);
+                                            AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name);
                                         }
                                     }
 
@@ -138,7 +138,7 @@ namespace ShopNow.Helpers
                                         db.Entry(customer).State = EntityState.Modified;
                                         db.SaveChanges();
                                         //Wallet History
-                                        AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name, item.DayLimit);
+                                        AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name);
                                     }
                                 }
                                 else
@@ -150,7 +150,7 @@ namespace ShopNow.Helpers
                                         db.Entry(customer).State = EntityState.Modified;
                                         db.SaveChanges();
                                         //Wallet History
-                                        AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name, item.DayLimit);
+                                        AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name);
                                     }
                                 }
                             }
@@ -174,7 +174,7 @@ namespace ShopNow.Helpers
                                             db.SaveChanges();
 
                                             //Wallet History
-                                            AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name, item.DayLimit);
+                                            AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name);
                                         }
                                     }
                                     else
@@ -187,7 +187,7 @@ namespace ShopNow.Helpers
                                             db.SaveChanges();
 
                                             //Wallet History
-                                            AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name, item.DayLimit);
+                                            AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name);
                                         }
                                     }
 
@@ -207,7 +207,7 @@ namespace ShopNow.Helpers
                                         db.Entry(customer).State = EntityState.Modified;
                                         db.SaveChanges();
                                         //Wallet History
-                                        AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name, item.DayLimit);
+                                        AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name);
                                     }
                                 }
                                 else
@@ -219,7 +219,7 @@ namespace ShopNow.Helpers
                                         db.Entry(customer).State = EntityState.Modified;
                                         db.SaveChanges();
                                         //Wallet History
-                                        AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name, item.DayLimit);
+                                        AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name);
                                     }
                                 }
                             }
@@ -243,7 +243,7 @@ namespace ShopNow.Helpers
                                             db.SaveChanges();
 
                                             //Wallet History
-                                            AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name, item.DayLimit);
+                                            AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name);
                                         }
                                     }
                                     else
@@ -258,7 +258,7 @@ namespace ShopNow.Helpers
                                             db.SaveChanges();
 
                                             //Wallet History
-                                            AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name, item.DayLimit);
+                                            AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name);
                                         }
                                     }
 
@@ -278,7 +278,7 @@ namespace ShopNow.Helpers
                                         db.Entry(customer).State = EntityState.Modified;
                                         db.SaveChanges();
                                         //Wallet History
-                                        AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name, item.DayLimit);
+                                        AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name);
                                     }
                                 }
                                 else
@@ -292,7 +292,7 @@ namespace ShopNow.Helpers
                                         db.Entry(customer).State = EntityState.Modified;
                                         db.SaveChanges();
                                         //Wallet History
-                                        AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name, item.DayLimit);
+                                        AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name);
                                     }
                                 }
                             }
@@ -317,7 +317,7 @@ namespace ShopNow.Helpers
                                             db.SaveChanges();
 
                                             //Wallet History
-                                            AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name, item.DayLimit);
+                                            AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name);
                                         }
                                     }
                                     else
@@ -332,7 +332,7 @@ namespace ShopNow.Helpers
                                             db.SaveChanges();
 
                                             //Wallet History
-                                            AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name, item.DayLimit);
+                                            AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name);
                                         }
                                     }
 
@@ -353,7 +353,7 @@ namespace ShopNow.Helpers
                                         db.Entry(customer).State = EntityState.Modified;
                                         db.SaveChanges();
                                         //Wallet History
-                                        AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name, item.DayLimit);
+                                        AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name);
                                     }
                                 }
                                 else
@@ -367,7 +367,7 @@ namespace ShopNow.Helpers
                                         db.Entry(customer).State = EntityState.Modified;
                                         db.SaveChanges();
                                         //Wallet History
-                                        AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name, item.DayLimit);
+                                        AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name);
                                     }
                                 }
                             }
@@ -389,7 +389,7 @@ namespace ShopNow.Helpers
                                             db.SaveChanges();
 
                                             //Wallet History
-                                            AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name, item.DayLimit);
+                                            AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name);
                                         }
                                     }
                                     else
@@ -402,7 +402,7 @@ namespace ShopNow.Helpers
                                             db.SaveChanges();
 
                                             //Wallet History
-                                            AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name, item.DayLimit);
+                                            AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name);
                                         }
                                     }
 
@@ -420,7 +420,7 @@ namespace ShopNow.Helpers
                                         db.Entry(customer).State = EntityState.Modified;
                                         db.SaveChanges();
                                         //Wallet History
-                                        AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name, item.DayLimit);
+                                        AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name);
                                     }
                                 }
                                 else
@@ -432,7 +432,7 @@ namespace ShopNow.Helpers
                                         db.Entry(customer).State = EntityState.Modified;
                                         db.SaveChanges();
                                         //Wallet History
-                                        AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name, item.DayLimit);
+                                        AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name);
                                     }
                                 }
                             }
@@ -454,7 +454,7 @@ namespace ShopNow.Helpers
                                             db.SaveChanges();
 
                                             //Wallet History
-                                            AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name, item.DayLimit);
+                                            AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name);
                                         }
                                     }
                                     else
@@ -467,7 +467,7 @@ namespace ShopNow.Helpers
                                             db.SaveChanges();
 
                                             //Wallet History
-                                            AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name, item.DayLimit);
+                                            AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name);
                                         }
                                     }
 
@@ -485,7 +485,7 @@ namespace ShopNow.Helpers
                                         db.Entry(customer).State = EntityState.Modified;
                                         db.SaveChanges();
                                         //Wallet History
-                                        AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name, item.DayLimit);
+                                        AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name);
                                     }
                                 }
                                 else
@@ -497,7 +497,7 @@ namespace ShopNow.Helpers
                                         db.Entry(customer).State = EntityState.Modified;
                                         db.SaveChanges();
                                         //Wallet History
-                                        AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name, item.DayLimit);
+                                        AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name);
                                     }
                                 }
                             }
@@ -510,7 +510,7 @@ namespace ShopNow.Helpers
             }
         }
 
-        public static void AddAchievementCustomerWalletHistory(int custId, double amount, string achievementName, int dayLimit)
+        public static void AddAchievementCustomerWalletHistory(int custId, double amount, string achievementName)
         {
             sncEntities db = new sncEntities();
             var walletHistory = new CustomerWalletHistory();
@@ -519,8 +519,7 @@ namespace ShopNow.Helpers
             walletHistory.DateEncoded = DateTime.Now;
             walletHistory.Description = $"Received from Achievement({achievementName})";
             walletHistory.Type = 1;
-            if (dayLimit != 0)
-                walletHistory.ExpiryDate = DateTime.Now.AddDays(dayLimit);
+             //walletHistory.ExpiryDate = DateTime.Now.AddDays(dayLimit);
             db.CustomerWalletHistories.Add(walletHistory);
             db.SaveChanges();
         }
