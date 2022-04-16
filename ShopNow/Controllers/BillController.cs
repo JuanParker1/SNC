@@ -472,6 +472,7 @@ namespace ShopNow.Controllers
         public ActionResult ParcelDropDeliveryChargeAssign(ParcelDropDeliveryChargeAssignCreateViewModel model)
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
+            ViewBag.Name = user.Name;
             var shop = db.Shops.Where(i => i.Id == model.ShopId).FirstOrDefault();
 
             shop.ParcelDropDeliveryType = model.Type;

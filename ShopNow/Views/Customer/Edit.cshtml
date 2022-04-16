@@ -4,12 +4,12 @@
 }
 <title>ShopNow | Customer Update</title>
 <div class="container">
-    <div class="row">
+    <div class="row my-2">
         <div class="col-md-6">
             <h5 class="text-success" style="letter-spacing:1px">CUSTOMER UPDATE</h5>
         </div>
         <div class="col-md-6 text-right">
-            <a href="~/Customer/List" target="_blank"><span class="fa fa-bars"></span>&nbsp;Customer List</a>
+            <a href="~/Customer/List" class="btn btn-sm btn-primary" target="_blank"><i class="fa fa-bars"></i>&nbsp; Customer List</a>
         </div>
     </div>
     <div class="row">
@@ -26,9 +26,9 @@
                                     </div>
                                     <div class="col-md-6">
                                         @if (Model.Name != null)
-                                        {<p>@Model.Name</p>}
+                                        {<span>@Model.Name</span>}
                                     else
-                                    {<p>N/A</p>}
+                                    {<span>N/A</span>}
                                     </div>
                                 </div>
                                 <div class="form-group row">
@@ -37,9 +37,9 @@
                                     </div>
                                     <div class="col-md-6">
                                         @if (Model.PhoneNumber != null)
-                                        {<p>@Model.PhoneNumber</p>}
+                                        {<span>@Model.PhoneNumber</span>}
                                     else
-                                    {<p>N/A</p>}
+                                    {<span>N/A</span>}
                                     </div>
                                 </div>
                                 <div class="form-group row">
@@ -48,9 +48,9 @@
                                     </div>
                                     <div class="col-md-6">
                                         @if (Model.Email != null || Model.Email == "")
-                                        {<p>@Model.Email</p>}
+                                        {<span>@Model.Email</span>}
                                     else
-                                    {<p class="text-warning">N/A</p>}
+                                    {<span class="text-warning">N/A</span>}
                                     </div>
                                 </div>
                                 <div class="form-group row">
@@ -59,9 +59,9 @@
                                     </div>
                                     <div class="col-md-6">
                                         @if (Model.Address == "" || Model.Address == null)
-                                        {<p class="text-warning">N/A</p>}
+                                        {<span class="text-warning">N/A</span>}
                                         else
-                                        {<p>@Model.Address</p>}
+                                        {<span>@Model.Address</span>}
                                     </div>
                                 </div>
                                 <div class="form-group row">
