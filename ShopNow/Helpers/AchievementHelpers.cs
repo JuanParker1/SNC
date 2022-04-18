@@ -40,6 +40,9 @@ namespace ShopNow.Helpers
 
                                             //Wallet History
                                             AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name);
+
+                                            //Completed Achievement
+                                            AddCustomerCompletedAchievement(customer.Id, item.Id);
                                         }
                                     }
                                     else
@@ -54,6 +57,9 @@ namespace ShopNow.Helpers
 
                                             //Wallet History
                                             AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name);
+
+                                            //Completed Achievement
+                                            AddCustomerCompletedAchievement(customer.Id, item.Id);
                                         }
                                     }
 
@@ -73,6 +79,9 @@ namespace ShopNow.Helpers
                                         db.SaveChanges();
                                         //Wallet History
                                         AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name);
+
+                                        //Completed Achievement
+                                        AddCustomerCompletedAchievement(customer.Id, item.Id);
                                     }
                                 }
                                 else
@@ -86,6 +95,9 @@ namespace ShopNow.Helpers
                                         db.SaveChanges();
                                         //Wallet History
                                         AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name);
+
+                                        //Completed Achievement
+                                        AddCustomerCompletedAchievement(customer.Id, item.Id);
                                     }
                                 }
                             }
@@ -108,6 +120,9 @@ namespace ShopNow.Helpers
 
                                             //Wallet History
                                             AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name);
+
+                                            //Completed Achievement
+                                            AddCustomerCompletedAchievement(customer.Id, item.Id);
                                         }
                                     }
                                     else
@@ -121,6 +136,9 @@ namespace ShopNow.Helpers
 
                                             //Wallet History
                                             AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name);
+
+                                            //Completed Achievement
+                                            AddCustomerCompletedAchievement(customer.Id, item.Id);
                                         }
                                     }
 
@@ -139,6 +157,9 @@ namespace ShopNow.Helpers
                                         db.SaveChanges();
                                         //Wallet History
                                         AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name);
+
+                                        //Completed Achievement
+                                        AddCustomerCompletedAchievement(customer.Id, item.Id);
                                     }
                                 }
                                 else
@@ -151,6 +172,9 @@ namespace ShopNow.Helpers
                                         db.SaveChanges();
                                         //Wallet History
                                         AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name);
+
+                                        //Completed Achievement
+                                        AddCustomerCompletedAchievement(customer.Id, item.Id);
                                     }
                                 }
                             }
@@ -175,6 +199,9 @@ namespace ShopNow.Helpers
 
                                             //Wallet History
                                             AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name);
+
+                                            //Completed Achievement
+                                            AddCustomerCompletedAchievement(customer.Id, item.Id);
                                         }
                                     }
                                     else
@@ -188,6 +215,9 @@ namespace ShopNow.Helpers
 
                                             //Wallet History
                                             AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name);
+
+                                            //Completed Achievement
+                                            AddCustomerCompletedAchievement(customer.Id, item.Id);
                                         }
                                     }
 
@@ -208,6 +238,9 @@ namespace ShopNow.Helpers
                                         db.SaveChanges();
                                         //Wallet History
                                         AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name);
+
+                                        //Completed Achievement
+                                        AddCustomerCompletedAchievement(customer.Id, item.Id);
                                     }
                                 }
                                 else
@@ -220,6 +253,9 @@ namespace ShopNow.Helpers
                                         db.SaveChanges();
                                         //Wallet History
                                         AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name);
+
+                                        //Completed Achievement
+                                        AddCustomerCompletedAchievement(customer.Id, item.Id);
                                     }
                                 }
                             }
@@ -244,6 +280,9 @@ namespace ShopNow.Helpers
 
                                             //Wallet History
                                             AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name);
+
+                                            //Completed Achievement
+                                            AddCustomerCompletedAchievement(customer.Id, item.Id);
                                         }
                                     }
                                     else
@@ -259,6 +298,9 @@ namespace ShopNow.Helpers
 
                                             //Wallet History
                                             AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name);
+
+                                            //Completed Achievement
+                                            AddCustomerCompletedAchievement(customer.Id, item.Id);
                                         }
                                     }
 
@@ -279,6 +321,9 @@ namespace ShopNow.Helpers
                                         db.SaveChanges();
                                         //Wallet History
                                         AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name);
+
+                                        //Completed Achievement
+                                        AddCustomerCompletedAchievement(customer.Id, item.Id);
                                     }
                                 }
                                 else
@@ -293,6 +338,9 @@ namespace ShopNow.Helpers
                                         db.SaveChanges();
                                         //Wallet History
                                         AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name);
+
+                                        //Completed Achievement
+                                        AddCustomerCompletedAchievement(customer.Id, item.Id);
                                     }
                                 }
                             }
@@ -318,6 +366,9 @@ namespace ShopNow.Helpers
 
                                             //Wallet History
                                             AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name);
+
+                                            //Completed Achievement
+                                            AddCustomerCompletedAchievement(customer.Id, item.Id);
                                         }
                                     }
                                     else
@@ -333,6 +384,9 @@ namespace ShopNow.Helpers
 
                                             //Wallet History
                                             AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name);
+
+                                            //Completed Achievement
+                                            AddCustomerCompletedAchievement(customer.Id, item.Id);
                                         }
                                     }
 
@@ -354,6 +408,9 @@ namespace ShopNow.Helpers
                                         db.SaveChanges();
                                         //Wallet History
                                         AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name);
+
+                                        //Completed Achievement
+                                        AddCustomerCompletedAchievement(customer.Id, item.Id);
                                     }
                                 }
                                 else
@@ -368,6 +425,9 @@ namespace ShopNow.Helpers
                                         db.SaveChanges();
                                         //Wallet History
                                         AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name);
+
+                                        //Completed Achievement
+                                        AddCustomerCompletedAchievement(customer.Id, item.Id);
                                     }
                                 }
                             }
@@ -390,6 +450,9 @@ namespace ShopNow.Helpers
 
                                             //Wallet History
                                             AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name);
+
+                                            //Completed Achievement
+                                            AddCustomerCompletedAchievement(customer.Id, item.Id);
                                         }
                                     }
                                     else
@@ -403,6 +466,9 @@ namespace ShopNow.Helpers
 
                                             //Wallet History
                                             AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name);
+
+                                            //Completed Achievement
+                                            AddCustomerCompletedAchievement(customer.Id, item.Id);
                                         }
                                     }
 
@@ -421,6 +487,9 @@ namespace ShopNow.Helpers
                                         db.SaveChanges();
                                         //Wallet History
                                         AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name);
+
+                                        //Completed Achievement
+                                        AddCustomerCompletedAchievement(customer.Id, item.Id);
                                     }
                                 }
                                 else
@@ -433,6 +502,9 @@ namespace ShopNow.Helpers
                                         db.SaveChanges();
                                         //Wallet History
                                         AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name);
+
+                                        //Completed Achievement
+                                        AddCustomerCompletedAchievement(customer.Id, item.Id);
                                     }
                                 }
                             }
@@ -455,6 +527,9 @@ namespace ShopNow.Helpers
 
                                             //Wallet History
                                             AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name);
+
+                                            //Completed Achievement
+                                            AddCustomerCompletedAchievement(customer.Id, item.Id);
                                         }
                                     }
                                     else
@@ -468,6 +543,9 @@ namespace ShopNow.Helpers
 
                                             //Wallet History
                                             AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name);
+
+                                            //Completed Achievement
+                                            AddCustomerCompletedAchievement(customer.Id, item.Id);
                                         }
                                     }
 
@@ -486,6 +564,9 @@ namespace ShopNow.Helpers
                                         db.SaveChanges();
                                         //Wallet History
                                         AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name);
+
+                                        //Completed Achievement
+                                        AddCustomerCompletedAchievement(customer.Id, item.Id);
                                     }
                                 }
                                 else
@@ -498,6 +579,9 @@ namespace ShopNow.Helpers
                                         db.SaveChanges();
                                         //Wallet History
                                         AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name);
+                                        //Completed Achievement
+                                        AddCustomerCompletedAchievement(customer.Id, item.Id);
+
                                     }
                                 }
                             }
@@ -521,6 +605,18 @@ namespace ShopNow.Helpers
             walletHistory.Type = 1;
              //walletHistory.ExpiryDate = DateTime.Now.AddDays(dayLimit);
             db.CustomerWalletHistories.Add(walletHistory);
+            db.SaveChanges();
+        }
+
+        public static void AddCustomerCompletedAchievement(int custId,int achievementId)
+        {
+            sncEntities db = new sncEntities();
+            var completedAchievement = new CustomerAchievementCompleted();
+            completedAchievement.CustomerId = custId;
+            completedAchievement.AchievementId = achievementId;
+            completedAchievement.Status = 0;
+            completedAchievement.DateEncoded = DateTime.Now;
+            db.CustomerAchievementCompleteds.Add(completedAchievement);
             db.SaveChanges();
         }
     }

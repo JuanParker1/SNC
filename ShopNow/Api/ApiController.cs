@@ -5768,9 +5768,14 @@ namespace ShopNow.Controllers
 
         public JsonResult GetLiveOrderCount(int customerid)
         {
+            double walletAmount = 0;
             var liveOrdercount = db.Orders.Where(i => i.CustomerId == customerid && i.Status != 0 && i.Status != 6 && i.Status != 7 && i.Status != 9 && i.Status != 10 && i.Status != -1).Count();
             var oldOrdercount = db.Orders.Where(i => i.CustomerId == customerid && i.Status == 6).Count();
-            return Json(new { count = liveOrdercount, oldOrderCount = oldOrdercount }, JsonRequestBehavior.AllowGet);
+            var customer = db.Customers.FirstOrDefault(i => i.Id == customerid);
+            if (customer != null)
+                walletAmount = customer.WalletAmount;
+            var achievementCompletedCount = db.CustomerAchievementCompleteds.Where(i => i.CustomerId == customerid).Count();
+            return Json(new { count = liveOrdercount, oldOrderCount = oldOrdercount, walletAmount = walletAmount,achievementCount = achievementCompletedCount }, JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult GetCheckOldCart(OldCartCheckViewModel model)
