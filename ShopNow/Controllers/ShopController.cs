@@ -684,6 +684,7 @@ namespace ShopNow.Controllers
             return RedirectToAction("List", "Shop");
         }
 
+        [AccessPolicy(PageCode = "SNCSDS354")]
         public ActionResult DeletedShop()
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
