@@ -337,6 +337,7 @@ namespace ShopNow.Controllers
             return RedirectToAction("DeliveryChargeAssignList");
         }
 
+        [AccessPolicy(PageCode = "SNCBPDL344")]
         public ActionResult ParcelDropDeliveryList()
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
@@ -356,6 +357,7 @@ namespace ShopNow.Controllers
             return View(model.List);
         }
 
+        [AccessPolicy(PageCode = "SNCBPDC345")]
         public ActionResult ParcelDropDeliveryCharge()
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
@@ -365,6 +367,7 @@ namespace ShopNow.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [AccessPolicy(PageCode = "SNCBPDC345")]
         public ActionResult ParcelDropDeliveryCharge(ParcelDropDeliveryCreateViewModel model)
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
@@ -392,6 +395,7 @@ namespace ShopNow.Controllers
             return RedirectToAction("ParcelDropDeliveryList");
         }
 
+        [AccessPolicy(PageCode = "SNCBPDU346")]
         public ActionResult ParcelDropDeliveryUpdate(string Id)
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
@@ -410,6 +414,7 @@ namespace ShopNow.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [AccessPolicy(PageCode = "SNCBPDU346")]
         public ActionResult ParcelDropDeliveryUpdate(ParcelDropDeliveryEditViewModel model)
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
@@ -429,6 +434,7 @@ namespace ShopNow.Controllers
             return RedirectToAction("ParcelDropDeliveryList");
         }
 
+        [AccessPolicy(PageCode = "SNCBPDD347")]
         public JsonResult ParcelDropDeliveryDelete(int id)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -444,6 +450,7 @@ namespace ShopNow.Controllers
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
+        [AccessPolicy(PageCode = "SNCBPDAL348")]
         public ActionResult ParcelDropDeliveryChargeAssignList()
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -460,6 +467,7 @@ namespace ShopNow.Controllers
             return View(model.List);
         }
 
+        [AccessPolicy(PageCode = "SNCBPDA349")]
         public ActionResult ParcelDropDeliveryChargeAssign()
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
@@ -469,12 +477,12 @@ namespace ShopNow.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [AccessPolicy(PageCode = "SNCBPDA349")]
         public ActionResult ParcelDropDeliveryChargeAssign(ParcelDropDeliveryChargeAssignCreateViewModel model)
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
             var shop = db.Shops.Where(i => i.Id == model.ShopId).FirstOrDefault();
-
             shop.ParcelDropDeliveryType = model.Type;
             shop.UpdatedBy = user.Name;
             shop.DateUpdated = DateTime.Now;

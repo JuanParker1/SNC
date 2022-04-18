@@ -192,6 +192,7 @@ namespace ShopNow.ViewModels
         public bool IsPickupDrop { get; set; }
         public string Remarks { get; set; }
         public System.DateTime? OrderPickupTime { get; set; }
+        public double WalletAmount { get; set; }
         public class ImagePathList
         {
             public string ImagePath { get; set; }
