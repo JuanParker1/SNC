@@ -310,6 +310,16 @@
           <Property Name="DateEncoded" Type="datetime" Nullable="false" />
           <Property Name="DateUpdated" Type="datetime" Nullable="false" />
         </EntityType>
+        <EntityType Name="CustomerAchievementCompleted">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="AchievementId" Type="int" Nullable="false" />
+          <Property Name="CustomerId" Type="int" Nullable="false" />
+          <Property Name="Status" Type="int" Nullable="false" />
+          <Property Name="DateEncoded" Type="datetime" Nullable="false" />
+        </EntityType>
         <EntityType Name="CustomerAchievements">
           <Key>
             <PropertyRef Name="Id" />
@@ -1893,6 +1903,7 @@
           <EntitySet Name="CallRecords" EntityType="Self.CallRecords" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Categories" EntityType="Self.Categories" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Crusts" EntityType="Self.Crusts" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CustomerAchievementCompleted" EntityType="Self.CustomerAchievementCompleted" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CustomerAchievements" EntityType="Self.CustomerAchievements" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CustomerAddresses" EntityType="Self.CustomerAddresses" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CustomerAppInfo" EntityType="Self.CustomerAppInfo" Schema="dbo" store:Type="Tables" />
@@ -3181,6 +3192,7 @@
           <EntitySet Name="ParcelDropDeliveryCharges" EntityType="sncModel.ParcelDropDeliveryCharge" />
           <EntitySet Name="PushNotifications" EntityType="sncModel.PushNotification" />
           <EntitySet Name="Shops" EntityType="sncModel.Shop" />
+          <EntitySet Name="CustomerAchievementCompleteds" EntityType="sncModel.CustomerAchievementCompleted" />
         </EntityContainer>
         <ComplexType Name="GetDEliveryBoyList_Result">
           <Property Type="Int32" Name="Id" Nullable="false" />
@@ -4072,6 +4084,16 @@
           <Property Name="DeliveryDiscountPercentage" Type="Double" Nullable="false" />
           <Property Name="IsShopRate" Type="Boolean" Nullable="false" />
           <Property Name="ParcelDropDeliveryType" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="CustomerAchievementCompleted">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="AchievementId" Type="Int32" Nullable="false" />
+          <Property Name="CustomerId" Type="Int32" Nullable="false" />
+          <Property Name="Status" Type="Int32" Nullable="false" />
+          <Property Name="DateEncoded" Type="DateTime" Nullable="false" Precision="3" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -6095,6 +6117,17 @@
                 <ScalarProperty Name="ImagePath" ColumnName="ImagePath" />
                 <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CustomerAchievementCompleteds">
+            <EntityTypeMapping TypeName="sncModel.CustomerAchievementCompleted">
+              <MappingFragment StoreEntitySet="CustomerAchievementCompleted">
+                <ScalarProperty Name="DateEncoded" ColumnName="DateEncoded" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
+                <ScalarProperty Name="AchievementId" ColumnName="AchievementId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

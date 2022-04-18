@@ -153,8 +153,8 @@
                     $.getJSON("/PushNotification/Save", { Name: name, Phonenumber: phonenumber, Password: password }, function (data) {
                         if (data == true) {
                             swal({
-                                title: "",
-                                text: "Notication Added Successfully",
+                                title: "Notication",
+                                text: "Added Successfully",
                                 type: "success"
                             }, function () {
                                 window.location.reload();
@@ -184,8 +184,8 @@
                     $.getJSON("/PushNotification/Edit?id=" + id + "&name=" + Name + "&phonenumber=" + PhoneNumber + "&password=" + Password, function (data) {
                         if (data == true) {
                             swal({
-                                title: "",
-                                text: "Notification Updated Successfully",
+                                title: "Notification",
+                                text: "Updated Successfully",
                                 type: "success"
                             }, function () {
                                 window.location.reload();

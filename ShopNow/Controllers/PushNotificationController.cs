@@ -56,7 +56,7 @@ namespace ShopNow.Controllers
         }
 
         [HttpPost]
-        public ActionResult SendBulk(string title, string message, string[] district, int type,DateTime? scheduleDateTime, string imagePath = "")
+        public ActionResult SendBulk(string title, string message, string[] district, int type, DateTime? scheduleDateTime, string imagePath = "")
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
@@ -101,7 +101,6 @@ namespace ShopNow.Controllers
                     //Helpers.PushNotification.SendBulk(message, title, "SpecialOffer", imagePath, fcmTokenList.Skip(1000).Take(1000).ToArray());
                     //Helpers.PushNotification.SendBulk(message, title, "SpecialOffer", imagePath, fcmTokenList.Skip(2000).Take(1000).ToArray());
                 }
-
                 var pushNotification = new PushNotification
                 {
                     DateEncoded = DateTime.Now,
@@ -110,7 +109,7 @@ namespace ShopNow.Controllers
                     EncodedBy = user.Name,
                     ImageUrl = imagePath,
                     RedirectUrl = "",
-                    Status = scheduleDateTime == null? 0 : 1,
+                    Status = scheduleDateTime == null ? 0 : 1,
                     Title = title,
                     Type = type,
                     ScheduleDateTime = scheduleDateTime
@@ -127,6 +126,7 @@ namespace ShopNow.Controllers
             }
         }
 
+        [AccessPolicy(PageCode = "SNCPNNL350")]
         public ActionResult NotificationLogin()
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
@@ -144,24 +144,28 @@ namespace ShopNow.Controllers
             return View(model.NotificationLists);
         }
 
+        [AccessPolicy(PageCode = "SNCPNS351")]
         public JsonResult Save(string Name, string Phonenumber, string Password)
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
-            var notificationlogin = new NotificationLogin();
-            notificationlogin.Name = Name;
-            notificationlogin.PhoneNumber = Phonenumber;
-            notificationlogin.Password = Password;
-            notificationlogin.Status = 0;
-            notificationlogin.DateEncoded = DateTime.Now;
-            notificationlogin.DateUpdated = DateTime.Now;
-            notificationlogin.EncodedBy = user.Name;
-            notificationlogin.UpdatedBy = user.Name;
+            var notificationlogin = new NotificationLogin
+            {
+                Name = Name,
+                PhoneNumber = Phonenumber,
+                Password = Password,
+                Status = 0,
+                DateEncoded = DateTime.Now,
+                DateUpdated = DateTime.Now,
+                EncodedBy = user.Name,
+                UpdatedBy = user.Name
+            };
             db.NotificationLogins.Add(notificationlogin);
             db.SaveChanges();
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
+        [AccessPolicy(PageCode = "SNCPNE352")]
         public JsonResult Edit(int id, string name, string phonenumber, string password)
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
@@ -180,6 +184,7 @@ namespace ShopNow.Controllers
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
+        [AccessPolicy(PageCode = "SNCPND353")]
         public JsonResult Delete(int id)
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
