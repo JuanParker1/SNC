@@ -44,7 +44,18 @@ namespace ShopNow.Controllers
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
-            return View();
+            var model = new ServiceCreateViewModel();
+            model.DistanceLists = db.Orders.Where(i => i.Status == 6 && i.IsPickupDrop == false && i.Distance == 0)
+                        .Join(db.Shops.Where(i => i.Status == 0), o => o.ShopId, s => s.Id, (o, s) => new { o, s })
+                        .Select(i => new ServiceCreateViewModel.DistanceList
+                        {
+                            Latitude = i.o.Latitude,
+                            Longitude = i.o.Longitude,
+                            ShopLatitude = i.s.Latitude,
+                            ShopLongitude = i.s.Longitude,
+                            OrderNumber = i.o.OrderNumber
+                        }).ToList();
+            return View(model);
         }
 
         [HttpPost]
@@ -174,6 +185,7 @@ namespace ShopNow.Controllers
                     db.SaveChanges();
                 }
             }
+            
             return RedirectToAction("List");
         }
 
@@ -289,6 +301,18 @@ namespace ShopNow.Controllers
                 db.SaveChanges();
             }
             return Json(new { message = "Saved Successfully" }, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult UpdateDistance(long orderNumber, double distance)
+        {
+            var order = db.Orders.FirstOrDefault(i => i.OrderNumber == orderNumber);
+            if(order != null)
+            {
+                order.Distance = distance;
+                //db.Entry(order).State = System.Data.Entity.EntityState.Modified;
+                //db.SaveChanges();
+            }
+            return Json(true, JsonRequestBehavior.AllowGet);
         }
     }
 }
