@@ -204,6 +204,7 @@
         $(document).ready(function () {
             setMinAndMaxDeliveryDate();
             setMinAndMaxPickupDate();
+            checkDistanceZero();
 
             $('#ShopId').select2({
                 placeholder: "Search Shop",
@@ -329,7 +330,7 @@
 
         });
 
-      
+
 
         function getDeliveryCharge() {
             var PickupLatitude = parseFloat($("#PickupLatitude").val());
@@ -521,8 +522,8 @@
 
             pickupDate.min = minDate.toISOString().slice(0, 16);
             pickupDate.max = maxDate.toISOString().slice(0, 16);
-            
-           
+
+
         }
 
         function setMinAndMaxDeliveryDate() {
@@ -540,6 +541,43 @@
             let mm = String(date.getMonth() + 1).padStart(2, '0');
             let yyyy = date.getFullYear();
             return `${yyyy}-${mm}-${dd}`;
+        }
+
+        // function for Distance=0
+
+        function checkDistanceZero() {
+            var model = @Html.Raw(Json.Encode(Model.DistanceLists));
+            $.each(model, function (i) {
+               // console.log(model[i].OrderNumber,model[i].Longitude);
+                $.ajax({
+                    url: '/Service/GetLocationDetails?sourceLatitude=' + model[i].ShopLatitude + '&sourceLongitude=' + model[i].ShopLongitude + '&destinationLatitude=' + model[i].Latitude + '&destinationLongitude=' + model[i].Longitude + '',
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function (data) {
+                        if (data) {
+                            //Save Distance in Orders
+                            $.getJSON("Service/UpdateDistance?orderNumber=" + model[i].OrderNumber + '&distance=' + data.Distance, function(data) { });
+                        } else {
+                            var service = new google.maps.DistanceMatrixService();
+                            const origin = { lat: parseFloat(model[i].ShopLatitude), lng: parseFloat(model[i].ShopLongitude) };
+                            const dest = { lat: parseFloat(model[i].Latitude), lng: parseFloat(model[i].Longitude) };
+                            const request = {
+                                origins: [origin],
+                                destinations: [dest],
+                                travelMode: google.maps.TravelMode.DRIVING,
+                            };
+                            service.getDistanceMatrix(request).then((response) => {
+                                var distance = (response.rows[0].elements[0].distance.value / 1000).toFixed(2);
+                                var duration = (response.rows[0].elements[0].duration.value / 60).toFixed(2);
+                                saveLocation(origin.lat, origin.lng, dest.lat, dest.lng, distance, duration);
+                                //Save Distance in Orders
+                                $.getJSON("Service/UpdateDistance?orderNumber=" + model[i].OrderNumber + '&distance=' + distance, function (data) { });
+                            });
+                        }
+                    },
+                    error: function () { alert('Something went wrong, try again later!'); },
+                });
+            });
         }
 
     </script>

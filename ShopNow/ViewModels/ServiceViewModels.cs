@@ -77,5 +77,14 @@ namespace ShopNow.ViewModels
         public DateTime? PickupDateTime { get; set; }
         public DateTime? DeliveryDate { get; set; }
         public int DeliverySlotType { get; set; }
+        public List<DistanceList> DistanceLists { get; set; }
+        public class DistanceList
+        {
+            public int OrderNumber { get; set; }
+            public double ShopLatitude { get; set; }
+            public double ShopLongitude { get; set; }
+            public double Latitude { get; set; }
+            public double Longitude { get; set; }
+        }
     }
 }

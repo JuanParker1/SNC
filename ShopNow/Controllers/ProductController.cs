@@ -362,104 +362,116 @@ namespace ShopNow.Controllers
                 ViewBag.ErrorMessage = model.Name + " Already Exist";
                 return View();
             }
-            var prod = _mapper.Map<FoodCreateViewModel, Product>(model);
-            if (model.ShopId != 0)
+            try
             {
-                var sh = db.Shops.FirstOrDefault(i => i.Id == model.ShopId);
-                prod.ShopCategoryId = sh.ShopCategoryId;
-                prod.ShopCategoryName = sh.ShopCategoryName;
-                prod.ShopId = sh.Id;
-            }
-            prod.ProductTypeId = 1;
-            prod.ProductTypeName = "Dish";
-            prod.Status = 0;
-            prod.IsOnline = true;
-            prod.MappedDate = DateTime.Now;
-            prod.DateEncoded = DateTime.Now;
-            prod.DateUpdated = DateTime.Now;
-            prod.CreatedBy = user.Name;
-            prod.UpdatedBy = user.Name;
-            db.Products.Add(prod);
-            db.SaveChanges();
-
-            //AddOns
-            if (prod.Customisation == true)
-            {
-                List<ShopAddOnSessionAddViewModel> shopAddOns = Session["ShopAddOns"] as List<ShopAddOnSessionAddViewModel>;
-                foreach (var item in shopAddOns)
+                var prod = _mapper.Map<FoodCreateViewModel, Product>(model);
+                if (model.ShopId != 0)
                 {
-                    var productDishAddon = db.ProductDishAddOns.FirstOrDefault(i => i.Id == item.Id);
-                    var shopdishAddOn = _mapper.Map<ProductDishAddOn, ShopDishAddOn>(productDishAddon);
-                    shopdishAddOn.PortionPrice = item.PortionPrice;
-                    shopdishAddOn.AddOnsPrice = item.AddOnsPrice;
-                    shopdishAddOn.CrustPrice = item.CrustPrice;
-                    shopdishAddOn.IsActive = true;
-                    shopdishAddOn.ProductId = prod.Id;
-                    shopdishAddOn.ProductName = prod.Name;
-                    shopdishAddOn.ShopId = prod.ShopId;
-                    shopdishAddOn.ShopName = prod.ShopName;
-                    shopdishAddOn.ProductDishAddonId = productDishAddon.Id;
-                    db.ShopDishAddOns.Add(shopdishAddOn);
-                    db.SaveChanges();
+                    var sh = db.Shops.FirstOrDefault(i => i.Id == model.ShopId);
+                    prod.ShopCategoryId = sh.ShopCategoryId;
+                    prod.ShopCategoryName = sh.ShopCategoryName;
+                    prod.ShopId = sh.Id;
                 }
-            }
-            if (model.ShopId != 0)
-            {
-                var sh = db.Shops.FirstOrDefault(i => i.Id == model.ShopId);// Shop.Get(model.ShopId);
-                if (prod.Percentage > 0)
-                    UpdateShopMaxOfferPercentage(sh.Id);
+                prod.ProductTypeId = 1;
+                prod.ProductTypeName = "Dish";
+                prod.Status = 0;
+                prod.IsOnline = true;
+                prod.MappedDate = DateTime.Now;
+                prod.DateEncoded = DateTime.Now;
+                prod.DateUpdated = DateTime.Now;
+                prod.CreatedBy = user.Name;
+                prod.UpdatedBy = user.Name;
+                db.Products.Add(prod);
+                db.SaveChanges();
 
-                var productcount = db.Products.Where(i => i.ShopId == model.ShopId && i.Status == 0).Count();
-                if (productcount >= 10 && sh.Status == 1)
+                //AddOns
+                if (prod.Customisation == true)
                 {
-                    Payment payment = new Payment();
-                    payment.CustomerId = sh.CustomerId;
-                    payment.CustomerName = sh.CustomerName;
-                    payment.ShopId = sh.Id;
-                    payment.ShopName = sh.Name;
-                    payment.CountryName = sh.CountryName;
-                    payment.CreatedBy = sh.CustomerName;
-                    payment.UpdatedBy = sh.CustomerName;
-                    payment.GSTINNumber = sh.GSTINNumber;
-                    payment.Credits = "PlatForm Credits";
-                    payment.OriginalAmount = 0;
-                    payment.Amount = 0;
-                    payment.GSTAmount = 0;
-                    payment.CreditType = 0;
-                    payment.PaymentResult = "success";
-                    payment.DateEncoded = DateTime.Now;
-                    payment.DateUpdated = DateTime.Now;
-                    payment.Status = 0;
-                    payment.PlatformCreditType = 2;
-                    db.Payments.Add(payment);
-                    db.SaveChanges();
-
-                    // ShopCredit
-                    var sc = db.ShopCredits.FirstOrDefault(i => i.CustomerId == sh.CustomerId);
-                    if (sc == null)
+                    List<ShopAddOnSessionAddViewModel> shopAddOns = Session["ShopAddOns"] as List<ShopAddOnSessionAddViewModel>;
+                    foreach (var item in shopAddOns)
                     {
-                        ShopCredit shopCredit = new ShopCredit
-                        {
-                            CustomerId = sh.CustomerId,
-                            DateUpdated = DateTime.Now,
-                            DeliveryCredit = 0,
-                            PlatformCredit = 0
-                        };
-                        db.ShopCredits.Add(shopCredit);
+                        var productDishAddon = db.ProductDishAddOns.FirstOrDefault(i => i.Id == item.Id);
+                        var shopdishAddOn = _mapper.Map<ProductDishAddOn, ShopDishAddOn>(productDishAddon);
+                        shopdishAddOn.PortionPrice = item.PortionPrice;
+                        shopdishAddOn.AddOnsPrice = item.AddOnsPrice;
+                        shopdishAddOn.CrustPrice = item.CrustPrice;
+                        shopdishAddOn.IsActive = true;
+                        shopdishAddOn.ProductId = prod.Id;
+                        shopdishAddOn.ProductName = prod.Name;
+                        shopdishAddOn.ShopId = prod.ShopId;
+                        shopdishAddOn.ShopName = prod.ShopName;
+                        shopdishAddOn.ProductDishAddonId = productDishAddon.Id;
+                        db.ShopDishAddOns.Add(shopdishAddOn);
                         db.SaveChanges();
                     }
-
-                    sh.Status = 0;
-                    sh.UpdatedBy = user.Name;
-                    sh.DateUpdated = DateTime.Now;
-                    sh.DateUpdated = DateTime.Now;
-                    db.Entry(sh).State = System.Data.Entity.EntityState.Modified;
-                    db.SaveChanges();
                 }
+                if (model.ShopId != 0)
+                {
+                    var sh = db.Shops.FirstOrDefault(i => i.Id == model.ShopId);// Shop.Get(model.ShopId);
+                    if (prod.Percentage > 0)
+                        UpdateShopMaxOfferPercentage(sh.Id);
+
+                    var productcount = db.Products.Where(i => i.ShopId == model.ShopId && i.Status == 0).Count();
+                    if (productcount >= 10 && sh.Status == 1)
+                    {
+                        Payment payment = new Payment();
+                        payment.CustomerId = sh.CustomerId;
+                        payment.CustomerName = sh.CustomerName;
+                        payment.ShopId = sh.Id;
+                        payment.ShopName = sh.Name;
+                        payment.CountryName = sh.CountryName;
+                        payment.CreatedBy = sh.CustomerName;
+                        payment.UpdatedBy = sh.CustomerName;
+                        payment.GSTINNumber = sh.GSTINNumber;
+                        payment.Credits = "PlatForm Credits";
+                        payment.OriginalAmount = 0;
+                        payment.Amount = 0;
+                        payment.GSTAmount = 0;
+                        payment.CreditType = 0;
+                        payment.PaymentResult = "success";
+                        payment.DateEncoded = DateTime.Now;
+                        payment.DateUpdated = DateTime.Now;
+                        payment.Status = 0;
+                        payment.PlatformCreditType = 2;
+                        db.Payments.Add(payment);
+                        db.SaveChanges();
+
+                        // ShopCredit
+                        var sc = db.ShopCredits.FirstOrDefault(i => i.CustomerId == sh.CustomerId);
+                        if (sc == null)
+                        {
+                            ShopCredit shopCredit = new ShopCredit
+                            {
+                                CustomerId = sh.CustomerId,
+                                DateUpdated = DateTime.Now,
+                                DeliveryCredit = 0,
+                                PlatformCredit = 0
+                            };
+                            db.ShopCredits.Add(shopCredit);
+                            db.SaveChanges();
+                        }
+
+                        sh.Status = 0;
+                        sh.UpdatedBy = user.Name;
+                        sh.DateUpdated = DateTime.Now;
+                        sh.DateUpdated = DateTime.Now;
+                        db.Entry(sh).State = System.Data.Entity.EntityState.Modified;
+                        db.SaveChanges();
+                    }
+                }
+                ViewBag.Message = model.Name + " Saved Successfully!";
+                Session["ShopAddOns"] = null;
+                return View();
             }
-            ViewBag.Message = model.Name + " Saved Successfully!";
-            Session["ShopAddOns"] = null;
-            return View();
+            catch (Exception)
+            {
+                ViewBag.ErrorMessage = "Something went wrong. Try Again!";
+                return View();
+            }
+            //finally
+            //{
+            //    db.Dispose();
+            //}
         }
 
         [AccessPolicy(PageCode = "SNCPRDE210")]
