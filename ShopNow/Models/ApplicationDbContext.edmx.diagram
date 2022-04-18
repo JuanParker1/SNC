@@ -98,9 +98,9 @@
         <EntityTypeShape EntityType="sncModel.Wallet" Width="1.5" PointX="11.375" PointY="35.75" />
         <EntityTypeShape EntityType="sncModel.Order" Width="1.5" PointX="35.375" PointY="25.75" />
         <EntityTypeShape EntityType="sncModel.ParcelDropDeliveryCharge" Width="1.5" PointX="35.375" PointY="4.75" />
-        <EntityTypeShape EntityType="sncModel.PushNotification" Width="1.5" PointX="0.75" PointY="34.75" />
         <EntityTypeShape EntityType="sncModel.Shop" Width="1.5" PointX="31.375" PointY="26.75" />
         <EntityTypeShape EntityType="sncModel.CustomerAchievementCompleted" Width="1.5" PointX="35.375" PointY="8.75" />
+        <EntityTypeShape EntityType="sncModel.PushNotification" Width="1.5" PointX="0.75" PointY="34.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

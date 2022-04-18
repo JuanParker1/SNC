@@ -62,45 +62,6 @@ namespace ShopNow.Controllers
             ViewBag.Name = user.Name;
             try
             {
-                if (type == 1 && scheduleDateTime == null)
-                {
-                    var fcmTokenList = db.Customers.OrderBy(i => i.Id).Where(i => !string.IsNullOrEmpty(i.FcmTocken) && i.FcmTocken != "NULL").Select(i => i.FcmTocken).ToArray();
-                    var count = Math.Ceiling((double)fcmTokenList.Count() / 1000);
-                    for (int i = 0; i < count; i++)
-                    {
-                        Helpers.PushNotification.SendBulk(message, title, "SpecialOffer", imagePath, fcmTokenList.Skip(i * 1000).Take(1000).ToArray(), "tune2.caf");
-                    }
-                    //Helpers.PushNotification.SendBulk(message, title, "SpecialOffer", imagePath, fcmTokenList.Take(1000).ToArray());
-                    //Helpers.PushNotification.SendBulk(message, title, "SpecialOffer", imagePath, fcmTokenList.Skip(1000).Take(1000).ToArray());
-                    //Helpers.PushNotification.SendBulk(message, title, "SpecialOffer", imagePath, fcmTokenList.Skip(2000).Take(1000).ToArray());
-                }
-                if (type == 2 && scheduleDateTime == null)
-                {
-                    var fcmTokenList = db.Customers.Where(i => !string.IsNullOrEmpty(i.FcmTocken) && i.FcmTocken != "NULL" && district.Contains(i.DistrictName)).Select(i => i.FcmTocken).ToArray();
-                    var count = Math.Ceiling((double)fcmTokenList.Count() / 1000);
-                    for (int i = 0; i < count; i++)
-                    {
-                        Helpers.PushNotification.SendBulk(message, title, "SpecialOffer", imagePath, fcmTokenList.Skip(i * 1000).Take(1000).ToArray(), "tune2.caf");
-                    }
-                    //Helpers.PushNotification.SendBulk(message, title, "SpecialOffer", imagePath, fcmTokenList.Take(1000).ToArray());
-                    //Helpers.PushNotification.SendBulk(message, title, "SpecialOffer", imagePath, fcmTokenList.Skip(1000).Take(1000).ToArray());
-                    //Helpers.PushNotification.SendBulk(message, title, "SpecialOffer", imagePath, fcmTokenList.Skip(2000).Take(1000).ToArray());
-                }
-                if (type == 3 && scheduleDateTime == null)
-                {
-                    var latestVersion = db.AppDetails.FirstOrDefault().Version;
-                    var fcmTokenList = db.Customers.Where(i => !string.IsNullOrEmpty(i.FcmTocken))
-                        .Join(db.CustomerAppInfoes.Where(i => i.Version != latestVersion), c => c.Id, ca => ca.CustomerId, (c, ca) => new { c, ca })
-                        .Select(i => i.c.FcmTocken).ToArray();
-                    var count = Math.Ceiling((double)fcmTokenList.Count() / 1000);
-                    for (int i = 0; i < count; i++)
-                    {
-                        Helpers.PushNotification.SendBulk(message, title, "SpecialOffer", imagePath, fcmTokenList.Skip(i * 1000).Take(1000).ToArray(), "tune2.caf");
-                    }
-                    //Helpers.PushNotification.SendBulk(message, title, "SpecialOffer", imagePath, fcmTokenList.Take(1000).ToArray());
-                    //Helpers.PushNotification.SendBulk(message, title, "SpecialOffer", imagePath, fcmTokenList.Skip(1000).Take(1000).ToArray());
-                    //Helpers.PushNotification.SendBulk(message, title, "SpecialOffer", imagePath, fcmTokenList.Skip(2000).Take(1000).ToArray());
-                }
                 var pushNotification = new PushNotification
                 {
                     DateEncoded = DateTime.Now,
@@ -116,6 +77,47 @@ namespace ShopNow.Controllers
                 };
                 db.PushNotifications.Add(pushNotification);
                 db.SaveChanges();
+
+                if (type == 1 && scheduleDateTime == null)
+                {
+                    var fcmTokenList = db.Customers.OrderBy(i => i.Id).Where(i => !string.IsNullOrEmpty(i.FcmTocken) && i.FcmTocken != "NULL").Select(i => i.FcmTocken).ToArray();
+                    var count = Math.Ceiling((double)fcmTokenList.Count() / 1000);
+                    for (int i = 0; i < count; i++)
+                    {
+                        Helpers.PushNotification.SendBulk(message, title, "SpecialOffer", imagePath, fcmTokenList.Skip(i * 1000).Take(1000).ToArray(), "tune2.caf", "", "", pushNotification.Id);
+                    }
+                    //Helpers.PushNotification.SendBulk(message, title, "SpecialOffer", imagePath, fcmTokenList.Take(1000).ToArray());
+                    //Helpers.PushNotification.SendBulk(message, title, "SpecialOffer", imagePath, fcmTokenList.Skip(1000).Take(1000).ToArray());
+                    //Helpers.PushNotification.SendBulk(message, title, "SpecialOffer", imagePath, fcmTokenList.Skip(2000).Take(1000).ToArray());
+                }
+                if (type == 2 && scheduleDateTime == null)
+                {
+                    var fcmTokenList = db.Customers.Where(i => !string.IsNullOrEmpty(i.FcmTocken) && i.FcmTocken != "NULL" && district.Contains(i.DistrictName)).Select(i => i.FcmTocken).ToArray();
+                    var count = Math.Ceiling((double)fcmTokenList.Count() / 1000);
+                    for (int i = 0; i < count; i++)
+                    {
+                        Helpers.PushNotification.SendBulk(message, title, "SpecialOffer", imagePath, fcmTokenList.Skip(i * 1000).Take(1000).ToArray(), "tune2.caf", "", "", pushNotification.Id);
+                    }
+                    //Helpers.PushNotification.SendBulk(message, title, "SpecialOffer", imagePath, fcmTokenList.Take(1000).ToArray());
+                    //Helpers.PushNotification.SendBulk(message, title, "SpecialOffer", imagePath, fcmTokenList.Skip(1000).Take(1000).ToArray());
+                    //Helpers.PushNotification.SendBulk(message, title, "SpecialOffer", imagePath, fcmTokenList.Skip(2000).Take(1000).ToArray());
+                }
+                if (type == 3 && scheduleDateTime == null)
+                {
+                    var latestVersion = db.AppDetails.FirstOrDefault().Version;
+                    var fcmTokenList = db.Customers.Where(i => !string.IsNullOrEmpty(i.FcmTocken))
+                        .Join(db.CustomerAppInfoes.Where(i => i.Version != latestVersion), c => c.Id, ca => ca.CustomerId, (c, ca) => new { c, ca })
+                        .Select(i => i.c.FcmTocken).ToArray();
+                    var count = Math.Ceiling((double)fcmTokenList.Count() / 1000);
+                    for (int i = 0; i < count; i++)
+                    {
+                        Helpers.PushNotification.SendBulk(message, title, "SpecialOffer", imagePath, fcmTokenList.Skip(i * 1000).Take(1000).ToArray(), "tune2.caf", "", "", 0);
+                    }
+                    //Helpers.PushNotification.SendBulk(message, title, "SpecialOffer", imagePath, fcmTokenList.Take(1000).ToArray());
+                    //Helpers.PushNotification.SendBulk(message, title, "SpecialOffer", imagePath, fcmTokenList.Skip(1000).Take(1000).ToArray());
+                    //Helpers.PushNotification.SendBulk(message, title, "SpecialOffer", imagePath, fcmTokenList.Skip(2000).Take(1000).ToArray());
+                }
+
                 string alertmessage = "";
                 alertmessage = scheduleDateTime == null ? "Notification Send Successfully!" : "Notification Scheduled Successfully!";
                 return RedirectToAction("Index", new { message = alertmessage, type = 1 });

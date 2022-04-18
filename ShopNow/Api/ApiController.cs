@@ -7801,6 +7801,18 @@ namespace ShopNow.Controllers
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
+        public JsonResult UpdatePushNotificationClickCount(int id)
+        {
+            var pushNotification = db.PushNotifications.FirstOrDefault(i => i.Id == id);
+            if (pushNotification != null)
+            {
+                pushNotification.ClickCount += 1;
+                db.Entry(pushNotification).State = EntityState.Modified;
+                db.SaveChanges();
+            }
+            return Json(true, JsonRequestBehavior.AllowGet);
+        }
+
         //test apis
         public JsonResult SendTestNotification(string deviceId = "", string title = "", string body = "", string imagepath="")
         {
@@ -8411,5 +8423,6 @@ namespace ShopNow.Controllers
             }
             return Json(true, JsonRequestBehavior.AllowGet);
         }
+
     }
 }
