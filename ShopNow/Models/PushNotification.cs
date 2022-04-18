@@ -22,6 +22,7 @@ namespace ShopNow.Models
         public string Description { get; set; }
         public string RedirectUrl { get; set; }
         public Nullable<System.DateTime> ScheduleDateTime { get; set; }
+        public int ClickCount { get; set; }
         public int Status { get; set; }
         public System.DateTime DateEncoded { get; set; }
         public string EncodedBy { get; set; }
