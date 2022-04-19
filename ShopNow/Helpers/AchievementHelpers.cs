@@ -603,7 +603,7 @@ namespace ShopNow.Helpers
             walletHistory.DateEncoded = DateTime.Now;
             walletHistory.Description = $"Received from Achievement({achievementName})";
             walletHistory.Type = 1;
-             //walletHistory.ExpiryDate = DateTime.Now.AddDays(dayLimit);
+            walletHistory.ExpiryDate = DateTime.Now.AddDays(10);
             db.CustomerWalletHistories.Add(walletHistory);
             db.SaveChanges();
         }
