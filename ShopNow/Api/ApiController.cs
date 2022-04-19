@@ -7456,6 +7456,13 @@ namespace ShopNow.Controllers
                         db.ShopCredits.Add(shopcredit);
                         db.SaveChanges();
                     }
+
+                    //SMS
+                    //if (order.Id != 0)
+                    //{
+                    //    string message = $"Hi {order.CustomerName}, your order from {order.ShopName} is scheduled for delivery through Snowch , install Snowch app for tracking & online payment http://app.snowch.in - Joyra";
+                    //    string result = SendSMS.execute("04448134440", order.CustomerPhoneNumber, message);
+                    //}
                 }
             }
             catch (Exception ex)
