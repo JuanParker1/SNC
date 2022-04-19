@@ -94,5 +94,6 @@ namespace ShopNow.Models
         public double DeliveryDiscountPercentage { get; set; }
         public bool IsShopRate { get; set; }
         public int ParcelDropDeliveryType { get; set; }
+        public int DishType { get; set; }
     }
 }

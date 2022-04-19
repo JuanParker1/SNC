@@ -1639,6 +1639,7 @@
           <Property Name="DeliveryDiscountPercentage" Type="float" Nullable="false" />
           <Property Name="IsShopRate" Type="bit" Nullable="false" />
           <Property Name="ParcelDropDeliveryType" Type="int" Nullable="false" />
+          <Property Name="DishType" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="ShopSchedules">
           <Key>
@@ -3191,9 +3192,9 @@
           <EntitySet Name="Wallets" EntityType="sncModel.Wallet" />
           <EntitySet Name="Orders" EntityType="sncModel.Order" />
           <EntitySet Name="ParcelDropDeliveryCharges" EntityType="sncModel.ParcelDropDeliveryCharge" />
-          <EntitySet Name="Shops" EntityType="sncModel.Shop" />
           <EntitySet Name="CustomerAchievementCompleteds" EntityType="sncModel.CustomerAchievementCompleted" />
           <EntitySet Name="PushNotifications" EntityType="sncModel.PushNotification" />
+          <EntitySet Name="Shops" EntityType="sncModel.Shop" />
         </EntityContainer>
         <ComplexType Name="GetDEliveryBoyList_Result">
           <Property Type="Int32" Name="Id" Nullable="false" />
@@ -3985,6 +3986,33 @@
           <Property Name="CreatedBy" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
           <Property Name="UpdatedBy" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
         </EntityType>
+        <EntityType Name="CustomerAchievementCompleted">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="AchievementId" Type="Int32" Nullable="false" />
+          <Property Name="CustomerId" Type="Int32" Nullable="false" />
+          <Property Name="Status" Type="Int32" Nullable="false" />
+          <Property Name="DateEncoded" Type="DateTime" Nullable="false" Precision="3" />
+        </EntityType>
+        <EntityType Name="PushNotification">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Type" Type="Int32" Nullable="false" />
+          <Property Name="District" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Title" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ImageUrl" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="RedirectUrl" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ScheduleDateTime" Type="DateTime" Precision="3" />
+          <Property Name="ClickCount" Type="Int32" Nullable="false" />
+          <Property Name="Status" Type="Int32" Nullable="false" />
+          <Property Name="DateEncoded" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="EncodedBy" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+        </EntityType>
         <EntityType Name="Shop">
           <Key>
             <PropertyRef Name="Id" />
@@ -4069,33 +4097,7 @@
           <Property Name="DeliveryDiscountPercentage" Type="Double" Nullable="false" />
           <Property Name="IsShopRate" Type="Boolean" Nullable="false" />
           <Property Name="ParcelDropDeliveryType" Type="Int32" Nullable="false" />
-        </EntityType>
-        <EntityType Name="CustomerAchievementCompleted">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="AchievementId" Type="Int32" Nullable="false" />
-          <Property Name="CustomerId" Type="Int32" Nullable="false" />
-          <Property Name="Status" Type="Int32" Nullable="false" />
-          <Property Name="DateEncoded" Type="DateTime" Nullable="false" Precision="3" />
-        </EntityType>
-        <EntityType Name="PushNotification">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Type" Type="Int32" Nullable="false" />
-          <Property Name="District" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="Title" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="ImageUrl" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="RedirectUrl" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="ScheduleDateTime" Type="DateTime" Precision="3" />
-          <Property Name="ClickCount" Type="Int32" Nullable="false" />
-          <Property Name="Status" Type="Int32" Nullable="false" />
-          <Property Name="DateEncoded" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="EncodedBy" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="DishType" Type="Int32" Nullable="false" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -6020,9 +6022,39 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="CustomerAchievementCompleteds">
+            <EntityTypeMapping TypeName="sncModel.CustomerAchievementCompleted">
+              <MappingFragment StoreEntitySet="CustomerAchievementCompleted">
+                <ScalarProperty Name="DateEncoded" ColumnName="DateEncoded" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
+                <ScalarProperty Name="AchievementId" ColumnName="AchievementId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PushNotifications">
+            <EntityTypeMapping TypeName="sncModel.PushNotification">
+              <MappingFragment StoreEntitySet="PushNotifications">
+                <ScalarProperty Name="EncodedBy" ColumnName="EncodedBy" />
+                <ScalarProperty Name="DateEncoded" ColumnName="DateEncoded" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="ClickCount" ColumnName="ClickCount" />
+                <ScalarProperty Name="ScheduleDateTime" ColumnName="ScheduleDateTime" />
+                <ScalarProperty Name="RedirectUrl" ColumnName="RedirectUrl" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="ImageUrl" ColumnName="ImageUrl" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="District" ColumnName="District" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="Shops">
             <EntityTypeMapping TypeName="sncModel.Shop">
               <MappingFragment StoreEntitySet="Shops">
+                <ScalarProperty Name="DishType" ColumnName="DishType" />
                 <ScalarProperty Name="ParcelDropDeliveryType" ColumnName="ParcelDropDeliveryType" />
                 <ScalarProperty Name="IsShopRate" ColumnName="IsShopRate" />
                 <ScalarProperty Name="DeliveryDiscountPercentage" ColumnName="DeliveryDiscountPercentage" />
@@ -6102,35 +6134,6 @@
                 <ScalarProperty Name="ImagePath" ColumnName="ImagePath" />
                 <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="CustomerAchievementCompleteds">
-            <EntityTypeMapping TypeName="sncModel.CustomerAchievementCompleted">
-              <MappingFragment StoreEntitySet="CustomerAchievementCompleted">
-                <ScalarProperty Name="DateEncoded" ColumnName="DateEncoded" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
-                <ScalarProperty Name="AchievementId" ColumnName="AchievementId" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="PushNotifications">
-            <EntityTypeMapping TypeName="sncModel.PushNotification">
-              <MappingFragment StoreEntitySet="PushNotifications">
-                <ScalarProperty Name="EncodedBy" ColumnName="EncodedBy" />
-                <ScalarProperty Name="DateEncoded" ColumnName="DateEncoded" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="ClickCount" ColumnName="ClickCount" />
-                <ScalarProperty Name="ScheduleDateTime" ColumnName="ScheduleDateTime" />
-                <ScalarProperty Name="RedirectUrl" ColumnName="RedirectUrl" />
-                <ScalarProperty Name="Description" ColumnName="Description" />
-                <ScalarProperty Name="ImageUrl" ColumnName="ImageUrl" />
-                <ScalarProperty Name="Title" ColumnName="Title" />
-                <ScalarProperty Name="District" ColumnName="District" />
-                <ScalarProperty Name="Type" ColumnName="Type" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
