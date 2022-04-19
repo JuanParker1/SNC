@@ -273,6 +273,8 @@ namespace ShopNow.ViewModels
             public bool IsCustomerAccepted { get; set; }
             public string ExpiryDate { get; set; }
             public string Description { get; set; }
+            public bool IsCompleted { get; set; }
+            public string CompleteText { get; set; }
 
             public List<ShopListItem> ShopListItems { get; set; }
             public List<ProductListItem> ProductListItems { get; set; }
