@@ -3,7 +3,7 @@
     ViewBag.Title = "Agency Entry";
     var mapkey = Session["googleMApkey"];
 }
-<title>ShopNow | @ViewBag.Title</title>
+<title>SNOWCH | @ViewBag.Title</title>
 <div class="container-fluid">
     <div class="row mb-2">
         <div class="col-md-3">
@@ -256,7 +256,6 @@
     <script src="https://maps.googleapis.com/maps/api/js?key=@mapkey&libraries=places&callback=initMap" async defer></script>
     <script>
         $(document).ready(function () {
-
             $("#Phone").on('keypress', function (e) {
                 if (e.keycode == 13) {
                     $("#btnCheckCustomer").click();

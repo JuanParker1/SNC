@@ -2,9 +2,7 @@
 @{
     ViewBag.Title = "Achievement Setting Entry";
 }
-
-<title>ShopNow | @ViewBag.Title</title>
-
+<title>SNOWCH | @ViewBag.Title</title>
 <div class="container-fluid mb-5">
     <div class="row">
         <div class="col-md-10 mx-auto mt-3">
@@ -178,6 +176,7 @@
         </div>
     </div>
 </div>
+
 @section Scripts
 {
     <script src="~/Scripts/select2/js/select2.js"></script>
@@ -186,7 +185,6 @@
     <script src="~/Scripts/ckeditor/ckeditor.js"></script>
     <script>
         $(document).ready(function () {
-
             $('#select-district').select2({
                 placeholder: "Search District",
                 width: '100%',
@@ -212,13 +210,11 @@
                 //}
             });
 
-
             $('[name="CountType"]').on('change', function () {
                 var $value = $(this).val();
                 $('#div-shop').addClass('d-none');
                 $('#div-district').addClass('d-none');
                 $('#div-product').addClass('d-none');
-
                 if ($value == '3') {
                     $('#div-shop').removeClass('d-none');
                     $('#div-district').removeClass('d-none');
@@ -237,7 +233,6 @@
             $('[name="ActivateType"]').on('change', function () {
                 var $value = $(this).val();
                 $('#div-game').addClass('d-none');
-
                 if ($value == '2') {
                     $('#div-game').removeClass('d-none');
                 } else {
@@ -278,9 +273,6 @@
                     }
                 });
             }
-
         });
-
-
     </script>
 }
