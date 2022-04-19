@@ -1674,7 +1674,7 @@ namespace ShopNow.Controllers
                     //accept
                     if (status == 3)
                     {
-                        Helpers.PushNotification.SendbydeviceId($"Your order has been accepted by shop({order.ShopName}).", "Snowch", "Orderstatus", "", fcmToken.ToString(), "tune1.caf", "liveorder");
+                        Helpers.PushNotification.SendbydeviceId($"Your order has been accepted by {order.ShopName}.", "Snowch", "Orderstatus", "", fcmToken.ToString(), "tune1.caf", "liveorder");
                     }
                 }
                 //Refund
@@ -2093,7 +2093,7 @@ namespace ShopNow.Controllers
             {
                 var deliveryboy = db.DeliveryBoys.FirstOrDefault(i => i.CustomerId == customerId); //This is delivery boy
                 var order = db.Orders.FirstOrDefault(i => i.OrderNumber == orderNo);
-                string notificationMessage = $"Your order on shop({order.ShopName}) is on the way.";
+                string notificationMessage = $"Your order on {order.ShopName} is on the way.";
                 order.Status = 5;
                 order.UpdatedBy = deliveryboy.Name;
                 order.DateUpdated = DateTime.Now;
@@ -2128,7 +2128,7 @@ namespace ShopNow.Controllers
                     models.DateUpdated = DateTime.Now;
                     db.OtpVerifications.Add(models);
                     db.SaveChanges();
-                    notificationMessage = $"Your order on shop({order.ShopName}) is on the way. Please share the delivery code { models.Otp} with the delivery partner {deliveryboy.Name} for verification.";
+                    notificationMessage = $"Your order on {order.ShopName} is on the way. Please share the delivery code { models.Otp} with the delivery partner {deliveryboy.Name} for verification.";
                 }
                 if (order.CustomerId != 0)
                 {
@@ -2315,7 +2315,7 @@ namespace ShopNow.Controllers
 
                 string fcmtocken = customerDetails.FcmTocken ?? "";
 
-                Helpers.PushNotification.SendbydeviceId($"Your order on shop({order.ShopName}) has been delivered by delivery partner {order.DeliveryBoyName}.", "Snowch", "Orderstatus", "", fcmtocken.ToString(), "tune1.caf", "liveorder");
+                Helpers.PushNotification.SendbydeviceId($"Your order on {order.ShopName} has been delivered by delivery partner {order.DeliveryBoyName}.", "Snowch", "Orderstatus", "", fcmtocken.ToString(), "tune1.caf", "liveorder");
 
                 //For Successfull First Order
                 var orderExist = db.Orders.Where(i => i.CustomerId == order.CustomerId && i.Status == 6).ToList();
