@@ -12,7 +12,7 @@ namespace ShopNow.Helpers
         public static void UpdateAchievements(int customerId)
         {
             sncEntities db = new sncEntities();
-            DateTime achievementStartDateTime = new DateTime(2021, 10, 20);
+            DateTime achievementStartDateTime = new DateTime(2022, 04, 19);
             var customer = db.Customers.FirstOrDefault(i => i.Id == customerId);
             if (customer != null)
             {
