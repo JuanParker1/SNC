@@ -170,7 +170,7 @@ namespace ShopNow.Helpers
         //}
 
 
-        public static string SendBulk(string body, string title, string channelId, string imgPath, string[] deviceId, string sound = "", string type = "", string shopcategories = "")
+        public static string SendBulk(string body, string title, string channelId, string imgPath, string[] deviceId, string sound = "", string type = "", string shopcategories = "",int pushNotificationId=0)
         {
             string res = "";
             try
@@ -195,7 +195,8 @@ namespace ShopNow.Helpers
                     {
                         queryParams = "",
                         type = type,
-                        Shopcategories = shopcategories
+                        Shopcategories = shopcategories,
+                        Id = pushNotificationId
                     }
                 };
                 var serializer = new JavaScriptSerializer();

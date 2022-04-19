@@ -48,7 +48,8 @@ namespace ShopNow.Controllers
                     Description = i.Description,
                     DistrictName = i.Type == 1 ? "All Customer" : i.District,
                     EncodedBy = i.EncodedBy,
-                    Title = i.Title
+                    Title = i.Title,
+                    ClickCount = i.ClickCount
                 }).ToList();
             int counter = 1;
             model.ListItems.ForEach(x => x.Index = counter++);
@@ -56,19 +57,35 @@ namespace ShopNow.Controllers
         }
 
         [HttpPost]
-        public ActionResult SendBulk(string title, string message, string[] district, int type,DateTime? scheduleDateTime, string imagePath = "")
+        public ActionResult SendBulk(string title, string message, string[] district, int type, DateTime? scheduleDateTime, string imagePath = "")
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
             try
             {
+                var pushNotification = new PushNotification
+                {
+                    DateEncoded = DateTime.Now,
+                    Description = message,
+                    District = string.Join(",", district),
+                    EncodedBy = user.Name,
+                    ImageUrl = imagePath,
+                    RedirectUrl = "",
+                    Status = scheduleDateTime == null ? 0 : 1,
+                    Title = title,
+                    Type = type,
+                    ScheduleDateTime = scheduleDateTime
+                };
+                db.PushNotifications.Add(pushNotification);
+                db.SaveChanges();
+
                 if (type == 1 && scheduleDateTime == null)
                 {
                     var fcmTokenList = db.Customers.OrderBy(i => i.Id).Where(i => !string.IsNullOrEmpty(i.FcmTocken) && i.FcmTocken != "NULL").Select(i => i.FcmTocken).ToArray();
                     var count = Math.Ceiling((double)fcmTokenList.Count() / 1000);
                     for (int i = 0; i < count; i++)
                     {
-                        Helpers.PushNotification.SendBulk(message, title, "SpecialOffer", imagePath, fcmTokenList.Skip(i * 1000).Take(1000).ToArray(), "tune2.caf");
+                        Helpers.PushNotification.SendBulk(message, title, "SpecialOffer", imagePath, fcmTokenList.Skip(i * 1000).Take(1000).ToArray(), "tune2.caf", "", "", pushNotification.Id);
                     }
                     //Helpers.PushNotification.SendBulk(message, title, "SpecialOffer", imagePath, fcmTokenList.Take(1000).ToArray());
                     //Helpers.PushNotification.SendBulk(message, title, "SpecialOffer", imagePath, fcmTokenList.Skip(1000).Take(1000).ToArray());
@@ -80,7 +97,7 @@ namespace ShopNow.Controllers
                     var count = Math.Ceiling((double)fcmTokenList.Count() / 1000);
                     for (int i = 0; i < count; i++)
                     {
-                        Helpers.PushNotification.SendBulk(message, title, "SpecialOffer", imagePath, fcmTokenList.Skip(i * 1000).Take(1000).ToArray(), "tune2.caf");
+                        Helpers.PushNotification.SendBulk(message, title, "SpecialOffer", imagePath, fcmTokenList.Skip(i * 1000).Take(1000).ToArray(), "tune2.caf", "", "", pushNotification.Id);
                     }
                     //Helpers.PushNotification.SendBulk(message, title, "SpecialOffer", imagePath, fcmTokenList.Take(1000).ToArray());
                     //Helpers.PushNotification.SendBulk(message, title, "SpecialOffer", imagePath, fcmTokenList.Skip(1000).Take(1000).ToArray());
@@ -95,28 +112,13 @@ namespace ShopNow.Controllers
                     var count = Math.Ceiling((double)fcmTokenList.Count() / 1000);
                     for (int i = 0; i < count; i++)
                     {
-                        Helpers.PushNotification.SendBulk(message, title, "SpecialOffer", imagePath, fcmTokenList.Skip(i * 1000).Take(1000).ToArray(), "tune2.caf");
+                        Helpers.PushNotification.SendBulk(message, title, "SpecialOffer", imagePath, fcmTokenList.Skip(i * 1000).Take(1000).ToArray(), "tune2.caf", "", "", 0);
                     }
                     //Helpers.PushNotification.SendBulk(message, title, "SpecialOffer", imagePath, fcmTokenList.Take(1000).ToArray());
                     //Helpers.PushNotification.SendBulk(message, title, "SpecialOffer", imagePath, fcmTokenList.Skip(1000).Take(1000).ToArray());
                     //Helpers.PushNotification.SendBulk(message, title, "SpecialOffer", imagePath, fcmTokenList.Skip(2000).Take(1000).ToArray());
                 }
 
-                var pushNotification = new PushNotification
-                {
-                    DateEncoded = DateTime.Now,
-                    Description = message,
-                    District = string.Join(",", district),
-                    EncodedBy = user.Name,
-                    ImageUrl = imagePath,
-                    RedirectUrl = "",
-                    Status = scheduleDateTime == null? 0 : 1,
-                    Title = title,
-                    Type = type,
-                    ScheduleDateTime = scheduleDateTime
-                };
-                db.PushNotifications.Add(pushNotification);
-                db.SaveChanges();
                 string alertmessage = "";
                 alertmessage = scheduleDateTime == null ? "Notification Send Successfully!" : "Notification Scheduled Successfully!";
                 return RedirectToAction("Index", new { message = alertmessage, type = 1 });
@@ -127,6 +129,7 @@ namespace ShopNow.Controllers
             }
         }
 
+        [AccessPolicy(PageCode = "SNCPNNL350")]
         public ActionResult NotificationLogin()
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
@@ -144,24 +147,28 @@ namespace ShopNow.Controllers
             return View(model.NotificationLists);
         }
 
+        [AccessPolicy(PageCode = "SNCPNS351")]
         public JsonResult Save(string Name, string Phonenumber, string Password)
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
-            var notificationlogin = new NotificationLogin();
-            notificationlogin.Name = Name;
-            notificationlogin.PhoneNumber = Phonenumber;
-            notificationlogin.Password = Password;
-            notificationlogin.Status = 0;
-            notificationlogin.DateEncoded = DateTime.Now;
-            notificationlogin.DateUpdated = DateTime.Now;
-            notificationlogin.EncodedBy = user.Name;
-            notificationlogin.UpdatedBy = user.Name;
+            var notificationlogin = new NotificationLogin
+            {
+                Name = Name,
+                PhoneNumber = Phonenumber,
+                Password = Password,
+                Status = 0,
+                DateEncoded = DateTime.Now,
+                DateUpdated = DateTime.Now,
+                EncodedBy = user.Name,
+                UpdatedBy = user.Name
+            };
             db.NotificationLogins.Add(notificationlogin);
             db.SaveChanges();
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
+        [AccessPolicy(PageCode = "SNCPNE352")]
         public JsonResult Edit(int id, string name, string phonenumber, string password)
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
@@ -180,6 +187,7 @@ namespace ShopNow.Controllers
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
+        [AccessPolicy(PageCode = "SNCPND353")]
         public JsonResult Delete(int id)
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);

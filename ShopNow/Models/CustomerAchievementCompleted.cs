@@ -12,19 +12,12 @@ namespace ShopNow.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class PushNotification
+    public partial class CustomerAchievementCompleted
     {
         public int Id { get; set; }
-        public int Type { get; set; }
-        public string District { get; set; }
-        public string Title { get; set; }
-        public string ImageUrl { get; set; }
-        public string Description { get; set; }
-        public string RedirectUrl { get; set; }
-        public Nullable<System.DateTime> ScheduleDateTime { get; set; }
-        public int ClickCount { get; set; }
+        public int AchievementId { get; set; }
+        public int CustomerId { get; set; }
         public int Status { get; set; }
         public System.DateTime DateEncoded { get; set; }
-        public string EncodedBy { get; set; }
     }
 }

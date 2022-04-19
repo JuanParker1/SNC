@@ -12,7 +12,7 @@
             <h4 class="text-success">Notification List</h4>
         </div>
         <div class="col-md-4 text-right">
-            <a data-toggle="modal" data-target="#createModal" href="createModal"><span class="fa fa-plus"></span> Create New</a>
+            <a data-toggle="modal" data-target="#createModal" href="createModal" class="btn btn-sm btn-primary"><i class="fa fa-plus"></i>&nbsp; Create New</a>
         </div>
     </div>
     <div class="row">
@@ -24,12 +24,12 @@
                columns.Add(c => c.Name).Filterable(true).SetWidth(10);
                columns.Add(c => c.PhoneNumber).Titled("Phone Number").Filterable(true).SetWidth(10);
                columns.Add(c => c.Password).Titled("Password").Filterable(true).SetWidth(30);
-               columns.Add(c => c.DateEncoded).Titled("Date").Filterable(true).SetWidth(10);
+               columns.Add(c => c.DateEncoded).Titled("Date").Filterable(true).SetWidth(10).Format("{0:dd-MM-yyyy hh:mm tt}");
                columns.Add(c => c.EncodedBy).Titled("Created By").Filterable(true).SetWidth(10);
                columns.Add().Encoded(false).Sanitized(false).Titled("Action").Filterable(false).SetWidth(10)
                .RenderValueAs(c => @<div>
                         <a data-toggle="modal" data-target="#updateModal" href="updateModal" data-name="@c.Name" data-phonenumber="@c.PhoneNumber" data-password="@c.Password" data-id=@c.Id class="text-info Update"><i class="fa fa-edit fa-lg"></i></a>
-                        <a href="javascript:void(0)" data-id=@c.Id class="text-danger btnDelete ml-3"><i class="fa fa-trash fa-lg"></i></a>
+                        <a href="javascript:void(0)" data-id=@c.Id class="text-danger btnDelete ml-4"><i class="fa fa-trash fa-lg"></i></a>
                     </div>);
             }).WithPaging(20).Sortable(true)
                 </div>
@@ -153,8 +153,8 @@
                     $.getJSON("/PushNotification/Save", { Name: name, Phonenumber: phonenumber, Password: password }, function (data) {
                         if (data == true) {
                             swal({
-                                title: "",
-                                text: "Notication Added Successfully",
+                                title: "Notication",
+                                text: "Added Successfully",
                                 type: "success"
                             }, function () {
                                 window.location.reload();
@@ -184,8 +184,8 @@
                     $.getJSON("/PushNotification/Edit?id=" + id + "&name=" + Name + "&phonenumber=" + PhoneNumber + "&password=" + Password, function (data) {
                         if (data == true) {
                             swal({
-                                title: "",
-                                text: "Notification Updated Successfully",
+                                title: "Notification",
+                                text: "Updated Successfully",
                                 type: "success"
                             }, function () {
                                 window.location.reload();

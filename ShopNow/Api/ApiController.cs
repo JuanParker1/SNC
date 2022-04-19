@@ -5768,9 +5768,14 @@ namespace ShopNow.Controllers
 
         public JsonResult GetLiveOrderCount(int customerid)
         {
+            double walletAmount = 0;
             var liveOrdercount = db.Orders.Where(i => i.CustomerId == customerid && i.Status != 0 && i.Status != 6 && i.Status != 7 && i.Status != 9 && i.Status != 10 && i.Status != -1).Count();
             var oldOrdercount = db.Orders.Where(i => i.CustomerId == customerid && i.Status == 6).Count();
-            return Json(new { count = liveOrdercount, oldOrderCount = oldOrdercount }, JsonRequestBehavior.AllowGet);
+            var customer = db.Customers.FirstOrDefault(i => i.Id == customerid);
+            if (customer != null)
+                walletAmount = customer.WalletAmount;
+            var achievementCompletedCount = db.CustomerAchievementCompleteds.Where(i => i.CustomerId == customerid).Count();
+            return Json(new { count = liveOrdercount, oldOrderCount = oldOrdercount, walletAmount = walletAmount,achievementCount = achievementCompletedCount }, JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult GetCheckOldCart(OldCartCheckViewModel model)
@@ -7796,6 +7801,18 @@ namespace ShopNow.Controllers
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
+        public JsonResult UpdatePushNotificationClickCount(int id)
+        {
+            var pushNotification = db.PushNotifications.FirstOrDefault(i => i.Id == id);
+            if (pushNotification != null)
+            {
+                pushNotification.ClickCount += 1;
+                db.Entry(pushNotification).State = EntityState.Modified;
+                db.SaveChanges();
+            }
+            return Json(true, JsonRequestBehavior.AllowGet);
+        }
+
         //test apis
         public JsonResult SendTestNotification(string deviceId = "", string title = "", string body = "", string imagepath="")
         {
@@ -8406,5 +8423,6 @@ namespace ShopNow.Controllers
             }
             return Json(true, JsonRequestBehavior.AllowGet);
         }
+
     }
 }

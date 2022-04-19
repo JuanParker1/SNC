@@ -525,6 +525,9 @@
     <Compile Include="Models\CustomerAchievement.cs">
       <DependentUpon>ApplicationDbContext.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\CustomerAchievementCompleted.cs">
+      <DependentUpon>ApplicationDbContext.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\CustomerAddress.cs">
       <DependentUpon>ApplicationDbContext.tt</DependentUpon>
     </Compile>
