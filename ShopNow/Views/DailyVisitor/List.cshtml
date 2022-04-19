@@ -15,8 +15,19 @@
         <div class="col-md-7">
             <form method="get" action="/DailyVisitor/List">
                 <div class="row">
-                    <div class="col-md-4"><input type="date" class="form-control" name="DateFilter" value="@Model.DateFilter.Value.ToString("yyyy-MM-dd")" /></div>
-                    <input type="submit" class="btn btn-info" value="Apply Filter" />
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="col-form-label">Start Date</label>
+                            <input type="date" class="form-control" name="StartDateFilter" value="@Model.StartDateFilter.Value.ToString("yyyy-MM-dd")" />
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="col-form-label">End Date</label>
+                            <input type="date" class="form-control" name="EndDateFilter" value="@Model.EndDateFilter.Value.ToString("yyyy-MM-dd")" />
+                        </div>
+                    </div>
+                    <div class="mt-3"> <input type="submit" class="btn btn-info mt-4" value="Apply Filter" style="height:48%"/></div>
                 </div>
             </form>
         </div>

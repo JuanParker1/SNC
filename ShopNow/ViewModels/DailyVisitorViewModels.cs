@@ -7,7 +7,8 @@ namespace ShopNow.ViewModels
 {
     public class DailyVisitorListViewModel
     {
-        public DateTime? DateFilter { get; set; }
+        public DateTime? StartDateFilter { get; set; }
+        public DateTime? EndDateFilter { get; set; }
         public List<ListItem> ListItems { get; set; } 
         public class ListItem
         {
