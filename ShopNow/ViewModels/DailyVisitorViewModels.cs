@@ -9,6 +9,8 @@ namespace ShopNow.ViewModels
     {
         public DateTime? StartDateFilter { get; set; }
         public DateTime? EndDateFilter { get; set; }
+        public int AndroidHomeCount { get; set; }
+        public int IOSHomeCount { get; set; }
         public List<ListItem> ListItems { get; set; } 
         public class ListItem
         {

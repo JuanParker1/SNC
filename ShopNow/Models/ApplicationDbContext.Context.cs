@@ -120,9 +120,9 @@ namespace ShopNow.Models
         public virtual DbSet<Wallet> Wallets { get; set; }
         public virtual DbSet<Order> Orders { get; set; }
         public virtual DbSet<ParcelDropDeliveryCharge> ParcelDropDeliveryCharges { get; set; }
-        public virtual DbSet<Shop> Shops { get; set; }
         public virtual DbSet<CustomerAchievementCompleted> CustomerAchievementCompleteds { get; set; }
         public virtual DbSet<PushNotification> PushNotifications { get; set; }
+        public virtual DbSet<Shop> Shops { get; set; }
     
         [DbFunction("sncEntities", "GetTableVAlueString")]
         public virtual IQueryable<GetTableVAlueString_Result> GetTableVAlueString(string key)

@@ -4142,7 +4142,8 @@ namespace ShopNow.Controllers
                      NextOnTime = i.NextOnTime,
                      //OfferPercentage = db.Products.Where(b => b.ShopId == i.s.Id && b.Status == 0).Select(b => b.Percentage)?.Max(b => b) ?? 0
                      OfferPercentage = i.MaxOfferPercentage,
-                     IsShopRate = i.IsShopRate
+                     IsShopRate = i.IsShopRate,
+                     DishType = i.DishType
                  }).ToList();
                 model.SuperMarketList = db.Shops.SqlQuery(querySuperMarketList,
                 new SqlParameter("Latitude", Latitude),
@@ -4165,7 +4166,8 @@ namespace ShopNow.Controllers
                      Address = i.Address,
                      NextOnTime = i.NextOnTime,
                      OfferPercentage = i.MaxOfferPercentage,
-                     IsShopRate = i.IsShopRate
+                     IsShopRate = i.IsShopRate,
+                     DishType = i.DishType
                  }).ToList();
                 model.GroceriesList = db.Shops.SqlQuery(queryGroceriesList,
                 new SqlParameter("Latitude", Latitude),
@@ -4188,7 +4190,8 @@ namespace ShopNow.Controllers
                      Address = i.Address,
                      NextOnTime = i.NextOnTime,
                      OfferPercentage = i.MaxOfferPercentage,
-                     IsShopRate = i.IsShopRate
+                     IsShopRate = i.IsShopRate,
+                     DishType = i.DishType
                  }).ToList();
                 model.HealthList = db.Shops.SqlQuery(queryHealthList,
                 new SqlParameter("Latitude", Latitude),
@@ -4211,7 +4214,8 @@ namespace ShopNow.Controllers
                     Address = i.Address,
                     NextOnTime = i.NextOnTime,
                     OfferPercentage = i.MaxOfferPercentage,
-                    IsShopRate = i.IsShopRate
+                    IsShopRate = i.IsShopRate,
+                    DishType = i.DishType
                 }).ToList();
 
                 model.ElectronicsList = db.Shops.SqlQuery(queryElectronicsList,
@@ -4235,7 +4239,8 @@ namespace ShopNow.Controllers
                      Address = i.Address,
                      NextOnTime = i.NextOnTime,
                      OfferPercentage = i.MaxOfferPercentage,
-                     IsShopRate = i.IsShopRate
+                     IsShopRate = i.IsShopRate,
+                     DishType = i.DishType
                  }).ToList();
                 model.ServicesList = db.Shops.SqlQuery(qServicesList,
                 new SqlParameter("Latitude", Latitude),
@@ -4258,7 +4263,8 @@ namespace ShopNow.Controllers
                     Address = i.Address,
                     NextOnTime = i.NextOnTime,
                     OfferPercentage = i.MaxOfferPercentage,
-                    IsShopRate = i.IsShopRate
+                    IsShopRate = i.IsShopRate,
+                    DishType = i.DishType
                 }).ToList();
                 model.OtherList = db.Shops.SqlQuery(queryOtherList,
                 new SqlParameter("Latitude", Latitude),
@@ -4281,7 +4287,8 @@ namespace ShopNow.Controllers
                      Address = i.Address,
                      NextOnTime = i.NextOnTime,
                      OfferPercentage = i.MaxOfferPercentage,
-                     IsShopRate = i.IsShopRate
+                     IsShopRate = i.IsShopRate,
+                     DishType = i.DishType
                  }).ToList();
                 return Json(model, JsonRequestBehavior.AllowGet);
             }
@@ -4308,7 +4315,8 @@ namespace ShopNow.Controllers
                      Address = i.Address,
                      NextOnTime = i.NextOnTime,
                      OfferPercentage = i.MaxOfferPercentage,
-                     IsShopRate = i.IsShopRate
+                     IsShopRate = i.IsShopRate,
+                     DishType = i.DishType
                      //IsShopRate = i.DeliveryDiscountPercentage >= 10 ? true : false
                  }).ToList();
                 return Json(model, JsonRequestBehavior.AllowGet);
@@ -4336,7 +4344,8 @@ namespace ShopNow.Controllers
                      Address = i.Address,
                      NextOnTime = i.NextOnTime,
                      OfferPercentage = i.MaxOfferPercentage,
-                     IsShopRate = i.IsShopRate
+                     IsShopRate = i.IsShopRate,
+                     DishType = i.DishType
                  }).ToList();
                 return Json(model, JsonRequestBehavior.AllowGet);
             }
@@ -4363,7 +4372,8 @@ namespace ShopNow.Controllers
                      Address = i.Address,
                      NextOnTime = i.NextOnTime,
                      OfferPercentage = i.MaxOfferPercentage,
-                     IsShopRate = i.IsShopRate
+                     IsShopRate = i.IsShopRate,
+                     DishType = i.DishType
                  }).ToList();
                 return Json(model, JsonRequestBehavior.AllowGet);
             }
@@ -4390,7 +4400,8 @@ namespace ShopNow.Controllers
                       Address = i.Address,
                       NextOnTime = i.NextOnTime,
                       OfferPercentage = i.MaxOfferPercentage,
-                      IsShopRate = i.IsShopRate
+                      IsShopRate = i.IsShopRate,
+                      DishType = i.DishType
                   }).ToList();
                 return Json(model, JsonRequestBehavior.AllowGet);
             }
@@ -4417,7 +4428,8 @@ namespace ShopNow.Controllers
                      Address = i.Address,
                      NextOnTime = i.NextOnTime,
                      OfferPercentage = i.MaxOfferPercentage,
-                     IsShopRate = i.IsShopRate
+                     IsShopRate = i.IsShopRate,
+                     DishType = i.DishType
                  }).ToList();
                 return Json(model, JsonRequestBehavior.AllowGet);
             }
@@ -4461,7 +4473,8 @@ namespace ShopNow.Controllers
                      Address = i.Address,
                      NextOnTime = i.NextOnTime,
                      OfferPercentage = i.MaxOfferPercentage,
-                     IsShopRate = i.IsShopRate
+                     IsShopRate = i.IsShopRate,
+                     DishType = i.DishType
                  }).ToList();
                 return Json(model, JsonRequestBehavior.AllowGet);
             }
@@ -4491,7 +4504,8 @@ namespace ShopNow.Controllers
                      Address = i.Address,
                      NextOnTime = i.NextOnTime,
                      OfferPercentage = i.MaxOfferPercentage,
-                     IsShopRate = i.IsShopRate
+                     IsShopRate = i.IsShopRate,
+                     DishType = i.DishType
                  }).ToList();
                 return Json(model, JsonRequestBehavior.AllowGet);
             }
@@ -5777,7 +5791,8 @@ namespace ShopNow.Controllers
             if (customer != null)
                 walletAmount = customer.WalletAmount;
             var achievementCompletedCount = db.CustomerAchievementCompleteds.Where(i => i.CustomerId == customerid).Count();
-            return Json(new { count = liveOrdercount, oldOrderCount = oldOrdercount, walletAmount = walletAmount,achievementCount = achievementCompletedCount }, JsonRequestBehavior.AllowGet);
+            bool hasPickupOrder = db.Orders.Any(i => i.CustomerId == customerid && i.Status == 5);
+            return Json(new { count = liveOrdercount, oldOrderCount = oldOrdercount, walletAmount = walletAmount,achievementCount = achievementCompletedCount,hasPickupOrder = hasPickupOrder }, JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult GetCheckOldCart(OldCartCheckViewModel model)

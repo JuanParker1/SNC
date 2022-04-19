@@ -96,6 +96,7 @@ namespace ShopNow.ViewModels
             // public List<Models.Banner> List { get; set; }
             public double OfferPercentage { get; set; }
             public bool IsShopRate { get; set; }
+            public int DishType { get; set; }
         }
     }
 
