@@ -5636,7 +5636,7 @@ namespace ShopNow.Controllers
                     Description = i.a.a.a.Description,
                     ProductListItems = i.a.apro.Select(b => new AchievementApiListViewModel.AchievementListItem.ProductListItem { Id = b.ProductId }).ToList(),
                     ShopListItems = i.a.a.ashop.Select(b => new AchievementApiListViewModel.AchievementListItem.ShopListItem { Id = b.ShopId }).ToList(),
-                    IsCustomerAccepted = i.ca.Any() ? i.ca.Any(a => a.Status == 1) : false,
+                    IsCustomerAccepted = i.ca.Any() ? i.ca.Any(a => a.Status == 1 && a.CustomerId == customerid) : false,
                     ExpiryDate = (i.a.a.a.DayLimit != 0 && i.ca.Any(a => a.Status == 1) == true) ? i.ca.FirstOrDefault().DateEncoded.AddDays(Convert.ToDouble(i.a.a.a.DayLimit)).ToString("dd-MMM-yyyy") : ""
                 }).ToList();
             return Json(new { list = model.AchievementListItems }, JsonRequestBehavior.AllowGet);
