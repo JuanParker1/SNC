@@ -3,7 +3,7 @@
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<title>Shop Now | AddOn Category Ecxel Upload</title>
+<title>SNOWCH | AddOn Category Ecxel Upload</title>
 <div class="container">
     @using (Html.BeginForm("Index", "AddOnCategory", null, FormMethod.Post, new { enctype = "multipart/form-data" }))
     {
@@ -71,11 +71,11 @@
         </div>
     }
 </div>
+
 @section Scripts
-    {
+{
     <script>
         $(document).ready(function () {
-
             var tbl = document.getElementById("AddOnCategory-list");
             if (tbl != null) {
                 for (var i = 0; i < tbl.rows.length; i++) {

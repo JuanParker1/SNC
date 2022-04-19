@@ -2,9 +2,7 @@
 @{
     ViewBag.Title = "Achievement Setting Update";
 }
-
-<title>ShopNow | @ViewBag.Title</title>
-
+<title>SNOWCH | @ViewBag.Title</title>
 <div class="container-fluid mb-5">
     <div class="row">
         <div class="col-md-10 mx-auto mt-3">
@@ -162,6 +160,7 @@
         </div>
     </div>
 </div>
+
 @section Scripts
 {
     <script src="~/Scripts/select2/js/select2.js"></script>
@@ -230,12 +229,10 @@
                 //}
             });
 
-
             $('[name="CountType"]').on('change', function () {
                 var $value = $(this).val();
                 setCountTypeDivs($value);
             });
-
             $('[name="ActivateType"]').on('change', function () {
                 var $value = $(this).val();
                 setActivateTypeDivs($value);
@@ -251,15 +248,15 @@
                 }
             });
 
-                $('#select-product').select2({
-                    placeholder: "Search Products",
-                    width: '100%',
-                    minimumInputLength: 5,
-                    ajax: {
-                        url: "/Product/GetAllProductSelect2",
-                        delay: 250,
-                        dataType: 'json'
-                    }
+            $('#select-product').select2({
+                placeholder: "Search Products",
+                width: '100%',
+                minimumInputLength: 5,
+                ajax: {
+                    url: "/Product/GetAllProductSelect2",
+                    delay: 250,
+                    dataType: 'json'
+                }
             });
 
             function getShops() {
@@ -304,9 +301,6 @@
                     $('#div-game').addClass('d-none');
                 }
             }
-
         });
-
-
     </script>
 }
