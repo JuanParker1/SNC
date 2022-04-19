@@ -11,9 +11,9 @@
     table > thead > tr > th:first-child {
         padding: 12px 4px !important;
     }
-    table > thead > tr > th:last-child, table > thead > tr > th:nth-last-child(2) {
-        padding: 12px 6px;
-    }
+    /*table > thead > tr > th:last-child, table > thead > tr > th:nth-last-child(2) {
+        padding: 16px 6px;
+    }*/
 </style>
 
 <div class="container-fluid mb-5">
@@ -31,6 +31,7 @@
                    columns.Add(c => c.DistrictName).Titled("Customer").Filterable(true).SetWidth(10);
                    columns.Add(c => c.Title).Titled("Title").Filterable(true).SetWidth(20);
                    columns.Add(c => c.Description).Titled("Description").Filterable(true).SetWidth(30);
+                   columns.Add(c => c.ClickCount).Titled("Click Count").Css("text-center").Filterable(true).SetWidth(10);
                    columns.Add(c => c.DateEncoded).Titled("Date Created").Filterable(true).SetWidth(5).Format("{0:dd-MMM-yyyy hh:MM tt}");
                    columns.Add(c => c.EncodedBy).Titled("Created By").Filterable(true).SetWidth(5);
                }).Sortable(false)

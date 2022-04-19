@@ -48,7 +48,8 @@ namespace ShopNow.Controllers
                     Description = i.Description,
                     DistrictName = i.Type == 1 ? "All Customer" : i.District,
                     EncodedBy = i.EncodedBy,
-                    Title = i.Title
+                    Title = i.Title,
+                    ClickCount = i.ClickCount
                 }).ToList();
             int counter = 1;
             model.ListItems.ForEach(x => x.Index = counter++);

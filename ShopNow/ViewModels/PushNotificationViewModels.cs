@@ -29,6 +29,7 @@ namespace ShopNow.ViewModels
             public string Description { get; set; }
             public string EncodedBy { get; set; }
             public DateTime DateEncoded { get; set; }
+            public int ClickCount { get; set; }
         }
     }
 
