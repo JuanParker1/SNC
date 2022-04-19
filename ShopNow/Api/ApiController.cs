@@ -4096,27 +4096,27 @@ namespace ShopNow.Controllers
             var model = new PlacesListView();
             string query = "SELECT * " +
                                " FROM Shops where(3959 * acos(cos(radians(@Latitude)) * cos(radians(Latitude)) * cos(radians(Longitude) - radians(@Longitude)) + sin(radians(@Latitude)) * sin(radians(Latitude)))) < 8 and ShopCategoryId = 1 and (Status = 0 or  Status = 6) and Latitude != 0 and Longitude != 0" +
-                               " order by IsOnline desc,Adscore desc,Rating desc";
+                               " order by IsOnline desc,IsShopRate desc,Adscore desc,Rating desc";
             string querySuperMarketList = "SELECT * " +
             " FROM Shops where(3959 * acos(cos(radians(@Latitude)) * cos(radians(Latitude)) * cos(radians(Longitude) - radians(@Longitude)) + sin(radians(@Latitude)) * sin(radians(Latitude)))) < 8 and ShopCategoryId = 3 and (Status = 0 or  Status = 6) and Latitude != 0 and Longitude != 0" +
-            " order by IsOnline desc,Adscore desc,Rating desc";
+            " order by IsOnline desc,IsShopRate desc,Adscore desc,Rating desc";
             string queryGroceriesList = "SELECT * " +
             " FROM Shops where(3959 * acos(cos(radians(@Latitude)) * cos(radians(Latitude)) * cos(radians(Longitude) - radians(@Longitude)) + sin(radians(@Latitude)) * sin(radians(Latitude)))) < 8 and ShopCategoryId = 2 and (Status = 0 or  Status = 6) and Latitude != 0 and Longitude != 0" +
-            " order by IsOnline desc,Adscore desc,Rating desc";
+            " order by IsOnline desc,IsShopRate desc,Adscore desc,Rating desc";
             string queryHealthList = "SELECT * " +
             " FROM Shops where(3959 * acos(cos(radians(@Latitude)) * cos(radians(Latitude)) * cos(radians(Longitude) - radians(@Longitude)) + sin(radians(@Latitude)) * sin(radians(Latitude)))) < 16 and ShopCategoryId = 4 and (Status = 0 or  Status = 6) and Latitude != 0 and Longitude != 0" +
-            " order by IsOnline desc,Adscore desc,Rating desc";
+            " order by IsOnline desc,IsShopRate desc,Adscore desc,Rating desc";
             string queryElectronicsList = "SELECT * " +
             " FROM Shops where(3959 * acos(cos(radians(@Latitude)) * cos(radians(Latitude)) * cos(radians(Longitude) - radians(@Longitude)) + sin(radians(@Latitude)) * sin(radians(Latitude)))) < 8 and ShopCategoryId = 5 and (Status = 0 or  Status = 6) and Latitude != 0 and Longitude != 0" +
-            " order by IsOnline desc,Adscore desc,Rating desc";
+            " order by IsOnline desc,IsShopRate desc,Adscore desc,Rating desc";
             string qServicesList = "SELECT * " +
             " FROM Shops where(3959 * acos(cos(radians(@Latitude)) * cos(radians(Latitude)) * cos(radians(Longitude) - radians(@Longitude)) + sin(radians(@Latitude)) * sin(radians(Latitude)))) < 8 and ShopCategoryId = 6 and (Status = 0 or  Status = 6) and Latitude != 0 and Longitude != 0" +
-            " order by IsOnline desc,Adscore desc,Rating desc";
+            " order by IsOnline desc,IsShopRate desc,Adscore desc,Rating desc";
             if (a == "-1")
             {
                 string queryOtherList = "SELECT * " +
                 " FROM Shops where(3959 * acos(cos(radians(@Latitude)) * cos(radians(Latitude)) * cos(radians(Longitude) - radians(@Longitude)) + sin(radians(@Latitude)) * sin(radians(Latitude)))) < 8 and ShopCategoryId = 7 and (Status = 0 or  Status = 6) and Latitude != 0 and Longitude != 0" +
-                " order by IsOnline desc,Adscore desc,Rating desc";
+                " order by IsOnline desc,IsShopRate desc,Adscore desc,Rating desc";
                 model.ResturantList = db.Shops.SqlQuery(query,
                  new SqlParameter("Latitude", Latitude),
                  new SqlParameter("Longitude", Longitude))
@@ -4469,7 +4469,7 @@ namespace ShopNow.Controllers
             {
                 string queryOtherList = "SELECT top(6) * " +
               " FROM Shops where(3959 * acos(cos(radians(@Latitude)) * cos(radians(Latitude)) * cos(radians(Longitude) - radians(@Longitude)) + sin(radians(@Latitude)) * sin(radians(Latitude)))) < 8 and ShopCategoryId = 7 and (Status = 0 or  Status = 6) and Latitude != 0 and Longitude != 0 " +
-              " order by IsOnline desc,Adscore desc,Rating desc";
+              " order by IsOnline desc,IsShopRate desc,Adscore desc,Rating desc";
                 model.OtherList = db.Shops.SqlQuery(queryOtherList,
                 new SqlParameter("Latitude", Latitude),
                 new SqlParameter("Longitude", Longitude))
