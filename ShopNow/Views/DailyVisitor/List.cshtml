@@ -36,6 +36,10 @@
         <div class="col-md-12">
             <div class="card shadow">
                 <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <h5>Android Home Count- <b>@Model.AndroidHomeCount</b></h5>
+                        <h5>IOS Home Count- <b>@Model.IOSHomeCount</b></h5>
+                    </div>
                     @Html.Grid(Model.ListItems).Columns(columns =>
                {
                    columns.Add(c => c.DateUpdated).Titled("Date").Filterable(true).SetWidth(10).Format("{0:dd-MM-yyyy hh:mm tt}");
