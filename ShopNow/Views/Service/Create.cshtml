@@ -204,7 +204,7 @@
         $(document).ready(function () {
             setMinAndMaxDeliveryDate();
             setMinAndMaxPickupDate();
-            checkDistanceZero();
+           // checkDistanceZero();
 
             $('#ShopId').select2({
                 placeholder: "Search Shop",
@@ -545,7 +545,7 @@
 
         // function for Distance=0
 
-        function checkDistanceZero() {
+        @*function checkDistanceZero() {
             var model = @Html.Raw(Json.Encode(Model.DistanceLists));
             $.each(model, function (i) {
                // console.log(model[i].OrderNumber,model[i].Longitude);
@@ -556,7 +556,7 @@
                     success: function (data) {
                         if (data) {
                             //Save Distance in Orders
-                            $.getJSON("Service/UpdateDistance?orderNumber=" + model[i].OrderNumber + '&distance=' + data.Distance, function(data) { });
+                            //$.getJSON("/Service/UpdateDistance?orderNumber=" + model[i].OrderNumber + '&distance=' + data.Distance, function(data) { });
                         } else {
                             var service = new google.maps.DistanceMatrixService();
                             const origin = { lat: parseFloat(model[i].ShopLatitude), lng: parseFloat(model[i].ShopLongitude) };
@@ -571,14 +571,14 @@
                                 var duration = (response.rows[0].elements[0].duration.value / 60).toFixed(2);
                                 saveLocation(origin.lat, origin.lng, dest.lat, dest.lng, distance, duration);
                                 //Save Distance in Orders
-                                $.getJSON("Service/UpdateDistance?orderNumber=" + model[i].OrderNumber + '&distance=' + distance, function (data) { });
+                               // $.getJSON("/Service/UpdateDistance?orderNumber=" + model[i].OrderNumber + '&distance=' + distance, function (data) { });
                             });
                         }
                     },
                     error: function () { alert('Something went wrong, try again later!'); },
                 });
             });
-        }
+        }*@
 
     </script>
 }
