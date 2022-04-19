@@ -3,6 +3,7 @@
     ViewBag.Title = "Batch List";
     var shopList = Model.ListItems.OrderBy(i => i.ShopName).GroupBy(i => i.ShopName).ToList();
 }
+<title>SNOWCH | @ViewBag.Title</title>
 <div class="container-fluid">
     <div class="row mt-2">
         <div class="col-md-3 mt-1">

@@ -3,7 +3,7 @@
 @{
     ViewBag.Title = "Customer Prescription List";
 }
-<title>ShopNow | @ViewBag.Title</title>
+<title>SNOWCH | @ViewBag.Title</title>
 <link href="~/Content/Gridmvc.css" rel="stylesheet" />
 <script src="~/Scripts/gridmvc.js"></script>
 <style>
@@ -241,6 +241,7 @@
             w.print();
             w.close();
         }
+
         $(document).ready(function () {
             var modal = document.getElementById('myModal');
             var img = document.getElementsByClassName('PrescriptionImage');
@@ -295,28 +296,28 @@
             });
 
             $('#btn-save-prescription').on('click', function () {
-                    if (itemArray.length > 0) {
-                        var model = {
-                            prescriptionId: $('[name="PrescriptionId"]').val(),
-                            shopId: $('#select-shop').val(),
-                            customerId: $('#CustomerId').val(),
-                            ListItems: itemArray
+                if (itemArray.length > 0) {
+                    var model = {
+                        prescriptionId: $('[name="PrescriptionId"]').val(),
+                        shopId: $('#select-shop').val(),
+                        customerId: $('#CustomerId').val(),
+                        ListItems: itemArray
+                    }
+                    $.post('/CustomerPrescription/AddPrescriptionItem', model, function (data) {
+                        if (data) {
+                            swal('Success', 'Prescription Items saved successfully', 'success');
+                            window.location.reload();
+                        } else {
+                            // swal('Warning', 'Shop already has Schedules, Kindly update there.', 'warning');
+                            timeArray.length = 0;
+                            $('#tbl-items tbody').empty();
+                            $('#div-items').addClass('d-none');
+                            //$('#select-shop').val('').trigger('change');
+                            $('#modal-add').modal('hide');
                         }
-                        $.post('/CustomerPrescription/AddPrescriptionItem', model, function (data) {
-                            if (data) {
-                                swal('Success', 'Prescription Items saved successfully', 'success');
-                                window.location.reload();
-                            } else {
-                               // swal('Warning', 'Shop already has Schedules, Kindly update there.', 'warning');
-                                timeArray.length = 0;
-                                $('#tbl-items tbody').empty();
-                                $('#div-items').addClass('d-none');
-                                //$('#select-shop').val('').trigger('change');
-                                $('#modal-add').modal('hide');
-                            }
-                        });
-                    } else
-                        swal('Warning', 'Item List should not be empty!', 'warning');
+                    });
+                } else
+                    swal('Warning', 'Item List should not be empty!', 'warning');
             });
 
             $('.btn-modal-added-item-list').on('click', function () {

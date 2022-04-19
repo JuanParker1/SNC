@@ -2,8 +2,7 @@
 @{
     ViewBag.Title = "Delivary Charge Setting";
 }
-<title>ShopNow | Delivary Charge Setting</title>
-
+<title>SNOWCH | Delivary Charge Setting</title>
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-4">
@@ -143,79 +142,79 @@
         </div>
     </div>
 </div>
+
 @section Scripts
 {
-<!--Select2-->
-<script src="~/Scripts/select2/js/select2.js"></script>
-<link href="~/Scripts/select2/css/select2.css" rel="stylesheet" />
-<link href="~/Content/select2/select2.custom.css" rel="stylesheet" />
-<!--Select2 End-->
-<script src="~/Scripts/ValidateRequiredFields.js"></script>
-<script src="~/Scripts/sweetalert/sweetalert.min.js"></script>
-<link href="~/Content/sweetalert/sweetalert.css" rel="stylesheet" />
-<script>
-    $(document).ready(function () {
-      var msg = "@ViewBag.Message";
-        if (msg != "") {
-            swal("Notice!", msg, "error")
+    <!--Select2-->
+    <script src="~/Scripts/select2/js/select2.js"></script>
+    <link href="~/Scripts/select2/css/select2.css" rel="stylesheet" />
+    <link href="~/Content/select2/select2.custom.css" rel="stylesheet" />
+    <!--Select2 End-->
+    <script src="~/Scripts/ValidateRequiredFields.js"></script>
+    <script src="~/Scripts/sweetalert/sweetalert.min.js"></script>
+    <link href="~/Content/sweetalert/sweetalert.css" rel="stylesheet" />
+    <script>
+        $(document).ready(function () {
+            var msg = "@ViewBag.Message";
+            if (msg != "") {
+                swal("Notice!", msg, "error")
             }
-           
-        $('input[type=radio][name=Type]').change(function () {
-            if (this.value == '0') {
-                $("#GeneralEntry").removeClass("d-none");
-                $("#SpecialEntry").addClass("d-none");
-            }
-            else if (this.value == '1') {
-                $("#GeneralEntry").addClass("d-none");
-                $("#SpecialEntry").removeClass("d-none");
-            }
-        });
 
-        $('#Create').on('click', function () {
-            var generalChargeUpto5Km = $('#ChargeUpto5Km').val();
-            var generalChargePerKm = $('#ChargePerKm').val();
-            var specialChargeUpto5Km = $('#ChargeUpto5Km1').val();
-            var specialChargePerKm = $('#ChargePerKm1').val();
-            var type = $('input[name="Type"]:checked').val();
-            var tiretype = $('input[name="TireType"]:checked').val();
-            var vehicletype = $('input[name="VehicleType"]:checked').val();
-            if (type == '0') {
-                if (generalChargeUpto5Km == null || generalChargePerKm == null || generalChargeUpto5Km == "" || generalChargePerKm == "") {
-                    swal("Notice!", "Please Enter General Delivery Charge Amount!", "warning");
-                } else if (generalChargeUpto5Km < 25) {
-                    swal("Notice!", "General Delivery Charge within 5KM is Minimum Rs.25", "warning");
-                } else if (generalChargePerKm < 5) {
-                    swal("Notice!", "General Delivery Charge After 5KM per KM is Minimum Rs.5", "warning");
+            $('input[type=radio][name=Type]').change(function () {
+                if (this.value == '0') {
+                    $("#GeneralEntry").removeClass("d-none");
+                    $("#SpecialEntry").addClass("d-none");
                 }
-                else {
-                    $.getJSON("/Bill/DeliveryChargeExist?tiretype=" + tiretype + "&vehicletype=" + vehicletype, function (data) {
-                        if (data.IsAdded == true) {
-                            $('#DeliveryForm').submit();
-                        } else {
-                            swal(data.message, "", "warning");
-                        }
-                    });
+                else if (this.value == '1') {
+                    $("#GeneralEntry").addClass("d-none");
+                    $("#SpecialEntry").removeClass("d-none");
                 }
-            } else if (type == '1') {
-                if (specialChargeUpto5Km == null || specialChargePerKm == null || specialChargeUpto5Km == "" || specialChargePerKm == "") {
-                    swal("Notice!", "Please Enter Special Delivery Charge Amount!", "warning");
-                } else if (specialChargeUpto5Km < 30) {
-                    swal("Notice!", "Special Delivery Charge within 5KM is Minimum Rs.30", "warning");
-                } else if (specialChargePerKm < 10) {
-                    swal("Notice!", "Special Delivery Charge After 5KM per KM is Minimum Rs.10", "warning");
+            });
+
+            $('#Create').on('click', function () {
+                var generalChargeUpto5Km = $('#ChargeUpto5Km').val();
+                var generalChargePerKm = $('#ChargePerKm').val();
+                var specialChargeUpto5Km = $('#ChargeUpto5Km1').val();
+                var specialChargePerKm = $('#ChargePerKm1').val();
+                var type = $('input[name="Type"]:checked').val();
+                var tiretype = $('input[name="TireType"]:checked').val();
+                var vehicletype = $('input[name="VehicleType"]:checked').val();
+                if (type == '0') {
+                    if (generalChargeUpto5Km == null || generalChargePerKm == null || generalChargeUpto5Km == "" || generalChargePerKm == "") {
+                        swal("Notice!", "Please Enter General Delivery Charge Amount!", "warning");
+                    } else if (generalChargeUpto5Km < 25) {
+                        swal("Notice!", "General Delivery Charge within 5KM is Minimum Rs.25", "warning");
+                    } else if (generalChargePerKm < 5) {
+                        swal("Notice!", "General Delivery Charge After 5KM per KM is Minimum Rs.5", "warning");
+                    }
+                    else {
+                        $.getJSON("/Bill/DeliveryChargeExist?tiretype=" + tiretype + "&vehicletype=" + vehicletype, function (data) {
+                            if (data.IsAdded == true) {
+                                $('#DeliveryForm').submit();
+                            } else {
+                                swal(data.message, "", "warning");
+                            }
+                        });
+                    }
+                } else if (type == '1') {
+                    if (specialChargeUpto5Km == null || specialChargePerKm == null || specialChargeUpto5Km == "" || specialChargePerKm == "") {
+                        swal("Notice!", "Please Enter Special Delivery Charge Amount!", "warning");
+                    } else if (specialChargeUpto5Km < 30) {
+                        swal("Notice!", "Special Delivery Charge within 5KM is Minimum Rs.30", "warning");
+                    } else if (specialChargePerKm < 10) {
+                        swal("Notice!", "Special Delivery Charge After 5KM per KM is Minimum Rs.10", "warning");
+                    }
+                    else {
+                        $.getJSON("/Bill/DeliveryChargeExist?tiretype=" + tiretype + "&vehicletype=" + vehicletype, function (data) {
+                            if (data.IsAdded == true) {
+                                $('#DeliveryForm').submit();
+                            } else {
+                                swal(data.message, "", "warning");
+                            }
+                        });
+                    }
                 }
-                else {
-                    $.getJSON("/Bill/DeliveryChargeExist?tiretype=" + tiretype + "&vehicletype=" + vehicletype, function (data) {
-                        if (data.IsAdded == true) {
-                            $('#DeliveryForm').submit();
-                        } else {
-                            swal(data.message, "", "warning");
-                        }
-                    });
-                }
-            }
+            });
         });
-        
-    });
-</script>
+    </script>
 }

@@ -3,7 +3,7 @@
     ViewBag.Title = "DeliveryBoy Update";
     var mapkey = Session["googleMApkey"];
 }
-<title>ShopNow | @ViewBag.Title</title>
+<title>SNOWCH | @ViewBag.Title</title>
 <div class="container-fluid">
     <div class="row mb-2">
         <div class="col-md-3">
@@ -298,7 +298,6 @@
 </div>
 
 <!--License Model-->
-
 <div class="modal fade" id="LicenseModal" tabindex="-1" role="dialog" aria-labelledby="LicenseModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">
@@ -387,7 +386,6 @@
     <script src="https://maps.googleapis.com/maps/api/js?key=@mapkey&libraries=places&callback=initMap" async defer></script>
     <script>
         $(document).ready(function () {
-
             jQuery(document).ready(function ($) {
                 $("#WorkType").find('option[value="@Model.WorkType"]').attr('selected', 'selected');
              });
@@ -614,7 +612,6 @@
                 $("#CVPath").val('');
                 $(this).addClass("d-none");
             });
-
            
             function readURL(input) {
                 if (input.files && input.files[0]) {
@@ -697,7 +694,6 @@
                                 lng: position.coords.longitude
                             };
 
-
                             var marker = new google.maps.Marker({
                                 position: pos,
                                 map: map,
@@ -713,7 +709,6 @@
                             google.maps.event.addListener(marker, 'drag', function () {
                                 geocodePosition(marker.position);
                             });
-
 
                             function geocodePosition(pos) {
 
@@ -816,7 +811,6 @@
             } else {
                 x.innerHTML = "Geolocation is not supported by this browser.";
             }
-
         }
 
         function handleLocationError(browserHasGeolocation, infoWindow, pos) {
@@ -826,6 +820,5 @@
                 'Error: Your browser doesn\'t support geolocation.');
             infoWindow.open(map);
         }
-
     </script>
 }

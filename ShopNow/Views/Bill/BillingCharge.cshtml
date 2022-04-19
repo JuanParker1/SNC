@@ -2,8 +2,7 @@
 @{
     ViewBag.Title = "Billing Charge Setting";
 }
-
-<title>ShopNow | @ViewBag.Title</title>
+<title>SNOWCH | @ViewBag.Title</title>
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-4">
@@ -31,10 +30,10 @@
                                                 </div>
                                                 <div class="col-md-7">
                                                     <select id="ShopId" name="ShopId" class="form-control">
-                                                        @if(ViewBag.ShopId != 0)
-                {
+                                                        @if (ViewBag.ShopId != 0)
+                                                        {
                                                             <option value="@ViewBag.ShopId">@ViewBag.ShopName</option>
-                }
+                                                        }
                                                     </select>
                                                     <input type="hidden" name="ShopName" id="ShopName" value="@ViewBag.ShopName"/>
                                                 </div>
@@ -225,6 +224,7 @@
             //        $("#PackingCharge").focus();
             //    }
             //});
+
             $('#Create').on('click', function () {
                 var PackingCharge = $("#PackingCharge").val();
                 var itemtype = $('input[type=radio][name=ItemType]:checked').val();
@@ -248,6 +248,7 @@
                     }
                 }
             });
+
             $('#ShopId').select2({
                 placeholder: "Search Shop",
                 ajax: {
@@ -259,7 +260,6 @@
             }).on('select2:select', function (e) {
                 $('input[name="ShopName"]').val(e.params.data.textSave);
             });
-
         });
     </script>
 }

@@ -2,7 +2,7 @@
 @{
     ViewBag.Title = "Order Ratios";
 }
-<title>ShopNow | @ViewBag.Title</title>
+<title>SNOWCH | @ViewBag.Title</title>
 <link href="~/Content/switch.css" rel="stylesheet" />
 <style>
     .tableFixHead {
@@ -91,67 +91,67 @@
                                 @foreach (var item in Model.ListItems)
                                 {
 
-                                <tr class="@if (item.Date.Equals(DateTime.Now.ToString("dd-MMM-yyyy"))) { <text>text-danger</text> }">
-                                    <td class="text-nowrap">@item.Date</td>
-                                    <td>@item.TotalOrder</td>
-                                    <td>@item.DeliveredOrder</td>
-                                    <td>@item.CancelOrder</td>
-                                    <td>@item.NewOrder</td>
-                                    <td>@Math.Abs(item.TotalOrder - item.NewOrder - item.CancelOrder)</td>
-                                    <td>
-                                        @if (Math.Abs(item.TotalOrder - item.NewOrder - item.CancelOrder) != 0)
-                                        {
-                                            <span>@(Math.Round(Math.Abs((double)(item.TotalOrder - item.NewOrder - item.CancelOrder) / item.TotalOrder) * 100, 2))</span>
-                                        }
-                                        else
-                                        {
-                                            <span>0</span>
-                                        }
-                                    </td>
-                                    <td>@item.VegTotal</td>
-                                    <td>@item.VegCancelOrder</td>
-                                    <td>@item.VegNewOrder</td>
-                                    <td>@Math.Abs(item.VegTotal - item.VegNewOrder - item.VegCancelOrder)</td>
-                                    <td>
-                                        @if (Math.Abs(item.VegTotal - item.VegNewOrder - item.VegCancelOrder) != 0)
-                                        {
-                                            <span>@(Math.Round(Math.Abs((double)(item.VegTotal - item.VegNewOrder - item.VegCancelOrder) / item.VegTotal) * 100, 2))</span>
-                                        }
-                                        else
-                                        {
-                                            <span>0</span>
-                                        }
-                                    </td>
-                                    <td>@item.ResTotal</td>
-                                    <td>@item.ResCancelOrder</td>
-                                    <td>@item.ResNewOrder</td>
-                                    <td>@Math.Abs(item.ResTotal - item.ResNewOrder - item.ResCancelOrder)</td>
-                                    <td>
-                                        @if (Math.Abs(item.ResTotal - item.ResNewOrder - item.ResCancelOrder) != 0)
-                                        {
-                                            <span>@(Math.Round(Math.Abs((double)(item.ResTotal - item.ResNewOrder - item.ResCancelOrder) / item.ResTotal) * 100, 2))</span>
-                                        }
-                                        else
-                                        {
-                                            <span>0</span>
-                                        }
-                                    </td>
-                                    <td>@item.MedicalTotal</td>
-                                    <td>@item.MedicalCancelOrder</td>
-                                    <td>@item.MedicalNewOrder</td>
-                                    <td>@Math.Abs(item.MedicalTotal - item.MedicalNewOrder - item.MedicalCancelOrder)</td>
-                                    <td>
-                                        @if (Math.Abs(item.MedicalTotal - item.MedicalNewOrder - item.MedicalCancelOrder) != 0)
-                                        {
-                                            <span>@(Math.Round(Math.Abs((double)(item.MedicalTotal - item.MedicalNewOrder - item.MedicalCancelOrder) / item.MedicalTotal) * 100, 2))</span>
-                                        }
-                                        else
-                                        {
-                                            <span>0</span>
-                                        }
-                                    </td>
-                                    <td>@item.CustomerCount</td>
-                                </tr>
+                                    <tr class="@if (item.Date.Equals(DateTime.Now.ToString("dd-MMM-yyyy"))) { <text>text-danger</text> }">
+                                        <td class="text-nowrap">@item.Date</td>
+                                        <td>@item.TotalOrder</td>
+                                        <td>@item.DeliveredOrder</td>
+                                        <td>@item.CancelOrder</td>
+                                        <td>@item.NewOrder</td>
+                                        <td>@Math.Abs(item.TotalOrder - item.NewOrder - item.CancelOrder)</td>
+                                        <td>
+                                            @if (Math.Abs(item.TotalOrder - item.NewOrder - item.CancelOrder) != 0)
+                                            {
+                                                <span>@(Math.Round(Math.Abs((double)(item.TotalOrder - item.NewOrder - item.CancelOrder) / item.TotalOrder) * 100, 2))</span>
+                                            }
+                                            else
+                                            {
+                                                <span>0</span>
+                                            }
+                                        </td>
+                                        <td>@item.VegTotal</td>
+                                        <td>@item.VegCancelOrder</td>
+                                        <td>@item.VegNewOrder</td>
+                                        <td>@Math.Abs(item.VegTotal - item.VegNewOrder - item.VegCancelOrder)</td>
+                                        <td>
+                                            @if (Math.Abs(item.VegTotal - item.VegNewOrder - item.VegCancelOrder) != 0)
+                                            {
+                                                <span>@(Math.Round(Math.Abs((double)(item.VegTotal - item.VegNewOrder - item.VegCancelOrder) / item.VegTotal) * 100, 2))</span>
+                                            }
+                                            else
+                                            {
+                                                <span>0</span>
+                                            }
+                                        </td>
+                                        <td>@item.ResTotal</td>
+                                        <td>@item.ResCancelOrder</td>
+                                        <td>@item.ResNewOrder</td>
+                                        <td>@Math.Abs(item.ResTotal - item.ResNewOrder - item.ResCancelOrder)</td>
+                                        <td>
+                                            @if (Math.Abs(item.ResTotal - item.ResNewOrder - item.ResCancelOrder) != 0)
+                                            {
+                                                <span>@(Math.Round(Math.Abs((double)(item.ResTotal - item.ResNewOrder - item.ResCancelOrder) / item.ResTotal) * 100, 2))</span>
+                                            }
+                                            else
+                                            {
+                                                <span>0</span>
+                                            }
+                                        </td>
+                                        <td>@item.MedicalTotal</td>
+                                        <td>@item.MedicalCancelOrder</td>
+                                        <td>@item.MedicalNewOrder</td>
+                                        <td>@Math.Abs(item.MedicalTotal - item.MedicalNewOrder - item.MedicalCancelOrder)</td>
+                                        <td>
+                                            @if (Math.Abs(item.MedicalTotal - item.MedicalNewOrder - item.MedicalCancelOrder) != 0)
+                                            {
+                                                <span>@(Math.Round(Math.Abs((double)(item.MedicalTotal - item.MedicalNewOrder - item.MedicalCancelOrder) / item.MedicalTotal) * 100, 2))</span>
+                                            }
+                                            else
+                                            {
+                                                <span>0</span>
+                                            }
+                                        </td>
+                                        <td>@item.CustomerCount</td>
+                                    </tr>
                                 }
                             </tbody>
                             <tfoot>
@@ -234,10 +234,8 @@
     <link href="~/Content/select2/select2.custom.css" rel="stylesheet" />
     <script>
         $(document).ready(function () {
-
             $('select[name="MonthFilter"] option[value=@Model.MonthFilter]').prop('selected', true);
             $('select[name="YearFilter"] option[value=@Model.YearFilter]').prop('selected', true);
-
         });
     </script>
 }

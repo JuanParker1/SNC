@@ -3,7 +3,7 @@
 @{
     ViewBag.Title = "Cart List";
 }
-<title>ShopNow | Order List</title>
+<title>SNOWCH | Order List</title>
 <link href="~/Content/Gridmvc.css" rel="stylesheet" />
 <script src="~/Scripts/gridmvc.js"></script>
 <style>
@@ -214,6 +214,7 @@
         </div>
     </div>
 </div>
+
 @section Scripts
 {
     <!--Select2-->
@@ -229,7 +230,7 @@
             if ('@Model.IsPickupDrop' == "True")
                 $('#pickup-check').prop('checked', true);
             var orderIdArray = [];
-          
+
             $('#ShopId').select2({
                 placeholder: "Search Shop",
                 width: '100%',
@@ -241,7 +242,7 @@
             }).on('select2:select', function (e) {
                 $('input[name="ShopName"]').val(e.params.data.text);
             });
-            
+
             $(".btn-modal-refund").click(function () {
                 var id = $(this).data('id');
                 $('[name="Id"]').val(id);
@@ -273,7 +274,7 @@
                         OrderId: $this.data('id')
                     };
                     orderIdArray.push(item);
-                   
+
                     $('#select-deliveryboy').select2({
                         placeholder: "Select Delivery Boy",
                         width: '100%',
@@ -287,7 +288,7 @@
                     removeFromArray($this.data('id'));
                 }
             });
-            
+
             //$('#select-deliveryboy').select2({
             //    placeholder: "Select Delivery Boy",
             //    width: '100%',
@@ -308,7 +309,7 @@
                         location.reload();
                     else
                         swal("Notice!", "Something went wrong, please try again.", "error")
-                    });
+                });
             });
             function removeFromArray(id) {
                 const indx = orderIdArray.findIndex(v => v.OrderId === id);
@@ -344,8 +345,8 @@
                 $('input[name="DeliveryCharge"]').val('');
                 $('input[name="Amount"]').val('');
             });
-
         });
+
         function calculateDeliveryCharge() {
             var grossDC = $('input[name="GrossDeliveryCharge"]').val();
             var orderno = $("#OrderNumber").val();
@@ -364,7 +365,6 @@
                     $('input[name="Amount"]').val(nettotal);
                 }
             });
-           
         }
     </script>
 }

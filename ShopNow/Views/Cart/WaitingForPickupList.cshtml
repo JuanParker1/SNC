@@ -3,7 +3,7 @@
 @{
     ViewBag.Title = "Waiting For Pickup List";
 }
-<title>ShopNow | Waiting For Pickup List</title>
+<title>SNOWCH | @ViewBag.Title</title>
 <link href="~/Content/Gridmvc.css" rel="stylesheet" />
 <script src="~/Scripts/gridmvc.js"></script>
 <style>
@@ -15,7 +15,7 @@
     <form method="get" action="~/Cart/WaitingForPickupList">
         <div class="row my-2">
             <div class="col-md-4">
-                <h5 class="text-success" style="letter-spacing:1px">WAITING FOR PICKUP LIST</h5>
+                <h5 class="text-success text-uppercase" style="letter-spacing:1px">@ViewBag.Title</h5>
             </div>
             <div class="col-md-3">
                 <select name="ShopId" id="ShopId" class="form-control">
