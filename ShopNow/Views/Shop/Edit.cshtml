@@ -3,7 +3,7 @@
     ViewBag.Title = "Shop Edit";
     var mapkey = Session["googleMApkey"];
 }
-<title>ShopNow | Shop Update</title>
+<title>SNOWCH | Shop Update</title>
 <style>
     #map {
         height: 100%;
@@ -171,6 +171,19 @@
                                                 <option value="@Model.ShopCategoryId">@Model.ShopCategoryName</option>
                                             </select>
                                             <input type="hidden" name="ShopCategoryName" id="ShopCategoryName" value="@Model.ShopCategoryName" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-md-4 text-md-left">
+                                            <label class="col-form-label"><strong class="text-secondary">Dish Type</strong></label>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <select class="form-control" name="DishType" id="DishType" style="width:100%;">
+                                                <option value=""> Select Dish Type</option>
+                                                <option value="1"> All</option>
+                                                <option value="2"> Veg</option>
+                                                <option value="3"> Non-Veg</option>
+                                            </select>
                                         </div>
                                     </div>
                                 </div>
@@ -1295,6 +1308,9 @@
     <link href="~/Content/sweetalert/sweetalert.css" rel="stylesheet" />
     <script src="https://maps.googleapis.com/maps/api/js?key=@mapkey&libraries=places&callback=initMap" async defer></script>
     <script>
+        jQuery(document).ready(function ($) {
+            $("#DishType").find('option[value="@Model.DishType"]').attr('selected', 'selected');
+        });
 
         function printDiv(divName) {
             var printContents = document.getElementById(divName).innerHTML;

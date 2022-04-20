@@ -3,7 +3,7 @@
     ViewBag.Title = "Shop Entry";
     var mapkey = Session["googleMApkey"];
 }
-<title>ShopNow | Shop Entry</title>
+<title>SNOWCH | Shop Entry</title>
 <style>
     #map {
         height: 100%;
@@ -111,6 +111,19 @@
                                         <div class="col-md-8">
                                             <select id="ShopCategoryId" name="ShopCategoryId" class="form-control" style="width:100%;" required></select>
                                             <input type="hidden" name="ShopCategoryName" id="ShopCategoryName" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-md-4 text-md-left">
+                                            <label class="col-form-label"><strong class="text-secondary">Dish Type</strong></label>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <select class="form-control" name="DishType" id="DishType" style="width:100%;">
+                                                <option selected>Select Type</option>
+                                                <option value="1"> All</option>
+                                                <option value="2"> Veg</option>
+                                                <option value="3"> Non-Veg</option>
+                                            </select>
                                         </div>
                                     </div>
                                 </div>
