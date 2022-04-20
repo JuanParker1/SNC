@@ -3,12 +3,9 @@
 @{
     ViewBag.Title = "Today Platform Credit Report";
 } 
-
-<title>ShopNow | Today Platform Credit Report</title>
-
+<title>SNOWCH | Today Platform Credit Report</title>
 <link href="~/Content/Gridmvc.css" rel="stylesheet" />
 <script src="~/Scripts/gridmvc.js"></script>
-
 @using (Html.BeginForm("TodayPlatformCreditReport", "Payment", FormMethod.Post, new { id = "PlatformCreditReportForm", role = "form", enctype = "multipart/form-data" }))
 {
     <div class="container-fluid">
@@ -38,6 +35,7 @@ columns.Add(c => c.RatePerOrder).Titled("Platform Credit").Filterable(true).SetW
         </div>
     </div>
 }
+
 @section Scripts
 {
     <!--Select2-->
@@ -65,26 +63,6 @@ columns.Add(c => c.RatePerOrder).Titled("Platform Credit").Filterable(true).SetW
                     exclude_links: true,
                 });
             });
-
-            $('#ShopCode').select2({
-                placeholder: "Search Shop",
-                ajax: {
-                    url: "/Payment/GetShopSelect2",
-                    width: '100%',
-                    delay: 250,
-                    dataType: 'json'
-                }
-            }).on('select2:select', function (e) {
-                $('input[name="ShopName"]').val(e.params.data.text);
-            });
-
-            $("#Filter").click(function () {
-                var shopcode = $("#ShopCode").val();
-                window.location.href = "/Payment/TodayPlatformCreditReport/?shopcode=" + shopcode;
-            });
-
-
         });
-
     </script>
 }

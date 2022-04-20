@@ -3,12 +3,9 @@
 @{
     ViewBag.Title = "Platform Credit Report";
 }
-
-<title>ShopNow | Platform Credit Report</title>
-
+<title>SNOWCH | Platform Credit Report</title>
 <link href="~/Content/Gridmvc.css" rel="stylesheet" />
 <script src="~/Scripts/gridmvc.js"></script>
-
 @using (Html.BeginForm("PlatformCreditReport", "Payment", FormMethod.Post, new { id = "PlatformCreditReportForm", role = "form", enctype = "multipart/form-data" }))
 {
     <div class="container-fluid">
@@ -85,7 +82,6 @@
                     $('.data-search input').removeClass('form-control-sm');
                 },
             });
-
             t.on('order.dt search.dt', function () {
                 t.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
                     cell.innerHTML = i + 1;
