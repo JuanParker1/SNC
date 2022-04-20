@@ -2,15 +2,13 @@
 @{
     ViewBag.Title = "Single ItemMapping";
 }
-<title>ShopNow | Single Item Mapping</title>
-
+<title>SNOWCH | Single Item Mapping</title>
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-4">
             <h5 class="text-success" style="letter-spacing:1px">SINGLE ITEM MAPPING</h5>
         </div>
     </div>
-
     <div class="row">
         <div class="col-md-12 mx-auto">
             @using (Html.BeginForm("SingleItemMapping", "MasterProduct", FormMethod.Post, new { id = "ItemMappingForm", enctype = "multipart/form-data" }))

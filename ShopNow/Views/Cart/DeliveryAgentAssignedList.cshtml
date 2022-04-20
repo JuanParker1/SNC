@@ -3,7 +3,7 @@
 @{
     ViewBag.Title = "Delivery Agent Assigned List";
 }
-<title>ShopNow | Delivery Agent Assigned List</title>
+<title>SNOWCH | @ViewBag.Title</title>
 <link href="~/Content/Gridmvc.css" rel="stylesheet" />
 <script src="~/Scripts/gridmvc.js"></script>
 <style>
@@ -15,7 +15,7 @@
     <form method="get" action="~/Cart/DeliveryAgentAssignedList">
         <div class="row my-2">
             <div class="col-md-4">
-                <h5 class="mt-1 text-success" style="letter-spacing:1px">DELIVERY AGENT ASSIGNED LIST</h5>
+                <h5 class="mt-1 text-success text-uppercase" style="letter-spacing:1px">@ViewBag.Title</h5>
             </div>
             <div class="col-md-3">
                 <select name="ShopId" id="ShopId" class="form-control">

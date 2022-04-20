@@ -1674,7 +1674,7 @@ namespace ShopNow.Controllers
                     //accept
                     if (status == 3)
                     {
-                        Helpers.PushNotification.SendbydeviceId($"Your order has been accepted by shop({order.ShopName}).", "Snowch", "Orderstatus", "", fcmToken.ToString(), "tune1.caf", "liveorder");
+                        Helpers.PushNotification.SendbydeviceId($"Your order has been accepted by {order.ShopName}.", "Snowch", "Orderstatus", "", fcmToken.ToString(), "tune1.caf", "liveorder");
                     }
                 }
                 //Refund
@@ -2093,7 +2093,7 @@ namespace ShopNow.Controllers
             {
                 var deliveryboy = db.DeliveryBoys.FirstOrDefault(i => i.CustomerId == customerId); //This is delivery boy
                 var order = db.Orders.FirstOrDefault(i => i.OrderNumber == orderNo);
-                string notificationMessage = $"Your order on shop({order.ShopName}) is on the way.";
+                string notificationMessage = $"Your order on {order.ShopName} is on the way.";
                 order.Status = 5;
                 order.UpdatedBy = deliveryboy.Name;
                 order.DateUpdated = DateTime.Now;
@@ -2128,7 +2128,7 @@ namespace ShopNow.Controllers
                     models.DateUpdated = DateTime.Now;
                     db.OtpVerifications.Add(models);
                     db.SaveChanges();
-                    notificationMessage = $"Your order on shop({order.ShopName}) is on the way. Please share the delivery code { models.Otp} with the delivery partner {deliveryboy.Name} for verification.";
+                    notificationMessage = $"Your order on {order.ShopName} is on the way. Please share the delivery code { models.Otp} with the delivery partner {deliveryboy.Name} for verification.";
                 }
                 if (order.CustomerId != 0)
                 {
@@ -2315,7 +2315,7 @@ namespace ShopNow.Controllers
 
                 string fcmtocken = customerDetails.FcmTocken ?? "";
 
-                Helpers.PushNotification.SendbydeviceId($"Your order on shop({order.ShopName}) has been delivered by delivery partner {order.DeliveryBoyName}.", "Snowch", "Orderstatus", "", fcmtocken.ToString(), "tune1.caf", "liveorder");
+                Helpers.PushNotification.SendbydeviceId($"Your order on {order.ShopName} has been delivered by delivery partner {order.DeliveryBoyName}.", "Snowch", "Orderstatus", "", fcmtocken.ToString(), "tune1.caf", "liveorder");
 
                 //For Successfull First Order
                 var orderExist = db.Orders.Where(i => i.CustomerId == order.CustomerId && i.Status == 6).ToList();
@@ -4096,27 +4096,27 @@ namespace ShopNow.Controllers
             var model = new PlacesListView();
             string query = "SELECT * " +
                                " FROM Shops where(3959 * acos(cos(radians(@Latitude)) * cos(radians(Latitude)) * cos(radians(Longitude) - radians(@Longitude)) + sin(radians(@Latitude)) * sin(radians(Latitude)))) < 8 and ShopCategoryId = 1 and (Status = 0 or  Status = 6) and Latitude != 0 and Longitude != 0" +
-                               " order by IsOnline desc,Adscore desc,Rating desc";
+                               " order by IsOnline desc,IsShopRate desc,Adscore desc,Rating desc";
             string querySuperMarketList = "SELECT * " +
             " FROM Shops where(3959 * acos(cos(radians(@Latitude)) * cos(radians(Latitude)) * cos(radians(Longitude) - radians(@Longitude)) + sin(radians(@Latitude)) * sin(radians(Latitude)))) < 8 and ShopCategoryId = 3 and (Status = 0 or  Status = 6) and Latitude != 0 and Longitude != 0" +
-            " order by IsOnline desc,Adscore desc,Rating desc";
+            " order by IsOnline desc,IsShopRate desc,Adscore desc,Rating desc";
             string queryGroceriesList = "SELECT * " +
             " FROM Shops where(3959 * acos(cos(radians(@Latitude)) * cos(radians(Latitude)) * cos(radians(Longitude) - radians(@Longitude)) + sin(radians(@Latitude)) * sin(radians(Latitude)))) < 8 and ShopCategoryId = 2 and (Status = 0 or  Status = 6) and Latitude != 0 and Longitude != 0" +
-            " order by IsOnline desc,Adscore desc,Rating desc";
+            " order by IsOnline desc,IsShopRate desc,Adscore desc,Rating desc";
             string queryHealthList = "SELECT * " +
             " FROM Shops where(3959 * acos(cos(radians(@Latitude)) * cos(radians(Latitude)) * cos(radians(Longitude) - radians(@Longitude)) + sin(radians(@Latitude)) * sin(radians(Latitude)))) < 16 and ShopCategoryId = 4 and (Status = 0 or  Status = 6) and Latitude != 0 and Longitude != 0" +
-            " order by IsOnline desc,Adscore desc,Rating desc";
+            " order by IsOnline desc,IsShopRate desc,Adscore desc,Rating desc";
             string queryElectronicsList = "SELECT * " +
             " FROM Shops where(3959 * acos(cos(radians(@Latitude)) * cos(radians(Latitude)) * cos(radians(Longitude) - radians(@Longitude)) + sin(radians(@Latitude)) * sin(radians(Latitude)))) < 8 and ShopCategoryId = 5 and (Status = 0 or  Status = 6) and Latitude != 0 and Longitude != 0" +
-            " order by IsOnline desc,Adscore desc,Rating desc";
+            " order by IsOnline desc,IsShopRate desc,Adscore desc,Rating desc";
             string qServicesList = "SELECT * " +
             " FROM Shops where(3959 * acos(cos(radians(@Latitude)) * cos(radians(Latitude)) * cos(radians(Longitude) - radians(@Longitude)) + sin(radians(@Latitude)) * sin(radians(Latitude)))) < 8 and ShopCategoryId = 6 and (Status = 0 or  Status = 6) and Latitude != 0 and Longitude != 0" +
-            " order by IsOnline desc,Adscore desc,Rating desc";
+            " order by IsOnline desc,IsShopRate desc,Adscore desc,Rating desc";
             if (a == "-1")
             {
                 string queryOtherList = "SELECT * " +
                 " FROM Shops where(3959 * acos(cos(radians(@Latitude)) * cos(radians(Latitude)) * cos(radians(Longitude) - radians(@Longitude)) + sin(radians(@Latitude)) * sin(radians(Latitude)))) < 8 and ShopCategoryId = 7 and (Status = 0 or  Status = 6) and Latitude != 0 and Longitude != 0" +
-                " order by IsOnline desc,Adscore desc,Rating desc";
+                " order by IsOnline desc,IsShopRate desc,Adscore desc,Rating desc";
                 model.ResturantList = db.Shops.SqlQuery(query,
                  new SqlParameter("Latitude", Latitude),
                  new SqlParameter("Longitude", Longitude))
@@ -4142,7 +4142,8 @@ namespace ShopNow.Controllers
                      NextOnTime = i.NextOnTime,
                      //OfferPercentage = db.Products.Where(b => b.ShopId == i.s.Id && b.Status == 0).Select(b => b.Percentage)?.Max(b => b) ?? 0
                      OfferPercentage = i.MaxOfferPercentage,
-                     IsShopRate = i.IsShopRate
+                     IsShopRate = i.IsShopRate,
+                     DishType = i.DishType
                  }).ToList();
                 model.SuperMarketList = db.Shops.SqlQuery(querySuperMarketList,
                 new SqlParameter("Latitude", Latitude),
@@ -4165,7 +4166,8 @@ namespace ShopNow.Controllers
                      Address = i.Address,
                      NextOnTime = i.NextOnTime,
                      OfferPercentage = i.MaxOfferPercentage,
-                     IsShopRate = i.IsShopRate
+                     IsShopRate = i.IsShopRate,
+                     DishType = i.DishType
                  }).ToList();
                 model.GroceriesList = db.Shops.SqlQuery(queryGroceriesList,
                 new SqlParameter("Latitude", Latitude),
@@ -4188,7 +4190,8 @@ namespace ShopNow.Controllers
                      Address = i.Address,
                      NextOnTime = i.NextOnTime,
                      OfferPercentage = i.MaxOfferPercentage,
-                     IsShopRate = i.IsShopRate
+                     IsShopRate = i.IsShopRate,
+                     DishType = i.DishType
                  }).ToList();
                 model.HealthList = db.Shops.SqlQuery(queryHealthList,
                 new SqlParameter("Latitude", Latitude),
@@ -4211,7 +4214,8 @@ namespace ShopNow.Controllers
                     Address = i.Address,
                     NextOnTime = i.NextOnTime,
                     OfferPercentage = i.MaxOfferPercentage,
-                    IsShopRate = i.IsShopRate
+                    IsShopRate = i.IsShopRate,
+                    DishType = i.DishType
                 }).ToList();
 
                 model.ElectronicsList = db.Shops.SqlQuery(queryElectronicsList,
@@ -4235,7 +4239,8 @@ namespace ShopNow.Controllers
                      Address = i.Address,
                      NextOnTime = i.NextOnTime,
                      OfferPercentage = i.MaxOfferPercentage,
-                     IsShopRate = i.IsShopRate
+                     IsShopRate = i.IsShopRate,
+                     DishType = i.DishType
                  }).ToList();
                 model.ServicesList = db.Shops.SqlQuery(qServicesList,
                 new SqlParameter("Latitude", Latitude),
@@ -4258,7 +4263,8 @@ namespace ShopNow.Controllers
                     Address = i.Address,
                     NextOnTime = i.NextOnTime,
                     OfferPercentage = i.MaxOfferPercentage,
-                    IsShopRate = i.IsShopRate
+                    IsShopRate = i.IsShopRate,
+                    DishType = i.DishType
                 }).ToList();
                 model.OtherList = db.Shops.SqlQuery(queryOtherList,
                 new SqlParameter("Latitude", Latitude),
@@ -4281,7 +4287,8 @@ namespace ShopNow.Controllers
                      Address = i.Address,
                      NextOnTime = i.NextOnTime,
                      OfferPercentage = i.MaxOfferPercentage,
-                     IsShopRate = i.IsShopRate
+                     IsShopRate = i.IsShopRate,
+                     DishType = i.DishType
                  }).ToList();
                 return Json(model, JsonRequestBehavior.AllowGet);
             }
@@ -4308,7 +4315,8 @@ namespace ShopNow.Controllers
                      Address = i.Address,
                      NextOnTime = i.NextOnTime,
                      OfferPercentage = i.MaxOfferPercentage,
-                     IsShopRate = i.IsShopRate
+                     IsShopRate = i.IsShopRate,
+                     DishType = i.DishType
                      //IsShopRate = i.DeliveryDiscountPercentage >= 10 ? true : false
                  }).ToList();
                 return Json(model, JsonRequestBehavior.AllowGet);
@@ -4336,7 +4344,8 @@ namespace ShopNow.Controllers
                      Address = i.Address,
                      NextOnTime = i.NextOnTime,
                      OfferPercentage = i.MaxOfferPercentage,
-                     IsShopRate = i.IsShopRate
+                     IsShopRate = i.IsShopRate,
+                     DishType = i.DishType
                  }).ToList();
                 return Json(model, JsonRequestBehavior.AllowGet);
             }
@@ -4363,7 +4372,8 @@ namespace ShopNow.Controllers
                      Address = i.Address,
                      NextOnTime = i.NextOnTime,
                      OfferPercentage = i.MaxOfferPercentage,
-                     IsShopRate = i.IsShopRate
+                     IsShopRate = i.IsShopRate,
+                     DishType = i.DishType
                  }).ToList();
                 return Json(model, JsonRequestBehavior.AllowGet);
             }
@@ -4390,7 +4400,8 @@ namespace ShopNow.Controllers
                       Address = i.Address,
                       NextOnTime = i.NextOnTime,
                       OfferPercentage = i.MaxOfferPercentage,
-                      IsShopRate = i.IsShopRate
+                      IsShopRate = i.IsShopRate,
+                      DishType = i.DishType
                   }).ToList();
                 return Json(model, JsonRequestBehavior.AllowGet);
             }
@@ -4417,7 +4428,8 @@ namespace ShopNow.Controllers
                      Address = i.Address,
                      NextOnTime = i.NextOnTime,
                      OfferPercentage = i.MaxOfferPercentage,
-                     IsShopRate = i.IsShopRate
+                     IsShopRate = i.IsShopRate,
+                     DishType = i.DishType
                  }).ToList();
                 return Json(model, JsonRequestBehavior.AllowGet);
             }
@@ -4461,7 +4473,8 @@ namespace ShopNow.Controllers
                      Address = i.Address,
                      NextOnTime = i.NextOnTime,
                      OfferPercentage = i.MaxOfferPercentage,
-                     IsShopRate = i.IsShopRate
+                     IsShopRate = i.IsShopRate,
+                     DishType = i.DishType
                  }).ToList();
                 return Json(model, JsonRequestBehavior.AllowGet);
             }
@@ -4469,7 +4482,7 @@ namespace ShopNow.Controllers
             {
                 string queryOtherList = "SELECT top(6) * " +
               " FROM Shops where(3959 * acos(cos(radians(@Latitude)) * cos(radians(Latitude)) * cos(radians(Longitude) - radians(@Longitude)) + sin(radians(@Latitude)) * sin(radians(Latitude)))) < 8 and ShopCategoryId = 7 and (Status = 0 or  Status = 6) and Latitude != 0 and Longitude != 0 " +
-              " order by IsOnline desc,Adscore desc,Rating desc";
+              " order by IsOnline desc,IsShopRate desc,Adscore desc,Rating desc";
                 model.OtherList = db.Shops.SqlQuery(queryOtherList,
                 new SqlParameter("Latitude", Latitude),
                 new SqlParameter("Longitude", Longitude))
@@ -4491,7 +4504,8 @@ namespace ShopNow.Controllers
                      Address = i.Address,
                      NextOnTime = i.NextOnTime,
                      OfferPercentage = i.MaxOfferPercentage,
-                     IsShopRate = i.IsShopRate
+                     IsShopRate = i.IsShopRate,
+                     DishType = i.DishType
                  }).ToList();
                 return Json(model, JsonRequestBehavior.AllowGet);
             }
@@ -5636,8 +5650,10 @@ namespace ShopNow.Controllers
                     Description = i.a.a.a.Description,
                     ProductListItems = i.a.apro.Select(b => new AchievementApiListViewModel.AchievementListItem.ProductListItem { Id = b.ProductId }).ToList(),
                     ShopListItems = i.a.a.ashop.Select(b => new AchievementApiListViewModel.AchievementListItem.ShopListItem { Id = b.ShopId }).ToList(),
-                    IsCustomerAccepted = i.ca.Any() ? i.ca.Any(a => a.Status == 1) : false,
-                    ExpiryDate = (i.a.a.a.DayLimit != 0 && i.ca.Any(a => a.Status == 1) == true) ? i.ca.FirstOrDefault().DateEncoded.AddDays(Convert.ToDouble(i.a.a.a.DayLimit)).ToString("dd-MMM-yyyy") : ""
+                    IsCustomerAccepted = i.ca.Any() ? i.ca.Any(a => a.Status == 1 && a.CustomerId == customerid) : false,
+                    ExpiryDate = (i.a.a.a.DayLimit != 0 && i.ca.Any(a => a.Status == 1 && a.CustomerId == customerid) == true) ? i.ca.FirstOrDefault().DateEncoded.AddDays(Convert.ToDouble(i.a.a.a.DayLimit)).ToString("dd-MMM-yyyy") : "",
+                    IsCompleted = db.CustomerAchievementCompleteds.Any(b => b.CustomerId == customerid && b.AchievementId == i.a.a.a.ActivateAfterId),
+                    CompleteText = i.a.a.a.ActivateAfterId != 0 ? "Complete " + db.AchievementSettings.FirstOrDefault(a => a.Id == i.a.a.a.ActivateAfterId).Name + " challenge to unlock." : ""
                 }).ToList();
             return Json(new { list = model.AchievementListItems }, JsonRequestBehavior.AllowGet);
         }
@@ -5775,7 +5791,8 @@ namespace ShopNow.Controllers
             if (customer != null)
                 walletAmount = customer.WalletAmount;
             var achievementCompletedCount = db.CustomerAchievementCompleteds.Where(i => i.CustomerId == customerid).Count();
-            return Json(new { count = liveOrdercount, oldOrderCount = oldOrdercount, walletAmount = walletAmount,achievementCount = achievementCompletedCount }, JsonRequestBehavior.AllowGet);
+            bool hasPickupOrder = db.Orders.Any(i => i.CustomerId == customerid && i.Status == 5);
+            return Json(new { count = liveOrdercount, oldOrderCount = oldOrdercount, walletAmount = walletAmount,achievementCount = achievementCompletedCount,hasPickupOrder = hasPickupOrder }, JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult GetCheckOldCart(OldCartCheckViewModel model)
@@ -7456,6 +7473,13 @@ namespace ShopNow.Controllers
                         db.ShopCredits.Add(shopcredit);
                         db.SaveChanges();
                     }
+
+                    //SMS
+                    //if (order.Id != 0)
+                    //{
+                    //    string message = $"Hi {order.CustomerName}, your order from {order.ShopName} is scheduled for delivery through Snowch , install Snowch app for tracking & online payment http://app.snowch.in - Joyra";
+                    //    string result = SendSMS.execute("04448134440", order.CustomerPhoneNumber, message);
+                    //}
                 }
             }
             catch (Exception ex)

@@ -2,7 +2,7 @@
 @{
     ViewBag.Title = "Cart Details";
 }
-<title>ShopNow | Cart Details</title>
+<title>SNOWCH | Cart Details</title>
 <div class="container-fluid">
     <div class="row mb-2">
         <div class="col-md-6">
@@ -225,6 +225,7 @@
         </div>
     </div>
 </div>
+
 <div id="myModal" class="modal fade">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -350,7 +351,6 @@
                     $('.data-search input').removeClass('form-control-sm');
                 },
             });
-
             t.on('order.dt search.dt', function () {
                 t.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
                     cell.innerHTML = i + 1;

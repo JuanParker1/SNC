@@ -1,10 +1,9 @@
 ﻿@model ShopNow.ViewModels.CategoryMasterViewModel
 @using System.Data;
 @{
-
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<title>Shop Now | Category Ecxel Upload</title>
+<title>SNOWCH | Category Ecxel Upload</title>
 <div class="container">
     @using (Html.BeginForm("Index", "Category", null, FormMethod.Post, new { enctype = "multipart/form-data" }))
     {
@@ -79,6 +78,7 @@
         </div>
     }
 </div>
+
 @section Scripts
 {
     <script src="~/Scripts/select2/js/select2.js"></script>
@@ -86,7 +86,6 @@
     <link href="~/Content/select2/select2.custom.css" rel="stylesheet" />
     <script>
         $(document).ready(function () {
-
             var tbl = document.getElementById("Category-list");
             if (tbl != null) {
                 for (var i = 0; i < tbl.rows.length; i++) {

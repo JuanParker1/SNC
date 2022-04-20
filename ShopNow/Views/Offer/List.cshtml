@@ -3,12 +3,9 @@
 @{
     ViewBag.Title = "Offers List";
 }
-
-<title>ShopNow | @ViewBag.Title</title>
+<title>SNOWCH | @ViewBag.Title</title>
 <link href="~/Content/Gridmvc.css" rel="stylesheet" />
 <script src="~/Scripts/gridmvc.js"></script>
-
-
 <div class="container-fluid mb-3">
     <div class="d-flex justify-content-between">
         <h5 class="text-success" style="letter-spacing:1px">@ViewBag.Title</h5>
@@ -42,10 +39,8 @@
 {
     <script src="~/Scripts/sweetalert/sweetalert.min.js"></script>
     <link href="~/Content/sweetalert/sweetalert.css" rel="stylesheet" />
-
     <script>
         $(document).ready(function () {
-
             $(".btnDelete").click(function () {
                 var Id = $(this).attr('data-id');
                 swal({
@@ -70,7 +65,6 @@
                     }
                 );
             });
-
         });
     </script>
 }

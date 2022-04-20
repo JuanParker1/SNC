@@ -2,9 +2,7 @@
 @{
     ViewBag.Title = "Bill Entry";
 }
-
-<title>ShopNow | Bill Entry</title>
-
+<title>SNOWCH | Bill Entry</title>
 <div class="container-fluid my-4">
     <div class="row">
         <div class="col-md-4">
@@ -15,7 +13,6 @@
             <a href="~/Bill/DeliveryChargeList" target="_self"><span class="fa fa-bars ml-3"></span> Delivery Charge List</a>
         </div>
     </div>
-
     <div class="row">
         <div class="col-md-12">
             @using (Html.BeginForm("Create", "Bill", FormMethod.Post, new { id = "BillForm" }))
@@ -30,7 +27,7 @@
                                         <label class="col-form-label text-secondary font-weight-bold">Shop Name</label>
                                     </div>
                                     <div class="col-md-9">
-                                        <select id="ShopCode" name="ShopCode" class="form-control"></select>
+                                        <select id="ShopId" name="ShopId" class="form-control"></select>
                                         <input type="hidden" name="ShopName" id="ShopName" />
                                     </div>
                                 </div>
@@ -96,7 +93,6 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="card d-none" id="DeliveryCharge">
                     <div class="card-header">
                         <span class="text-success h5"><strong>Delivery Charge</strong></span>
@@ -129,7 +125,6 @@
                         </div>
                     </div>
                 </div>
-
             }
         </div>
     </div>
@@ -158,7 +153,7 @@
                 }
             });
 
-            $('#ShopCode').select2({
+            $('#ShopId').select2({
                 placeholder: "Search Shop",
                 ajax: {
                     url: "/Bill/GetBillShopSelect2",
@@ -171,14 +166,13 @@
             });
 
             $(".Save").click(function () {
-                var shopcode = $("#ShopCode").val();
-                if (shopcode == null) {
+                var shopid = $("#ShopId").val();
+                if (shopid == null) {
                     swal("Notice!", "Please Select Shop Name!", "warning");
                 } else {
                     $('#BillForm').submit();
                 }
             });
-
         });
     </script>
 }

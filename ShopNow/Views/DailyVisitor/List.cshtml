@@ -3,10 +3,9 @@
 @{
     ViewBag.Title = "Daily Visitors Count";
 }
-<title>ShopNow | @ViewBag.Title</title>
+<title>SNOWCH | @ViewBag.Title</title>
 <link href="~/Content/Gridmvc.css" rel="stylesheet" />
 <script src="~/Scripts/gridmvc.js"></script>
-
 <div class="container-fluid mb-3">
     <div class="row my-3">
         <div class="col-md-3">
@@ -15,8 +14,19 @@
         <div class="col-md-7">
             <form method="get" action="/DailyVisitor/List">
                 <div class="row">
-                    <div class="col-md-4"><input type="date" class="form-control" name="DateFilter" value="@Model.DateFilter.Value.ToString("yyyy-MM-dd")" /></div>
-                    <input type="submit" class="btn btn-info" value="Apply Filter" />
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="col-form-label">Start Date</label>
+                            <input type="date" class="form-control" name="StartDateFilter" value="@Model.StartDateFilter.Value.ToString("yyyy-MM-dd")" />
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="col-form-label">End Date</label>
+                            <input type="date" class="form-control" name="EndDateFilter" value="@Model.EndDateFilter.Value.ToString("yyyy-MM-dd")" />
+                        </div>
+                    </div>
+                    <div class="mt-3"> <input type="submit" class="btn btn-info mt-4" value="Apply Filter" style="height:48%"/></div>
                 </div>
             </form>
         </div>
@@ -25,6 +35,10 @@
         <div class="col-md-12">
             <div class="card shadow">
                 <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <h5>Android Home Count- <b>@Model.AndroidHomeCount</b></h5>
+                        <h5>IOS Home Count- <b>@Model.IOSHomeCount</b></h5>
+                    </div>
                     @Html.Grid(Model.ListItems).Columns(columns =>
                {
                    columns.Add(c => c.DateUpdated).Titled("Date").Filterable(true).SetWidth(10).Format("{0:dd-MM-yyyy hh:mm tt}");

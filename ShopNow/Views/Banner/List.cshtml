@@ -3,7 +3,7 @@
 @{
     ViewBag.Title = "Banner List";
 }
-<title>ShopNow | Banner List</title>
+<title>SNOWCH | Banner List</title>
 <link href="~/Content/Gridmvc.css" rel="stylesheet" />
 <script src="~/Scripts/gridmvc.js"></script>
 <link href="~/Content/switch.css" rel="stylesheet" />
@@ -36,13 +36,13 @@
                columns.Add().Encoded(false).Sanitized(false).Titled("Image").Filterable(false).SetWidth(10).RenderValueAs(s => @<div><img id='img-upload' data-toggle="modal" data-target="#myModal" title="Click Here To Preview!" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@s.Bannerpath" class="img-thumbnail BannerImage" width="60" height="60" onerror="this.src='/Images/noimage.png'" /></div>);
 columns.Add().Encoded(false).Sanitized(false)
 .RenderValueAs(o => @<div>
-                    <a href="/Banner/Edit?Id=@ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id)" class="text-info mr-5"><i class="fa fa-edit fa-lg"></i></a>
-                    @*<a href="javascript:void(0)" data-id=@o.Id class="text-danger btnDelete"><i class="fa fa-trash fa-lg"></i></a>*@
-                </div>          );
-                      columns.Add().Encoded(false).Sanitized(false)
-                       .RenderValueAs(s => new HtmlString
-                                ("<label class='switch'> <input type='checkbox' value='" + s.Status + "' data-id='" + s.Id + "' Id='Id_" + s.Id + "' class='check-active' data-code='" + s.Id + "'><span class='slider round'></span></label>")).Titled("IsActive").SetWidth(10);
-                  }).WithPaging(10).Sortable(true)
+                <a href="/Banner/Edit?Id=@ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id)" class="text-info mr-5"><i class="fa fa-edit fa-lg"></i></a>
+                @*<a href="javascript:void(0)" data-id=@o.Id class="text-danger btnDelete"><i class="fa fa-trash fa-lg"></i></a>*@
+            </div>);
+  columns.Add().Encoded(false).Sanitized(false)
+   .RenderValueAs(s => new HtmlString
+            ("<label class='switch'> <input type='checkbox' value='" + s.Status + "' data-id='" + s.Id + "' Id='Id_" + s.Id + "' class='check-active' data-code='" + s.Id + "'><span class='slider round'></span></label>")).Titled("IsActive").SetWidth(10);
+}).WithPaging(10).Sortable(true)
                 </div>
             </div>
         </div>
@@ -66,7 +66,6 @@ columns.Add().Encoded(false).Sanitized(false)
     <link href="~/Content/sweetalert/sweetalert.css" rel="stylesheet" />
     <script>
         $(document).ready(function () {
-
             var modal = document.getElementById('myModal');
             var img = document.getElementsByClassName('BannerImage');
             var modalImg = document.getElementById("myImage");
@@ -125,7 +124,6 @@ columns.Add().Encoded(false).Sanitized(false)
                 }
             );
         });
-
     </script>
 }
 

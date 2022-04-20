@@ -3,7 +3,7 @@
 @{
     ViewBag.Title = "Access Policy List";
 }
-<title>ShopNow | Access Policy List</title>
+<title>ShopNow | @ViewBag.Title</title>
 <link href="~/Content/Gridmvc.css" rel="stylesheet" />
 <script src="~/Scripts/gridmvc.js"></script>
 <style>
@@ -60,7 +60,6 @@
                     <a href="~/AccessPolicy/Manage" target="_blank" class="text-theme"><span class="fa fa-user"></span> Update Staff Access</a>
                 </div>*@
         </div>
-
         <div class="row">
             <div class="col-md-12">
                 <div class="card my-3 shadow">
@@ -113,18 +112,16 @@
                                 </tbody>
                             </table>*@
                         <div class="form-group mt-3 row">
-                            <div class="col-md-4 mx-auto">
+                            <div class="col-md-2 mx-auto">
                                 <button type="button" class="btn btn-block btn-success Save"><span class="glyphicon glyphicon-file"></span> Save</button>
                             </div>
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
     </div>
 }
-
 
 @section Scripts
 {
@@ -161,7 +158,6 @@
                     $('.data-search input').removeClass('form-control-sm');
                 },
             });
-
             t.on('order.dt search.dt', function () {
                 t.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
                     cell.innerHTML = i + 1;
@@ -188,14 +184,16 @@
                     window.location.href = "/AccessPolicy/List/?customerid=" + Id;
                 }
             });
+
             $(".Save").click(function () {
                 var customerid = $("#CustomerId").val();
-                if (customerid != null || customerid != "") {
-                    $('#AccessPolicyForm').submit();
-                } else {
+                if (customerid == null || customerid == "") {
                     swal("Notice!", "Please Select Customer Name!", "warning");
+                } else {
+                    $('#AccessPolicyForm').submit();
                 }
             });
+
             $('.Access').change(function () {
                 var customerId = $("#CustomerId").val();
                 var customerName = $("#CustomerName").val();
@@ -269,7 +267,6 @@
                     });
                 }
             });
-
         });
     </script>
 }

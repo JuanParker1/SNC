@@ -1,15 +1,15 @@
 ﻿@model IEnumerable<ShopNow.Models.Category>
 @using GridMvc.Html
 @{
-    ViewBag.Title = "Category";
+    ViewBag.Title = "Category List";
 }
-<title>ShopNow | Category List</title>
+<title>SNOWCH | @ViewBag.Title</title>
 <link href="~/Content/Gridmvc.css" rel="stylesheet" />
 <script src="~/Scripts/gridmvc.js"></script>
 <div class="container-fluid mb-5">
     <div class="row">
         <div class="col-md-6">
-            <h4 class="text-success" style="letter-spacing:1px">CATEGORY LIST</h4>
+            <h4 class="text-success text-uppercase" style="letter-spacing:1px">@ViewBag.Title</h4>
         </div>
         <div class="col-md-6 text-right">
             <a data-toggle="modal" data-target="#createModal" href="createModal"><span class="fa fa-plus"></span> New Category</a>

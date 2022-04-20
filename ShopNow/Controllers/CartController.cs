@@ -1014,7 +1014,7 @@ namespace ShopNow.Controllers
                     var fcmToken = (from c in db.Customers
                                     where c.Id == order.CustomerId
                                     select c.FcmTocken ?? "").FirstOrDefault().ToString();
-                    Helpers.PushNotification.SendbydeviceId($"Your order has been accepted by shop({order.ShopName}).", "ShopNowChat", "Orderstatus", "", fcmToken.ToString(), "tune1.caf", "liveorder");
+                    Helpers.PushNotification.SendbydeviceId($"Your order has been accepted by {order.ShopName}.", "ShopNowChat", "Orderstatus", "", fcmToken.ToString(), "tune1.caf", "liveorder");
                 }
                 //AddPaymentData
                 //if (order.PaymentModeType == 1)
@@ -1097,7 +1097,7 @@ namespace ShopNow.Controllers
                                     where c.Id == order.CustomerId
                                     select c.FcmTocken ?? "").FirstOrDefault().ToString();
                     //order cancel
-                    Helpers.PushNotification.SendbydeviceId($"Shop({order.ShopName}) has cancelled your order. Kindly contact shop for details or try another order.", "Snowch", "Orderstatus", "", fcmToken.ToString(), "tune1.caf", "liveorder");
+                    Helpers.PushNotification.SendbydeviceId($"{order.ShopName} has cancelled your order. Kindly contact shop for details or try another order.", "Snowch", "Orderstatus", "", fcmToken.ToString(), "tune1.caf", "liveorder");
 
                     //Refund notification
                     if (payment.PaymentMode == "Online Payment" && status == 7)
@@ -1176,7 +1176,7 @@ namespace ShopNow.Controllers
             order.DateUpdated = DateTime.Now;
             db.Entry(order).State = System.Data.Entity.EntityState.Modified;
             db.SaveChanges();
-            string notificationMessage = $"Your order on shop({order.ShopName}) is on the way.";
+            string notificationMessage = $"Your order on {order.ShopName} is on the way.";
             var orderItemList = db.OrderItems.Where(i => i.OrderId == order.Id).ToList();
             foreach (var item in orderItemList)
             {
@@ -1207,7 +1207,7 @@ namespace ShopNow.Controllers
                 otpVerification.DateUpdated = DateTime.Now;
                 db.OtpVerifications.Add(otpVerification);
                 db.SaveChanges();
-                notificationMessage = $"Your order on shop({order.ShopName}) is on the way. Please share the delivery code { otpVerification.Otp} with the delivery partner {order.DeliveryBoyName} for verification.";
+                notificationMessage = $"Your order on {order.ShopName} is on the way. Please share the delivery code { otpVerification.Otp} with the delivery partner {order.DeliveryBoyName} for verification.";
             }
             if (order.CustomerId != 0)
             {
@@ -1355,7 +1355,7 @@ namespace ShopNow.Controllers
             {
                 string fcmtocken = customerDetails.FcmTocken ?? "";
 
-                Helpers.PushNotification.SendbydeviceId($"Your order on shop({ order.ShopName}) has been delivered by delivery partner { order.DeliveryBoyName}.", "Snowch", "Orderstatus", "", fcmtocken, "tune1.caf", "liveorder");
+                Helpers.PushNotification.SendbydeviceId($"Your order on { order.ShopName} has been delivered by delivery partner { order.DeliveryBoyName}.", "Snowch", "Orderstatus", "", fcmtocken, "tune1.caf", "liveorder");
 
                 //For Successfull First Order
                 var orderExist = db.Orders.Where(i => i.CustomerId == order.CustomerId && i.Status == 6).ToList();

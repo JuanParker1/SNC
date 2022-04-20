@@ -2,9 +2,7 @@
 @{
     ViewBag.Title = "Update Api Setting";
 }
-
-<title>ShopNow | @ViewBag.Title</title>
-
+<title>SNOWCH | @ViewBag.Title</title>
 <div class="container-fluid mb-5">
     <div class="row">
         <div class="col-md-10 mx-auto mt-3">
@@ -94,12 +92,12 @@
         </div>
     </div>
 </div>
+
 @section Scripts
 {
     <script src="~/Scripts/select2/js/select2.js"></script>
     <link href="~/Scripts/select2/css/select2.css" rel="stylesheet" />
     <link href="~/Content/select2/select2.custom.css" rel="stylesheet" />
-
     <script>
         $(document).ready(function () {
             $('[name="Category"]').val(@Model.Category);

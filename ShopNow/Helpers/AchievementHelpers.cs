@@ -12,7 +12,7 @@ namespace ShopNow.Helpers
         public static void UpdateAchievements(int customerId)
         {
             sncEntities db = new sncEntities();
-            DateTime achievementStartDateTime = new DateTime(2021, 10, 20);
+            DateTime achievementStartDateTime = new DateTime(2022, 04, 19);
             var customer = db.Customers.FirstOrDefault(i => i.Id == customerId);
             if (customer != null)
             {
@@ -603,7 +603,7 @@ namespace ShopNow.Helpers
             walletHistory.DateEncoded = DateTime.Now;
             walletHistory.Description = $"Received from Achievement({achievementName})";
             walletHistory.Type = 1;
-             //walletHistory.ExpiryDate = DateTime.Now.AddDays(dayLimit);
+            walletHistory.ExpiryDate = DateTime.Now.AddDays(10);
             db.CustomerWalletHistories.Add(walletHistory);
             db.SaveChanges();
         }

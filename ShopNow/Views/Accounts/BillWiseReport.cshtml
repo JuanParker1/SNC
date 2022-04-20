@@ -3,7 +3,7 @@
 @{
     ViewBag.Title = "Bill Wise Report";
 }
-<title>ShopNow | @ViewBag.Title</title>
+<title>SNOWCH | @ViewBag.Title</title>
 <link href="~/Content/Gridmvc.css" rel="stylesheet" />
 <script src="~/Scripts/gridmvc.js"></script>
 <style>
@@ -29,7 +29,7 @@
     </div>
     <div class="row">
         <div class="col-md-12">
-            <div class="card shadow mt-3">
+            <div class="card shadow mb-5 mt-3">
                 <div class="card-body">
                     <form method="get" action="/Accounts/BillWiseReport">
                         <div class="row mb-3">
@@ -95,12 +95,62 @@
                    columns.Add(c => c.DeliveryChargePaidToDeliveryBoy).Titled("DeliveryCharge PaidTo DeliveryBoy").Filterable(true).SetWidth(10).Format("{0:#,##,0.00}");
                    columns.Add(c => c.DeliveryChargeProfit).Titled("DeliveryCharge Profit").Filterable(true).SetWidth(10).Format("{0:#,##,0.00}");
                    columns.Add(c => c.AmountProfit).Titled("Trade Profit").Filterable(true).SetWidth(10);
-               }).Sortable(true)
+               }).WithPaging(10).Sortable(true)
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<table id="table_excel" class="d-none">
+    <thead>
+        <tr>
+            <td>Sl.No</td>
+            <td>Date</td>
+            <td>Order Number</td>
+            <td>Shop Name</td>
+            <td>GST Number</td>
+            <td>Menu Price</td>
+            <td>Shop Bill Amount</td>
+            <td>Price Difference</td>
+            <td>Customer Paid Amount</td>
+            <td>Refund Amount</td>
+            <td>Wallet Used</td>
+            <td>Final Amount</td>
+            <td>Delivery Amount From Customer</td>
+            <td>Delivery Discount</td>
+            <td>Total Delivery Charge</td>
+            <td>Delivery Charge Paid To DeliveryBoy</td>
+            <td>Delivery Charge Profit</td>
+            <td>Amount Profit</td>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.ListItems)
+        {
+            <tr>
+                <td>@item.SNo</td>
+                <td>@item.Date</td>
+                <td>@item.OrderNumber</td>
+                <td>@item.ShopName</td>
+                <td>@item.GSTNumber</td>
+                <td>@item.MenuPrice</td>
+                <td>@item.ShopBillAmount</td>
+                <td>@item.PriceDifference</td>
+                <td>@item.CustomerPaidAmount</td>
+                <td>@item.RefundAmount</td>
+                <td>@item.WalletUsed</td>
+                <td>@item.FinalAmount</td>
+                <td>@item.DeliveryAmountFromCustomer</td>
+                <td>@item.DeliveryDiscount</td>
+                <td>@item.TotalDeliveryCharge</td>
+                <td>@item.DeliveryChargePaidToDeliveryBoy</td>
+                <td>@item.DeliveryChargeProfit</td>
+                <td>@item.AmountProfit</td>
+            </tr>
+        }
+    </tbody>
+</table>
 
 @section Scripts
 {
@@ -112,9 +162,9 @@
             $('select[name="YearFilter"] option[value=@Model.YearFilter]').prop('selected', true);
 
             $("#btnExport").click(function () {
-                $("table").table2excel({
+                $("#table_excel").table2excel({
                     name: "Worksheet Name",
-                    filename: "BillWiseReport",
+                    filename: "Bill Wise Report",
                     fileext: ".xls",
                     exclude_links: true,
                 });

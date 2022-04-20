@@ -2,15 +2,13 @@
 @{
     ViewBag.Title = "Item Mapping Update";
 }
-<title>ShopNow | Item Mapping Update</title>
-
+<title>SNOWCH | Item Mapping Update</title>
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-4">
             <h5 class="text-success">UPDATE ITEM MAPPING</h5>
         </div>
     </div>
-
     <div class="row">
         <div class="col-md-12 mx-auto">
             @using (Html.BeginForm("ItemMappingUpdate", "MasterProduct", FormMethod.Post, new { id = "ItemMappingForm", enctype = "multipart/form-data" }))

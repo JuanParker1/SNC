@@ -19,10 +19,11 @@ namespace ShopNow.Controllers
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
-            model.DateFilter = model.DateFilter == null ? DateTime.Now : model.DateFilter;
-            model.ListItems = db.DailyVisitors.Where(i => DbFunctions.TruncateTime(i.DateUpdated) == DbFunctions.TruncateTime(model.DateFilter)).GroupBy(i => i.ShopId)
-                .GroupJoin(db.Orders.Where(i => DbFunctions.TruncateTime(i.DateEncoded) == DbFunctions.TruncateTime(model.DateFilter) && i.Status == 6), dv => dv.FirstOrDefault().ShopId, o => o.ShopId, (dv, o) => new { dv, o })
+            model.StartDateFilter = model.StartDateFilter == null ? new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1)  : model.StartDateFilter;
+            model.EndDateFilter = model.EndDateFilter == null ? DateTime.Now : model.EndDateFilter;
 
+            model.ListItems = db.DailyVisitors.Where(i => (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(model.StartDateFilter) && DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(model.EndDateFilter))).GroupBy(i => i.ShopId)
+                .GroupJoin(db.Orders.Where(i => (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(model.StartDateFilter) && DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(model.EndDateFilter)) && i.Status == 6), dv => dv.FirstOrDefault().ShopId, o => o.ShopId, (dv, o) => new { dv, o })
                 .Select(i => new DailyVisitorListViewModel.ListItem
                 {
                     Count = i.dv.Count(),
@@ -30,10 +31,18 @@ namespace ShopNow.Controllers
                     DateUpdated = i.dv.OrderByDescending(a => a.DateUpdated).FirstOrDefault().DateUpdated,
                     ShopId = i.dv.Key,
                     ShopName = i.dv.OrderByDescending(a => a.DateUpdated).FirstOrDefault().ShopName,
-                    OrderCount = i.dv.Key !=0 ? i.o.Count() : db.Orders.Where(a => DbFunctions.TruncateTime(a.DateEncoded) == DbFunctions.TruncateTime(model.DateFilter) && a.Status == 6).GroupBy(a=>a.CustomerId).Count(),
+                    OrderCount = i.dv.Key !=0 ? i.o.Count() : db.Orders.Where(a => (DbFunctions.TruncateTime(a.DateEncoded) >= DbFunctions.TruncateTime(model.StartDateFilter) && DbFunctions.TruncateTime(a.DateEncoded) <= DbFunctions.TruncateTime(model.EndDateFilter)) && a.Status == 6).GroupBy(a=>a.CustomerId).Count(),
                     //ConversionRate = Math.Round((double)i.o.Count() / i.dv.Count() * 100,2)
-                    ConversionRate = Math.Round((double)(i.dv.Key != 0 ? i.o.Count() : db.Orders.Where(a => DbFunctions.TruncateTime(a.DateEncoded) == DbFunctions.TruncateTime(model.DateFilter) && a.Status == 6).GroupBy(a => a.CustomerId).Count()) / i.dv.Count() * 100,2)
+                    ConversionRate = Math.Round((double)(i.dv.Key != 0 ? i.o.Count() : db.Orders.Where(a => (DbFunctions.TruncateTime(a.DateEncoded) >= DbFunctions.TruncateTime(model.StartDateFilter) && DbFunctions.TruncateTime(a.DateEncoded) <= DbFunctions.TruncateTime(model.EndDateFilter)) && a.Status == 6).GroupBy(a => a.CustomerId).Count()) / i.dv.Count() * 100,2)
                 }).OrderByDescending(i => i.Count).ToList();
+
+            model.AndroidHomeCount = db.DailyVisitors.Where(i => i.ShopId == 0 && (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(model.StartDateFilter) && DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(model.EndDateFilter)))
+                .Join(db.CustomerDeviceInfoes.Where(i=>i.Platform =="android"), dv => dv.CustomerId, cdi => cdi.CustomerId, (dv, cdi) => new { dv, cdi })
+                .Count();
+
+            model.IOSHomeCount = db.DailyVisitors.Where(i => i.ShopId == 0 && (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(model.StartDateFilter) && DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(model.EndDateFilter)))
+                .Join(db.CustomerDeviceInfoes.Where(i => i.Platform == "ios"), dv => dv.CustomerId, cdi => cdi.CustomerId, (dv, cdi) => new { dv, cdi })
+                .Count();
             return View(model);
         }
     }

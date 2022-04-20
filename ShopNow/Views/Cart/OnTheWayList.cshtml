@@ -3,7 +3,7 @@
 @{
     ViewBag.Title = "On the Way List";
 }
-<title>ShopNow | On the Way </title>
+<title>SNOWCH | @ViewBag.Title </title>
 <link href="~/Content/Gridmvc.css" rel="stylesheet" />
 <script src="~/Scripts/gridmvc.js"></script>
 <style>
@@ -18,7 +18,7 @@
     <form method="get" action="~/Cart/OntheWayList">
         <div class="row">
             <div class="col-md-4">
-                <h5 class="my-2 text-success" style="letter-spacing:1px">ON THE WAY</h5>
+                <h5 class="my-2 text-success text-uppercase" style="letter-spacing:1px">@ViewBag.Title</h5>
             </div>
             <div class="col-md-3">
                 <select name="ShopId" id="ShopId" class="form-control">
@@ -99,7 +99,6 @@
     <!--Select2 End-->
     <script>
         $(document).ready(function () {
-
             $('#ShopId').select2({
                 placeholder: "Search Shop",
                 ajax: {

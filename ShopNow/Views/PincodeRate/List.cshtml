@@ -1,14 +1,12 @@
 ﻿@model ShopNow.ViewModels.PincodeRateListViewModel
 @using GridMvc.Html
 @{
-
     ViewBag.Title = "Pincode Rate";
 }
-<title>ShopNow | PIN Code Rate List</title>
+<title>SNOWCH | PIN Code Rate List</title>
 <link href="~/Content/Gridmvc.css" rel="stylesheet" />
 <script src="~/Scripts/gridmvc.js"></script>
 <link href="~/Content/switch.css" rel="stylesheet" />
-
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-4">
@@ -47,7 +45,6 @@
                       ("<label class='switch'> <input type='checkbox' value='" + s.Status + "' data-id='" + s.Id + "' class='check-active'><span class='slider round'></span></label>")).Titled("Active/Inactive").SetWidth(5);
                }).WithPaging(10).Sortable(true)
                 </div>
-
             </div>
         </div>
     </div>
@@ -79,7 +76,6 @@
                     $thisactive.prop('checked', false);
             });
 
-
             $('.btn-save').on('click', function () {
                 var tr = $(this).closest('tr');
                 var type = tr.find('.select-type').val();
@@ -110,9 +106,7 @@
                 }
                 window.location.reload();
             });
-
         });
-
     </script>
 }
 
