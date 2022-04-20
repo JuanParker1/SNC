@@ -3,26 +3,25 @@
 @{
     ViewBag.Title = "StockMaintenance";
 }
-
+<title>SNOWCH | @ViewBag.Title</title>
 <div class="container">
     @using (Html.BeginForm("StockMaintenance", "StockUpdate", FormMethod.Post, new { enctype = "multipart/form-data" }))
     {
-
-    <div class="row">
-        <div class="col-md-3">
-            <div class="form-group">
-                <label class="font-weight-bold">Select Shop</label>
-                <select id="select-shop" name="ShopId" class="form-control">
-                    @if (Model.ShopId != 0)
-                    {
-                        <option value="@Model.ShopId">@Model.ShopName</option>
-                    }
-                </select>
-                <input type="hidden" name="ShopName" value="@Model.ShopName" />
-                <input type="hidden" name="upload" value="@Model.upload" />
+        <div class="row">
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label class="font-weight-bold">Select Shop</label>
+                    <select id="select-shop" name="ShopId" class="form-control">
+                        @if (Model.ShopId != 0)
+                        {
+                            <option value="@Model.ShopId">@Model.ShopName</option>
+                        }
+                    </select>
+                    <input type="hidden" name="ShopName" value="@Model.ShopName" />
+                    <input type="hidden" name="upload" value="@Model.upload" />
+                </div>
             </div>
         </div>
-    </div>
         <div class="row">
             <div class="col-md-12">
                 <h5>Upload Products Excel</h5>
@@ -107,57 +106,56 @@
             </div>
         </div>
     }
-
-    @section Scripts
-{
-        <!--Select2-->
-        <script src="~/Scripts/select2/js/select2.js"></script>
-        <link href="~/Scripts/select2/css/select2.css" rel="stylesheet" />
-        <link href="~/Content/select2/select2.custom.css" rel="stylesheet" />
-        <!--Select2 End-->
-        <script>
-            $(document).ready(function () {
-
-                $('#select-shop').select2({
-                    placeholder: "Search Shop",
-                    width: '100%',
-                    ajax: {
-                        url: "/StockUpdate/GetActiveShopSelect",
-                        delay: 250,
-                        dataType: 'json'
-                    }
-                }).on('select2:select', function (e) {
-                    $('input[name="ShopName"]').val(e.params.data.text);
-                });
-
-                var tbl = document.getElementById("Upload-list");
-                if (tbl != null) {
-                    for (var i = 0; i < tbl.rows.length; i++) {
-                        for (var j = 0; j < tbl.rows[i].cells.length; j++)
-                            tbl.rows[i].cells[j].onclick = function () { getval(this); };
-                    }
-                }
-                function getval(cel) {
-                    $(function () {
-                        $('#ItemCode').on('click', function () {
-                            $('#ItemCode').val(cel.innerHTML)
-                        });
-                        $('#ItemName').on('click', function () {
-                            $('#ItemName').val(cel.innerHTML)
-                        });
-                        $('#MRP').on('click', function () {
-                            $('#MRP').val(cel.innerHTML)
-                        });
-                        $('#Stock').on('click', function () {
-                            $('#Stock').val(cel.innerHTML)
-                        });
-                        $('#IBarU').on('click', function () {
-                            $('#IBarU').val(cel.innerHTML)
-                        });
-                    });
-                }
-
-            });
-        </script>
-    }
 </div>
+
+@section Scripts
+{
+    <!--Select2-->
+    <script src="~/Scripts/select2/js/select2.js"></script>
+    <link href="~/Scripts/select2/css/select2.css" rel="stylesheet" />
+    <link href="~/Content/select2/select2.custom.css" rel="stylesheet" />
+    <!--Select2 End-->
+    <script>
+        $(document).ready(function () {
+            $('#select-shop').select2({
+                placeholder: "Search Shop",
+                width: '100%',
+                ajax: {
+                    url: "/StockUpdate/GetActiveShopSelect",
+                    delay: 250,
+                    dataType: 'json'
+                }
+            }).on('select2:select', function (e) {
+                $('input[name="ShopName"]').val(e.params.data.text);
+            });
+
+            var tbl = document.getElementById("Upload-list");
+            if (tbl != null) {
+                for (var i = 0; i < tbl.rows.length; i++) {
+                    for (var j = 0; j < tbl.rows[i].cells.length; j++)
+                        tbl.rows[i].cells[j].onclick = function () { getval(this); };
+                }
+            }
+
+            function getval(cel) {
+                $(function () {
+                    $('#ItemCode').on('click', function () {
+                        $('#ItemCode').val(cel.innerHTML)
+                    });
+                    $('#ItemName').on('click', function () {
+                        $('#ItemName').val(cel.innerHTML)
+                    });
+                    $('#MRP').on('click', function () {
+                        $('#MRP').val(cel.innerHTML)
+                    });
+                    $('#Stock').on('click', function () {
+                        $('#Stock').val(cel.innerHTML)
+                    });
+                    $('#IBarU').on('click', function () {
+                        $('#IBarU').val(cel.innerHTML)
+                    });
+                });
+            }
+        });
+    </script>
+}

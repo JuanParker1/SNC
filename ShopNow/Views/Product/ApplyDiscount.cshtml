@@ -1,10 +1,8 @@
 ﻿@model ShopNow.ViewModels.ApplyDiscountViewModel
-
 @{
     ViewBag.Title = "Apply Discount";
 }
-<title>ShopNow | @ViewBag.Title</title>
-
+<title>SNOWCH | @ViewBag.Title</title>
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-8 mx-auto mt-3">
@@ -49,7 +47,6 @@
                 swal("Success!", msg, "success")
             }
 
-
             $('#select-shop').select2({
                 placeholder: "Search Shop",
                 ajax: {
@@ -61,7 +58,6 @@
             }).on('select2:select', function (e) {
                 $('input[name="ShopName"]').val(e.params.data.text);
             });
-
         });
     </script>
 }

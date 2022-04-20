@@ -1,15 +1,12 @@
 ﻿@model ShopNow.Models.stockmodel
 @{
-    ViewBag.Title = "DiscountMaintenance";
+    ViewBag.Title = "Discount Maintenance";
 }
-
+<title>SNOWCH | @ViewBag.Title</title>
 <div class="container">
     @using (Html.BeginForm("UpdateDiscount", "StockUpdate", FormMethod.Post, new { enctype = "multipart/form-data" }))
     {
         @Html.AntiForgeryToken()
-
-
-
         <div class="row">
             <div class="col-md-3">
                 <div class="form-group">
@@ -30,30 +27,28 @@
             </div>
         </div>
     }
-
-    @section Scripts
-{
-        <!--Select2-->
-        <script src="~/Scripts/select2/js/select2.js"></script>
-        <link href="~/Scripts/select2/css/select2.css" rel="stylesheet" />
-        <link href="~/Content/select2/select2.custom.css" rel="stylesheet" />
-        <!--Select2 End-->
-        <script>
-            $(document).ready(function () {
-
-                $('#select-shop').select2({
-                    placeholder: "Search Shop",
-                    width: '100%',
-                    ajax: {
-                        url: "/StockUpdate/GetActiveShopSelect",
-                        delay: 250,
-                        dataType: 'json'
-                    }
-                }).on('select2:select', function (e) {
-                    $('input[name="ShopName"]').val(e.params.data.text);
-                });
-            });
-        </script>
-    }
 </div>
 
+@section Scripts
+{
+    <!--Select2-->
+    <script src="~/Scripts/select2/js/select2.js"></script>
+    <link href="~/Scripts/select2/css/select2.css" rel="stylesheet" />
+    <link href="~/Content/select2/select2.custom.css" rel="stylesheet" />
+    <!--Select2 End-->
+    <script>
+        $(document).ready(function () {
+            $('#select-shop').select2({
+                placeholder: "Search Shop",
+                width: '100%',
+                ajax: {
+                    url: "/StockUpdate/GetActiveShopSelect",
+                    delay: 250,
+                    dataType: 'json'
+                }
+            }).on('select2:select', function (e) {
+                $('input[name="ShopName"]').val(e.params.data.text);
+            });
+        });
+    </script>
+}

@@ -1,10 +1,8 @@
 ﻿@model ShopNow.ViewModels.UpdatePriceViewModel
-
 @{
     ViewBag.Title = "Update Price";
 }
-<title>ShopNow | @ViewBag.Title</title>
-
+<title>SNOWCH | @ViewBag.Title</title>
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-8 mx-auto mt-3">
@@ -61,11 +59,10 @@
     <link href="~/Content/sweetalert/sweetalert.css" rel="stylesheet" />
     <script>
         $(document).ready(function () {
-             var msg = "@ViewBag.Message";
+            var msg = "@ViewBag.Message";
             if (msg != "") {
                 swal("Success!", msg, "success")
             }
-
 
             $('#select-shop').select2({
                 placeholder: "Search Shop",
@@ -78,7 +75,6 @@
             }).on('select2:select', function (e) {
                 $('input[name="ShopName"]').val(e.params.data.text);
             });
-
         });
     </script>
 }

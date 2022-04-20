@@ -2,7 +2,7 @@
 @{
     ViewBag.Title = "Staff Update";
 }
-<title>ShopNow | @ViewBag.Title</title>
+<title>SNOWCH | @ViewBag.Title</title>
 @using (Html.BeginForm("Edit", "Staff", FormMethod.Post, new { id = "StaffForm", role = "form", enctype = "multipart/form-data" }))
 {
     <div class="container-fluid">
@@ -171,7 +171,6 @@
                 $("#ImagePath").val("");
                 $(this).addClass("d-none");
             });
-
         });
     </script>
 }

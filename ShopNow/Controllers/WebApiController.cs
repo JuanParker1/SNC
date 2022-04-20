@@ -311,8 +311,6 @@ namespace ShopNow.Controllers
             {
                 model.ShopId = 123;
                 model.ShopName = "JOYRA MEDICALS+SURGICALS";
-
-                
                 using (WebClient myData = new WebClient())
                 {
                     myData.Headers[model.AuthName] = model.AuthKey;
