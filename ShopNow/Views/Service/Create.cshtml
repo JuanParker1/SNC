@@ -546,7 +546,7 @@
         // function for Distance=0
 
         @*function checkDistanceZero() {
-            var model = @Html.Raw(Json.Encode(Model.DistanceLists));
+            var model = @Html.Raw(Json.Encode(Model.DistanceLists.Take(100)));
             $.each(model, function (i) {
                // console.log(model[i].OrderNumber,model[i].Longitude);
                 $.ajax({
@@ -554,10 +554,7 @@
                     type: 'GET',
                     dataType: 'json',
                     success: function (data) {
-                        if (data) {
-                            //Save Distance in Orders
-                            //$.getJSON("/Service/UpdateDistance?orderNumber=" + model[i].OrderNumber + '&distance=' + data.Distance, function(data) { });
-                        } else {
+                        if (data === 'false') {
                             var service = new google.maps.DistanceMatrixService();
                             const origin = { lat: parseFloat(model[i].ShopLatitude), lng: parseFloat(model[i].ShopLongitude) };
                             const dest = { lat: parseFloat(model[i].Latitude), lng: parseFloat(model[i].Longitude) };
@@ -571,13 +568,22 @@
                                 var duration = (response.rows[0].elements[0].duration.value / 60).toFixed(2);
                                 saveLocation(origin.lat, origin.lng, dest.lat, dest.lng, distance, duration);
                                 //Save Distance in Orders
-                               // $.getJSON("/Service/UpdateDistance?orderNumber=" + model[i].OrderNumber + '&distance=' + distance, function (data) { });
+                               // $.getJSON('/Service/UpdateDistance?orderNumber=' + model[i].OrderNumber + '&distance=' + distance, function (data) { });
+                                UpdateOrderDistance(model[i].OrderNumber, data.Distance);
                             });
+                        } else {
+                            //Save Distance in Orders
+                           // $.getJSON('/Service/UpdateDistance?orderNumber=' + model[i].OrderNumber + '&distance=' + data.Distance, function (data) { });
+                            UpdateOrderDistance(model[i].OrderNumber,data.Distance);
                         }
                     },
                     error: function () { alert('Something went wrong, try again later!'); },
                 });
             });
+        }
+
+        function UpdateOrderDistance(ordernumber, distance) {
+            $.getJSON('/Service/UpdateDistance?orderNumber=' + ordernumber + '&distance=' + distance, function (data) { });
         }*@
 
     </script>

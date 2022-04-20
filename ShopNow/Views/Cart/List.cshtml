@@ -264,11 +264,15 @@
                 var numberOfChecked = $('.assign-checkbox:checked').length;
                 if (numberOfChecked > 0) {
                     $('#btn-assign-deliveryboymodal').prop('disabled', false);
+                    //var districtname = $this.data('district').val();
+                    //$this.data('district').find(districtname).prop("disabled", true);
+
                 } else {
                     $('#btn-assign-deliveryboymodal').prop('disabled', true);
                 }
 
                 if ($this.prop('checked') == true) {
+                    
                     var item = {
                         OrderId: $this.data('id')
                     };
