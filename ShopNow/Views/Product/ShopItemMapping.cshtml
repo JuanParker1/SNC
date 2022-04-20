@@ -1,16 +1,14 @@
 ﻿@model ShopNow.ViewModels.ProductMappingViewModel
 @{
-    ViewBag.Title = "ShopItemMapping";
+    ViewBag.Title = "Shop Item Mapping";
 }
-<title>ShopNow | Shop Items Mapping</title>
-
+<title>SNOWCH | @ViewBag.Title</title>
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-4">
-            <h5 class="text-success" style="letter-spacing:1px">SHOP ITEMS MAPPING</h5>
+            <h4 class="text-success" style="letter-spacing:1px">@ViewBag.Title</h4>
         </div>
     </div>
-
     <div class="row">
         <div class="col-md-12 mx-auto">
             @using (Html.BeginForm("ShopItemMapping", "Product", FormMethod.Post, new { id = "ShopItemMappingForm", enctype = "multipart/form-data" }))
@@ -33,37 +31,37 @@
                                     </div>
                                 </div>
                             </div>
-                            @if(Model.Lists != null) {
-                            <div class="col-md-12">
-                                <div class="row">
-                                    <table class="table table-striped table-hover table-borderless table-hover" id="mapproduct-list">
-                                        <thead>
-                                            <tr>
-                                                <th></th>
-                                                <th class="text-nowrap">Name</th>
-                                                <th class="text-nowrap">CategoryName</th>
-                                                <th class="text-nowrap">BrandName</th>
-                                                <th class="text-nowrap">Menu Price</th>
-                                                <th>Action</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach (var item in Model.Lists)
-                                            {
+                            @if (Model.Lists != null)
+                            {
+                                <div class="col-md-12">
+                                    <div class="row">
+                                        <table class="table table-striped table-hover table-borderless table-hover" id="mapproduct-list">
+                                            <thead>
                                                 <tr>
-                                                    <td></td>
-                                                    <td class="text-nowrap">@item.Name</td>
-                                                    <td class="text-nowrap">@item.CategoryName</td>
-                                                    <td class="text-nowrap">@item.BrandName</td>
-                                                    <td class="text-nowrap">@item.MenuPrice</td>
-                                                    
+                                                    <th></th>
+                                                    <th class="text-nowrap">Name</th>
+                                                    <th class="text-nowrap">CategoryName</th>
+                                                    <th class="text-nowrap">BrandName</th>
+                                                    <th class="text-nowrap">Menu Price</th>
+                                                    <th>Action</th>
                                                 </tr>
-                                            }
+                                            </thead>
+                                            <tbody>
+                                                @foreach (var item in Model.Lists)
+                                                {
+                                                    <tr>
+                                                        <td></td>
+                                                        <td class="text-nowrap">@item.Name</td>
+                                                        <td class="text-nowrap">@item.CategoryName</td>
+                                                        <td class="text-nowrap">@item.BrandName</td>
+                                                        <td class="text-nowrap">@item.MenuPrice</td>
 
-                                        </tbody>
-                                    </table>
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
-                            </div>
                             }
                         </div>
                         <div class="form-group row">

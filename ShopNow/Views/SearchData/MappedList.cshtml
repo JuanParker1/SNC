@@ -3,7 +3,7 @@
 @{
     ViewBag.Title = "Customer Search Data List";
 }
-<title>ShopNow | @ViewBag.Title</title>
+<title>SNOWCH | @ViewBag.Title</title>
 <link href="~/Content/Gridmvc.css" rel="stylesheet" />
 <script src="~/Scripts/gridmvc.js"></script>
 <style>
@@ -51,27 +51,27 @@
                 </li>
             </ul>
             <div class="tab-content">
-                     <div class="tab-pane active" id="mapped">
-                         @Html.Grid(Model.ListWithLinkedKeywords).Columns(columns =>
-                      {
-                        columns.Add(b => b.Date).Titled("Date").Filterable(true).SetWidth(10).Format("{0:dd-MMM-yyyy}");
-                        columns.Add(b => b.Key).Titled("Cust Search Word-0").Filterable(true).SetWidth(10);
-                        columns.Add(b => b.OldCommonWord).Titled("Old Common Word").Filterable(true).SetWidth(10);
-                        columns.Add(b => b.LinkedMasterProduct).Titled("Mapped Products").Filterable(true).SetWidth(10);
-                        columns.Add().Encoded(false).Sanitized(false)
-                     .RenderValueAs(b => new HtmlString
-                            ("<input class='form-control input-keyword' />")).Titled("Keyword").SetWidth(30);
-                        columns.Add().Encoded(false).Sanitized(false)
-                     .RenderValueAs(b => new HtmlString
-                            ("<select class='form-control select-source' multiple></select>")).Titled("Correct Word").SetWidth(30);
-                        columns.Add().Encoded(false).Sanitized(false)
-                     .RenderValueAs(b => new HtmlString
-                            ("<select class='form-control select-masterproduct' multiple></select>")).Titled("Nickname").SetWidth(30);
-                        columns.Add().Encoded(false).Sanitized(false)
-                     .RenderValueAs(b => new HtmlString
-                            ("<input type='button' class='btn btn-sm btn-success btn-save-keyword'  data-id=" + b.Id + " value='Save' />")).Titled("Action").Css("text-center").SetWidth(5);
-                     }).WithPaging(20).Sortable(true)
-                     </div>
+                <div class="tab-pane active" id="mapped">
+                    @Html.Grid(Model.ListWithLinkedKeywords).Columns(columns =>
+                 {
+                   columns.Add(b => b.Date).Titled("Date").Filterable(true).SetWidth(10).Format("{0:dd-MMM-yyyy}");
+                   columns.Add(b => b.Key).Titled("Cust Search Word-0").Filterable(true).SetWidth(10);
+                   columns.Add(b => b.OldCommonWord).Titled("Old Common Word").Filterable(true).SetWidth(10);
+                   columns.Add(b => b.LinkedMasterProduct).Titled("Mapped Products").Filterable(true).SetWidth(10);
+                   columns.Add().Encoded(false).Sanitized(false)
+                .RenderValueAs(b => new HtmlString
+                       ("<input class='form-control input-keyword' />")).Titled("Keyword").SetWidth(30);
+                   columns.Add().Encoded(false).Sanitized(false)
+                .RenderValueAs(b => new HtmlString
+                       ("<select class='form-control select-source' multiple></select>")).Titled("Correct Word").SetWidth(30);
+                   columns.Add().Encoded(false).Sanitized(false)
+                .RenderValueAs(b => new HtmlString
+                       ("<select class='form-control select-masterproduct' multiple></select>")).Titled("Nickname").SetWidth(30);
+                   columns.Add().Encoded(false).Sanitized(false)
+                .RenderValueAs(b => new HtmlString
+                       ("<input type='button' class='btn btn-sm btn-success btn-save-keyword'  data-id=" + b.Id + " value='Save' />")).Titled("Action").Css("text-center").SetWidth(5);
+                }).WithPaging(20).Sortable(true)
+                </div>
             </div>
         </div>
     </div>
@@ -131,8 +131,7 @@
                     });
                 } else
                     swal('Warning!', 'Enter Keyword', 'warning');
-            });
-            
+            });            
         });
     </script>
 }

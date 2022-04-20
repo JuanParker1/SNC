@@ -3,7 +3,7 @@
 @{
     ViewBag.Title = "Sales Report";
 }
-<title>ShopNow | Sales Report</title>
+<title>SNOWCH | Sales Report</title>
 <link href="~/Content/Gridmvc.css" rel="stylesheet" />
 <script src="~/Scripts/gridmvc.js"></script>
 @using (Html.BeginForm("Report", "Sales", FormMethod.Post, new { id = "SalesForm", role = "form", enctype = "multipart/form-data" }))
@@ -20,7 +20,6 @@
                 </div>
             </div>
         </div>
-
         <div class="row">
             <div class="col-md-12">
                 <div class="card">
@@ -46,7 +45,6 @@
     <script src="~/Scripts/exporttoexcel/jquery.table2excel.js"></script>
     <script>
         $(document).ready(function () {
-
             $('#btnPrint').click(function () {
                 $('.container-fluid *').removeClass('card');
                 $('.container-fluid *').removeClass('card-body');
@@ -63,9 +61,7 @@
                     exclude_links: true,
                 });
             });
-
         });
-
     </script>
 }
 

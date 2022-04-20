@@ -2,7 +2,7 @@
 @{
     ViewBag.Title = "TimeSpan Update";
 }
-<title>ShopNow | API History</title>
+<title>SNOWCH | API History</title>
 <style>
     p.p {
         margin-bottom: 0rem;
@@ -14,11 +14,11 @@
         border: 1;
         border-top: 1px dashed rgb(12, 144, 29);
     }
+
     .opa {
         opacity: 0.3;
     }
 </style>
-
 <div class="loading text-success d-none">
     Loading
     <span class="pulse"></span>
@@ -59,7 +59,7 @@
                                         <label class="col-form-label"><strong class="text-secondary">Shop Name</strong></label>
                                     </div>
                                     <div class="col-md-6">
-                                        <select id="ShopCode" name="ShopCode" class="form-control"></select>
+                                        <select id="ShopId" name="ShopId" class="form-control"></select>
                                         <input type="hidden" name="ShopName" id="ShopName" />
                                     </div>
                                 </div>
@@ -173,7 +173,7 @@
                 } else {
                     $(".Pincode").removeClass("d-none");
                     //$(this).addClass("d-none");
-                    $('#ShopCode').select2({
+                    $('#ShopId').select2({
                         placeholder: "Search Shop",
                         ajax: {
                             url: "/WebApi/GetShopSelect2/?pincode=" + pincode,

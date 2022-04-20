@@ -1,16 +1,15 @@
 ﻿@model ShopNow.ViewModels.PlatFormCreditRateListViewModel
 @using GridMvc.Html
 @{
-    ViewBag.Title = "PlatFormCreditRate";
+    ViewBag.Title = "Plat Form Credit Rate List";
 }
-<title>ShopNow | Plat Form Credit Rate List</title>
+<title>SNOWCH | @ViewBag.Title</title>
 <link href="~/Content/Gridmvc.css" rel="stylesheet" />
 <script src="~/Scripts/gridmvc.js"></script>
-
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-3">
-            <h5 class="text-success" style="letter-spacing:1px">PLATFORM CREDIT RATE LIST</h5>
+            <h5 class="text-success text-uppercase" style="letter-spacing:1px">@ViewBag.Title</h5>
         </div>
         <div class="col-md-2 col-sm-4 mb-2 data-search">
         </div>
@@ -101,7 +100,6 @@
     <link href="~/Content/sweetalert/sweetalert.css" rel="stylesheet" />
     <script>
         $(document).ready(function () {
-
             $('#Create').on('click', function () {
                 var ratePerOrder = $('#RatePerOrder').val();
                 var dailyViewer = $('#DailyViewer').val();

@@ -2,13 +2,12 @@
 @{
     ViewBag.Title = "Time Stamp Update";
 }
-<title>ShopNow | @ViewBag.Title</title>
+<title>SNOWCH | @ViewBag.Title</title>
 <style>
-   .opa {
+    .opa {
         opacity: 0.3;
     }
 </style>
-
 <div class="loading text-success d-none">
     Loading
     <span class="pulse"></span>
@@ -120,7 +119,6 @@
                     $(".tsformat").removeClass("d-none");
                 });
             });
-            
 
             $(".Save").click(function () {
                 var shop = $("#ShopId").val();
@@ -142,7 +140,6 @@
                 copyText.select();
                 navigator.clipboard.writeText(copyText.value);
             });
-
         });
     </script>
 }

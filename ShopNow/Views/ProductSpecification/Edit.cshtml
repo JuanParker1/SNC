@@ -2,8 +2,7 @@
 @{
     ViewBag.Title = "Electronic Specification Update";
 }
-<title>ShopNow | @ViewBag.Title</title>
-
+<title>SNOWCH | @ViewBag.Title</title>
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-6">
@@ -13,7 +12,6 @@
             <a href="~/ProductSpecification/List" target="_self"><span class="fa fa-list-ul"></span> Electronic Specification List</a>
         </div>
     </div>
-
     <div class="row">
         <div class="col-md-12 mx-auto">
             @using (Html.BeginForm("Edit", "ProductSpecification", FormMethod.Post, new { id = "ProductSpecificationForm", enctype = "multipart/form-data" }))
@@ -72,7 +70,6 @@
                     'Value'
                 ];
                 isValidated = ValidateEmptyRequiredFiels(requiredArr);
-
                 if (isValidated) {
                     $('#ProductSpecificationForm').submit();
                 };
@@ -101,7 +98,6 @@
             }).on('select2:select', function (e) {
                 $('input[name="SpecificationName"]').val(e.params.data.text);
             });
-
         });
     </script>
 }

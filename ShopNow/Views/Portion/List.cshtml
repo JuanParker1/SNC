@@ -4,12 +4,9 @@
 @{
     ViewBag.Title = "Portion";
 }
-
-<title>ShopNow | Portion List</title>
-
+<title>SNOWCH | Portion List</title>
 <link href="~/Content/Gridmvc.css" rel="stylesheet" />
 <script src="~/Scripts/gridmvc.js"></script>
-
 <div class="container-fluid">
     <div class="row my-2">
         <div class="col-md-6">
@@ -19,7 +16,6 @@
             <a data-toggle="modal" data-target="#createModal" href="createModal"><span class="fa fa-plus"></span> New Portion</a>
         </div>
     </div>
-
     <div class="col-md-12">
         <div class="card shadow mt-3">
             <div class="card-body">
@@ -92,7 +88,7 @@
     <script src="~/Scripts/sweetalert/sweetalert.min.js"></script>
     <link href="~/Content/sweetalert/sweetalert.css" rel="stylesheet" />
     <script>
-        $(document).ready(function () {    
+        $(document).ready(function () {   
 
             $('#Create').on('click', function () {
                 var name = $('#Name').val();
@@ -148,7 +144,6 @@
                     });
                 }
             });
-
             $("#editModal").on("hidden.bs.modal", function () {
                 window.location.reload();
             });
