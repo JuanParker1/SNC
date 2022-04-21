@@ -3,7 +3,7 @@
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<title>Shop Now | Specification Ecxel Upload</title>
+<title>SNOWCH | Specification Ecxel Upload</title>
 <div class="container">
     @using (Html.BeginForm("Index", "Specification", null, FormMethod.Post, new { enctype = "multipart/form-data" }))
     {
@@ -70,75 +70,13 @@
                 </div>
             </div>
         </div>
-
-
-
-        <!--
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="row">
-                            <div class="form-group">
-                                <input type="file" id="dataFile" name="upload" />
-                            </div>
-                            @if (Model != null)
-                            {
-                                <input type="hidden" value="save" name="button" class="btn btn-secondary" />
-                            }
-                            else
-                            {
-                                <input type="hidden" value="upload" name="button" class="btn btn-success" />
-                            }
-
-                            <div class="form-group">
-                                <input type="submit" value="Upload" class="btn btn-success" />
-                            </div>
-                        </div>
-                        <div class="row form-group">
-                            @if (Model != null)
-                            {
-                                <div class="col-md-4">
-                                    <table id="Specification-list">
-                                        <thead>
-                                        </thead>
-                                        <tbody>
-                                            @foreach (DataColumn col in Model.DataTable.Columns)
-                                            {
-                                                <tr>
-                                                    <td>@col.ColumnName</td>
-                                                </tr>
-                                            }
-                                        </tbody>
-                                    </table>
-                                    <input id="FileName" name="FileName" type="hidden" value="@Model.Filename" />
-                                </div>
-                                <div class="col-md-8">
-                                    <table id="Database-list" class="w-100">
-                                        <tbody>
-                                            <tr>
-                                                <td>
-                                                    <label class="col-md-3">Name</label>
-                                                    <input id="Name" name="Name" type="text" class="col-md-3" />
-                                                    <input id="DBName" name="DBName" type="hidden" class="col-md-3" value="Name" />
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                    <div class="form-group row ml-3 mt-2">
-                                        <input type="submit" value="submit" class="btn btn-success" />
-                                    </div>
-                                </div>
-                            }
-                        </div>
-                    </div>
-                </div>
-                -->
     }
 </div>
+
 @section Scripts
-    {
+{
     <script>
         $(document).ready(function () {
-
             var tbl = document.getElementById("Specification-list");
             if (tbl != null) {
                 for (var i = 0; i < tbl.rows.length; i++) {

@@ -2,8 +2,7 @@
 @{
     ViewBag.Title = "Update";
 }
-<title>ShopNow | Web API Update</title>
-
+<title>SNOWCH | Web API Update</title>
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-4">
@@ -32,7 +31,7 @@
                                 <label class="col-form-label"><strong class="text-secondary">Shop Name</strong></label>
                             </div>
                             <div class="col-md-8">
-                                <select id="ShopCode" name="ShopCode" class="form-control"></select>
+                                <select id="ShopId" name="ShopId" class="form-control"></select>
                                 <input type="hidden" name="ShopName" id="ShopName" />
                             </div>
                         </div>
@@ -73,7 +72,7 @@
                             </div>
                         </div>
                     </div>
-                    </div>
+                </div>
             }
         </div>
     </div>
@@ -87,7 +86,7 @@
     <link href="~/Content/select2/select2.custom.css" rel="stylesheet" />
     <script>
         $(document).ready(function () {
-            $('#ShopCode').select2({
+            $('#ShopId').select2({
                 placeholder: "Search Shop",
                 ajax: {
                     url: "/WebApi/GetShopSelect2",

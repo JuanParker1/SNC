@@ -20,24 +20,16 @@
                     @Html.Grid(Model.List).Columns(columns =>
                {
                    columns.Add(b => b.Pincode).Titled("Pincode").Filterable(true).SetWidth(10);
-                   columns.Add()
-             .Encoded(false)
-             .Sanitized(false)
+                   columns.Add().Encoded(false).Sanitized(false)
               .RenderValueAs(b => new HtmlString
                        ("<select class='form-control select-type'><option disabled selected>Select Type</option><option value='0'>General</option><option value='1'>Special</option></select>")).Titled("Select Type").SetWidth(20);
-                   columns.Add()
-             .Encoded(false)
-             .Sanitized(false)
+                   columns.Add().Encoded(false).Sanitized(false)
               .RenderValueAs(b => new HtmlString
                        ("<select class='form-control select-tier'><option disabled selected>Select Tier</option><option value='1'>1<sup>st</sup> Tier</option><option value='2'>2<sup>nd</sup> Tier</option><option value='3'>3<sup>rd</sup> Tier</option></select>")).Titled("Select Tier").SetWidth(20);
-                   columns.Add()
-             .Encoded(false)
-             .Sanitized(false)
+                   columns.Add().Encoded(false).Sanitized(false)
               .RenderValueAs(b => new HtmlString
                        ("<select class='form-control select-remark'><option disabled selected>Select Remark</option><option value='Normal'>Normal</option><option value='Rain'>Rain</option><option value='Delivery Person Shortage'>Delivery Person Shortage</option><option value='Festival'>Festival</option><option value='Road Block'>Road Block</option></select>")).Titled("Remark").SetWidth(30);
-                   columns.Add()
-             .Encoded(false)
-             .Sanitized(false)
+                   columns.Add().Encoded(false).Sanitized(false)
               .RenderValueAs(b => new HtmlString
                        ("<input type='button' class='btn btn-sm btn-success btn-save' data-id="+b.Id+" data-pincode="+b.Pincode+" data-type="+b.Type+ " data-tier=" + b.Tier + " data-remark='" + b.Remarks + "' value='Update' />")).Titled("Action").Css("text-center").SetWidth(5);
                    columns.Add().Encoded(false).Sanitized(false)
@@ -68,7 +60,6 @@
                     $this.closest('tr').find('.select-tier option[value=' + tier + ']').prop("selected", true);
                     $this.closest('tr').find('.select-remark option[value="' + remark + '"]').prop("selected", true);
                 }
-
                 var $thisactive = $(this).find(".check-active");
                 if ($thisactive.val() == '0')
                     $thisactive.prop('checked', true);
