@@ -1065,7 +1065,8 @@ namespace ShopNow.Controllers
                 payment.DateUpdated = DateTime.Now;
                 db.Entry(payment).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
-
+                db.Dispose();
+                db = new sncEntities();
                 var orderItemList = db.OrderItems.Where(i => i.OrderId == order.Id);
                 if (orderItemList != null)
                 {
@@ -1077,8 +1078,10 @@ namespace ShopNow.Controllers
                         {
                             product.HoldOnStok -= Convert.ToInt32(item.Quantity);
                             product.Qty += Convert.ToInt32(item.Quantity);
+                           // product.HoldOnStok = 0;
+                            //product.Qty = 18;
                             db.Entry(product).State = System.Data.Entity.EntityState.Modified;
-                            db.SaveChanges();
+                          db.SaveChangesAsync();
                         }
                     }
                 }
