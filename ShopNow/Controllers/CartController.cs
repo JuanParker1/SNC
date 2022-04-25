@@ -1849,7 +1849,7 @@ namespace ShopNow.Controllers
             var model = await db.Shops.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && (a.Status == 0 || a.Status == 1)).Select(i => new
             {
                 id = i.Id,
-                text = i.Name,
+                text = i.Name + " -- " + i.DistrictName,
                 shopCategoryId = i.ShopCategoryId
             }).ToListAsync();
 
