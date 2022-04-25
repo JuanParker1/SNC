@@ -215,6 +215,7 @@ namespace ShopNow.ViewModels
         public double MaxOfferPercentage { get; set; }
         public int ParcelDropDeliveryType { get; set; }
         public int DishType { get; set; }
+        public string District { get; set; }
     }
 
     public class ShopListViewModel
