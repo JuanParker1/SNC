@@ -30,7 +30,11 @@ namespace ShopNow.Helpers
                                     if (item.DayLimit > 0)
                                     {
                                         DateTime achievementExpirydate = customerAcceptedAchievements.DateEncoded.AddDays(item.DayLimit);
-                                        var orderListSelectShop = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(customerAcceptedAchievements.DateEncoded) && DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(achievementExpirydate))).Select(i => i.ShopId).ToArray();
+                                        // var orderListSelectShop = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(customerAcceptedAchievements.DateEncoded) && DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(achievementExpirydate))).Select(i => i.ShopId).ToArray();
+                                        // var orderListSelectShop = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && i.DateEncoded >= achievementStartDateTime && (i.DateEncoded >= customerAcceptedAchievements.DateEncoded && i.DateEncoded <= achievementExpirydate)).Select(i => i.ShopId).ToArray();
+                                        var orderListSelectShop = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && !db.CustomerAchievementCompleteds.Any(y => y.AchievementId == item.Id) && i.DateEncoded >= achievementStartDateTime && (i.DateEncoded >= customerAcceptedAchievements.DateEncoded && i.DateEncoded <= achievementExpirydate))
+                                            .Join(db.CustomerAchievementCompleteds, o =>o.CustomerId,CAC => CAC.CustomerId, (o,CAC) => new { o,CAC})
+                                            .Select(i => i.o.ShopId).ToArray();
                                         var shopCategoryCount = db.Shops.Where(i => orderListSelectShop.Contains(i.Id)).GroupBy(i => i.ShopCategoryId).Count();
                                         if (shopCategoryCount == item.CountValue)
                                         {
@@ -47,7 +51,8 @@ namespace ShopNow.Helpers
                                     }
                                     else
                                     {
-                                        var orderListSelectShop = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(achievementStartDateTime)).Select(i => i.ShopId).ToArray();
+                                        // var orderListSelectShop = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(achievementStartDateTime)).Select(i => i.ShopId).ToArray();
+                                        var orderListSelectShop = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && i.DateEncoded >= achievementStartDateTime).Select(i => i.ShopId).ToArray();
                                         var shopCategoryCount = db.Shops.Where(i => orderListSelectShop.Contains(i.Id)).GroupBy(i => i.ShopCategoryId).Count();
                                         if (shopCategoryCount == item.CountValue)
                                         {
@@ -70,7 +75,8 @@ namespace ShopNow.Helpers
                                 if (item.DayLimit > 0)
                                 {
                                     DateTime achievementExpirydate = achievementStartDateTime.AddDays(item.DayLimit);
-                                    var orderListSelectShop = db.Orders.ToList().Where(i => i.CustomerId == customer.Id && i.Status == 6 && (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(achievementStartDateTime) && DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(achievementExpirydate))).Select(i => i.ShopId);
+                                    //var orderListSelectShop = db.Orders.ToList().Where(i => i.CustomerId == customer.Id && i.Status == 6 && (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(achievementStartDateTime) && DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(achievementExpirydate))).Select(i => i.ShopId);
+                                    var orderListSelectShop = db.Orders.ToList().Where(i => i.CustomerId == customer.Id && i.Status == 6 && (i.DateEncoded >= achievementStartDateTime && i.DateEncoded <= achievementExpirydate)).Select(i => i.ShopId);
                                     var shopCategoryCount = db.Shops.Where(i => orderListSelectShop.Contains(i.Id)).GroupBy(i => i.ShopCategoryId).Count();
                                     if (shopCategoryCount == item.CountValue)
                                     {
@@ -86,7 +92,8 @@ namespace ShopNow.Helpers
                                 }
                                 else
                                 {
-                                    var orderListSelectShop = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(achievementStartDateTime)).Select(i => i.ShopId);
+                                    // var orderListSelectShop = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(achievementStartDateTime)).Select(i => i.ShopId);
+                                    var orderListSelectShop = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && i.DateEncoded >= achievementStartDateTime).Select(i => i.ShopId);
                                     var shopCategoryCount = db.Shops.Where(i => orderListSelectShop.Contains(i.Id)).GroupBy(i => i.ShopCategoryId).Count();
                                     if (shopCategoryCount == item.CountValue)
                                     {
@@ -111,7 +118,7 @@ namespace ShopNow.Helpers
                                     if (item.DayLimit > 0)
                                     {
                                         DateTime achievementExpirydate =customerAcceptedAchievements.DateEncoded.AddDays(item.DayLimit);
-                                        var orderListShopCount = db.Orders.ToList().Where(i => i.CustomerId == customer.Id && i.Status == 6 && i.Id == 13739 && (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(customerAcceptedAchievements.DateEncoded) && DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(achievementExpirydate))).GroupBy(i => i.ShopId).Count();
+                                        var orderListShopCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && i.DateEncoded >= achievementStartDateTime && (i.DateEncoded >= customerAcceptedAchievements.DateEncoded && i.DateEncoded <= achievementExpirydate)).GroupBy(i => i.ShopId).Count();
                                         if (orderListShopCount == item.CountValue)
                                         {
                                             customer.WalletAmount += item.Amount;
@@ -127,7 +134,8 @@ namespace ShopNow.Helpers
                                     }
                                     else
                                     {
-                                        var orderListShopCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(achievementStartDateTime)).GroupBy(i => i.ShopId).Count();
+                                        //var orderListShopCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(achievementStartDateTime)).GroupBy(i => i.ShopId).Count();
+                                        var orderListShopCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && i.DateEncoded >= achievementStartDateTime).GroupBy(i => i.ShopId).Count();
                                         if (orderListShopCount == item.CountValue)
                                         {
                                             customer.WalletAmount += item.Amount;
@@ -149,7 +157,8 @@ namespace ShopNow.Helpers
                                 if (item.DayLimit > 0)
                                 {
                                     DateTime achievementExpirydate = achievementStartDateTime.AddDays(item.DayLimit);
-                                    var orderListShopCount = db.Orders.ToList().Where(i => i.CustomerId == customer.Id && i.Status == 6 && (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(achievementStartDateTime) && DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(achievementExpirydate))).GroupBy(i => i.ShopId).Count();
+                                    // var orderListShopCount = db.Orders.ToList().Where(i => i.CustomerId == customer.Id && i.Status == 6 && (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(achievementStartDateTime) && DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(achievementExpirydate))).GroupBy(i => i.ShopId).Count();
+                                    var orderListShopCount = db.Orders.ToList().Where(i => i.CustomerId == customer.Id && i.Status == 6 && (i.DateEncoded >= achievementStartDateTime && i.DateEncoded <= achievementExpirydate)).GroupBy(i => i.ShopId).Count();
                                     if (orderListShopCount == item.CountValue)
                                     {
                                         customer.WalletAmount += item.Amount;
@@ -164,7 +173,8 @@ namespace ShopNow.Helpers
                                 }
                                 else
                                 {
-                                    var orderListShopCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(achievementStartDateTime)).GroupBy(i => i.ShopId).Count();
+                                    // var orderListShopCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(achievementStartDateTime)).GroupBy(i => i.ShopId).Count();
+                                    var orderListShopCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && i.DateEncoded >= achievementStartDateTime).GroupBy(i => i.ShopId).Count();
                                     if (orderListShopCount == item.CountValue)
                                     {
                                         customer.WalletAmount += item.Amount;
@@ -190,7 +200,7 @@ namespace ShopNow.Helpers
                                     {
                                         DateTime achievementExpirydate = customerAcceptedAchievements.DateEncoded.AddDays(item.DayLimit);
                                        // var orderListShopCount = db.Orders.ToList().Where(i => i.CustomerId == customer.Id && i.Status == 6 && (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(customerAcceptedAchievements.DateEncoded) && DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(achievementExpirydate)) && achievementSelectedShopList.Contains(i.ShopId)).GroupBy(i => i.ShopId).Count();
-                                        var orderListShopCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(customerAcceptedAchievements.DateEncoded) && DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(achievementExpirydate)) && achievementSelectedShopList.Contains(i.ShopId)).GroupBy(i => i.ShopId).Count();
+                                        var orderListShopCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && i.DateEncoded >= achievementStartDateTime && (i.DateEncoded >= customerAcceptedAchievements.DateEncoded && i.DateEncoded <= achievementExpirydate) && achievementSelectedShopList.Contains(i.ShopId)).GroupBy(i => i.ShopId).Count();
                                         if (orderListShopCount == item.CountValue)
                                         {
                                             customer.WalletAmount += item.Amount;
@@ -206,7 +216,8 @@ namespace ShopNow.Helpers
                                     }
                                     else
                                     {
-                                        var orderListShopCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(achievementStartDateTime) && achievementSelectedShopList.Contains(i.ShopId)).GroupBy(i => i.ShopId).Count();
+                                        // var orderListShopCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(achievementStartDateTime) && achievementSelectedShopList.Contains(i.ShopId)).GroupBy(i => i.ShopId).Count();
+                                        var orderListShopCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && i.DateEncoded >= achievementStartDateTime && achievementSelectedShopList.Contains(i.ShopId)).GroupBy(i => i.ShopId).Count();
                                         if (orderListShopCount == item.CountValue)
                                         {
                                             customer.WalletAmount += item.Amount;
@@ -230,7 +241,8 @@ namespace ShopNow.Helpers
                                 {
                                     DateTime achievementExpirydate = achievementStartDateTime.AddDays(item.DayLimit);
                                     //var orderListShopCount = db.Orders.ToList().Where(i => i.CustomerId == customer.Id && i.Status == 6 && (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(achievementStartDateTime) && DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(achievementExpirydate)) && achievementSelectedShopList.Contains(i.ShopId)).GroupBy(i => i.ShopId).Count();
-                                    var orderListShopCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(achievementStartDateTime) && DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(achievementExpirydate)) && achievementSelectedShopList.Contains(i.ShopId)).GroupBy(i => i.ShopId).Count();
+                                    // var orderListShopCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(achievementStartDateTime) && DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(achievementExpirydate)) && achievementSelectedShopList.Contains(i.ShopId)).GroupBy(i => i.ShopId).Count();
+                                    var orderListShopCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && (i.DateEncoded >= achievementStartDateTime && i.DateEncoded <= achievementExpirydate) && achievementSelectedShopList.Contains(i.ShopId)).GroupBy(i => i.ShopId).Count();
                                     if (orderListShopCount == item.CountValue)
                                     {
                                         customer.WalletAmount += item.Amount;
@@ -245,7 +257,8 @@ namespace ShopNow.Helpers
                                 }
                                 else
                                 {
-                                    var orderListShopCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(achievementStartDateTime) && achievementSelectedShopList.Contains(i.ShopId)).GroupBy(i => i.ShopId).Count();
+                                    // var orderListShopCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(achievementStartDateTime) && achievementSelectedShopList.Contains(i.ShopId)).GroupBy(i => i.ShopId).Count();
+                                    var orderListShopCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && i.DateEncoded >= achievementStartDateTime && achievementSelectedShopList.Contains(i.ShopId)).GroupBy(i => i.ShopId).Count();
                                     if (orderListShopCount == item.CountValue)
                                     {
                                         customer.WalletAmount += item.Amount;
@@ -269,9 +282,12 @@ namespace ShopNow.Helpers
                                     if (item.DayLimit > 0)
                                     {
                                         DateTime achievementExpirydate = customerAcceptedAchievements.DateEncoded.AddDays(item.DayLimit);
-                                        var orderListProductCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(customerAcceptedAchievements.DateEncoded) && DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(achievementExpirydate)))
-                                            .Join(db.OrderItems.GroupBy(i => i.ProductId), o => o.Id, oi => oi.FirstOrDefault().OrderId, (o, oi) => new { o, oi })
-                                            .Count();
+                                        //var orderListProductCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(customerAcceptedAchievements.DateEncoded) && DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(achievementExpirydate)))
+                                        //    .Join(db.OrderItems.GroupBy(i => i.ProductId), o => o.Id, oi => oi.FirstOrDefault().OrderId, (o, oi) => new { o, oi })
+                                        //    .Count();
+                                        var orderListProductCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && i.DateEncoded >= achievementStartDateTime && (i.DateEncoded >= customerAcceptedAchievements.DateEncoded && i.DateEncoded <= achievementExpirydate))
+                                          .Join(db.OrderItems.GroupBy(i => i.ProductId), o => o.Id, oi => oi.FirstOrDefault().OrderId, (o, oi) => new { o, oi })
+                                          .Count();
                                         if (orderListProductCount == item.CountValue)
                                         {
                                             customer.WalletAmount += item.Amount;
@@ -287,7 +303,10 @@ namespace ShopNow.Helpers
                                     }
                                     else
                                     {
-                                        var orderListProductCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(achievementStartDateTime))
+                                        //var orderListProductCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(achievementStartDateTime))
+                                        //     .Join(db.OrderItems.GroupBy(i => i.ProductId), o => o.Id, oi => oi.FirstOrDefault().OrderId, (o, oi) => new { o, oi })
+                                        //    .Count();
+                                        var orderListProductCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && i.DateEncoded >= achievementStartDateTime)
                                              .Join(db.OrderItems.GroupBy(i => i.ProductId), o => o.Id, oi => oi.FirstOrDefault().OrderId, (o, oi) => new { o, oi })
                                             .Count();
                                         if (orderListProductCount == item.CountValue)
@@ -311,9 +330,12 @@ namespace ShopNow.Helpers
                                 if (item.DayLimit > 0)
                                 {
                                     DateTime achievementExpirydate = achievementStartDateTime.AddDays(item.DayLimit);
-                                    var orderListProductCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(achievementStartDateTime) && DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(achievementExpirydate)))
-                                        .Join(db.OrderItems.GroupBy(i => i.ProductId), o => o.Id, oi => oi.FirstOrDefault().OrderId, (o, oi) => new { o, oi })
-                                            .Count();
+                                    //var orderListProductCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(achievementStartDateTime) && DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(achievementExpirydate)))
+                                    //    .Join(db.OrderItems.GroupBy(i => i.ProductId), o => o.Id, oi => oi.FirstOrDefault().OrderId, (o, oi) => new { o, oi })
+                                    //        .Count();
+                                    var orderListProductCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && (i.DateEncoded >= achievementStartDateTime && i.DateEncoded <= achievementExpirydate))
+                                      .Join(db.OrderItems.GroupBy(i => i.ProductId), o => o.Id, oi => oi.FirstOrDefault().OrderId, (o, oi) => new { o, oi })
+                                          .Count();
                                     if (orderListProductCount == item.CountValue)
                                     {
                                         customer.WalletAmount += item.Amount;
@@ -328,9 +350,12 @@ namespace ShopNow.Helpers
                                 }
                                 else
                                 {
-                                    var orderListProductCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(achievementStartDateTime))
-                                        .Join(db.OrderItems.GroupBy(i => i.ProductId), o => o.Id, oi => oi.FirstOrDefault().OrderId, (o, oi) => new { o, oi })
-                                            .Count();
+                                    //var orderListProductCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(achievementStartDateTime))
+                                    //    .Join(db.OrderItems.GroupBy(i => i.ProductId), o => o.Id, oi => oi.FirstOrDefault().OrderId, (o, oi) => new { o, oi })
+                                    //        .Count();
+                                    var orderListProductCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && i.DateEncoded >= achievementStartDateTime)
+                                       .Join(db.OrderItems.GroupBy(i => i.ProductId), o => o.Id, oi => oi.FirstOrDefault().OrderId, (o, oi) => new { o, oi })
+                                           .Count();
                                     if (orderListProductCount == item.CountValue)
                                     {
                                         customer.WalletAmount += item.Amount;
@@ -355,7 +380,10 @@ namespace ShopNow.Helpers
                                     if (item.DayLimit > 0)
                                     {
                                         DateTime achievementExpirydate = customerAcceptedAchievements.DateEncoded.AddDays(item.DayLimit);
-                                        var orderListProductCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(customerAcceptedAchievements.DateEncoded) && DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(achievementExpirydate)))
+                                        //var orderListProductCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(customerAcceptedAchievements.DateEncoded) && DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(achievementExpirydate)))
+                                        //    .Join(db.OrderItems.Where(i => achievementSelectedProductList.Contains(i.ProductId)).GroupBy(i => i.ProductId), o => o.Id, oi => oi.FirstOrDefault().OrderId, (o, oi) => new { o, oi })
+                                        //    .Count();
+                                        var orderListProductCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && i.DateEncoded >= achievementStartDateTime && (i.DateEncoded >= customerAcceptedAchievements.DateEncoded && i.DateEncoded <= achievementExpirydate))
                                             .Join(db.OrderItems.Where(i => achievementSelectedProductList.Contains(i.ProductId)).GroupBy(i => i.ProductId), o => o.Id, oi => oi.FirstOrDefault().OrderId, (o, oi) => new { o, oi })
                                             .Count();
                                         if (orderListProductCount == item.CountValue)
@@ -373,9 +401,12 @@ namespace ShopNow.Helpers
                                     }
                                     else
                                     {
-                                        var orderListProductCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(achievementStartDateTime))
-                                             .Join(db.OrderItems.Where(i => achievementSelectedProductList.Contains(i.ProductId)).GroupBy(i => i.ProductId), o => o.Id, oi => oi.FirstOrDefault().OrderId, (o, oi) => new { o, oi })
-                                            .Count();
+                                        //var orderListProductCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(achievementStartDateTime))
+                                        //     .Join(db.OrderItems.Where(i => achievementSelectedProductList.Contains(i.ProductId)).GroupBy(i => i.ProductId), o => o.Id, oi => oi.FirstOrDefault().OrderId, (o, oi) => new { o, oi })
+                                        //    .Count();
+                                        var orderListProductCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && i.DateEncoded >=achievementStartDateTime)
+                                            .Join(db.OrderItems.Where(i => achievementSelectedProductList.Contains(i.ProductId)).GroupBy(i => i.ProductId), o => o.Id, oi => oi.FirstOrDefault().OrderId, (o, oi) => new { o, oi })
+                                           .Count();
                                         if (orderListProductCount == item.CountValue)
                                         {
                                             customer.WalletAmount += item.Amount;
@@ -398,9 +429,12 @@ namespace ShopNow.Helpers
                                 if (item.DayLimit > 0)
                                 {
                                     DateTime achievementExpirydate = achievementStartDateTime.AddDays(item.DayLimit);
-                                    var orderListProductCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(achievementStartDateTime) && DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(achievementExpirydate)))
-                                        .Join(db.OrderItems.Where(i => achievementSelectedProductList.Contains(i.ProductId)).GroupBy(i => i.ProductId), o => o.Id, oi => oi.FirstOrDefault().OrderId, (o, oi) => new { o, oi })
-                                            .Count();
+                                    //var orderListProductCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(achievementStartDateTime) && DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(achievementExpirydate)))
+                                    //    .Join(db.OrderItems.Where(i => achievementSelectedProductList.Contains(i.ProductId)).GroupBy(i => i.ProductId), o => o.Id, oi => oi.FirstOrDefault().OrderId, (o, oi) => new { o, oi })
+                                    //        .Count();
+                                    var orderListProductCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && (i.DateEncoded >= achievementStartDateTime && i.DateEncoded <= achievementExpirydate))
+                                   .Join(db.OrderItems.Where(i => achievementSelectedProductList.Contains(i.ProductId)).GroupBy(i => i.ProductId), o => o.Id, oi => oi.FirstOrDefault().OrderId, (o, oi) => new { o, oi })
+                                       .Count();
                                     if (orderListProductCount == item.CountValue)
                                     {
                                         customer.WalletAmount += item.Amount;
@@ -415,9 +449,12 @@ namespace ShopNow.Helpers
                                 }
                                 else
                                 {
-                                    var orderListProductCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(achievementStartDateTime))
-                                        .Join(db.OrderItems.Where(i => achievementSelectedProductList.Contains(i.ProductId)).GroupBy(i => i.ProductId), o => o.Id, oi => oi.FirstOrDefault().OrderId, (o, oi) => new { o, oi })
-                                            .Count();
+                                    //var orderListProductCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(achievementStartDateTime))
+                                    //    .Join(db.OrderItems.Where(i => achievementSelectedProductList.Contains(i.ProductId)).GroupBy(i => i.ProductId), o => o.Id, oi => oi.FirstOrDefault().OrderId, (o, oi) => new { o, oi })
+                                    //        .Count();
+                                    var orderListProductCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && i.DateEncoded >= achievementStartDateTime)
+                                       .Join(db.OrderItems.Where(i => achievementSelectedProductList.Contains(i.ProductId)).GroupBy(i => i.ProductId), o => o.Id, oi => oi.FirstOrDefault().OrderId, (o, oi) => new { o, oi })
+                                           .Count();
                                     if (orderListProductCount == item.CountValue)
                                     {
                                         customer.WalletAmount += item.Amount;
@@ -441,7 +478,8 @@ namespace ShopNow.Helpers
                                     if (item.DayLimit > 0)
                                     {
                                         DateTime achievementExpirydate = customerAcceptedAchievements.DateEncoded.AddDays(item.DayLimit);
-                                        var orderListCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(customerAcceptedAchievements.DateEncoded) && DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(achievementExpirydate))).Count();
+                                        //var orderListCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(customerAcceptedAchievements.DateEncoded) && DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(achievementExpirydate))).Count();
+                                        var orderListCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && i.DateEncoded >= achievementStartDateTime && (i.DateEncoded >= customerAcceptedAchievements.DateEncoded && i.DateEncoded <= achievementExpirydate)).Count();
                                         if (orderListCount == item.CountValue)
                                         {
                                             customer.WalletAmount += item.Amount;
@@ -457,7 +495,8 @@ namespace ShopNow.Helpers
                                     }
                                     else
                                     {
-                                        var orderListCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(achievementStartDateTime)).Count();
+                                        //var orderListCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(achievementStartDateTime)).Count();
+                                        var orderListCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && i.DateEncoded >= achievementStartDateTime).Count();
                                         if (orderListCount == item.CountValue)
                                         {
                                             customer.WalletAmount += item.Amount;
@@ -479,7 +518,8 @@ namespace ShopNow.Helpers
                                 if (item.DayLimit > 0)
                                 {
                                     DateTime achievementExpirydate = achievementStartDateTime.AddDays(item.DayLimit);
-                                    var orderListCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(achievementStartDateTime) && DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(achievementExpirydate))).Count();
+                                    //var orderListCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(achievementStartDateTime) && DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(achievementExpirydate))).Count();
+                                    var orderListCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && (i.DateEncoded >= achievementStartDateTime && i.DateEncoded <=achievementExpirydate)).Count();
                                     if (orderListCount == item.CountValue)
                                     {
                                         customer.WalletAmount += item.Amount;
@@ -494,7 +534,8 @@ namespace ShopNow.Helpers
                                 }
                                 else
                                 {
-                                    var orderListCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(achievementStartDateTime)).Count();
+                                    // var orderListCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(achievementStartDateTime)).Count();
+                                    var orderListCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && i.DateEncoded >= achievementStartDateTime).Count();
                                     if (orderListCount == item.CountValue)
                                     {
                                         customer.WalletAmount += item.Amount;
@@ -518,7 +559,8 @@ namespace ShopNow.Helpers
                                     if (item.DayLimit > 0)
                                     {
                                         DateTime achievementExpirydate = customerAcceptedAchievements.DateEncoded.AddDays(item.DayLimit);
-                                        var orderListCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(customerAcceptedAchievements.DateEncoded) && DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(achievementExpirydate))).Count();
+                                        //var orderListCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(customerAcceptedAchievements.DateEncoded) && DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(achievementExpirydate))).Count();
+                                        var orderListCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && i.DateEncoded >= achievementStartDateTime && (i.DateEncoded >= customerAcceptedAchievements.DateEncoded && i.DateEncoded <= achievementExpirydate)).Count();
                                         if (orderListCount == item.CountValue)
                                         {
                                             customer.WalletAmount += item.Amount;
@@ -534,7 +576,8 @@ namespace ShopNow.Helpers
                                     }
                                     else
                                     {
-                                        var orderListCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(achievementStartDateTime)).Count();
+                                        // var orderListCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(achievementStartDateTime)).Count();
+                                        var orderListCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && i.DateEncoded >= achievementStartDateTime).Count();
                                         if (orderListCount == item.CountValue)
                                         {
                                             customer.WalletAmount += item.Amount;
@@ -556,7 +599,8 @@ namespace ShopNow.Helpers
                                 if (item.DayLimit > 0)
                                 {
                                     DateTime achievementExpirydate = achievementStartDateTime.AddDays(item.DayLimit);
-                                    var orderListCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(achievementStartDateTime) && DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(achievementExpirydate))).Count();
+                                    // var orderListCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(achievementStartDateTime) && DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(achievementExpirydate))).Count();
+                                    var orderListCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && (i.DateEncoded >= achievementStartDateTime && i.DateEncoded <= achievementExpirydate)).Count();
                                     if (orderListCount == item.CountValue)
                                     {
                                         customer.WalletAmount += item.Amount;
@@ -571,7 +615,8 @@ namespace ShopNow.Helpers
                                 }
                                 else
                                 {
-                                    var orderListCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(achievementStartDateTime)).Count();
+                                    //var orderListCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(achievementStartDateTime)).Count();
+                                    var orderListCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && i.DateEncoded >= achievementStartDateTime).Count();
                                     if (orderListCount == item.CountValue)
                                     {
                                         customer.WalletAmount += item.Amount;
