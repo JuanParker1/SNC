@@ -796,7 +796,7 @@ namespace ShopNow.Controllers
                        DeliveryBoyId = i.c.DeliveryBoyId,
                        DeliveryBoyName = i.c.DeliveryBoyName,
                        // Amount = i.p.Amount - (i.p.RefundAmount ?? 0),
-                       Amount = i.c.IsPickupDrop == true ? (i.p.RefundAmount != null && i.p.RefundAmount != 0) ? i.c.TotalPrice - (i.p.RefundAmount ?? 0) : i.c.TotalPrice : i.p.Amount - (i.p.RefundAmount ?? 0),
+                       Amount = i.c.IsPickupDrop == true ? (i.p.RefundAmount != null && i.p.RefundAmount != 0) ? i.c.TotalPrice - (i.p.RefundAmount ?? 0) : i.c.TotalPrice : i.p.Amount - (i.p.RefundAmount ?? 0) - i.c.WalletAmount,
                        DateEncoded = i.p.DateEncoded,
                        DeliveryOrderPaymentStatus = i.c.DeliveryOrderPaymentStatus
                    }).OrderByDescending(i => i.DateEncoded).ToList();
@@ -1065,7 +1065,6 @@ namespace ShopNow.Controllers
                 payment.DateUpdated = DateTime.Now;
                 db.Entry(payment).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
-
                 var orderItemList = db.OrderItems.Where(i => i.OrderId == order.Id);
                 if (orderItemList != null)
                 {
@@ -1075,13 +1074,18 @@ namespace ShopNow.Controllers
                         var product = db.Products.FirstOrDefault(i => i.Id == item.ProductId && i.ProductTypeId == 3);
                         if (product != null)
                         {
-                            product.HoldOnStok -= Convert.ToInt32(item.Quantity);
-                            product.Qty += Convert.ToInt32(item.Quantity);
-                            db.Entry(product).State = System.Data.Entity.EntityState.Modified;
-                            db.SaveChanges();
+                            product.HoldOnStok = 0;
+                            product.Qty = 17;
+                            using (sncEntities dbb = new sncEntities())
+                            {
+                                dbb.Entry(product).State = System.Data.Entity.EntityState.Modified;
+
+                                dbb.SaveChanges();
+                            }
                         }
                     }
                 }
+
 
                 //Add Wallet Amount to customer
                 if (order.WalletAmount != 0 && customer != null)
@@ -1849,7 +1853,7 @@ namespace ShopNow.Controllers
             var model = await db.Shops.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && (a.Status == 0 || a.Status == 1)).Select(i => new
             {
                 id = i.Id,
-                text = i.Name,
+                text = i.Name + " -- " + i.DistrictName,
                 shopCategoryId = i.ShopCategoryId
             }).ToListAsync();
 

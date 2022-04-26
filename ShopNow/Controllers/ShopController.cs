@@ -320,7 +320,7 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SNCSE256")]
-        public ActionResult Edit(string id)
+        public ActionResult Edit(string id, string district)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
@@ -376,6 +376,7 @@ namespace ShopNow.Controllers
                 model.PlatformCredit = shopcredit.PlatformCredit;
                 model.DeliveryCredit = shopcredit.DeliveryCredit;
             }
+            model.District = district;
             return View(model);
         }
 
@@ -536,7 +537,7 @@ namespace ShopNow.Controllers
                 db.Entry(shop).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
 
-                return RedirectToAction("List", "Shop");
+                return RedirectToAction("List", "Shop", new{ model.District});
             }
             catch (AmazonS3Exception amazonS3Exception)
             {
