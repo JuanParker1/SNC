@@ -64,10 +64,12 @@ namespace ShopNow.ViewModels
 
     public class WalletDispatchReportViewModel
     {
+        public DateTime? StartDate { get; set; }
+        public DateTime? EndDate { get; set; }
         public List<ListItem> ListItems { get; set; }
         public class ListItem
         {
-            public int SiNo { get; set; }
+            public int No { get; set; }
             public DateTime? DateEncoded { get; set; }
             public string CustomerName { get; set; }
             public string CustomerPhoneNumber { get; set; }
