@@ -796,7 +796,7 @@ namespace ShopNow.Controllers
                        DeliveryBoyId = i.c.DeliveryBoyId,
                        DeliveryBoyName = i.c.DeliveryBoyName,
                        // Amount = i.p.Amount - (i.p.RefundAmount ?? 0),
-                       Amount = i.c.IsPickupDrop == true ? (i.p.RefundAmount != null && i.p.RefundAmount != 0) ? i.c.TotalPrice - (i.p.RefundAmount ?? 0) : i.c.TotalPrice : i.p.Amount - (i.p.RefundAmount ?? 0) - i.c.WalletAmount,
+                       Amount = i.c.IsPickupDrop == true ? (i.p.RefundAmount != null && i.p.RefundAmount != 0) ? i.c.TotalPrice - (i.p.RefundAmount ?? 0) : i.c.TotalPrice : (i.p.Amount - (i.p.RefundAmount ?? 0) - i.c.WalletAmount) < 0 ? 0 : i.p.Amount - (i.p.RefundAmount ?? 0) - i.c.WalletAmount,
                        DateEncoded = i.p.DateEncoded,
                        DeliveryOrderPaymentStatus = i.c.DeliveryOrderPaymentStatus
                    }).OrderByDescending(i => i.DateEncoded).ToList();

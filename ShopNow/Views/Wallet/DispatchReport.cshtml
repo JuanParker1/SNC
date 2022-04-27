@@ -22,14 +22,31 @@
 <div class="container-fluid">
     <div class="row mt-3">
         <div class="col-md-12">
-            <div class="card shadow h-100">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between">
+            <form method="get" action="~/Wallet/DispatchReport">
+                <div class="row">
+                    <div class="col-md-3">
                         <h5 class="text-success" style="letter-spacing:1px">@ViewBag.Title</h5>
                     </div>
+                    <div class="col-md-5">
+                        <div class="input-daterange input-group">
+                            <input type="date" class="form-control well well-sm" placeholder="From Date" id="datepicker" name="StartDate" @if (Model.StartDate != null) { <text> value="@Model.StartDate.Value.ToString("yyyy-MM-dd")" </text> }>
+                            <span class="input-group-addon mx-3 mt-2">to</span>
+                            <input type="date" class="form-control" placeholder="To Date" id="datepicker1" name="EndDate" @if (Model.EndDate != null) { <text> value="@Model.EndDate.Value.ToString("yyyy-MM-dd")" </text> }>
+                        </div>
+                    </div>
+                    <div class="col-md-1">
+                        <input type="submit" class="btn btn-info mx-2 mr-2" value="Apply Filter" />
+                    </div>
+                    <div class="col-md-2">
+                        <a href="~/Wallet/DispatchReport" class="btn btn-secondary mx-2">Clear Filter</a>
+                    </div>
+                </div>
+            </form>
+            <div class="card shadow h-100 mt-3">
+                <div class="card-body">
                     @Html.Grid(Model.ListItems).Columns(columns =>
                {
-                   columns.Add(s => s.SiNo).Titled("Si No").Filterable(true).SetWidth(10);
+                   columns.Add(s => s.No).Titled("Sl.No").Filterable(true).SetWidth(10);
                    columns.Add(s => s.DateEncoded).Titled("Created Date").Filterable(true).SetWidth(10).Format("{0:dd-MMM-yyyy}");
                    columns.Add(s => s.CustomerName).Titled("Customer Name").Filterable(true).SetWidth(10);
                    columns.Add(s => s.CustomerPhoneNumber).Titled("Customer PhoneNo.").Filterable(true).SetWidth(10);

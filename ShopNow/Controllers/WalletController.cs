@@ -111,7 +111,7 @@ namespace ShopNow.Controllers
             return RedirectToAction("Index");
         }
 
-        public List<int> GetCustomerList(int shopCategoryId,DateTime? startDate,DateTime? endDate, int lastdays=0,int month=0)
+        public List<int> GetCustomerList(int shopCategoryId, DateTime? startDate, DateTime? endDate, int lastdays = 0, int month = 0)
         {
             var allOrders = db.Orders.Where(i => i.Status == 6 && (lastdays != 0 ? (DbFunctions.TruncateTime(DbFunctions.AddDays(DateTime.Now, lastdays)) <= DbFunctions.TruncateTime(i.DateEncoded)) : true) && (month != 0 ? i.DateEncoded.Month == month : true) && ((startDate != null && endDate != null) ? (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(startDate.Value) && DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(endDate.Value)) : true))
                       .GroupBy(i => new { i.ShopId, i.CustomerId }).Select(i => new { ShopId = i.FirstOrDefault().ShopId, CustomerId = i.FirstOrDefault().CustomerId })
@@ -129,7 +129,7 @@ namespace ShopNow.Controllers
             return result;
         }
 
-        public void SaveWalletHistory(int customerGroup, List<int> customerIds,double amount,DateTime? expiryDate, string description, string reference,int month)
+        public void SaveWalletHistory(int customerGroup, List<int> customerIds, double amount, DateTime? expiryDate, string description, string reference, int month)
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
@@ -166,7 +166,7 @@ namespace ShopNow.Controllers
                 db.SaveChanges();
             }
 
-            var customerList = db.Customers.Where(i=>customerIds.Contains(i.Id)).OrderBy(i => i.Id).Select(i =>new {Id = i.Id, FcmToken = i.FcmTocken,Name = i.Name}).ToList();
+            var customerList = db.Customers.Where(i => customerIds.Contains(i.Id)).OrderBy(i => i.Id).Select(i => new { Id = i.Id, FcmToken = i.FcmTocken, Name = i.Name }).ToList();
             //var fcmTokenList = customerList.Select(i => i.FcmToken).ToArray();
             //var count = Math.Ceiling((double)fcmTokenList.Count() / 1000);
             //var message = "";
@@ -189,7 +189,7 @@ namespace ShopNow.Controllers
                 if (!string.IsNullOrEmpty(item.Name) && item.Name != "Null")
                     message = $"Hi {item.Name}, Rs.{wallet.Amount} 💵 has been added to your wallet. (Expires 🗓️ {expiryDate.Value.ToString("dd-MMM-yyyy")}). Happy Shopping 😎.";
                 else
-                  message=  $"Hi, Rs.{wallet.Amount} 💵 has been added to your wallet. (Expires 🗓️ {expiryDate.Value.ToString("dd-MMM-yyyy")}). Happy Shopping 😎.";
+                    message = $"Hi, Rs.{wallet.Amount} 💵 has been added to your wallet. (Expires 🗓️ {expiryDate.Value.ToString("dd-MMM-yyyy")}). Happy Shopping 😎.";
 
                 if (!string.IsNullOrEmpty(item.FcmToken) && item.FcmToken != "NULL")
                     Helpers.PushNotification.SendbydeviceId(message, $"You have won Rs.{wallet.Amount} 💵 in wallet.", "SpecialOffer", "", item.FcmToken, "tune2.caf", "mywallet");
@@ -197,13 +197,12 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SNCWDR343")]
-        public ActionResult DispatchReport()
+        public ActionResult DispatchReport(WalletDispatchReportViewModel model)
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
-            var model = new WalletDispatchReportViewModel();
             model.ListItems = db.Customers
-                .Join(db.CustomerWalletHistories.Where(i => i.Status == 0 && i.Type == 1), c => c.Id, cw => cw.CustomerId, (c, cw) => new { c, cw })
+                .Join(db.CustomerWalletHistories.Where(i => i.Status == 0 && i.Type == 1 && ((model.StartDate != null && model.EndDate != null) ? DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(model.StartDate) && DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(model.EndDate) : true)), c => c.Id, cw => cw.CustomerId, (c, cw) => new { c, cw })
                 .GroupJoin(db.Wallets, c => c.cw.WalletId, w => w.Id, (c, w) => new { c, w })
                 .AsEnumerable()
                 .Select(i => new WalletDispatchReportViewModel.ListItem
@@ -220,7 +219,7 @@ namespace ShopNow.Controllers
                     WalletAmountUsed = GetWalletAmountUsed(i.c.cw.DateEncoded, i.c.cw.ExpiryDate, i.c.c.Id) < i.c.cw.Amount ? GetWalletAmountUsed(i.c.cw.DateEncoded, i.c.cw.ExpiryDate, i.c.c.Id) : i.c.cw.Amount
                 }).OrderBy(i => i.DateEncoded).ToList();
             int counter = 1;
-            model.ListItems.ForEach(x => x.SiNo = counter++);
+            model.ListItems.ForEach(x => x.No = counter++);
             return View(model);
         }
 
