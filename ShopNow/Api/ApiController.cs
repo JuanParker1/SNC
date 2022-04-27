@@ -5655,7 +5655,9 @@ namespace ShopNow.Controllers
                     //IsCompleted = db.CustomerAchievementCompleteds.Any(b => b.CustomerId == customerid && b.AchievementId == i.a.a.a.ActivateAfterId),
                     IsCompleted = (db.CustomerAchievementCompleteds.Any(b => b.CustomerId == customerid && b.AchievementId == i.a.a.a.Id) == true ? true : false),
                     IsParentCompleted = (i.a.a.a.ActivateAfterId != 0 ? (db.CustomerAchievementCompleteds.Any(b => b.CustomerId == customerid && b.AchievementId == i.a.a.a.ActivateAfterId) == true ? true : false) : true),
-                    CompleteText = i.a.a.a.ActivateAfterId != 0 ? "Complete " + db.AchievementSettings.FirstOrDefault(a => a.Id == i.a.a.a.ActivateAfterId).Name + " challenge to unlock." : ""
+                    CompleteText = i.a.a.a.ActivateAfterId != 0 ? "Complete " + db.AchievementSettings.FirstOrDefault(a => a.Id == i.a.a.a.ActivateAfterId).Name + " challenge to unlock." : "",
+                    AcheivementStartDate=i.ca.FirstOrDefault().DateEncoded,
+                    AcheivementRemaingCount=0
                 }).ToList();
             return Json(new { list = model.AchievementListItems }, JsonRequestBehavior.AllowGet);
         }
