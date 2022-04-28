@@ -35,7 +35,7 @@
                             <input id="date-end" type="date" class="form-control" name="EndDate" @if (Model.EndDate != null) { <text> value="@Model.EndDate.Value.ToString("yyyy-MM-dd")" </text> } />
                         </div>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <div class="form-group">
                             <label>Select Shop</label>
                             <select class="form-control" id="select-shop" name="ShopId">
@@ -47,8 +47,9 @@
                             <input type="hidden" name="ShopName" value="@Model.ShopName" />
                         </div>
                     </div>
-                    <div class="mt-1">
-                        <input type="submit" class="btn btn-info h-50 mt-4" value="Apply Filter" />
+                    <div class="mt-4">
+                        <input type="submit" class="btn btn-info mt-2" value="Apply Filter" />
+                        <a href="~/Payment/RetailerPayment" class="btn btn-warning mt-2 ml-2">Clear Filter</a>
                     </div>
                 </div>
             </form>
