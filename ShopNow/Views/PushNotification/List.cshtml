@@ -19,13 +19,13 @@
         <div class="col-md-12 mx-auto mt-3">
             <div class="card shadow">
                 <div class="card-body">
-                    <div class="d-flex justify-content-between"> 
-                    <h5 class="text-success" style="letter-spacing:1px">@ViewBag.Title</h5>
-                        <a href="/PushNotification/Index"><u>Go to Entry</u></a>
+                    <div class="d-flex justify-content-between mb-2">
+                        <h5 class="text-success" style="letter-spacing:1px">@ViewBag.Title</h5>
+                        <a href="/PushNotification/Index" class="btn btn-sm btn-primary">Go to Entry</a>
                     </div>
                     @Html.Grid(Model.ListItems).Columns(columns =>
                {
-                   columns.Add(c => c.Index).Titled("Si No").Filterable(false).SetWidth(5);
+                   columns.Add(c => c.Index).Titled("Sl.No").Filterable(false).SetWidth(5);
                    columns.Add(c => c.DistrictName).Titled("Customer").Filterable(true).SetWidth(10);
                    columns.Add(c => c.Title).Titled("Title").Filterable(true).SetWidth(20);
                    columns.Add(c => c.Description).Titled("Description").Filterable(true).SetWidth(30);
