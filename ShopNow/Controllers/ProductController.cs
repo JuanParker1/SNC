@@ -1261,6 +1261,21 @@ namespace ShopNow.Controllers
             return Json(list, JsonRequestBehavior.AllowGet);
         }
 
+        public JsonResult UpdateShopAddOns(int Id, double PortionPrice, double AddOnsPrice, double CrustPrice, bool IsActive)
+        {
+            var sda = db.ShopDishAddOns.Where(i => i.Id == Id).FirstOrDefault();
+            if(sda != null)
+            {
+                sda.PortionPrice = PortionPrice;
+                sda.AddOnsPrice = AddOnsPrice;
+                sda.CrustPrice = CrustPrice;
+                sda.IsActive = IsActive;
+                db.Entry(sda).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+            }
+            return Json(true, JsonRequestBehavior.AllowGet);
+        }
+
         public async Task<JsonResult> GetShopSelect2(string q = "")
         {
             var model = await db.Shops.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && (a.Status == 0 || a.Status == 1)).Select(i => new

@@ -214,6 +214,7 @@
                                                 <th>Min</th>
                                                 <th>Max</th>
                                                 <th>On/Off</th>
+                                                <th>Action</th>
                                             </tr>
                                         </thead>
                                         <tbody></tbody>
@@ -272,7 +273,7 @@
             $('#IsPreorder').change(function () {
                 showHour();
             });
-            //Calculate ShopPricePercentage 
+            //Calculate ShopPricePercentage
           //  calculateShopPrice($("#MenuPrice").val(), $("#ShopPricePercentage").val(), $("#Price").val(), $("#Percentage").val());
 
             $('#Price').on('change keyup', function () {
@@ -280,7 +281,7 @@
                 var sellingprice = $(this).val();
                 var results = parseFloat(((menuprice - sellingprice) / menuprice) * 100).toFixed(2);
                 $("#Percentage").val(results);
-                calculateShopPrice(menuprice, $("#ShopPricePercentage").val(), sellingprice, results); 
+                calculateShopPrice(menuprice, $("#ShopPricePercentage").val(), sellingprice, results);
             });
 
             $('#MenuPrice').on('change keyup', function () {
@@ -288,7 +289,7 @@
                 var sellingprice = $('#Price').val();
                 var results = parseFloat(((menuprice - sellingprice) / menuprice) * 100).toFixed(2);
                 $("#Percentage").val(results);
-                calculateShopPrice(menuprice, $("#ShopPricePercentage").val(), sellingprice, results);  //Calculate ShopPricePercentage 
+                calculateShopPrice(menuprice, $("#ShopPricePercentage").val(), sellingprice, results);  //Calculate ShopPricePercentage
             });
 
             $('#Percentage').on('change keyup', function () {
@@ -354,6 +355,7 @@
                                     <td>' + item.MinSelectionLimit + '</td>\
                                     <td>' + item.MaxSelectionLimit + '</td>\
                                     <td><input type="checkbox" class="chk-select chk_' + item.AddOnType + '" value="true" name="IsActive" data-id=' + item.Id + '></td>\
+                                    <td><input type="button" class="btn btn-sm btn-primary btnShopDishAddOnsUpdate chk_' + item.AddOnType + '" value="update" data-id=' + item.Id + ' data-portionprice=' + item.PortionPrice + ' data-addonprice=' + item.AddOnsPrice + ' data-crustprice=' + item.CrustPrice +'></td>\
                                 </tr>';
                             $('#tbl-addOns tbody').append(tableData);
                         } else {
@@ -368,6 +370,7 @@
                                     <td>' + item.MinSelectionLimit + '</td>\
                                     <td>' + item.MaxSelectionLimit + '</td>\
                                     <td><input type="checkbox" class="chk-select chk_' + item.AddOnType + '" value="true" name="IsActive" data-id=' + item.Id + ' data-type="Shop" checked ></td>\
+                                    <td><input type="button" class="btn btn-sm btn-primary btnShopDishAddOnsUpdate chk_' + item.AddOnType + '" value="update" data-id=' + item.Id + ' data-portionprice=' + item.PortionPrice + ' data-addonprice=' + item.AddOnsPrice + ' data-crustprice=' + item.CrustPrice + '></td>\
                                 </tr>';
                             $('#tbl-addOns tbody').append(tableData);
                         }
@@ -420,7 +423,7 @@
                 }
             });
 
-            $('#tbl-addOns').on('click', '.chk-select', function () {
+           $('#tbl-addOns').on('click', '.chk-select', function () {
                 var id = $(this).data('id');
                 var $tr = $(this).closest('tr');
                 var type = $(this).data('type');
@@ -466,6 +469,20 @@
                         $.post('/Product/EditShopAddOns', { model: data }, function () { });
                     }
                 }
+           });
+
+            $('#tbl-addOns').on('click', '.btnShopDishAddOnsUpdate', function () {
+                var id = $(this).data('id');
+                var $tr = $(this).closest('tr');
+                var portionprice = parseFloat($tr.find('.portion-price').val());
+                var addonprice = parseFloat($tr.find('.addon-price').val());
+                var crustprice = parseFloat($tr.find('.crust-price').val());
+                var check = $(".chk-select").val();
+                $.getJSON('/Product/UpdateShopAddOns', { Id: id, PortionPrice: portionprice, AddOnsPrice: addonprice, CrustPrice: crustprice, IsActive: check }, function (data) {
+                    if (data == true) {
+                        window.location.reload();
+                    }
+                });
             });
 
             function addonDisableCheckbox() {
@@ -503,7 +520,7 @@
                 $("#PreorderHour").val(0);
             }
         }
-         //Calculate ShopPricePercentage 
+         //Calculate ShopPricePercentage
         function calculateShopPrice(menuprice, shoppercentage, sellingprice, percentage) {
             if (shoppercentage != 0 && percentage == 0) {
                 var shopprice = (menuprice - (menuprice * (shoppercentage / 100)));
