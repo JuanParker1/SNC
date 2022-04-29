@@ -29,17 +29,13 @@
                     <div class="col-md-3">
                         <div class="form-group">
                             <label>Customer Phone No</label>
-                            <input type="text" class="form-control" name="CustomerPhoneNo" value="@Model.CustomerPhoneNo" />
+                            <input type="text" class="form-control" name="CustomerPhoneNo" value="@Model.CustomerPhoneNo" placeholder="Customer Phone Number" />
                         </div>
                     </div>
                     <div class="col-md-2 mt-2">
                         <div class="form-group mt-4">
-                            <input type="submit" class="form-control btn btn-sm btn-info" value="Apply Filter" />
-                        </div>
-                    </div>
-                    <div class="col-md-1 mt-2">
-                        <div class="form-group mt-4">
-                            <input type="button" class="form-control btn btn-sm btn-secondary" name="Clear" id="Clear" value="Clear" />
+                            <input type="submit" class="btn btn-info mr-1" value="Filter" />
+                            <a href="~/Refund/History" class="btn btn-warning">Clear</a>
                         </div>
                     </div>
                 </div>
@@ -65,14 +61,3 @@
         </div>
     </div>
 </div>
-
-@section Scripts
-{
-    <script>
-        $(document).ready(function () {
-            $("#Clear").click(function () {
-                window.location.href = "/Refund/History";
-            });
-        });
-    </script>
-}
