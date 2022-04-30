@@ -26,7 +26,9 @@
                             <input type="date" class="form-control" name="EndDateFilter" value="@Model.EndDateFilter.Value.ToString("yyyy-MM-dd")" />
                         </div>
                     </div>
-                    <div class="mt-3"> <input type="submit" class="btn btn-info mt-4" value="Apply Filter" style="height:48%"/></div>
+                    <div class="mt-3">
+                        <input type="submit" class="btn btn-info mt-4" value="Apply Filter" style="height:48%" />
+                    </div>
                 </div>
             </form>
         </div>
@@ -36,8 +38,8 @@
             <div class="card shadow">
                 <div class="card-body">
                     <div class="d-flex justify-content-between">
-                        <h5>Android Home Count- <b>@Model.AndroidHomeCount</b></h5>
-                        <h5>IOS Home Count- <b>@Model.IOSHomeCount</b></h5>
+                        <h5>Android Home Count- <span class="font-weight-bold text-danger">@Model.AndroidHomeCount</span></h5>
+                        <h5>IOS Home Count- <span class="font-weight-bold text-danger">@Model.IOSHomeCount</span></h5>
                     </div>
                     @Html.Grid(Model.ListItems).Columns(columns =>
                {

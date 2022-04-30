@@ -1,8 +1,8 @@
 ﻿@model ShopNow.ViewModels.SupportViewModel
 @{
-    ViewBag.Title = "Live Pending";
+    ViewBag.Title = "Live Order Pending";
 }
-<title>SNOWCH | Live Order Pending</title>
+<title>SNOWCH | @ViewBag.Title</title>
 <style>
     body {
         background-color: aliceblue;
@@ -217,11 +217,10 @@
         </div>
     </div>*@
 
-
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-12 text-center">
-            <h4 class="mt-1 text-success" style="letter-spacing:1px">Live Order Pending</h4>
+            <h4 class="mt-1 text-success" style="letter-spacing:1px">@ViewBag.Title</h4>
         </div>
     </div>
     <div class="row">
@@ -237,10 +236,10 @@
                             </div>
                             <div class="col-7 col-md-8">
                                 <div class="numbers">
-                                    <p class="card-title display-4 font-weight-bold" id="ShopAcceptanceCount">@Model.ShopAcceptanceCount</p>
+                                    <span class="card-title display-4 font-weight-bold" id="ShopAcceptanceCount">@Model.ShopAcceptanceCount</span>
                                 </div>
                             </div>
-                            <p class="col text-dark mb-0">Shop Acceptance</p>
+                            <span class="col text-dark mb-0">Shop Acceptance</span>
                         </div>
                     </div>
                 </a>
@@ -265,10 +264,10 @@
                             </div>
                             <div class="col-7 col-md-8">
                                 <div class="numbers">
-                                    <p class="card-title display-4 font-weight-bold" id="DeliveryAcceptanceCount">@Model.DeliveryAcceptanceCount</p>
+                                    <span class="card-title display-4 font-weight-bold" id="DeliveryAcceptanceCount">@Model.DeliveryAcceptanceCount</span>
                                 </div>
                             </div>
-                            <p class="col text-dark mb-0">Delivery Acceptance</p>
+                            <span class="col text-dark mb-0">Delivery Acceptance</span>
                         </div>
                     </div>
                 </a>
@@ -293,10 +292,10 @@
                             </div>
                             <div class="col-7 col-md-8">
                                 <div class="numbers">
-                                    <p class="card-title display-4 font-weight-bold" id="ShopPickupCount">@Model.ShopPickupCount</p>
+                                    <span class="card-title display-4 font-weight-bold" id="ShopPickupCount">@Model.ShopPickupCount</span>
                                 </div>
                             </div>
-                            <p class="col text-dark mb-0">Shop Pickup</p>
+                            <span class="col text-dark mb-0">Shop Pickup</span>
                         </div>
                     </div>
                 </a>
@@ -321,10 +320,10 @@
                             </div>
                             <div class="col-7 col-md-8">
                                 <div class="numbers">
-                                    <p class="card-title display-4 font-weight-bold" id="CustomerDeliveryCount">@Model.CustomerDeliveryCount</p>
+                                    <span class="card-title display-4 font-weight-bold" id="CustomerDeliveryCount">@Model.CustomerDeliveryCount</span>
                                 </div>
                             </div>
-                            <p class="col text-dark mb-0">Customer Delivery</p>
+                            <span class="col text-dark mb-0">Customer Delivery</span>
                         </div>
                     </div>
                 </a>
@@ -349,10 +348,10 @@
                             </div>
                             <div class="col-10 col-md-10">
                                 <div class="numbers">
-                                    <p class="card-title display-4 font-weight-bold" id="OrderswithoutDeliveryboyCount">@Model.OrderswithoutDeliveryboyCount</p>
+                                    <span class="card-title display-4 font-weight-bold" id="OrderswithoutDeliveryboyCount">@Model.OrderswithoutDeliveryboyCount</span>
                                 </div>
                             </div>
-                            <p class="col text-dark mb-0">Orders without Delivery Boy</p>
+                            <span class="col text-dark mb-0">Orders without Delivery Boy</span>
                         </div>
                     </div>
                 </a>
@@ -377,10 +376,10 @@
                             </div>
                             <div class="col-7 col-md-8">
                                 <div class="numbers">
-                                    <p class="card-title display-4 font-weight-bold" id="CustomerCount">@Model.CustomerCount</p>
+                                    <span class="card-title display-4 font-weight-bold" id="CustomerCount">@Model.CustomerCount</span>
                                 </div>
                             </div>
-                            <p class="col text-dark mb-0">Customers</p>
+                            <span class="col text-dark mb-0">Customers</span>
                         </div>
                     </div>
                 </a>
@@ -405,10 +404,10 @@
                             </div>
                             <div class="col-7 col-md-8">
                                 <div class="numbers">
-                                    <p class="card-title display-4 font-weight-bold" id="ShopCount">@Model.ShopCount</p>
+                                    <span class="card-title display-4 font-weight-bold" id="ShopCount">@Model.ShopCount</span>
                                 </div>
                             </div>
-                            <p class="col text-dark mb-0">Shops</p>
+                            <span class="col text-dark mb-0">Shops</span>
                         </div>
                     </div>
                 </a>
@@ -441,10 +440,10 @@
                             </div>
                             <div class="col-7 col-md-8">
                                 <div class="numbers">
-                                    <p class="card-title display-4 font-weight-bold" id="OrderCount">@Model.OrderCount</p>
+                                    <span class="card-title display-4 font-weight-bold" id="OrderCount">@Model.OrderCount</span>
                                 </div>
                             </div>
-                            <p class="col text-dark mb-0">Orders</p>
+                            <span class="col text-dark mb-0">Orders</span>
                         </div>
                     </div>
                 </a>
@@ -469,10 +468,10 @@
                             </div>
                             <div class="col-7 col-md-8">
                                 <div class="numbers">
-                                    <p class="card-title display-4 font-weight-bold" id="RefundCount">@Model.RefundCount</p>
+                                    <span class="card-title display-4 font-weight-bold" id="RefundCount">@Model.RefundCount</span>
                                 </div>
                             </div>
-                            <p class="col text-dark mb-0">Refunds</p>
+                            <span class="col text-dark mb-0">Refunds</span>
                         </div>
                     </div>
                 </a>
@@ -497,10 +496,10 @@
                             </div>
                             <div class="col-7 col-md-8">
                                 <div class="numbers">
-                                    <p class="card-title display-4 font-weight-bold" id="ShopLowCreditCount">@Model.ShopLowCreditCount</p>
+                                    <span class="card-title display-4 font-weight-bold" id="ShopLowCreditCount">@Model.ShopLowCreditCount</span>
                                 </div>
                             </div>
-                            <p class="col text-dark mb-0">Low Shop Credits</p>
+                            <span class="col text-dark mb-0">Low Shop Credits</span>
                         </div>
                     </div>
                 </a>
@@ -525,10 +524,10 @@
                             </div>
                             <div class="col-7 col-md-8">
                                 <div class="numbers">
-                                    <p class="card-title display-4 font-weight-bold" id="CustomerPrescriptionCount">@Model.CustomerPrescriptionCount</p>
+                                    <span class="card-title display-4 font-weight-bold" id="CustomerPrescriptionCount">@Model.CustomerPrescriptionCount</span>
                                 </div>
                             </div>
-                            <p class="col text-dark mb-0"> Prescription</p>
+                            <span class="col text-dark mb-0"> Prescription</span>
                         </div>
                     </div>
                 </a>
@@ -553,10 +552,10 @@
                             </div>
                             <div class="col-7 col-md-8">
                                 <div class="numbers">
-                                    <p class="card-title display-4 font-weight-bold">@Model.CustomerGroceryUploadCount</p>
+                                    <span class="card-title display-4 font-weight-bold">@Model.CustomerGroceryUploadCount</span>
                                 </div>
                             </div>
-                            <p class="col text-dark mb-0"> Grocery</p>
+                            <span class="col text-dark mb-0"> Grocery</span>
                         </div>
                     </div>
                 </a>
@@ -616,10 +615,10 @@
                             </div>
                             <div class="col-7 col-md-8">
                                 <div class="numbers">
-                                    <p class="card-title display-4 font-weight-bold" id="UnMappedCount">@Model.UnMappedCount</p>
+                                    <span class="card-title display-4 font-weight-bold" id="UnMappedCount">@Model.UnMappedCount</span>
                                 </div>
                             </div>
-                            <p class="col text-dark mb-0">UnMapped List</p>
+                            <span class="col text-dark mb-0">UnMapped List</span>
                         </div>
                     </div>
                     <div class="card-footer">
@@ -644,10 +643,10 @@
                             </div>
                             <div class="col-7 col-md-8">
                                 <div class="numbers">
-                                    <p class="card-title display-4 font-weight-bold" id="OrderMissedCount">@Model.OrderMissedCount</p>
+                                    <span class="card-title display-4 font-weight-bold" id="OrderMissedCount">@Model.OrderMissedCount</span>
                                 </div>
                             </div>
-                            <p class="col text-dark mb-0">Order Missed List</p>
+                            <span class="col text-dark mb-0">Order Missed List</span>
                         </div>
                     </div>
                     <div class="card-footer">
@@ -672,10 +671,10 @@
                             </div>
                             <div class="col-7 col-md-8">
                                 <div class="numbers">
-                                    <p class="card-title display-4 font-weight-bold" id="ProductUnMappedCount">@Model.ProductUnMappedCount</p>
+                                    <span class="card-title display-4 font-weight-bold" id="ProductUnMappedCount">@Model.ProductUnMappedCount</span>
                                 </div>
                             </div>
-                            <p class="col text-dark mb-0">Products UnMapped List</p>
+                            <span class="col text-dark mb-0">Products UnMapped List</span>
                         </div>
                     </div>
                     <div class="card-footer">
@@ -703,12 +702,6 @@
                                 <h6 class="font-weight-bold text-secondary">Joyra Medicals, Palyamkottai</h6>
                                 <h6 class="font-weight-bold">@Model.JoyraPalai</h6>
                             </div>
-                            @*<div class="col-7 col-md-8">
-                                    <div class="numbers">
-                                        <p class="card-title display-4 font-weight-bold"></p>
-                                    </div>
-                                </div>*@
-
                         </div>
                     </div>
                     @*<div class="card-footer">
@@ -740,10 +733,10 @@
                             </div>
                             <div class="col-7 col-md-8">
                                 <div class="numbers">
-                                    <p class="card-title display-4 font-weight-bold" id="CustomerAadhaarVerifyCount">@Model.CustomerAadhaarVerifyCount</p>
+                                    <span class="card-title display-4 font-weight-bold" id="CustomerAadhaarVerifyCount">@Model.CustomerAadhaarVerifyCount</span>
                                 </div>
                             </div>
-                            <p class="col text-dark mb-0">Customer Aadhaar</p>
+                            <span class="col text-dark mb-0">Customer Aadhaar</span>
                         </div>
                     </div>
                     <div class="card-footer">
@@ -768,10 +761,10 @@
                             </div>
                             <div class="col-7 col-md-8">
                                 <div class="numbers">
-                                    <p class="card-title display-4 font-weight-bold" id="ShopOnBoardingVerifyCount">@Model.ShopOnBoardingVerifyCount</p>
+                                    <span class="card-title display-4 font-weight-bold" id="ShopOnBoardingVerifyCount">@Model.ShopOnBoardingVerifyCount</span>
                                 </div>
                             </div>
-                            <p class="col text-dark mb-0">Shop Onboarding</p>
+                            <span class="col text-dark mb-0">Shop Onboarding</span>
                         </div>
                     </div>
                     <div class="card-footer">
@@ -796,10 +789,10 @@
                             </div>
                             <div class="col-7 col-md-8">
                                 <div class="numbers">
-                                    <p class="card-title display-4 font-weight-bold" id="DeliveryBoyVerifyCount">@Model.DeliveryBoyVerifyCount</p>
+                                    <span class="card-title display-4 font-weight-bold" id="DeliveryBoyVerifyCount">@Model.DeliveryBoyVerifyCount</span>
                                 </div>
                             </div>
-                            <p class="col text-dark mb-0">Delivery Boy</p>
+                            <span class="col text-dark mb-0">Delivery Boy</span>
                         </div>
                     </div>
                     <div class="card-footer">
@@ -824,10 +817,10 @@
                             </div>
                             <div class="col-7 col-md-8">
                                 <div class="numbers">
-                                    <p class="card-title display-4 font-weight-bold" id="BannerPendingCount">@Model.BannerPendingCount</p>
+                                    <span class="card-title display-4 font-weight-bold" id="BannerPendingCount">@Model.BannerPendingCount</span>
                                 </div>
                             </div>
-                            <p class="col text-dark mb-0">Banner</p>
+                            <span class="col text-dark mb-0">Banner</span>
                         </div>
                     </div>
                     <div class="card-footer">
