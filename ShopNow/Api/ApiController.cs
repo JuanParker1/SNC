@@ -4602,7 +4602,7 @@ namespace ShopNow.Controllers
                  .Join(db.Payments.Where(i => i.PaymentMode != "Online Payment"), c => c.OrderNumber, p => p.OrderNumber, (c, p) => new { c, p })
                 .Select(i => new DelivaryCreditAmountApiViewModel.CartList
                 {
-                    Amount = i.c.IsPickupDrop == false ? (i.p.Amount - (i.p.RefundAmount ?? 0)) : (i.p.RefundAmount != null && i.p.RefundAmount != 0) ? i.c.NetTotal - (i.p.RefundAmount ?? 0) : i.c.TotalPrice
+                    Amount = i.c.IsPickupDrop == false ? (i.p.Amount - (i.p.RefundAmount ?? 0) - i.c.WalletAmount) : (i.p.RefundAmount != null && i.p.RefundAmount != 0) ? i.c.NetTotal - (i.p.RefundAmount ?? 0) - i.c.WalletAmount : i.c.TotalPrice
 
                 }).ToList();
             if (model.List.Count() != 0)

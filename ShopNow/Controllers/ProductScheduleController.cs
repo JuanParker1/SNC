@@ -59,9 +59,12 @@ namespace ShopNow.Controllers
         public JsonResult UpdateSchedule(int productid, bool hasSchedule)
         {
             var product = db.Products.FirstOrDefault(i => i.Id == productid && i.Status == 0);
-            product.HasSchedule = hasSchedule;
-            db.Entry(product).State = System.Data.Entity.EntityState.Modified;
-            db.SaveChanges();
+            if (product != null)
+            {
+                product.HasSchedule = hasSchedule;
+                db.Entry(product).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+            }
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
@@ -89,11 +92,14 @@ namespace ShopNow.Controllers
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
             var productSchedule = db.ProductSchedules.FirstOrDefault(i => i.Id == id);
-            productSchedule.OnTime = onTime;
-            productSchedule.OffTime = offTime;
-            productSchedule.UpdatedBy = user.Name;
-            db.Entry(productSchedule).State = System.Data.Entity.EntityState.Modified;
-            db.SaveChanges();
+            if (productSchedule != null)
+            {
+                productSchedule.OnTime = onTime;
+                productSchedule.OffTime = offTime;
+                productSchedule.UpdatedBy = user.Name;
+                db.Entry(productSchedule).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+            }
             return RedirectToAction("Index");
         }
 
