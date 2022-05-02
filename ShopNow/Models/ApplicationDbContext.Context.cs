@@ -541,5 +541,14 @@ namespace ShopNow.Models
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetShopCategoryProducts_Result>("GetShopCategoryProducts", shopCodeParameter, categoryCodeParameter, strParameter, pageParameter, pageSizeParameter, customeridParameter);
         }
+    
+        public virtual int WalletExpired(Nullable<int> customerid)
+        {
+            var customeridParameter = customerid.HasValue ?
+                new ObjectParameter("customerid", customerid) :
+                new ObjectParameter("customerid", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("WalletExpired", customeridParameter);
+        }
     }
 }
