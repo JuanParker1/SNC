@@ -276,8 +276,10 @@ namespace ShopNow.ViewModels
             public bool IsCompleted { get; set; }
             public bool IsParentCompleted { get; set; }
             public string CompleteText { get; set; }
-            public DateTime AcheivementStartDate { get; set; }
-            public DateTime AcheivementEndDate { get; set; }
+            public String AcheivementStartDate { get; set; }
+            public String AcheivementEndDate { get; set; }
+            public String CurrentDate { get; set; }
+
             public int AcheivementTotalCount { get; set; }
             public int AcheivementRemaingCount { get; set; }
 

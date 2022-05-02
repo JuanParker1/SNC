@@ -1887,6 +1887,9 @@
             </CollectionType>
           </ReturnType>
         </Function>
+        <Function Name="WalletExpired" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="customerid" Type="int" Mode="In" />
+        </Function>
         <EntityContainer Name="sncModelStoreContainer">
           <EntitySet Name="AccessPolicies" EntityType="Self.AccessPolicies" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AchievementProducts" EntityType="Self.AchievementProducts" Schema="dbo" store:Type="Tables" />
@@ -3195,6 +3198,9 @@
           <EntitySet Name="CustomerAchievementCompleteds" EntityType="sncModel.CustomerAchievementCompleted" />
           <EntitySet Name="PushNotifications" EntityType="sncModel.PushNotification" />
           <EntitySet Name="Shops" EntityType="sncModel.Shop" />
+          <FunctionImport Name="WalletExpired">
+            <Parameter Name="customerid" Mode="In" Type="Int32" />
+          </FunctionImport>
         </EntityContainer>
         <ComplexType Name="GetDEliveryBoyList_Result">
           <Property Type="Int32" Name="Id" Nullable="false" />
@@ -6138,6 +6144,7 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="WalletExpired" FunctionName="sncModel.Store.WalletExpired" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
