@@ -3019,7 +3019,9 @@ namespace ShopNow.Controllers
                        LikeText = (i.p.p.cf.Any(a => a.CustomerId == customerId && a.IsFavorite == true && a.ProductId == i.p.p.p.p.p.Id) == true && i.p.p.cf.Where(a => a.ProductId == i.p.p.p.p.p.Id && a.IsFavorite == true).Count() == 1) ? "You Liked" : i.p.p.cf.Any(a => a.CustomerId == customerId && a.IsFavorite == true && a.ProductId == i.p.p.p.p.p.Id) == true ? "You & " + (i.p.p.cf.Where(a => a.ProductId == i.p.p.p.p.p.Id && a.IsFavorite == true).Count() - 1) + " more" : i.p.p.cf.Where(a => a.ProductId == i.p.p.p.p.p.Id && a.IsFavorite == true).Count() > 0 ? i.p.p.cf.Where(a => a.ProductId == i.p.p.p.p.p.Id && a.IsFavorite == true).Count() + " like" : "",
                        ShopPrice = i.p.p.p.p.p.ShopPrice,
                        MaxAddonSelectionLimit = i.p.p.p.p.p.MaxSelectionLimit,
-                       MinAddonSelectionLimit = i.p.p.p.p.p.MinSelectionLimit
+                       MinAddonSelectionLimit = i.p.p.p.p.p.MinSelectionLimit,
+                       PackingCharge = i.p.p.p.p.p.PackingCharge,
+                       PackingType = i.p.p.p.p.p.PackingType
                    }).OrderByDescending(i => i.IsOnline).ToList();
 
                 if (!string.IsNullOrEmpty(str))
@@ -3064,7 +3066,9 @@ namespace ShopNow.Controllers
                         LikeText = (i.cf.Any(a => a.CustomerId == customerId && a.IsFavorite == true && a.ProductId == i.p.p.p.Id) == true && i.cf.Where(a => a.ProductId == i.p.p.p.Id && a.IsFavorite == true).Count() == 1) ? "You Liked" : i.cf.Any(a => a.CustomerId == customerId && a.IsFavorite == true && a.ProductId == i.p.p.p.Id) == true ? "You & " + (i.cf.Where(a => a.ProductId == i.p.p.p.Id && a.IsFavorite == true).Count() - 1) + " more" : i.cf.Where(a => a.ProductId == i.p.p.p.Id && a.IsFavorite == true).Count() > 0 ? i.cf.Where(a => a.ProductId == i.p.p.p.Id && a.IsFavorite == true).Count() + " like" : "",
                         ShopPrice = i.p.p.p.ShopPrice,
                         MaxAddonSelectionLimit = i.p.p.p.MaxSelectionLimit,
-                        MinAddonSelectionLimit = i.p.p.p.MinSelectionLimit
+                        MinAddonSelectionLimit = i.p.p.p.MinSelectionLimit,
+                        PackingType = i.p.p.p.PackingType,
+                        PackingCharge = i.p.p.p.PackingCharge
                     }).OrderByDescending(i => i.IsOnline).ToList();
 
                 if (!string.IsNullOrEmpty(str))
@@ -4611,7 +4615,7 @@ namespace ShopNow.Controllers
                  .Join(db.Payments.Where(i => i.PaymentMode != "Online Payment"), c => c.OrderNumber, p => p.OrderNumber, (c, p) => new { c, p })
                 .Select(i => new DelivaryCreditAmountApiViewModel.CartList
                 {
-                    Amount = i.c.IsPickupDrop == false ? (i.p.Amount - (i.p.RefundAmount ?? 0)) : (i.p.RefundAmount != null && i.p.RefundAmount != 0) ? i.c.NetTotal - (i.p.RefundAmount ?? 0) : i.c.TotalPrice
+                    Amount = i.c.IsPickupDrop == false ? (i.p.Amount - (i.p.RefundAmount ?? 0) - i.c.WalletAmount) : (i.p.RefundAmount != null && i.p.RefundAmount != 0) ? i.c.NetTotal - (i.p.RefundAmount ?? 0) - i.c.WalletAmount : i.c.TotalPrice
 
                 }).ToList();
             if (model.List.Count() != 0)

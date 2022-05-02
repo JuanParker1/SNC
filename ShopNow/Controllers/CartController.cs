@@ -1086,7 +1086,6 @@ namespace ShopNow.Controllers
                     }
                 }
 
-
                 //Add Wallet Amount to customer
                 if (order.WalletAmount != 0 && customer != null)
                 {

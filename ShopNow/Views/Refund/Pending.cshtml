@@ -8,13 +8,15 @@
 <script src="~/Scripts/gridmvc.js"></script>
 <div class="container-fluid">
     <div class="row mb-1">
-        <div class="col-md-4">
+        <div class="col-md-3">
             <h5 class="mt-1 text-uppercase text-success" style="letter-spacing:1px">@ViewBag.Title</h5>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-7">
             <form method="get" action="/Refund/Pending">
                 <div class="row">
-                    <div class="col-md-4"><input id="date-order" type="date" class="form-control" name="OrderDate" @if (Model.OrderDate != null) { <text> value="@Model.OrderDate.Value.ToString("yyyy-MM-dd")" </text> } /></div>
+                    <div class="col-md-4">
+                        <input id="date-order" type="date" class="form-control" name="OrderDate" @if (Model.OrderDate != null) { <text> value="@Model.OrderDate.Value.ToString("yyyy-MM-dd")" </text> } />
+                    </div>
                     <div class="col-md-4">
                         <select class="form-control" id="select-shop" name="ShopId">
                             @if (!string.IsNullOrEmpty(Model.ShopName))
@@ -25,10 +27,10 @@
                         <input type="hidden" name="ShopName" value="@Model.ShopName" />
                     </div>
                     <div class="col-md-2">
-                        <input type="submit" class="form-control btn btn-sm btn-success" name="Filter" id="Filter" value="Filter" />
+                        <input type="submit" class="btn btn-info" name="Filter" id="Filter" value="Apply Filter" />
                     </div>
                     <div class="col-md-2">
-                        <input type="button" class="form-control btn btn-sm btn-secondary" name="Clear" id="Clear" value="Clear" />
+                        <a href="~/Refund/Pending" class="btn btn-warning">Clear</a>
                     </div>
                 </div>
             </form>
@@ -78,10 +80,6 @@
                 }
             }).on('select2:select', function (e) {
                 $('input[name="ShopName"]').val(e.params.data.text);
-            });
-
-            $("#Clear").click(function () {
-                window.location.href = "/Refund/Pending";
             });
 
             var errormsg = "@Model.ErrorMessage";

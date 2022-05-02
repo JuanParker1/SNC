@@ -28,7 +28,7 @@
             <div class="col-md-4">
                 <div class="input-daterange input-group">
                     <input type="date" class="form-control well well-sm" placeholder="From Date" id="datepicker" name="StartDate" @if (Model.StartDate != null) { <text> value="@Model.StartDate.Value.ToString("yyyy-MM-dd")" </text> }>
-                    <span class="input-group-addon mx-3">to</span>
+                    <span class="input-group-addon mx-3 mt-2">to</span>
                     <input type="date" class="form-control" placeholder="To Date" id="datepicker1" name="EndDate" @if (Model.EndDate != null) { <text> value="@Model.EndDate.Value.ToString("yyyy-MM-dd")" </text> }>
                 </div>
             </div>
@@ -45,7 +45,7 @@
             </div>
             <div class="col-md-3">
                 <input type="submit" class="btn btn-info" value="Filter" />
-                <a href="/Payment/ShopBillDifferenceReport" class="btn btn-secondary">Clear</a>
+                <a href="/Payment/ShopBillDifferenceReport" class="btn btn-warning">Clear</a>
                 <a href="/Payment/ShopBillDifferencePendingReport" class="btn btn-primary">Pending List</a>
                 <a href="" id="btnExport" class="btn btn-secondary"><i class="fa fa-file-excel-o fa-lg" aria-hidden="true"></i></a>
             </div>

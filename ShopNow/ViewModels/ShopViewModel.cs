@@ -692,6 +692,9 @@ namespace ShopNow.ViewModels
             public string LikeText { get; set; }
             public int MinAddonSelectionLimit { get; set; }
             public int MaxAddonSelectionLimit { get; set; }
+            public double PackingCharge { get; set; }
+            public int PackingType { get; set; }
+
         }
         public class DrugCompundDetailList
         {
