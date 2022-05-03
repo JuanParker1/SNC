@@ -6332,12 +6332,343 @@ namespace ShopNow.Controllers
                     CompleteText = i.a.a.a.ActivateAfterId != 0 ? "Complete " + db.AchievementSettings.FirstOrDefault(a => a.Id == i.a.a.a.ActivateAfterId).Name + " challenge to unlock." : "",
                     AcheivementStartDate= i.ca.Any() ? i.ca.FirstOrDefault().DateEncoded.ToString("yyyy-MM-dd hh:mm") :"",//(i.ca.FirstOrDefault().DateEncoded != null ? i.ca.FirstOrDefault().DateEncoded.ToString():"") ,
                     AcheivementEndDate = i.ca.Any() ? i.ca.FirstOrDefault().DateEncoded.AddDays(Convert.ToDouble(i.a.a.a.DayLimit)).ToString("yyyy-MM-dd hh:mm") : "",
-                    AcheivementRemaingCount = (db.CustomerAchievementCompleteds.Any(b => b.CustomerId == customerid && b.AchievementId == i.a.a.a.Id) == true ? 0 : 1),
+                    AcheivementRemaingCount = (db.CustomerAchievementCompleteds.Any(b => b.CustomerId == customerid && b.AchievementId == i.a.a.a.Id) == true ? 0 : GetRemainingCount(customerid, i.a.a.a.Id)),
                     CurrentDate=DateTime.Now.ToString("yyyy-MM-dd hh:mm")
                 }).ToList();
             return Json(new { list = model.AchievementListItems }, JsonRequestBehavior.AllowGet);
         }
+        public static int GetRemainingCount(int customerid=0,int AchievementId=0)
+        {
 
+            using (sncEntities db = new sncEntities())
+            {
+                DateTime achievementStartDateTime = new DateTime(2022, 04, 19);
+                var customer = db.Customers.FirstOrDefault(i => i.Id == customerid);
+                if (customer != null)
+                {
+                    var achievementlist = db.AchievementSettings.Where(i => i.Status == 0 && i.Id == AchievementId)
+                     .Select(i => new
+                     {
+                         Id = i.Id,
+                         CountType = i.CountType,
+                         CountValue = i.CountValue,
+                         HasAccept = i.HasAccept,
+                         DayLimit = i.DayLimit,
+                         Amount = i.Amount,
+                         Name = i.Name,
+                     }).ToList();
+                    int id = Convert.ToInt32(achievementlist[0].Id);
+                    var customerAcceptedAchievements = db.CustomerAchievements.FirstOrDefault(i => i.Status == 1 && i.CustomerId == customer.Id && i.AchievementId == id);
+                    
+                    if (achievementlist[0].CountType == 1)
+                    {
+                        if (achievementlist[0].HasAccept == true)
+                        {
+                            if (customerAcceptedAchievements != null)
+                            {
+                                if (achievementlist[0].DayLimit > 0)
+                                {
+                                    DateTime achievementExpirydate = customerAcceptedAchievements.DateEncoded.AddDays(achievementlist[0].DayLimit);
+                                    var orderListSelectShop = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && i.DateEncoded >= achievementStartDateTime && (i.DateEncoded >= customerAcceptedAchievements.DateEncoded && i.DateEncoded <= achievementExpirydate))
+                                .Join(db.CustomerAchievementCompleteds, o => o.CustomerId, CAC => CAC.CustomerId, (o, CAC) => new { o, CAC })
+                                .Select(i => i.o.ShopId).ToArray();
+                                    var shopCategoryCount = db.Shops.Where(i => orderListSelectShop.Contains(i.Id)).GroupBy(i => i.ShopCategoryId).Count();
+                                    return ((shopCategoryCount - achievementlist[0].CountValue) >= 0 ?0:  shopCategoryCount);
+
+
+                                }
+                                else
+                                {
+                                    // var orderListSelectShop = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(achievementStartDateTime)).Select(i => i.ShopId).ToArray();
+                                    var orderListSelectShop = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && i.DateEncoded >= achievementStartDateTime).Select(i => i.ShopId).ToArray();
+                                    var shopCategoryCount = db.Shops.Where(i => orderListSelectShop.Contains(i.Id)).GroupBy(i => i.ShopCategoryId).Count();
+                                    return ((shopCategoryCount - achievementlist[0].CountValue) >= 0 ? 0 :  shopCategoryCount);
+
+                                }
+
+                            }
+                        }
+                        else
+                        {
+                            if (achievementlist[0].DayLimit > 0)
+                            {
+                                DateTime achievementExpirydate = customerAcceptedAchievements.DateEncoded.AddDays(achievementlist[0].DayLimit);
+                                var orderListSelectShop = db.Orders.ToList().Where(i => i.CustomerId == customer.Id && i.Status == 6 && (i.DateEncoded >= achievementStartDateTime && i.DateEncoded <= achievementExpirydate)).Select(i => i.ShopId);
+                                var shopCategoryCount = db.Shops.Where(i => orderListSelectShop.Contains(i.Id)).GroupBy(i => i.ShopCategoryId).Count();
+                                return ((shopCategoryCount - achievementlist[0].CountValue) >= 0 ? 0 : shopCategoryCount);
+
+                            }
+                            else
+                            {
+                                // var orderListSelectShop = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(achievementStartDateTime)).Select(i => i.ShopId);
+                                var orderListSelectShop = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && i.DateEncoded >= achievementStartDateTime).Select(i => i.ShopId);
+                                var shopCategoryCount = db.Shops.Where(i => orderListSelectShop.Contains(i.Id)).GroupBy(i => i.ShopCategoryId).Count();
+                                return ((shopCategoryCount - achievementlist[0].CountValue) >= 0 ? 0 :  shopCategoryCount);
+
+                            }
+                        }
+                    }
+                    else if (achievementlist[0].CountType == 2)
+                    {
+                        if (achievementlist[0].HasAccept == true)
+                        {
+
+                            if (customerAcceptedAchievements != null)
+                            {
+                                if (achievementlist[0].DayLimit > 0)
+                                {
+                                    DateTime achievementExpirydate = customerAcceptedAchievements.DateEncoded.AddDays(achievementlist[0].DayLimit);
+                                    var orderListShopCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && i.DateEncoded >= achievementStartDateTime && (i.DateEncoded >= customerAcceptedAchievements.DateEncoded && i.DateEncoded <= achievementExpirydate)).GroupBy(i => i.ShopId).Count();
+                                    return ((orderListShopCount - achievementlist[0].CountValue) >= 0 ?0:  orderListShopCount);
+                                }
+                                else
+                                {
+                                    //var orderListShopCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(achievementStartDateTime)).GroupBy(i => i.ShopId).Count();
+                                    var orderListShopCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && i.DateEncoded >= achievementStartDateTime).GroupBy(i => i.ShopId).Count();
+                                    return ((orderListShopCount - achievementlist[0].CountValue) >= 0 ? 0 :  orderListShopCount);
+                                }
+
+                            }
+                        }
+                        else
+                        {
+                            if (achievementlist[0].DayLimit > 0)
+                            {
+                                DateTime achievementExpirydate = customerAcceptedAchievements.DateEncoded.AddDays(achievementlist[0].DayLimit);
+                                // var orderListShopCount = db.Orders.ToList().Where(i => i.CustomerId == customer.Id && i.Status == 6 && (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(achievementStartDateTime) && DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(achievementExpirydate))).GroupBy(i => i.ShopId).Count();
+                                var orderListShopCount = db.Orders.ToList().Where(i => i.CustomerId == customer.Id && i.Status == 6 && (i.DateEncoded >= achievementStartDateTime && i.DateEncoded <= achievementExpirydate)).GroupBy(i => i.ShopId).Count();
+                                return ((orderListShopCount - achievementlist[0].CountValue) >= 0 ? 0 :  orderListShopCount);
+                            }
+                            else
+                            {
+                                // var orderListShopCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(achievementStartDateTime)).GroupBy(i => i.ShopId).Count();
+                                var orderListShopCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && i.DateEncoded >= achievementStartDateTime).GroupBy(i => i.ShopId).Count();
+                                return ((orderListShopCount - achievementlist[0].CountValue) >= 0 ? 0 : orderListShopCount);
+
+
+                            }
+                        }
+
+                    }
+                    else if (achievementlist[0].CountType == 3)
+                    {
+                        if (achievementlist[0].HasAccept == true)
+                        {
+
+                            if (customerAcceptedAchievements != null)
+                            {
+                                var achievementSelectedShopList = db.AchievementShops.Where(i => i.AchievementId == achievementlist[0].Id).Select(i => i.ShopId).ToList();
+                                if (achievementlist[0].DayLimit > 0)
+                                {
+                                    DateTime achievementExpirydate = customerAcceptedAchievements.DateEncoded.AddDays(achievementlist[0].DayLimit);
+                                    // var orderListShopCount = db.Orders.ToList().Where(i => i.CustomerId == customer.Id && i.Status == 6 && (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(customerAcceptedAchievements.DateEncoded) && DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(achievementExpirydate)) && achievementSelectedShopList.Contains(i.ShopId)).GroupBy(i => i.ShopId).Count();
+                                    var orderListShopCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && i.DateEncoded >= achievementStartDateTime && (i.DateEncoded >= customerAcceptedAchievements.DateEncoded && i.DateEncoded <= achievementExpirydate) && achievementSelectedShopList.Contains(i.ShopId)).GroupBy(i => i.ShopId).Count();
+                                    return ((orderListShopCount - achievementlist[0].CountValue) >= 0 ? 0 : orderListShopCount);
+                                }
+                                else
+                                {
+                                    // var orderListShopCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(achievementStartDateTime) && achievementSelectedShopList.Contains(i.ShopId)).GroupBy(i => i.ShopId).Count();
+                                    var orderListShopCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && i.DateEncoded >= achievementStartDateTime && achievementSelectedShopList.Contains(i.ShopId)).GroupBy(i => i.ShopId).Count();
+                                    return ((orderListShopCount - achievementlist[0].CountValue) >= 0 ? 0 : orderListShopCount);
+
+                                }
+
+                            }
+                        }
+                        else
+                        {
+                            var achievementSelectedShopList = db.AchievementShops.Where(i => i.AchievementId == achievementlist[0].Id).Select(i => i.ShopId).ToList();
+                            if (achievementlist[0].DayLimit > 0)
+                            {
+                                DateTime achievementExpirydate = customerAcceptedAchievements.DateEncoded.AddDays(achievementlist[0].DayLimit);
+                                var orderListShopCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && (i.DateEncoded >= achievementStartDateTime && i.DateEncoded <= achievementExpirydate) && achievementSelectedShopList.Contains(i.ShopId)).GroupBy(i => i.ShopId).Count();
+                                return ((orderListShopCount - achievementlist[0].CountValue) >= 0 ? 0 : orderListShopCount);
+                            }
+                            else
+                            {
+                                // var orderListShopCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(achievementStartDateTime) && achievementSelectedShopList.Contains(i.ShopId)).GroupBy(i => i.ShopId).Count();
+                                var orderListShopCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && i.DateEncoded >= achievementStartDateTime && achievementSelectedShopList.Contains(i.ShopId)).GroupBy(i => i.ShopId).Count();
+                                return ((orderListShopCount - achievementlist[0].CountValue) >= 0 ? 0 : orderListShopCount);
+                            }
+                        }
+                    }
+                    else if (achievementlist[0].CountType == 4)
+                    {
+                        if (achievementlist[0].HasAccept == true)
+                        {
+
+                            if (customerAcceptedAchievements != null)
+                            {
+                                if (achievementlist[0].DayLimit > 0)
+                                {
+                                    DateTime achievementExpirydate = customerAcceptedAchievements.DateEncoded.AddDays(achievementlist[0].DayLimit);
+
+                                    var orderListProductCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && i.DateEncoded >= achievementStartDateTime && (i.DateEncoded >= customerAcceptedAchievements.DateEncoded && i.DateEncoded <= achievementExpirydate))
+                                      .Join(db.OrderItems.GroupBy(i => i.ProductId), o => o.Id, oi => oi.FirstOrDefault().OrderId, (o, oi) => new { o, oi })
+                                      .Count();
+                                    return ((orderListProductCount - achievementlist[0].CountValue) >= 0 ? 0: orderListProductCount);
+                                }
+                                else
+                                {
+
+                                    var orderListProductCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && i.DateEncoded >= achievementStartDateTime)
+                                         .Join(db.OrderItems.GroupBy(i => i.ProductId), o => o.Id, oi => oi.FirstOrDefault().OrderId, (o, oi) => new { o, oi })
+                                        .Count();
+                                    return ((orderListProductCount - achievementlist[0].CountValue) >= 0 ? 0 : orderListProductCount);
+                                }
+
+                            }
+                        }
+                        else
+                        {
+                            if (achievementlist[0].DayLimit > 0)
+                            {
+                                DateTime achievementExpirydate = customerAcceptedAchievements.DateEncoded.AddDays(achievementlist[0].DayLimit);
+                                var orderListProductCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && (i.DateEncoded >= achievementStartDateTime && i.DateEncoded <= achievementExpirydate))
+                                  .Join(db.OrderItems.GroupBy(i => i.ProductId), o => o.Id, oi => oi.FirstOrDefault().OrderId, (o, oi) => new { o, oi })
+                                      .Count();
+                                return ((orderListProductCount - achievementlist[0].CountValue) >= 0 ? 0 : orderListProductCount);
+                            }
+                            else
+                            {
+
+                                var orderListProductCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && i.DateEncoded >= achievementStartDateTime)
+                                   .Join(db.OrderItems.GroupBy(i => i.ProductId), o => o.Id, oi => oi.FirstOrDefault().OrderId, (o, oi) => new { o, oi })
+                                       .Count();
+                                return ((orderListProductCount - achievementlist[0].CountValue) >= 0 ? 0 : orderListProductCount);
+                            }
+                        }
+                    }
+                    else if (achievementlist[0].CountType == 5)
+                    {
+                        if (achievementlist[0].HasAccept == true)
+                        {
+                            if (customerAcceptedAchievements != null)
+                            {
+                                var achievementSelectedProductList = db.AchievementProducts.Where(i => i.AchievementId == achievementlist[0].Id).Select(i => i.ProductId).ToList();
+                                if (achievementlist[0].DayLimit > 0)
+                                {
+                                    DateTime achievementExpirydate = customerAcceptedAchievements.DateEncoded.AddDays(achievementlist[0].DayLimit);
+                                    var orderListProductCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && i.DateEncoded >= achievementStartDateTime && (i.DateEncoded >= customerAcceptedAchievements.DateEncoded && i.DateEncoded <= achievementExpirydate))
+                                        .Join(db.OrderItems.Where(i => achievementSelectedProductList.Contains(i.ProductId)).GroupBy(i => i.ProductId), o => o.Id, oi => oi.FirstOrDefault().OrderId, (o, oi) => new { o, oi })
+                                        .Count();
+                                    return ((orderListProductCount - achievementlist[0].CountValue) >= 0 ? 0 : orderListProductCount);
+                                }
+                                else
+                                {
+
+                                    var orderListProductCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && i.DateEncoded >= achievementStartDateTime)
+                                        .Join(db.OrderItems.Where(i => achievementSelectedProductList.Contains(i.ProductId)).GroupBy(i => i.ProductId), o => o.Id, oi => oi.FirstOrDefault().OrderId, (o, oi) => new { o, oi })
+                                       .Count();
+                                    return ((orderListProductCount - achievementlist[0].CountValue) >= 0 ? 0 : orderListProductCount);
+                                }
+
+                            }
+                        }
+                        else
+                        {
+                            var achievementSelectedProductList = db.AchievementProducts.Where(i => i.AchievementId == achievementlist[0].Id).Select(i => i.ProductId).ToList();
+                            if (achievementlist[0].DayLimit > 0)
+                            {
+                                DateTime achievementExpirydate = customerAcceptedAchievements.DateEncoded.AddDays(achievementlist[0].DayLimit);
+                                var orderListProductCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && (i.DateEncoded >= achievementStartDateTime && i.DateEncoded <= achievementExpirydate))
+                               .Join(db.OrderItems.Where(i => achievementSelectedProductList.Contains(i.ProductId)).GroupBy(i => i.ProductId), o => o.Id, oi => oi.FirstOrDefault().OrderId, (o, oi) => new { o, oi })
+                                   .Count();
+                                return ((orderListProductCount - achievementlist[0].CountValue) >= 0 ? 0 : orderListProductCount);
+                            }
+                            else
+                            {
+
+                                var orderListProductCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && i.DateEncoded >= achievementStartDateTime)
+                                   .Join(db.OrderItems.Where(i => achievementSelectedProductList.Contains(i.ProductId)).GroupBy(i => i.ProductId), o => o.Id, oi => oi.FirstOrDefault().OrderId, (o, oi) => new { o, oi })
+                                       .Count();
+                                return ((orderListProductCount - achievementlist[0].CountValue) >= 0 ? 0 : orderListProductCount);
+                            }
+                        }
+                    }
+                    else if (achievementlist[0].CountType == 6)
+                    {
+                        if (achievementlist[0].HasAccept == true)
+                        {
+
+                            if (customerAcceptedAchievements != null)
+                            {
+                                if (achievementlist[0].DayLimit > 0)
+                                {
+                                    DateTime achievementExpirydate = customerAcceptedAchievements.DateEncoded.AddDays(achievementlist[0].DayLimit);
+                                    //var orderListCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(customerAcceptedAchievements.DateEncoded) && DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(achievementExpirydate))).Count();
+                                    var orderListCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && i.DateEncoded >= achievementStartDateTime && (i.DateEncoded >= customerAcceptedAchievements.DateEncoded && i.DateEncoded <= achievementExpirydate)).Count();
+                                    return ((orderListCount - achievementlist[0].CountValue) >= 0 ? 0: orderListCount );
+                                }
+                                else
+                                {
+                                    //var orderListCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(achievementStartDateTime)).Count();
+                                    var orderListCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && i.DateEncoded >= achievementStartDateTime).Count();
+                                    return ((orderListCount - achievementlist[0].CountValue) >= 0 ? 0 : orderListCount);
+                                }
+
+                            }
+                        }
+                        else
+                        {
+                            if (achievementlist[0].DayLimit > 0)
+                            {
+                                DateTime achievementExpirydate = customerAcceptedAchievements.DateEncoded.AddDays(achievementlist[0].DayLimit);
+                                var orderListCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && (i.DateEncoded >= achievementStartDateTime && i.DateEncoded <= achievementExpirydate)).Count();
+                                return ((orderListCount - achievementlist[0].CountValue) >= 0 ? 0 : orderListCount);
+                            }
+                            else
+                            {
+                                // var orderListCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(achievementStartDateTime)).Count();
+                                var orderListCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && i.DateEncoded >= achievementStartDateTime).Count();
+                                return ((orderListCount - achievementlist[0].CountValue) >= 0 ? 0 : orderListCount);
+                            }
+                        }
+                    }
+                    else if (achievementlist[0].CountType == 7)
+                    {
+                        if (achievementlist[0].HasAccept == true)
+                        {
+                            
+                            if (customerAcceptedAchievements != null)
+                            {
+                                if (achievementlist[0].DayLimit > 0)
+                                {
+                                    DateTime achievementExpirydate = customerAcceptedAchievements.DateEncoded.AddDays(achievementlist[0].DayLimit);
+                                    var orderListCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && i.DateEncoded >= achievementStartDateTime && (i.DateEncoded >= customerAcceptedAchievements.DateEncoded && i.DateEncoded <= achievementExpirydate)).Count();
+                                    return ((orderListCount - achievementlist[0].CountValue) >= 0 ? 0 : orderListCount);
+                                }
+                                else
+                                {
+                                    // var orderListCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(achievementStartDateTime)).Count();
+                                    var orderListCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && i.DateEncoded >= achievementStartDateTime).Count();
+                                    return ((orderListCount - achievementlist[0].CountValue) >= 0 ? 0 : orderListCount);
+                                }
+
+                            }
+                        }
+                        else
+                        {
+                            if (achievementlist[0].DayLimit > 0)
+                            {
+                                DateTime achievementExpirydate = customerAcceptedAchievements.DateEncoded.AddDays(achievementlist[0].DayLimit);
+                                var orderListCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && (i.DateEncoded >= achievementStartDateTime && i.DateEncoded <= achievementExpirydate)).Count();
+                                return ((orderListCount - achievementlist[0].CountValue) >= 0 ? 0 : orderListCount);
+                            }
+                            else
+                            {
+                                //var orderListCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(achievementStartDateTime)).Count();
+                                var orderListCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && i.DateEncoded >= achievementStartDateTime).Count();
+                                return ((orderListCount - achievementlist[0].CountValue) >= 0 ? 0 : orderListCount);
+                            }
+                        }
+                    }
+                    else
+                        return 0;
+                }
+            }
+                return 0;
+        }
         public JsonResult GetAllAchievement()
         {
             var achievements = db.AchievementSettings.Where(i => i.Status == 0).ToList();
