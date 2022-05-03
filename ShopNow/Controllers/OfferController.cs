@@ -171,6 +171,21 @@ namespace ShopNow.Controllers
             var user = ((Helpers.Sessions.User)Session["USER"]);
             var offer = db.Offers.FirstOrDefault(i => i.Id == model.Id);
             _mapper.Map(model, offer);
+            if (offer != null && model.ShopIds != null)
+            {
+                foreach (var item in model.ShopIds)
+                {
+                    var os = db.OfferShops.Where(i => i.ShopId == item).FirstOrDefault();
+                    if (os == null)
+                    {
+                        var offershop = new OfferShop();
+                        offershop.ShopId = item;
+                        offershop.OfferId = offer.Id;
+                        db.OfferShops.Add(offershop);
+                        db.SaveChanges();
+                    }
+                }
+            }
             offer.DateUpdated = DateTime.Now;
             offer.UpdatedBy = user.Name;
             db.Entry(offer).State = System.Data.Entity.EntityState.Modified;
