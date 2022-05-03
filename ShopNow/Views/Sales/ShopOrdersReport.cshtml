@@ -36,17 +36,13 @@
                 <label class="font-weight-bold">End Date</label>
                 <input id="date-end" type="date" class="form-control" name="EndDate" @if (Model.EndDate != null) { <text> value="@Model.EndDate.Value.ToString("yyyy-MM-dd")" </text> } />
             </div>
-            <div class="col-md-2 mt-2">
-                <div class="row">
-                    <input type="submit" class="btn btn-info mt-4 mr-2" value="Apply Filter" />
-                    <a href="/Sales/ShopOrdersReport" class="btn btn-warning mt-4">Clear</a>
-                </div>
+            <div class="col-md-2 mt-2 p-0">
+                <input type="submit" class="btn btn-info mt-4 mr-1" value="Apply Filter" />
+                <a href="/Sales/ShopOrdersReport" class="btn btn-warning mt-4">Clear Filter</a>
             </div>
-            <div class="col-md-1 mt-2 text-right">
-                <div class="row">
-                    <button id="btnPrint" class="btn btn-secondary mt-4 mr-2" value="Print"><i class="fa fa-print fa-lg" aria-hidden="true"></i></button>
-                    <button id="btnExport" class="btn btn-secondary mt-4" value="Export To Excel"><i class="fa fa-file-excel-o fa-lg" aria-hidden="true"></i></button>
-                </div>
+            <div class="col-md-1 mt-2 p-0">
+                <button id="btnPrint" class="btn btn-secondary mt-4" value="Print"><i class="fa fa-print fa-lg" aria-hidden="true"></i></button>
+                <button id="btnExport" class="btn btn-secondary mt-4" value="Export To Excel"><i class="fa fa-file-excel-o fa-lg" aria-hidden="true"></i></button>
             </div>
         </div>
     </form>
