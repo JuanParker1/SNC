@@ -50,6 +50,10 @@
                             <div class="col-md-6">
                                 <div id="div-shop" class="d-none">
                                     <div class="form-group">
+                                        <label class="col-form-label">Select District</label>
+                                        <select id="select-district" name="District" class="form-control"></select>
+                                    </div>
+                                    <div class="form-group">
                                         <label class="col-form-label">Select Shop</label>
                                         <select id="select-shop" name="ShopIds" class="form-control" multiple></select>
                                     </div>
@@ -132,22 +136,22 @@
                             </div>
                         </div>
                         @*<div class="row">
-            <div class="col-md-4">
-                <div class="form-group">
-                    <label class="col-form-label">Select Customer Group</label>
-                    <select class="form-control">
-                        <option disabled selected>Select Customer Group</option>
-                        <option value="1">Medical Group</option>
-                        <option value="2">Grocery Group</option>
-                        <option value="3">Restaurant Group</option>
-                        <option value="4">Supermarket Group</option>
-                        <option value="4">No Order Group</option>
-                        <option value="5">Last 10days No Order Group</option>
-                        <option value="6">Last 10days only Medical order Group</option>
-                    </select>
-                </div>
-            </div>
-        </div>*@
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label class="col-form-label">Select Customer Group</label>
+                                        <select class="form-control">
+                                            <option disabled selected>Select Customer Group</option>
+                                            <option value="1">Medical Group</option>
+                                            <option value="2">Grocery Group</option>
+                                            <option value="3">Restaurant Group</option>
+                                            <option value="4">Supermarket Group</option>
+                                            <option value="4">No Order Group</option>
+                                            <option value="5">Last 10days No Order Group</option>
+                                            <option value="6">Last 10days only Medical order Group</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>*@
                         <div class="row">
                             <div class="col-md-4 pl-5 my-3">
                                 <label class="form-check-label">
@@ -192,18 +196,19 @@
                 swal("Notice!", errormsg, "warning")
             }
 
-            $('#select-shop').select2({
-                placeholder: "Search Shop",
+            $('#select-district').select2({
+                placeholder: "Search District",
                 width: '100%',
                 ajax: {
-                    url: "/Cart/GetShopSelect2",
+                    url: "/Shop/GetDistrictSelect2",
+                    width: '100%',
                     delay: 250,
                     dataType: 'json'
                 }
             }).on('select2:select', function (e) {
-                getProducts();
+                getShops();
             }).on('select2:unselect', function (e) {
-                getProducts();
+                getShops();
             });
 
             $('#select-brand').select2({
@@ -232,6 +237,7 @@
                 } else if ($value == '3') {
                     $('#div-shop').addClass('d-none');
                     $('#div-brand').removeClass('d-none');
+                    $('#select-district').val('').trigger('change');
                     $('#select-shop').val('').trigger('change');
                 }
             });
@@ -286,6 +292,19 @@
                     width: '100%',
                     ajax: {
                         url: "/Product/GetProductByBrandSelect2?brandId=" + $selectedValues,
+                        delay: 250,
+                        dataType: 'json'
+                    }
+                });
+            }
+
+            function getShops() {
+                var $selectedValue = $('#select-district').val();
+                $('#select-shop').select2({
+                    placeholder: "Search Shops",
+                    width: '100%',
+                    ajax: {
+                        url: "/Shop/GetShopByDistrictSelect2?district=" + $selectedValue,
                         delay: 250,
                         dataType: 'json'
                     }
