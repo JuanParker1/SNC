@@ -167,7 +167,7 @@ namespace ShopNow.Controllers
                 else
                     UpdateMedicalShopMaxOfferPercentage(model.ShopId);
                 var productcount = db.Products.Where(i => i.ShopId == model.ShopId && i.Status == 0).Count();
-                if (productcount >= 10 && sh.Status == 1)
+                if (productcount >= 2 && sh.Status == 1)
                 {
                     Payment payment = new Payment();
                     payment.CustomerId = sh.CustomerId;
@@ -412,7 +412,7 @@ namespace ShopNow.Controllers
                         UpdateShopMaxOfferPercentage(sh.Id);
 
                     var productcount = db.Products.Where(i => i.ShopId == model.ShopId && i.Status == 0).Count();
-                    if (productcount >= 10 && sh.Status == 1)
+                    if (productcount >= 2 && sh.Status == 1)
                     {
                         Payment payment = new Payment();
                         payment.CustomerId = sh.CustomerId;
@@ -667,7 +667,7 @@ namespace ShopNow.Controllers
                 if (product.Percentage > 0)
                     UpdateShopMaxOfferPercentage(sh.Id);
                 var productcount = db.Products.Where(i => i.ShopId == model.ShopId && i.Status == 0).Count();
-                if (productcount >= 10 && sh.Status == 1)
+                if (productcount >= 2 && sh.Status == 1)
                 {
                     Payment payment = new Payment();
                     payment.CustomerId = sh.CustomerId;
@@ -859,7 +859,7 @@ namespace ShopNow.Controllers
                 if (product.Percentage > 0)
                     UpdateShopMaxOfferPercentage(sh.Id);
                 var productcount = db.Products.Where(i => i.ShopId == model.ShopId && i.Status == 0).Count();
-                if (productcount >= 10 && sh.Status == 1)
+                if (productcount >= 2 && sh.Status == 1)
                 {
                     Payment payment = new Payment();
                     payment.CustomerId = sh.CustomerId;
