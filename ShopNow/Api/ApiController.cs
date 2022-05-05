@@ -9459,5 +9459,18 @@ namespace ShopNow.Controllers
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
+        //public JsonResult InstallNoOrder(int customerid = 0)
+        //{
+        //    var fcmTokenList = db.Customers.Where(i => !string.IsNullOrEmpty(i.FcmTocken) && i.FcmTocken != "NULL")
+        //                       .GroupJoin(db.Orders, c => c.Id, o => o.CustomerId, (c, o) => new { c, o }).Where(i => i.o.FirstOrDefault().CustomerId == null).Select(i => i.c.FcmTocken).ToArray();
+        //    string notificationmessage = $"Get 50% off on food , groceries and medicines in first order. Order and save now.";
+        //    var count = Math.Ceiling((double)fcmTokenList.Count() / 1000);
+        //    for (int i = 0; i < count; i++)
+        //    {
+        //        Helpers.PushNotification.SendBulk(notificationmessage, "Get 50% off", "SpecialOffer", "", fcmTokenList.Skip(i * 1000).Take(1000).ToArray(), "tune1.caf", "");
+        //    }
+        //    return Json(true, JsonRequestBehavior.AllowGet);
+        //}
+
     }
 }
