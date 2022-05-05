@@ -465,6 +465,7 @@ namespace ShopNow.ViewModels
             public Nullable<System.DateTime> ShopCancelledTime { get; set; }
             public double ShopAcceptedTime { get; set; }
             public double OrderPeriod { get; set; }
+            public int ProductTypeId { get; set; }
             public string OrderStatusText
             {
                 get

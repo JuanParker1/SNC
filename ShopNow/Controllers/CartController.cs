@@ -681,20 +681,23 @@ namespace ShopNow.Controllers
                 //    model.RefundRemark = refundamount.RefundRemark ?? "";
                 //}
             }
-            model.List = db.OrderItems.Where(i => i.OrderId == cart.Id && i.Status == 0).Select(i => new CartListViewModel.CartList
+            model.List = db.OrderItems.Where(i => i.OrderId == cart.Id && i.Status == 0)
+                .Join(db.Products, oi=> oi.ProductId, p=> p.Id, (oi,p)=> new { oi,p})
+                .Select(i => new CartListViewModel.CartList
             {
-                Id = i.Id,
-                BrandName = i.BrandName,
-                CategoryName = i.CategoryName,
+                Id = i.oi.Id,
+                BrandName = i.oi.BrandName,
+                CategoryName = i.oi.CategoryName,
                 ShopName = cart.ShopName,
-                ProductId = i.ProductId,
-                ProductName = i.ProductName,
-                Qty = i.Quantity,
-                Price = i.Price,
+                ProductId = i.oi.ProductId,
+                ProductName = i.oi.ProductName,
+                Qty = i.oi.Quantity,
+                Price = i.oi.Price,
                 Status = cart.Status,
                 PhoneNumber = cart.CustomerPhoneNumber,
-                ImagePath = i.ImagePath == "N/A" ? null : i.ImagePath,
-                SinglePrice = i.UnitPrice
+                ImagePath = i.oi.ImagePath == "N/A" ? null : i.oi.ImagePath,
+                SinglePrice = i.oi.UnitPrice,
+                ProductTypeId = i.p.ProductTypeId
             }).ToList();
             return View(model);
         }
