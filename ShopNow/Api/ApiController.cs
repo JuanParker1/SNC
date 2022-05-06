@@ -5625,11 +5625,12 @@ namespace ShopNow.Controllers
             var offer = db.Offers.FirstOrDefault(i => i.OfferCode == offerCode && i.Status == 0);
             if (offer != null)
             {
-                var orderCount = db.Orders.Where(i => i.CustomerId == customerId && i.Status != 0 && (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(DateTime.Now))).Count();
+                var orderCount = db.Orders.Where(i => i.CustomerId == customerId && i.Status != 0 && (DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(DateTime.Now))).Count();
 
-                var offercount = db.Offers.Where(i => i.Type == 1 && (offer.MinimumPurchaseAmount != 0 ? offer.MinimumPurchaseAmount <= amount : true) && (offer.IsForOnlinePayment != false ? offer.IsForOnlinePayment == isOnlinePayment : true) && (offer.IsForFirstOrder != false ? orderCount == 0 : true))
-                    .Join(db.OfferShops.Where(i => i.ShopId == shopId), o => o.Id, oShp => oShp.OfferId, (o, oShp) => new { o, oShp })
-                    .Count();
+                var offercount = db.Offers.Where(i => i.Type == 1 && i.Status==0 && (offer.MinimumPurchaseAmount != 0 ? offer.MinimumPurchaseAmount <= amount : true) 
+                                 && (offer.IsForOnlinePayment != false ? offer.IsForOnlinePayment == isOnlinePayment : true) && (offer.IsForFirstOrder != false ? orderCount == 0 : true))
+                                 .Join(db.OfferShops.Where(i => i.ShopId == shopId), o => o.Id, oShp => oShp.OfferId, (o, oShp) => new { o, oShp })
+                                 .Count();
                 if (offercount > 0)
                     return Json(new { status = true, offerPercentage = offer.Percentage, offerAmountLimit = offer.AmountLimit, discountType = offer.DiscountType, id = offer.Id }, JsonRequestBehavior.AllowGet);
                 else

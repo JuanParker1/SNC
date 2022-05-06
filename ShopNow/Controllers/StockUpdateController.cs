@@ -125,7 +125,7 @@ namespace ShopNow.Controllers
                     Name = Name + extension;
                     string connString = "";
                     string[] validFileTypes = { ".xls", ".xlsx", ".csv" };
-                    string path1 = string.Format("{0}{1}", Server.MapPath("~/Content/ExcelUpload/"), Name);
+                    string path1 = string.Format("{0}{1}", Server.MapPath("~/Content/ExcelUpload/"), model.Filename);
                     if (!Directory.Exists(path1))
                     {
                         Directory.CreateDirectory(Server.MapPath("~/Content/ExcelUpload/"));
@@ -173,17 +173,29 @@ namespace ShopNow.Controllers
                         //                      itemcode = "PRO"+ Convert.ToString(row.ItemArray[0])
 
                         //                      };
-                        var newSortq = from row in dt.AsEnumerable()
-                                       where Convert.ToString(row.ItemArray[1])[Convert.ToString(row.ItemArray[1]).Length - 1] != '*'
-                                       group row by Convert.ToInt32(row.ItemArray[0]) into g
-                                       select new
-                                       {
-                                           itemid = Convert.ToInt32(g.Key),
-                                           stock = g.Sum(i => Convert.ToInt32(i.ItemArray[3])),
-                                           Mrp = g.Max(i => Convert.ToInt32(i.ItemArray[2])),//Convert.ToDouble(row.ItemArray[2]),
-                                           Iu = g.FirstOrDefault().ItemArray[4], //Convert.ToInt32(row.ItemArray[4]),
-                                           Name = g.FirstOrDefault().ItemArray[1].ToString()
-                                       };
+
+
+                        var newSortq = ((shopmodel.Id == 123) ? from row in dt.AsEnumerable()
+                                                                where Convert.ToString(row.ItemArray[1])[Convert.ToString(row.ItemArray[1]).Length - 1] != '*'
+                                                                group row by Convert.ToInt32(row.ItemArray[0]) into g
+                                                                select new
+                                                                {
+                                                                    itemid = Convert.ToInt32(g.Key),
+                                                                    stock = g.Sum(i => Convert.ToInt32(i.ItemArray[3])),
+                                                                    Mrp = g.Sum(i => Convert.ToInt32(i.ItemArray[2])),//Convert.ToDouble(row.ItemArray[2]),
+                                                                    Iu = g.FirstOrDefault().ItemArray[4], //Convert.ToInt32(row.ItemArray[4]),
+                                                                    Name = g.FirstOrDefault().ItemArray[1].ToString()
+                                                                } : from row in dt.AsEnumerable()
+                                                                    where Convert.ToString(row.ItemArray[1])[Convert.ToString(row.ItemArray[1]).Length - 1] != '*'
+                                                                    group row by Convert.ToInt32(row.ItemArray[0]) into g
+                                                                    select new
+                                                                    {
+                                                                        itemid = Convert.ToInt32(g.Key),
+                                                                        stock = g.Sum(i => Convert.ToInt32(i.ItemArray[3])),
+                                                                        Mrp = g.Max(i => Convert.ToInt32(i.ItemArray[2])),//Convert.ToDouble(row.ItemArray[2]),
+                                                                        Iu = g.FirstOrDefault().ItemArray[4], //Convert.ToInt32(row.ItemArray[4]),
+                                                                        Name = g.FirstOrDefault().ItemArray[1].ToString()
+                                                                    });
                         if (newSortq.Count() > 0)
                         {
                             foreach (var s in newSortq)
@@ -191,44 +203,92 @@ namespace ShopNow.Controllers
                                 int idx = lst.FindIndex(a => a.ItemId == s.itemid);
                                 if (idx >= 0)
                                 {
-                                    updateList.Add(new Models.Product
+                                    if (shopmodel.Id == 123)
                                     {
-                                        Id = lst[idx].Id,
-                                        ItemId = lst[idx].ItemId,
-                                        IBarU = lst[idx].IBarU,
-                                        MenuPrice = lst[idx].MenuPrice,
-                                        Name = lst[idx].Name,
-                                        Qty = s.stock,
-                                        ShopId = shopmodel.Id,
-                                        ShopName = shopmodel.Name,
-                                        DateEncoded = DateTime.Now,
-                                        DateUpdated = DateTime.Now,
-                                        Status = lst[idx].Status,
-                                        AppliesOnline = lst[idx].AppliesOnline,
-                                        Customisation = lst[idx].Customisation,
-                                        DataEntry = lst[idx].DataEntry,
-                                        DiscountCategoryId = lst[idx].DiscountCategoryId,
-                                        DiscountCategoryName = lst[idx].DiscountCategoryName,
-                                        MaxSelectionLimit = lst[idx].MaxSelectionLimit,
-                                        MinSelectionLimit = lst[idx].MinSelectionLimit,
-                                        Percentage = lst[idx].Percentage,
-                                        PackingCharge = lst[idx].PackingCharge,
-                                        PackingType = lst[idx].PackingType,
-                                        EAN = lst[idx].EAN,
-                                        GTIN = lst[idx].GTIN,
-                                        GTIN14 = lst[idx].GTIN14,
-                                        HoldOnStok = lst[idx].HoldOnStok,
-                                        ISBN = lst[idx].ISBN,
-                                        IsOnline = lst[idx].IsOnline,
-                                        MasterProductId = lst[idx].MasterProductId,
-                                        Price = lst[idx].Price,
-                                        ProductTypeId = 3,
-                                        ProductTypeName = "Medical",
-                                        ShopCategoryId = shopmodel.ShopCategoryId,
-                                        ShopCategoryName = shopmodel.ShopCategoryName,
-                                        CreatedBy = "Admin",
-                                        UpdatedBy = "Admin"
-                                    });
+                                        if (s.stock > 0 && s.Mrp > 0)
+                                        {
+                                            updateList.Add(new Models.Product
+                                            {
+                                                Id = lst[idx].Id,
+                                                ItemId = lst[idx].ItemId,
+                                                IBarU = lst[idx].IBarU,
+                                                MenuPrice = (s.Mrp / s.stock)* lst[idx].IBarU,
+                                                Name = lst[idx].Name,
+                                                Qty = s.stock/ lst[idx].IBarU,
+                                                ShopId = shopmodel.Id,
+                                                ShopName = shopmodel.Name,
+                                                DateEncoded = lst[idx].DateEncoded,
+                                                DateUpdated = DateTime.Now,
+                                                Status = lst[idx].Status,
+                                                AppliesOnline = lst[idx].AppliesOnline,
+                                                Customisation = lst[idx].Customisation,
+                                                DataEntry = lst[idx].DataEntry,
+                                                DiscountCategoryId = lst[idx].DiscountCategoryId,
+                                                DiscountCategoryName = lst[idx].DiscountCategoryName,
+                                                MaxSelectionLimit = lst[idx].MaxSelectionLimit,
+                                                MinSelectionLimit = lst[idx].MinSelectionLimit,
+                                                Percentage = lst[idx].Percentage,
+                                                PackingCharge = lst[idx].PackingCharge,
+                                                PackingType = lst[idx].PackingType,
+                                                EAN = lst[idx].EAN,
+                                                GTIN = lst[idx].GTIN,
+                                                GTIN14 = lst[idx].GTIN14,
+                                                HoldOnStok = lst[idx].HoldOnStok,
+                                                ISBN = lst[idx].ISBN,
+                                                IsOnline = lst[idx].IsOnline,
+                                                MasterProductId = lst[idx].MasterProductId,
+                                                Price = lst[idx].Price,
+                                                ProductTypeId = 3,
+                                                ProductTypeName = "Medical",
+                                                ShopCategoryId = shopmodel.ShopCategoryId,
+                                                ShopCategoryName = shopmodel.ShopCategoryName,
+                                                CreatedBy = "Admin",
+                                                UpdatedBy = "Admin"
+                                            });
+                                        }
+                                    }
+                                    else
+
+                                    {
+                                        updateList.Add(new Models.Product
+                                        {
+                                            Id = lst[idx].Id,
+                                            ItemId = lst[idx].ItemId,
+                                            IBarU = lst[idx].IBarU,
+                                            MenuPrice = lst[idx].MenuPrice,
+                                            Name = lst[idx].Name,
+                                            Qty = s.stock,
+                                            ShopId = shopmodel.Id,
+                                            ShopName = shopmodel.Name,
+                                            DateEncoded = lst[idx].DateEncoded,
+                                            DateUpdated = DateTime.Now,
+                                            Status = lst[idx].Status,
+                                            AppliesOnline = lst[idx].AppliesOnline,
+                                            Customisation = lst[idx].Customisation,
+                                            DataEntry = lst[idx].DataEntry,
+                                            DiscountCategoryId = lst[idx].DiscountCategoryId,
+                                            DiscountCategoryName = lst[idx].DiscountCategoryName,
+                                            MaxSelectionLimit = lst[idx].MaxSelectionLimit,
+                                            MinSelectionLimit = lst[idx].MinSelectionLimit,
+                                            Percentage = lst[idx].Percentage,
+                                            PackingCharge = lst[idx].PackingCharge,
+                                            PackingType = lst[idx].PackingType,
+                                            EAN = lst[idx].EAN,
+                                            GTIN = lst[idx].GTIN,
+                                            GTIN14 = lst[idx].GTIN14,
+                                            HoldOnStok = lst[idx].HoldOnStok,
+                                            ISBN = lst[idx].ISBN,
+                                            IsOnline = lst[idx].IsOnline,
+                                            MasterProductId = lst[idx].MasterProductId,
+                                            Price = lst[idx].Price,
+                                            ProductTypeId = 3,
+                                            ProductTypeName = "Medical",
+                                            ShopCategoryId = shopmodel.ShopCategoryId,
+                                            ShopCategoryName = shopmodel.ShopCategoryName,
+                                            CreatedBy = "Admin",
+                                            UpdatedBy = "Admin"
+                                        });
+                                    }
                                 }
                                 else
                                 {
