@@ -16,6 +16,11 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "SNCDI112")]
         public ActionResult Index(DashboardIndexViewModel model)
         {
+            var productMedicalStocktime = (from p in _db.Products
+                                           where p.ShopId == 444
+                                           orderby p.ItemTimeStamp descending
+                                           select p.ItemTimeStamp).FirstOrDefault();
+
             ViewBag.Name = ((ShopNow.Helpers.Sessions.User)System.Web.HttpContext.Current.Session["USER"]).Name;
             ViewBag.customer = _db.Customers.Where(i => i.Status == 0).Count();
             ViewBag.Shops = _db.Shops.Where(i => i.Status == 0).Count();
