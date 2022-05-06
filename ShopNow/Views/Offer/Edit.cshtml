@@ -49,12 +49,6 @@
                                 </div>
                             </div>
                             <div class="col-md-6">
-                                <div id="div-shop" class="d-none">
-                                    <div class="form-group">
-                                        <label class="col-form-label">Select Shop</label>
-                                        <select id="select-shop" name="ShopIds" class="form-control" multiple></select>
-                                    </div>
-                                </div>
                                 <div id="div-brand" class="d-none">
                                     <div class="form-group">
                                         <label class="col-form-label">Select Brand</label>
@@ -64,6 +58,18 @@
                                                 <option value="@Model.BrandId">@Model.BrandName</option>
                                             }
                                         </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12 d-none" id="div-shop">
+                                <div class="form-group row">
+                                    <div class="col-md-4">
+                                        <label class="col-form-label">Select District</label>
+                                        <select id="select-district" name="District" class="form-control"></select>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <label class="col-form-label">Select Shop</label>
+                                        <select id="select-shop" name="ShopIds" class="form-control" multiple></select>
                                     </div>
                                 </div>
                             </div>
@@ -194,9 +200,7 @@
             //Prodcuts Select
             
             var productId = "@Model.ProductIdstring";
-            var productName = "@Model.ProductNames";
-            
-
+            var productName = "@Model.ProductNames";            
             if (@Model.Type == '2') {
                 if (productId) {
                     var array_code = productId.split(',');
@@ -209,22 +213,24 @@
                 }
             }
 
-
             $('[name="DiscountType"]').val(@Model.DiscountType);
             $('[name="Type"]').val(@Model.Type);
             setOwnerTypeDivs(@Model.OwnerType);
             setTypeDivs(@Model.Type)
 
-            $('#select-shop').select2({
-                placeholder: "Search Shop",
+            $('#select-district').select2({
+                placeholder: "Search District",
                 width: '100%',
                 ajax: {
-                    url: "/Cart/GetShopSelect2",
+                    url: "/Shop/GetDistrictSelect2",
+                    width: '100%',
                     delay: 250,
                     dataType: 'json'
                 }
+            }).on('select2:select', function (e) {
+                getShops();
             }).on('select2:unselect', function (e) {
-                getProducts();
+                getShops();
             });
 
             $('#select-brand').select2({
@@ -248,76 +254,90 @@
             $('[name="Type"]').on('change', function () {
                 setTypeDivs($(this).val());
             });
-        });
+      
+            function getProducts() {
+                var $selectedValues = $('#select-shop').val();
+                $('#select-product,#select-product-single').select2({
+                    placeholder: "Search Products",
+                    width: '100%',
+                    ajax: {
+                        url: "/Product/GetProductByShopSelect2?shopIds=" + $selectedValues,
+                        delay: 250,
+                        dataType: 'json'
+                    }
+                });
+            }
 
-        function getProducts() {
-            var $selectedValues = $('#select-shop').val();
-            $('#select-product,#select-product-single').select2({
-                placeholder: "Search Products",
-                width: '100%',
-                ajax: {
-                    url: "/Product/GetProductByShopSelect2?shopIds=" + $selectedValues,
-                    delay: 250,
-                    dataType: 'json'
-                }
-            });
-        }
-
-        function setOwnerTypeDivs($value) {
-            //var $value = $(this).val();
-            $('#div-shop').addClass('d-none');
-            $('#div-brand').addClass('d-none');
-
-            if ($value == '1' || $value == '2') {
-                $('#div-shop').removeClass('d-none');
-                $('#div-brand').addClass('d-none');
-                $('#select-brand').val('').trigger('change');
-            } else if ($value == '3') {
+            function setOwnerTypeDivs($value) {
+                //var $value = $(this).val();
                 $('#div-shop').addClass('d-none');
-                $('#div-brand').removeClass('d-none');
-                $('#select-shop').val('').trigger('change');
-            }
-        }
+                $('#div-brand').addClass('d-none');
 
-        function setTypeDivs($value) {
-            $('#div-products').addClass('d-none');
-            $('#div-product').addClass('d-none');
-            //$('[name="Percentage"]').val('');
-            $('[name="Percentage"]').attr('readonly', false);
-            $('[name="QuantityLimit"]').attr('readonly', false);
-            $('[name="AmountLimit"]').attr('readonly', false);
-            if ($value == '2') {
-                $('#div-products').removeClass('d-none');
-                getProducts();
-            }
-            else if ($value == '3') {
-                $('#div-product').removeClass('d-none');
-                //$('#select-product-single').val('').trigger('change');
-                $('#select-brand').val('').trigger('change');
-                getProducts();
-                $('[name="Percentage"]').val(100);
-                $('[name="Percentage"]').attr('readonly', true);
-                $('[name="QuantityLimit"]').attr('readonly', true);
-                $('[name="AmountLimit"]').attr('readonly', true);
-            }
-            else {
-                $('#div-products').addClass('d-none');
-                $('#select-product').val('').trigger('change');
-            }
-        }
-
-        function getProductsByBrand() {
-            $('#select-product').val('').trigger('change');
-            var $selectedValues = $('#select-brand').val();
-            $('#select-product').select2({
-                placeholder: "Search Products",
-                width: '100%',
-                ajax: {
-                    url: "/Product/GetProductByBrandSelect2?brandId=" + $selectedValues,
-                    delay: 250,
-                    dataType: 'json'
+                if ($value == '1' || $value == '2') {
+                    $('#div-shop').removeClass('d-none');
+                    $('#div-brand').addClass('d-none');
+                    $('#select-brand').val('').trigger('change');
+                } else if ($value == '3') {
+                    $('#div-shop').addClass('d-none');
+                    $('#div-brand').removeClass('d-none');
+                    $('#select-shop').val('').trigger('change');
                 }
-            });
-        }
+            }
+
+            function setTypeDivs($value) {
+                $('#div-products').addClass('d-none');
+                $('#div-product').addClass('d-none');
+                //$('[name="Percentage"]').val('');
+                $('[name="Percentage"]').attr('readonly', false);
+                $('[name="QuantityLimit"]').attr('readonly', false);
+                $('[name="AmountLimit"]').attr('readonly', false);
+                if ($value == '2') {
+                    $('#div-products').removeClass('d-none');
+                    getProducts();
+                }
+                else if ($value == '3') {
+                    $('#div-product').removeClass('d-none');
+                    //$('#select-product-single').val('').trigger('change');
+                    $('#select-brand').val('').trigger('change');
+                    getProducts();
+                    $('[name="Percentage"]').val(100);
+                    $('[name="Percentage"]').attr('readonly', true);
+                    $('[name="QuantityLimit"]').attr('readonly', true);
+                    $('[name="AmountLimit"]').attr('readonly', true);
+                }
+                else {
+                    $('#div-products').addClass('d-none');
+                    $('#select-product').val('').trigger('change');
+                }
+            }
+
+            function getProductsByBrand() {
+                $('#select-product').val('').trigger('change');
+                var $selectedValues = $('#select-brand').val();
+                $('#select-product').select2({
+                    placeholder: "Search Products",
+                    width: '100%',
+                    ajax: {
+                        url: "/Product/GetProductByBrandSelect2?brandId=" + $selectedValues,
+                        delay: 250,
+                        dataType: 'json'
+                    }
+                });
+            }
+
+            function getShops() {
+                var $selectedValue = $('#select-district').val();
+                $('#select-shop').select2({
+                    placeholder: "Search Shops",
+                    width: '100%',
+                    ajax: {
+                        url: "/Shop/GetShopByDistrictSelect2?district=" + $selectedValue,
+                        delay: 250,
+                        dataType: 'json'
+                    }
+                });
+            }
+
+        });
     </script>
 }
