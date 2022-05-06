@@ -682,23 +682,35 @@ namespace ShopNow.Controllers
                 //}
             }
             model.List = db.OrderItems.Where(i => i.OrderId == cart.Id && i.Status == 0)
-                .Join(db.Products, oi=> oi.ProductId, p=> p.Id, (oi,p)=> new { oi,p})
+                .Join(db.Products, oi => oi.ProductId, p => p.Id, (oi, p) => new { oi, p })
                 .Select(i => new CartListViewModel.CartList
-            {
-                Id = i.oi.Id,
-                BrandName = i.oi.BrandName,
-                CategoryName = i.oi.CategoryName,
-                ShopName = cart.ShopName,
-                ProductId = i.oi.ProductId,
-                ProductName = i.oi.ProductName,
-                Qty = i.oi.Quantity,
-                Price = i.oi.Price,
-                Status = cart.Status,
-                PhoneNumber = cart.CustomerPhoneNumber,
-                ImagePath = i.oi.ImagePath == "N/A" ? null : i.oi.ImagePath,
-                SinglePrice = i.oi.UnitPrice,
-                ProductTypeId = i.p.ProductTypeId
-            }).ToList();
+                {
+                    Id = i.oi.Id,
+                    BrandName = i.oi.BrandName,
+                    CategoryName = i.oi.CategoryName,
+                    ShopName = cart.ShopName,
+                    ProductId = i.oi.ProductId,
+                    ProductName = i.oi.ProductName,
+                    Qty = i.oi.Quantity,
+                    Price = i.oi.Price,
+                    Status = cart.Status,
+                    PhoneNumber = cart.CustomerPhoneNumber,
+                    ImagePath = i.oi.ImagePath == "N/A" ? null : i.oi.ImagePath,
+                    SinglePrice = i.oi.UnitPrice,
+                    ProductTypeId = i.p.ProductTypeId,
+                    UnitPrice = i.oi.UnitPrice,
+                    AddonType = i.oi.AddOnType,
+                    HasAddon = i.oi.HasAddon,
+                    AddonListItems = db.OrderItemAddons.Where(a => a.OrderItemId == i.oi.Id)
+                        .Select(a => new CartListViewModel.CartList.AddonListItem
+                        {
+                            AddonName = a.AddonName,
+                            AddonPrice = a.AddonPrice,
+                            CrustName = a.CrustName,
+                            PortionName = a.PortionName,
+                            PortionPrice = a.PortionPrice
+                        }).ToList()
+                }).ToList();
             return View(model);
         }
 
