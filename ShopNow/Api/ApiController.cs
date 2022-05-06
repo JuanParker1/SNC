@@ -995,6 +995,8 @@ namespace ShopNow.Controllers
                 payment.RatePerOrder = Convert.ToDouble(perOrderAmount.RatePerOrder);
                 payment.PaymentModeType = model.PaymentMode == "Online Payment" ? 1 : 2;
                 payment.OrderNumber = model.OrderNo;
+                payment.Amount = model.NetTotal;
+                payment.GSTAmount = model.NetTotal;
                 if (model.OrderId != 0)
                 {
                     var order = db.Orders.FirstOrDefault(i => i.Id == model.OrderId);
