@@ -162,10 +162,10 @@ namespace ShopNow.Controllers
             if (model.ShopId != 0)
             {
                 var sh = db.Shops.FirstOrDefault(i => i.Id == model.ShopId);
-                if (model.ShopId == 322)
-                    UpdateShopMaxOfferPercentage(model.ShopId);
-                else
-                    UpdateMedicalShopMaxOfferPercentage(model.ShopId);
+                //if (model.ShopId == 322)
+                //    UpdateShopMaxOfferPercentage(model.ShopId);
+                //else
+                //    UpdateMedicalShopMaxOfferPercentage(model.ShopId);
                 var productcount = db.Products.Where(i => i.ShopId == model.ShopId && i.Status == 0).Count();
                 if (productcount >= 2 && sh.Status == 1)
                 {

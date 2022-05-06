@@ -48,20 +48,22 @@
                                 </div>
                             </div>
                             <div class="col-md-6">
-                                <div id="div-shop" class="d-none">
-                                    <div class="form-group">
-                                        <label class="col-form-label">Select District</label>
-                                        <select id="select-district" name="District" class="form-control"></select>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="col-form-label">Select Shop</label>
-                                        <select id="select-shop" name="ShopIds" class="form-control" multiple></select>
-                                    </div>
-                                </div>
                                 <div id="div-brand" class="d-none">
                                     <div class="form-group">
                                         <label class="col-form-label">Select Brand</label>
                                         <select id="select-brand" name="BrandId" class="form-control"></select>
+                                    </div>
+                                </div>
+                                <div class="d-none" id="div-shop">
+                                    <div class="form-group row">
+                                        <div class="col-md-12">
+                                            <label class="col-form-label">Select District</label>
+                                            <select id="select-district" name="District" class="form-control"></select>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <label class="col-form-label">Select Shop</label>
+                                            <select id="select-shop" name="ShopIds" class="form-control" multiple></select>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -302,9 +304,9 @@
                 var $selectedValue = $('#select-district').val();
                 $('#select-shop').select2({
                     placeholder: "Search Shops",
-                    width: '100%',
                     ajax: {
                         url: "/Shop/GetShopByDistrictSelect2?district=" + $selectedValue,
+                        width: '100%',
                         delay: 250,
                         dataType: 'json'
                     }

@@ -1592,7 +1592,7 @@ namespace ShopNow.Controllers
                 model.ShopId = shopId;
                 if (shop != null)
                 {
-                    model.ShopName = shop.Name;
+                    model.ShopName = shop.Name + " -- " + shop.DistrictName;
                 }
             }
             model.PendingCount = _db.Products.Where(a => a.ShopId == shopId && a.Status == 0 && a.MasterProductId == 0).Count();
@@ -2158,7 +2158,7 @@ namespace ShopNow.Controllers
             var model = await _db.Shops.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0).Select(i => new
             {
                 id = i.Id,
-                text = i.Name
+                text = i.Name + " -- " + i.DistrictName
             }).ToListAsync();
 
             return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);

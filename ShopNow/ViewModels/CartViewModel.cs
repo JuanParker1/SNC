@@ -423,6 +423,8 @@ namespace ShopNow.ViewModels
             public double OrderPeriod { get; set; }
         }
 
+        
+
         public List<CartList> List { get; set; }
         public class CartList
         {
@@ -466,6 +468,9 @@ namespace ShopNow.ViewModels
             public double ShopAcceptedTime { get; set; }
             public double OrderPeriod { get; set; }
             public int ProductTypeId { get; set; }
+            public double UnitPrice { get; set; }
+            public int AddonType { get; set; }
+            public bool HasAddon { get; set; }
             public string OrderStatusText
             {
                 get
@@ -494,6 +499,15 @@ namespace ShopNow.ViewModels
                             return "N/A";
                     }
                 }
+            }
+            public List<AddonListItem> AddonListItems { get; set; }
+            public class AddonListItem
+            {
+                public string PortionName { get; set; }
+                public double PortionPrice { get; set; }
+                public string CrustName { get; set; }
+                public string AddonName { get; set; }
+                public double AddonPrice { get; set; }
             }
         }
     }

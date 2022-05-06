@@ -171,29 +171,72 @@
                                 <td></td>
                                 @if (item.ProductName != null)
                                 {
-                                    <td>
-                                        @*<a href="~/Product/Details?id=@ShopNow.Helpers.AdminHelpers.ECodeLong(item.ProductId)">@item.ProductName</a>*@
-                                        @if (item.ProductTypeId == 1)
+                            <td>
+                                @*<a href="~/Product/Details?id=@ShopNow.Helpers.AdminHelpers.ECodeLong(item.ProductId)">@item.ProductName</a>*@
+                                @if (item.ProductTypeId == 1)
+                                {
+                                    <a href="~/Product/FoodEdit?Id=@ShopNow.Helpers.AdminHelpers.ECodeLong(item.ProductId)">@item.ProductName</a><br />
+                                    if (item.HasAddon == true)
+                                    {
+                                        foreach (var addon in item.AddonListItems)
                                         {
-                                        <a href="~/Product/FoodEdit?Id=@ShopNow.Helpers.AdminHelpers.ECodeLong(item.ProductId)">@item.ProductName</a>
+                                            if (item.AddonType == 1)
+                                            {
+                                                if (item.UnitPrice == addon.PortionPrice)
+                                                {
+                                                    <span>@addon.PortionName - @addon.PortionPrice</span><br />
+                                                }
+                                            }
+                                            else if (item.AddonType == 2)
+                                            {
+                                                <span>@addon.AddonName - @addon.AddonPrice</span><br />
+                                            }
+                                            else if (item.AddonType == 3)
+                                            {
+                                                if (addon.AddonPrice == 0)
+                                                {
+                                                    <span>@addon.PortionName - @addon.PortionPrice</span><br />
+                                                }
+                                                else
+                                                {
+                                                    <span>@addon.AddonName - @addon.AddonPrice</span><br />
+                                                }
+                                            }
+                                            else if (item.AddonType == 4)
+                                            {
+                                                if (addon.AddonPrice == 0 && addon.PortionPrice == 0)
+                                                {
+                                                    <span>@addon.CrustName</span><br />
+                                                }
+                                                else if (addon.PortionPrice != 0)
+                                                {
+                                                    <span>@addon.PortionName - @addon.PortionPrice</span><br />
+                                                }
+                                                else
+                                                {
+                                                    <span>@addon.AddonName - @addon.AddonPrice</span><br />
+                                                }
+                                            }
                                         }
-                                        else if (item.ProductTypeId == 2)
-                                        {
+                                    }
+                                }
+                                else if (item.ProductTypeId == 2)
+                                {
                                     <a href="~/Product/FMCGEdit?Id=@ShopNow.Helpers.AdminHelpers.ECodeLong(item.ProductId)">@item.ProductName</a>
-                                        }
-                                        else if (item.ProductTypeId == 3)
-                                        {
+                                }
+                                else if (item.ProductTypeId == 3)
+                                {
                                     <a href="~/Product/MedicalEdit?Id=@ShopNow.Helpers.AdminHelpers.ECodeLong(item.ProductId)">@item.ProductName</a>
-                                        }
-                                        else if (item.ProductTypeId == 4)
-                                        {
+                                }
+                                else if (item.ProductTypeId == 4)
+                                {
                                     <a href="~/Product/ElectronicEdit?Id=@ShopNow.Helpers.AdminHelpers.ECodeLong(item.ProductId)">@item.ProductName</a>
-                                        }
-                                        else
-                                        {
-                                            <a href="~/Product/ServiceEdit?Id=@ShopNow.Helpers.AdminHelpers.ECodeLong(item.ProductId)"></a>
-                                        }
-                                    </td>
+                                }
+                                else
+                                {
+                                    <a href="~/Product/ServiceEdit?Id=@ShopNow.Helpers.AdminHelpers.ECodeLong(item.ProductId)"></a>
+                                }
+                            </td>
                                 }
                                 else
                                 {
