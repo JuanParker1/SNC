@@ -175,7 +175,7 @@
                                 @*<a href="~/Product/Details?id=@ShopNow.Helpers.AdminHelpers.ECodeLong(item.ProductId)">@item.ProductName</a>*@
                                 @if (item.ProductTypeId == 1)
                                 {
-                                    <a href="~/Product/FoodEdit?Id=@ShopNow.Helpers.AdminHelpers.ECodeLong(item.ProductId)">@item.ProductName</a>
+                                    <a href="~/Product/FoodEdit?Id=@ShopNow.Helpers.AdminHelpers.ECodeLong(item.ProductId)">@item.ProductName</a><br />
                                     if (item.HasAddon == true)
                                     {
                                         foreach (var addon in item.AddonListItems)
