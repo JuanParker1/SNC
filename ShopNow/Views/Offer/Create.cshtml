@@ -35,16 +35,42 @@
                         </div>
                         <hr />
                         <div class="row">
-                            <div class="col-md-3">
-                                <div class="form-group">
-                                    <label class="col-form-label">Name</label>
-                                    <input type="text" name="Name" class="form-control" required />
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="form-group">
-                                    <label class="col-form-label">Offer Code</label>
-                                    <input type="text" name="OfferCode" class="form-control" required />
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="col-form-label">Name</label>
+                                            <input type="text" name="Name" class="form-control" required />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="col-form-label">Offer Code</label>
+                                            <input type="text" name="OfferCode" class="form-control" required />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="col-form-label">Discount Type</label>
+                                            <select name="DiscountType" class="form-control" required>
+                                                <option selected disabled>Select Discount Type</option>
+                                                <option value="1">Direct Discount</option>
+                                                <option value="2">Wallet Cashback</option>
+                                                <option value="3">Free Product</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="col-form-label">Offer Type</label>
+                                            <select name="Type" class="form-control" required>
+                                                <option selected disabled>Select Offer Type</option>
+                                                <option value="1">Cart Offer</option>
+                                                <option value="2" disabled>Item Offer</option>
+                                                <option value="3">Product Offer</option>
+                                            </select>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="col-md-6">
@@ -57,40 +83,23 @@
                                 <div class="d-none" id="div-shop">
                                     <div class="form-group row">
                                         <div class="col-md-12">
-                                            <label class="col-form-label">Select District</label>
-                                            <select id="select-district" name="District" class="form-control"></select>
+                                            <div class="form-group">
+                                                <label class="col-form-label">Select District</label>
+                                                <select id="select-district" name="District" class="form-control"></select>
+                                            </div>
                                         </div>
-                                        <div class="col-md-12">
-                                            <label class="col-form-label">Select Shop</label>
-                                            <select id="select-shop" name="ShopIds" class="form-control" multiple></select>
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label class="col-form-label">Select Shop</label>
+                                                    <select id="select-shop" name="ShopIds" class="form-control select-shop" multiple></select>
+                                                </div>
+                                            </div>
                                         </div>
-                                    </div>
                                 </div>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label class="col-form-label">Discount Type</label>
-                                    <select name="DiscountType" class="form-control" required>
-                                        <option selected disabled>Select Discount Type</option>
-                                        <option value="1">Direct Discount</option>
-                                        <option value="2">Wallet Cashback</option>
-                                        <option value="3">Free Product</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label class="col-form-label">Offer Type</label>
-                                    <select name="Type" class="form-control" required>
-                                        <option selected disabled>Select Offer Type</option>
-                                        <option value="1">Cart Offer</option>
-                                        <option value="2" disabled>Item Offer</option>
-                                        <option value="3">Product Offer</option>
-                                    </select>
-                                </div>
-                            </div>
+                           
                             <div id="div-products" class="col-md-4 d-none">
                                 <div class="form-group">
                                     <label class="col-form-label">Select Product</label>

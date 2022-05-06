@@ -5,7 +5,9 @@ using ShopNow.Models;
 using ShopNow.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 
@@ -205,6 +207,29 @@ namespace ShopNow.Controllers
                 db.SaveChanges();
             }
             return Json(true, JsonRequestBehavior.AllowGet);
+        }
+
+        public async Task<JsonResult> GetDistrictSelect2(string q = "")
+        {
+            var model = await db.Shops.Where(a => a.DistrictName.Contains(q) && a.Status == 0).GroupBy(i => i.DistrictName).Select(i => new
+            {
+                id = i.Key,
+                text = i.Key
+            }).OrderBy(i => i.text).ToListAsync();
+
+            return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
+        }
+        public async Task<JsonResult> GetShopByDistrictSelect2(string district, string q = "")
+        {
+            int[] shopidarray = db.Shops.Where(i => i.Status == 0 && i.DistrictName == district).Select(i => i.Id).ToArray();
+            var model = await db.Shops.Where(a => a.Name.Contains(q) && a.Status == 0 && a.DistrictName == district).OrderBy(i => i.Name).Select(i => new
+            {
+                id = i.Id,
+                text = i.Name,
+                shopid = shopidarray
+            }).OrderBy(i => i.text).ToListAsync();
+
+            return Json(new { results = model, result = shopidarray, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
         }
 
     }
