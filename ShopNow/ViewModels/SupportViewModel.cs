@@ -45,7 +45,8 @@ namespace ShopNow.ViewModels
 
     public class DeliveryBoyAssignViewModel
     {
-
+        public int ShopId { get; set; }
+        public string ShopName { get; set; }
         public List<AssignList> List { get; set; }
         public class AssignList
         {
@@ -148,6 +149,8 @@ namespace ShopNow.ViewModels
     }
     public class UnMappedListViewModel
     {
+        public int ShopId { get; set; }
+        public string ShopName { get; set; }
         public List<UnMappedList> List { get; set; }
         public class UnMappedList
         {
