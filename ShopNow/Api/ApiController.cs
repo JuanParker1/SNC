@@ -219,10 +219,18 @@ namespace ShopNow.Controllers
                     otpmodel.DateUpdated = DateTime.Now;
                     db.OtpVerifications.Add(otpmodel);
                     db.SaveChanges();
+
+                    int deliveryBoyType = 0;
+                    if (customer.Position == 3)
+                    {
+                        var deliveryBoy = db.DeliveryBoys.FirstOrDefault(i => i.CustomerId == customer.Id);
+                        if (deliveryBoy != null)
+                            deliveryBoyType = deliveryBoy.WorkType;
+                    }
                     if (otpmodel != null)
                     {
                         UpdateOrderCustomerIdOfPickupService(customer.PhoneNumber, customer.Id);
-                        return Json(new { message = "Already Customer and OTP send!", id = customer.Id, Position = customer.Position });
+                        return Json(new { message = "Already Customer and OTP send!", id = customer.Id, Position = customer.Position, DeliveryBoyType = deliveryBoyType });
                     }
                     else
                         return Json("Otp Failed to send!");
