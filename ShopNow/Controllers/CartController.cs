@@ -2215,10 +2215,22 @@ namespace ShopNow.Controllers
                 {
                     ShopName = i.FirstOrDefault().o.ShopName,
                     ProductName = i.FirstOrDefault().oi.ProductName,
+                    ProductId = i.FirstOrDefault().oi.ProductId,
                     OrderCount = i.Count(),
-                    ShopId = i.FirstOrDefault().o.ShopId
+                    ShopId = i.FirstOrDefault().o.ShopId,
+                    CustomerLikeCount = db.CustomerFavorites.Where(a=>a.ProductId == i.FirstOrDefault().oi.ProductId).Count(),
+                    MarketingLikes = db.Products.FirstOrDefault(a => a.Id == i.FirstOrDefault().oi.ProductId).MarketingLikes,
                 }).OrderByDescending(i=>i.OrderCount).ToList();
             return View(model);
+        }
+
+        public JsonResult UpdateProductMarketingLikes(long id, int likecount)
+        {
+            var product = db.Products.FirstOrDefault(i => i.Id == id);
+            product.MarketingLikes = likecount;
+            db.Entry(product).State = EntityState.Modified;
+            db.SaveChanges();
+            return Json(true, JsonRequestBehavior.AllowGet);
         }
 
         protected override void Dispose(bool disposing)

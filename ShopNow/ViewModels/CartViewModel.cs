@@ -693,7 +693,10 @@ namespace ShopNow.ViewModels
             public int ShopId { get; set; }
             public string ShopName { get; set; }
             public int OrderCount { get; set; }
+            public int CustomerLikeCount { get; set; }
             public string ProductName { get; set; }
+            public long ProductId { get; set; }
+            public int MarketingLikes { get; set; }
         }
     }
 

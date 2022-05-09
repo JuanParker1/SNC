@@ -38,6 +38,13 @@
                    columns.Add(c => c.ShopName).Titled("Shop Name").Filterable(true).SetWidth(20);
                    columns.Add(c => c.ProductName).Titled("Item Name").Filterable(true).SetWidth(35);
                    columns.Add(c => c.OrderCount).Titled("Sale Count").Filterable(true).SetWidth(10);
+                   columns.Add(c => c.CustomerLikeCount).Titled("Customer Likes").Filterable(true).SetWidth(10);
+                   columns.Add().Encoded(false).Sanitized(false)
+                    .RenderValueAs(b => new HtmlString
+                           ("<input class='form-control input-likes' value=" + b.MarketingLikes + " />")).Titled("Marketing Likes").SetWidth(30);
+                   columns.Add().Encoded(false).Sanitized(false)
+                    .RenderValueAs(b => new HtmlString
+                           ("<input type='button' class='btn btn-sm btn-success btn-save-likes' data-id=" + b.ProductId + " value='Save' />")).Titled("Action").Css("text-center").SetWidth(5);
                }).WithPaging(20).Sortable(true)
                 </div>
             </div>
@@ -63,8 +70,20 @@
                 }
             }).on('select2:select', function (e) {
                 $('input[name="FilterShopName"]').val(e.params.data.text);
+                });
+
+            $('.btn-save-likes').on('click', function () {
+                var tr = $(this).closest('tr');
+                var likes = tr.find('.input-likes').val();
+                var id = $(this).data('id');
+                $.post('/Cart/UpdateProductMarketingLikes', { id: id, likeCount: likes }, function (data) {
+                    if (data) {
+                        //swal('Success!', 'Save Successfully', 'success');
+                        //tr.find('.input-likes').val('');
+                        window.location.reload();
+                    }
+                });
             });
-            
         });
     </script>
 }
