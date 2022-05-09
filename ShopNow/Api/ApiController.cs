@@ -3094,6 +3094,28 @@ namespace ShopNow.Controllers
 
                 }
             }
+            
+            model.OfferLists = db.OfferShops.Where(i=>i.ShopId == shop.Id)
+                .Join(db.Offers.Where(i => i.Status == 0 && i.Type == 1), os => os.OfferId, o => o.Id, (os, o) => new { os, o })
+                .GroupBy(i => i.o.Id)
+                .Select(i => new ShopDetails.OfferListItem
+                {
+                    AmountLimit = i.FirstOrDefault().o.AmountLimit,
+                    BrandId = i.FirstOrDefault().o.BrandId,
+                    CustomerCountLimit = i.FirstOrDefault().o.CustomerCountLimit,
+                    DiscountType = i.FirstOrDefault().o.DiscountType,
+                    Id = i.FirstOrDefault().o.Id,
+                    IsForBlackListAbusers = i.FirstOrDefault().o.IsForBlackListAbusers,
+                    IsForFirstOrder = i.FirstOrDefault().o.IsForFirstOrder,
+                    IsForOnlinePayment = i.FirstOrDefault().o.IsForOnlinePayment,
+                    MinimumPurchaseAmount = i.FirstOrDefault().o.MinimumPurchaseAmount,
+                    Name = i.FirstOrDefault().o.Name,
+                    OfferCode = i.FirstOrDefault().o.OfferCode,
+                    Percentage = i.FirstOrDefault().o.Percentage,
+                    QuantityLimit = i.FirstOrDefault().o.QuantityLimit,
+                    Type = i.FirstOrDefault().o.Type,
+                    Description = i.FirstOrDefault().o.Description
+                }).ToList();
             return new JsonResult()
             {
                 ContentType = "application/json",
