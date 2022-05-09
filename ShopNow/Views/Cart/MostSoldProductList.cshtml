@@ -1,0 +1,70 @@
+﻿@model ShopNow.ViewModels.MostSoldProductListByShop
+@using GridMvc.Html
+@{
+    ViewBag.Title = "Most Sold List";
+}
+<title>SNOWCH | @ViewBag.Title</title>
+<link href="~/Content/Gridmvc.css" rel="stylesheet" />
+<script src="~/Scripts/gridmvc.js"></script>
+<div class="container-fluid">
+    <div class="row mb-3">
+        <div class="col-md-3">
+            <h5 class="mt-1 text-success text-uppercase" style="letter-spacing:1px">@ViewBag.Title</h5>
+        </div>
+        <div class="col-md-5">
+            <form method="get" action="/Cart/MostSoldProductList">
+                <div class="row">
+                    <div class="col-md-8">
+                        <select id="FilterShopId" class="form-control" name="FilterShopId">
+                            @if (Model.FilterShopId != 0)
+                            {
+                                <option value="@Model.FilterShopId">@Model.FilterShopName</option>
+                            }
+                        </select>
+                        <input type="hidden" name="FilterShopName" value="@Model.FilterShopName" />
+                    </div>
+                    <div class="col-md-4">
+                        <input type="submit" class="btn btn-info mr-3" value="Go" />
+                        <a href="/Cart/MostSoldProductList" class="btn btn-info">Clear</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="col-md-12">
+            <div class="card shadow mt-3">
+                <div class="card-body">
+                    @Html.Grid(Model.ListItems).Columns(columns =>
+               {
+                   columns.Add(c => c.ShopName).Titled("Shop Name").Filterable(true).SetWidth(20);
+                   columns.Add(c => c.ProductName).Titled("Item Name").Filterable(true).SetWidth(35);
+                   columns.Add(c => c.OrderCount).Titled("Sale Count").Filterable(true).SetWidth(10);
+               }).WithPaging(20).Sortable(true)
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+    <script src="~/Scripts/select2/js/select2.js"></script>
+    <link href="~/Scripts/select2/css/select2.css" rel="stylesheet" />
+    <link href="~/Content/select2/select2.custom.css" rel="stylesheet" />
+    <script>
+        $(document).ready(function () {
+
+            $('#FilterShopId').select2({
+                placeholder: "Search Shop",
+                width: '100%',
+                ajax: {
+                    url: "/Product/GetActiveShopSelect2",
+                    delay: 250,
+                    dataType: 'json'
+                }
+            }).on('select2:select', function (e) {
+                $('input[name="FilterShopName"]').val(e.params.data.text);
+            });
+            
+        });
+    </script>
+}

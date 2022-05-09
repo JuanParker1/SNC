@@ -3426,6 +3426,7 @@
     <Content Include="Views\Bill\ParcelDropDeliveryUpdate.cshtml" />
     <Content Include="Views\Bill\ParcelDropDeliveryChargeAssignList.cshtml" />
     <Content Include="Views\Bill\ParcelDropDeliveryChargeAssign.cshtml" />
+    <Content Include="Views\Cart\MostSoldProductList.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

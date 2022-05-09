@@ -682,6 +682,21 @@ namespace ShopNow.ViewModels
         }
     }
 
+
+    public class MostSoldProductListByShop
+    {
+        public int FilterShopId { get; set; }
+        public string FilterShopName { get; set; }
+        public List<ListItem> ListItems { get; set; }
+        public class ListItem
+        {
+            public int ShopId { get; set; }
+            public string ShopName { get; set; }
+            public int OrderCount { get; set; }
+            public string ProductName { get; set; }
+        }
+    }
+
     //Api
     public class CartCreateViewModel
     {

@@ -2204,6 +2204,23 @@ namespace ShopNow.Controllers
             return Json(ShopDeliveryDiscount, JsonRequestBehavior.AllowGet);
         }
 
+        public ActionResult MostSoldProductList(MostSoldProductListByShop model)
+        {
+            var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
+            ViewBag.Name = user.Name;
+            model.ListItems = db.Orders.Where(i => i.Status == 6 && (model.FilterShopId != 0 ? i.ShopId == model.FilterShopId : false))
+                .Join(db.OrderItems.Where(i => i.ProductId != 0), o => o.Id, oi => oi.OrderId, (o, oi) => new { o, oi })
+                .GroupBy(i => i.oi.ProductId)
+                .Select(i => new MostSoldProductListByShop.ListItem
+                {
+                    ShopName = i.FirstOrDefault().o.ShopName,
+                    ProductName = i.FirstOrDefault().oi.ProductName,
+                    OrderCount = i.Count(),
+                    ShopId = i.FirstOrDefault().o.ShopId
+                }).OrderByDescending(i=>i.OrderCount).ToList();
+            return View(model);
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)
