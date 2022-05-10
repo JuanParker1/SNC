@@ -347,6 +347,7 @@ namespace ShopNow.ViewModels
             public long Id { get; set; }
             public string OrderNumber { get; set; }
             public string ShopName { get; set; }
+            public int CustomerId { get; set; }
             public string CustomerPhoneNumber { get; set; }
             public int Status { get; set; }
             public DateTime DateEncoded { get; set; }

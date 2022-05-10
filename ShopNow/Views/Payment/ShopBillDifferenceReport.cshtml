@@ -107,15 +107,16 @@
     <script src="~/Scripts/select2/js/select2.js"></script>
     <link href="~/Scripts/select2/css/select2.css" rel="stylesheet" />
     <link href="~/Content/select2/select2.custom.css" rel="stylesheet" />
-    <script src="/Scripts/exporttoexcel/Table2ExcelNew.js"></script>
+    <script src="~/Scripts/exporttoexcel/jquery.table2excel.js"></script>
     <script>
         $(document).ready(function () {
-            $("#btnExport").on('click', function () {
-                $(function () {
-                    var table2excel = new Table2Excel({
-                        defaultFileName: "ShopBillDifference",
-                    });
-                    table2excel.export($("#table-excel"));
+           
+            $("#btnExport").click(function () {
+                $("#table-excel").table2excel({
+                    name: "Worksheet Name",
+                    filename: "ShopBillDifference",
+                    fileext: ".xls",
+                    exclude_links: true
                 });
             });
 
