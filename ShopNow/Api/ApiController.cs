@@ -3027,7 +3027,7 @@ namespace ShopNow.Controllers
                        OfferQuantityLimit = i.p.p.p.p.p.OfferQuantityLimit,
                        IsLiked = i.p.p.cf.Any(a => a.CustomerId == customerId && a.IsFavorite == true && a.ProductId == i.p.p.p.p.p.Id),
                       // LikeText = (i.p.p.cf.Any(a => a.CustomerId == customerId && a.IsFavorite == true && a.ProductId == i.p.p.p.p.p.Id) == true && i.p.p.cf.Where(a => a.ProductId == i.p.p.p.p.p.Id && a.IsFavorite == true).Count() == 1) ? "You Liked" : i.p.p.cf.Any(a => a.CustomerId == customerId && a.IsFavorite == true && a.ProductId == i.p.p.p.p.p.Id) == true ? "You & " + (i.p.p.cf.Where(a => a.ProductId == i.p.p.p.p.p.Id && a.IsFavorite == true).Count() - 1) + " more" : i.p.p.cf.Where(a => a.ProductId == i.p.p.p.p.p.Id && a.IsFavorite == true).Count() > 0 ? i.p.p.cf.Where(a => a.ProductId == i.p.p.p.p.p.Id && a.IsFavorite == true).Count() + " like" : "",
-                       LikeText = (i.p.p.cf.Any(a => a.CustomerId == customerId && a.IsFavorite == true && a.ProductId == i.p.p.p.p.p.Id) == true && i.p.p.cf.Where(a => a.ProductId == i.p.p.p.p.p.Id && a.IsFavorite == true).Count() == 1 && i.p.p.p.p.p.MarketingLikes == 0) ? "You Liked" : i.p.p.cf.Any(a => a.CustomerId == customerId && a.IsFavorite == true && a.ProductId == i.p.p.p.p.p.Id) == true ? "You & " + (i.p.p.cf.Where(a => a.ProductId == i.p.p.p.p.p.Id && a.IsFavorite == true).Count() - 1 + i.p.p.p.p.p.MarketingLikes) + " more" : i.p.p.cf.Where(a => a.ProductId == i.p.p.p.p.p.Id && a.IsFavorite == true).Count() > 0 ? i.p.p.cf.Where(a => a.ProductId == i.p.p.p.p.p.Id && a.IsFavorite == true).Count() + i.p.p.p.p.p.MarketingLikes + " like" : "",
+                       LikeText = (i.p.p.cf.Any(a => a.CustomerId == customerId && a.IsFavorite == true && a.ProductId == i.p.p.p.p.p.Id) == true && i.p.p.cf.Where(a => a.ProductId == i.p.p.p.p.p.Id && a.IsFavorite == true).Count() == 1 && i.p.p.p.p.p.MarketingLikes == 0) ? "You Liked" : i.p.p.cf.Any(a => a.CustomerId == customerId && a.IsFavorite == true && a.ProductId == i.p.p.p.p.p.Id) == true ? "You & " + (i.p.p.cf.Where(a => a.ProductId == i.p.p.p.p.p.Id && a.IsFavorite == true).Count() - 1 + i.p.p.p.p.p.MarketingLikes) + " more" : i.p.p.cf.Where(a => a.ProductId == i.p.p.p.p.p.Id && a.IsFavorite == true).Count() > 0 ? i.p.p.cf.Where(a => a.ProductId == i.p.p.p.p.p.Id && a.IsFavorite == true).Count() + i.p.p.p.p.p.MarketingLikes + " like" :i.p.p.p.p.p.MarketingLikes >0? i.p.p.p.p.p.MarketingLikes +" like": "",
                        ShopPrice = i.p.p.p.p.p.ShopPrice,
                        MaxAddonSelectionLimit = i.p.p.p.p.p.MaxSelectionLimit,
                        MinAddonSelectionLimit = i.p.p.p.p.p.MinSelectionLimit,
@@ -3075,7 +3075,7 @@ namespace ShopNow.Controllers
                         OfferQuantityLimit = i.p.p.p.OfferQuantityLimit,
                         IsLiked = i.cf.Any(a => a.CustomerId == customerId && a.IsFavorite == true && a.ProductId == i.p.p.p.Id),
                         //LikeText = (i.cf.Any(a => a.CustomerId == customerId && a.IsFavorite == true && a.ProductId == i.p.p.p.Id) == true && i.cf.Where(a => a.ProductId == i.p.p.p.Id && a.IsFavorite == true).Count() == 1) ? "You Liked" : i.cf.Any(a => a.CustomerId == customerId && a.IsFavorite == true && a.ProductId == i.p.p.p.Id) == true ? "You & " + (i.cf.Where(a => a.ProductId == i.p.p.p.Id && a.IsFavorite == true).Count() - 1) + " more" : i.cf.Where(a => a.ProductId == i.p.p.p.Id && a.IsFavorite == true).Count() > 0 ? i.cf.Where(a => a.ProductId == i.p.p.p.Id && a.IsFavorite == true).Count() + " like" : "",
-                        LikeText = (i.cf.Any(a => a.CustomerId == customerId && a.IsFavorite == true && a.ProductId == i.p.p.p.Id) == true && i.cf.Where(a => a.ProductId == i.p.p.p.Id && a.IsFavorite == true).Count() == 1 && i.p.p.p.MarketingLikes == 0) ? "You Liked" : i.cf.Any(a => a.CustomerId == customerId && a.IsFavorite == true && a.ProductId == i.p.p.p.Id) == true ? "You & " + (i.cf.Where(a => a.ProductId == i.p.p.p.Id && a.IsFavorite == true).Count() - 1 + i.p.p.p.MarketingLikes) + " more" : i.cf.Where(a => a.ProductId == i.p.p.p.Id && a.IsFavorite == true).Count() > 0 ? i.cf.Where(a => a.ProductId == i.p.p.p.Id && a.IsFavorite == true).Count() + i.p.p.p.MarketingLikes + " like" : "",
+                        LikeText = (i.cf.Any(a => a.CustomerId == customerId && a.IsFavorite == true && a.ProductId == i.p.p.p.Id) == true && i.cf.Where(a => a.ProductId == i.p.p.p.Id && a.IsFavorite == true).Count() == 1 && i.p.p.p.MarketingLikes == 0) ? "You Liked" : i.cf.Any(a => a.CustomerId == customerId && a.IsFavorite == true && a.ProductId == i.p.p.p.Id) == true ? "You & " + (i.cf.Where(a => a.ProductId == i.p.p.p.Id && a.IsFavorite == true).Count() - 1 + i.p.p.p.MarketingLikes) + " more" : i.cf.Where(a => a.ProductId == i.p.p.p.Id && a.IsFavorite == true).Count() > 0 ? i.cf.Where(a => a.ProductId == i.p.p.p.Id && a.IsFavorite == true).Count() + i.p.p.p.MarketingLikes + " like" : i.p.p.p.MarketingLikes > 0 ? i.p.p.p.MarketingLikes + " like": "",
                         ShopPrice = i.p.p.p.ShopPrice,
                         MaxAddonSelectionLimit = i.p.p.p.MaxSelectionLimit,
                         MinAddonSelectionLimit = i.p.p.p.MinSelectionLimit,
@@ -9488,6 +9488,33 @@ namespace ShopNow.Controllers
                     tvlAddon.ShopId = 264;
                     tvlAddon.ProductId = tvlProduct.Id;
                     db.ShopDishAddOns.Add(tvlAddon);
+                    db.SaveChanges();
+                }
+            }
+            return Json(true, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult UpdateMarketingLikesWithSaleCount()
+        {
+            var list = db.Shops.Where(i => i.ShopCategoryId == 1)
+               .Join(db.Orders.Where(i => i.Status == 6), s => s.Id, o => o.ShopId, (s, o) => new { s, o })
+                .Join(db.OrderItems.Where(i => i.ProductId != 0), s => s.o.Id, oi => oi.OrderId, (s, oi) => new { s, oi })
+                .GroupBy(i => i.oi.ProductId)
+                .Select(i => new MostSoldProductListByShop.ListItem
+                {
+                    ShopName = i.FirstOrDefault().s.o.ShopName,
+                    ProductId = i.FirstOrDefault().oi.ProductId,
+                    OrderCount = i.Count(),
+                    ShopId = i.FirstOrDefault().s.o.ShopId,
+                }).ToList();
+
+            foreach (var item in list)
+            {
+                var prod = db.Products.FirstOrDefault(i => i.Id == item.ProductId);
+                if (prod != null)
+                {
+                    prod.MarketingLikes = item.OrderCount;
+                    db.Entry(prod).State = EntityState.Modified;
                     db.SaveChanges();
                 }
             }
