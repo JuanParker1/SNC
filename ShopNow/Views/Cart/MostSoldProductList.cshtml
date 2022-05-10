@@ -44,7 +44,7 @@
                            ("<input class='form-control input-likes' value=" + b.MarketingLikes + " />")).Titled("Marketing Likes").SetWidth(30);
                    columns.Add().Encoded(false).Sanitized(false)
                     .RenderValueAs(b => new HtmlString
-                           ("<input type='button' class='btn btn-sm btn-success btn-save-likes' data-id=" + b.ProductId + " value='Save' />")).Titled("Action").Css("text-center").SetWidth(5);
+                           ("<input type='button' class='btn btn-sm btn-success btn-save-likes' data-id=" + b.ProductId + " value='Update' />")).Titled("Action").Css("text-center").SetWidth(5);
                }).WithPaging(20).Sortable(true)
                 </div>
             </div>
