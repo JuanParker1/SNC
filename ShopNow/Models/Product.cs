@@ -60,6 +60,7 @@ namespace ShopNow.Models
         public int OfferQuantityLimit { get; set; }
         public Nullable<System.DateTime> MappedDate { get; set; }
         public double ShopPrice { get; set; }
+        public int MarketingLikes { get; set; }
         public int Status { get; set; }
         public System.DateTime DateEncoded { get; set; }
         public System.DateTime DateUpdated { get; set; }
