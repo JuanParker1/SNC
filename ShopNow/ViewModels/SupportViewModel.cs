@@ -39,6 +39,7 @@ namespace ShopNow.ViewModels
         public int ServiceCount { get; set; }
         public string JoyraNagercoil { get; set; }
         public string JoyraPalai { get; set; }
+        public string JoyraCovai { get; set; }
 
 
     }

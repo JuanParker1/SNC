@@ -79,10 +79,13 @@ namespace ShopNow.Controllers
             model.ShopOfflineCount = db.Shops.Where(i => i.Status == 0 && i.IsOnline == false).Count();
             var nglts = db.Products.Where(i => i.ShopId == 123 && i.Status == 0).Max(i => i.ItemTimeStamp);
             var palaits = db.Products.Where(i => i.ShopId == 203 && i.Status == 0).Max(i => i.ItemTimeStamp);
+            var covaits = db.Products.Where(i => i.ShopId == 444 && i.Status == 0).Max(i => i.ItemTimeStamp);
             DateTime datengl = DateTime.ParseExact(nglts, "yyyyMMddHHmmss", System.Globalization.CultureInfo.InvariantCulture);
             DateTime datepalai = DateTime.ParseExact(palaits, "yyyyMMddHHmmss", System.Globalization.CultureInfo.InvariantCulture);
+            DateTime datecovai = DateTime.ParseExact(covaits, "yyyyMMddHHmmss", System.Globalization.CultureInfo.InvariantCulture);
             model.JoyraNagercoil = datengl.ToString("dd-MM-yyyy hh:mm tt");
             model.JoyraPalai = datepalai.ToString("dd-MM-yyyy hh:mm tt");
+            model.JoyraCovai = datecovai.ToString("dd-MM-yyyy hh:mm tt");
             //model.ServiceCount = db.Services.Where(i => i.Status == 0).Count();
 
             //Send PushNotification

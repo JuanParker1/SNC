@@ -212,9 +212,9 @@ namespace ShopNow.Controllers
                                                 Id = lst[idx].Id,
                                                 ItemId = lst[idx].ItemId,
                                                 IBarU = lst[idx].IBarU,
-                                                MenuPrice = (s.Mrp / s.stock)* lst[idx].IBarU,
+                                                MenuPrice = (Convert.ToDouble(s.Mrp) / Convert.ToInt32(s.stock))* lst[idx].IBarU,
                                                 Name = lst[idx].Name,
-                                                Qty = s.stock/ lst[idx].IBarU,
+                                                Qty = Convert.ToInt32(s.stock)/ lst[idx].IBarU,
                                                 ShopId = shopmodel.Id,
                                                 ShopName = shopmodel.Name,
                                                 DateEncoded = lst[idx].DateEncoded,
@@ -332,9 +332,9 @@ namespace ShopNow.Controllers
 
                                 }
                             }
-                            //db.BulkInsert(createList);
-                            //if (updateList.Count > 0)
-                            //    db.BulkUpdate(updateList);
+                            db.BulkInsert(createList);
+                           if (updateList.Count > 0)
+                                db.BulkUpdate(updateList);
                             //// db.SaveChanges();
                         }
                         //    var varMrp=newSortq.Where(i=>i.itemid == Convert.ToInt32(dr[0])).
