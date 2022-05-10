@@ -219,10 +219,18 @@ namespace ShopNow.Controllers
                     otpmodel.DateUpdated = DateTime.Now;
                     db.OtpVerifications.Add(otpmodel);
                     db.SaveChanges();
+
+                    int deliveryBoyType = 0;
+                    if (customer.Position == 3)
+                    {
+                        var deliveryBoy = db.DeliveryBoys.FirstOrDefault(i => i.CustomerId == customer.Id);
+                        if (deliveryBoy != null)
+                            deliveryBoyType = deliveryBoy.WorkType;
+                    }
                     if (otpmodel != null)
                     {
                         UpdateOrderCustomerIdOfPickupService(customer.PhoneNumber, customer.Id);
-                        return Json(new { message = "Already Customer and OTP send!", id = customer.Id, Position = customer.Position });
+                        return Json(new { message = "Already Customer and OTP send!", id = customer.Id, Position = customer.Position, DeliveryBoyType = deliveryBoyType });
                     }
                     else
                         return Json("Otp Failed to send!");
@@ -3018,7 +3026,8 @@ namespace ShopNow.Controllers
                        PreorderHour = i.p.p.p.p.p.PreorderHour,
                        OfferQuantityLimit = i.p.p.p.p.p.OfferQuantityLimit,
                        IsLiked = i.p.p.cf.Any(a => a.CustomerId == customerId && a.IsFavorite == true && a.ProductId == i.p.p.p.p.p.Id),
-                       LikeText = (i.p.p.cf.Any(a => a.CustomerId == customerId && a.IsFavorite == true && a.ProductId == i.p.p.p.p.p.Id) == true && i.p.p.cf.Where(a => a.ProductId == i.p.p.p.p.p.Id && a.IsFavorite == true).Count() == 1) ? "You Liked" : i.p.p.cf.Any(a => a.CustomerId == customerId && a.IsFavorite == true && a.ProductId == i.p.p.p.p.p.Id) == true ? "You & " + (i.p.p.cf.Where(a => a.ProductId == i.p.p.p.p.p.Id && a.IsFavorite == true).Count() - 1) + " more" : i.p.p.cf.Where(a => a.ProductId == i.p.p.p.p.p.Id && a.IsFavorite == true).Count() > 0 ? i.p.p.cf.Where(a => a.ProductId == i.p.p.p.p.p.Id && a.IsFavorite == true).Count() + " like" : "",
+                      // LikeText = (i.p.p.cf.Any(a => a.CustomerId == customerId && a.IsFavorite == true && a.ProductId == i.p.p.p.p.p.Id) == true && i.p.p.cf.Where(a => a.ProductId == i.p.p.p.p.p.Id && a.IsFavorite == true).Count() == 1) ? "You Liked" : i.p.p.cf.Any(a => a.CustomerId == customerId && a.IsFavorite == true && a.ProductId == i.p.p.p.p.p.Id) == true ? "You & " + (i.p.p.cf.Where(a => a.ProductId == i.p.p.p.p.p.Id && a.IsFavorite == true).Count() - 1) + " more" : i.p.p.cf.Where(a => a.ProductId == i.p.p.p.p.p.Id && a.IsFavorite == true).Count() > 0 ? i.p.p.cf.Where(a => a.ProductId == i.p.p.p.p.p.Id && a.IsFavorite == true).Count() + " like" : "",
+                       LikeText = (i.p.p.cf.Any(a => a.CustomerId == customerId && a.IsFavorite == true && a.ProductId == i.p.p.p.p.p.Id) == true && i.p.p.cf.Where(a => a.ProductId == i.p.p.p.p.p.Id && a.IsFavorite == true).Count() == 1 && i.p.p.p.p.p.MarketingLikes == 0) ? "You Liked" : i.p.p.cf.Any(a => a.CustomerId == customerId && a.IsFavorite == true && a.ProductId == i.p.p.p.p.p.Id) == true ? "You & " + (i.p.p.cf.Where(a => a.ProductId == i.p.p.p.p.p.Id && a.IsFavorite == true).Count() - 1 + i.p.p.p.p.p.MarketingLikes) + " more" : i.p.p.cf.Where(a => a.ProductId == i.p.p.p.p.p.Id && a.IsFavorite == true).Count() > 0 ? i.p.p.cf.Where(a => a.ProductId == i.p.p.p.p.p.Id && a.IsFavorite == true).Count() + i.p.p.p.p.p.MarketingLikes + " like" : "",
                        ShopPrice = i.p.p.p.p.p.ShopPrice,
                        MaxAddonSelectionLimit = i.p.p.p.p.p.MaxSelectionLimit,
                        MinAddonSelectionLimit = i.p.p.p.p.p.MinSelectionLimit,
@@ -3065,7 +3074,8 @@ namespace ShopNow.Controllers
                         PreorderHour = i.p.p.p.PreorderHour,
                         OfferQuantityLimit = i.p.p.p.OfferQuantityLimit,
                         IsLiked = i.cf.Any(a => a.CustomerId == customerId && a.IsFavorite == true && a.ProductId == i.p.p.p.Id),
-                        LikeText = (i.cf.Any(a => a.CustomerId == customerId && a.IsFavorite == true && a.ProductId == i.p.p.p.Id) == true && i.cf.Where(a => a.ProductId == i.p.p.p.Id && a.IsFavorite == true).Count() == 1) ? "You Liked" : i.cf.Any(a => a.CustomerId == customerId && a.IsFavorite == true && a.ProductId == i.p.p.p.Id) == true ? "You & " + (i.cf.Where(a => a.ProductId == i.p.p.p.Id && a.IsFavorite == true).Count() - 1) + " more" : i.cf.Where(a => a.ProductId == i.p.p.p.Id && a.IsFavorite == true).Count() > 0 ? i.cf.Where(a => a.ProductId == i.p.p.p.Id && a.IsFavorite == true).Count() + " like" : "",
+                        //LikeText = (i.cf.Any(a => a.CustomerId == customerId && a.IsFavorite == true && a.ProductId == i.p.p.p.Id) == true && i.cf.Where(a => a.ProductId == i.p.p.p.Id && a.IsFavorite == true).Count() == 1) ? "You Liked" : i.cf.Any(a => a.CustomerId == customerId && a.IsFavorite == true && a.ProductId == i.p.p.p.Id) == true ? "You & " + (i.cf.Where(a => a.ProductId == i.p.p.p.Id && a.IsFavorite == true).Count() - 1) + " more" : i.cf.Where(a => a.ProductId == i.p.p.p.Id && a.IsFavorite == true).Count() > 0 ? i.cf.Where(a => a.ProductId == i.p.p.p.Id && a.IsFavorite == true).Count() + " like" : "",
+                        LikeText = (i.cf.Any(a => a.CustomerId == customerId && a.IsFavorite == true && a.ProductId == i.p.p.p.Id) == true && i.cf.Where(a => a.ProductId == i.p.p.p.Id && a.IsFavorite == true).Count() == 1 && i.p.p.p.MarketingLikes == 0) ? "You Liked" : i.cf.Any(a => a.CustomerId == customerId && a.IsFavorite == true && a.ProductId == i.p.p.p.Id) == true ? "You & " + (i.cf.Where(a => a.ProductId == i.p.p.p.Id && a.IsFavorite == true).Count() - 1 + i.p.p.p.MarketingLikes) + " more" : i.cf.Where(a => a.ProductId == i.p.p.p.Id && a.IsFavorite == true).Count() > 0 ? i.cf.Where(a => a.ProductId == i.p.p.p.Id && a.IsFavorite == true).Count() + i.p.p.p.MarketingLikes + " like" : "",
                         ShopPrice = i.p.p.p.ShopPrice,
                         MaxAddonSelectionLimit = i.p.p.p.MaxSelectionLimit,
                         MinAddonSelectionLimit = i.p.p.p.MinSelectionLimit,
@@ -3084,6 +3094,28 @@ namespace ShopNow.Controllers
 
                 }
             }
+            
+            model.OfferLists = db.OfferShops.Where(i=>i.ShopId == shop.Id)
+                .Join(db.Offers.Where(i => i.Status == 0 && i.Type == 1), os => os.OfferId, o => o.Id, (os, o) => new { os, o })
+                .GroupBy(i => i.o.Id)
+                .Select(i => new ShopDetails.OfferListItem
+                {
+                    AmountLimit = i.FirstOrDefault().o.AmountLimit,
+                    BrandId = i.FirstOrDefault().o.BrandId,
+                    CustomerCountLimit = i.FirstOrDefault().o.CustomerCountLimit,
+                    DiscountType = i.FirstOrDefault().o.DiscountType,
+                    Id = i.FirstOrDefault().o.Id,
+                    IsForBlackListAbusers = i.FirstOrDefault().o.IsForBlackListAbusers,
+                    IsForFirstOrder = i.FirstOrDefault().o.IsForFirstOrder,
+                    IsForOnlinePayment = i.FirstOrDefault().o.IsForOnlinePayment,
+                    MinimumPurchaseAmount = i.FirstOrDefault().o.MinimumPurchaseAmount,
+                    Name = i.FirstOrDefault().o.Name,
+                    OfferCode = i.FirstOrDefault().o.OfferCode,
+                    Percentage = i.FirstOrDefault().o.Percentage,
+                    QuantityLimit = i.FirstOrDefault().o.QuantityLimit,
+                    Type = i.FirstOrDefault().o.Type,
+                    Description = i.FirstOrDefault().o.Description
+                }).ToList();
             return new JsonResult()
             {
                 ContentType = "application/json",

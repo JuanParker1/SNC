@@ -211,12 +211,10 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SNCSLDA293")]
-        public ActionResult LiveDeliveryboyAssignment(int shopId = 0)
+        public ActionResult LiveDeliveryboyAssignment(DeliveryBoyAssignViewModel model)
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
-            var model = new DeliveryBoyAssignViewModel();
-
             model.DeliveryBoyList = db.DeliveryBoys.Where(i => i.isAssign == 0 && i.OnWork == 0 && i.Active == 1 && i.Status == 0)
                 .Select(i => new DeliveryBoyAssignViewModel.DeliveryBoy
                 {
@@ -224,7 +222,7 @@ namespace ShopNow.Controllers
                     Name = i.Name
                 }).ToList();
 
-            model.List = db.Orders.Where(i => (i.Status == 3 || i.Status == 8) && (shopId != 0 ? i.ShopId == shopId : true))
+            model.List = db.Orders.Where(i => (i.Status == 3 || i.Status == 8) && i.ShopId != 0 && (model.ShopId != 0 ? i.ShopId == model.ShopId : true))
                .Select(i => new DeliveryBoyAssignViewModel.AssignList
                {
                    Id = i.Id,
@@ -239,12 +237,11 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SNCSUML299")]
-        public ActionResult UnMappedList(int shopId = 0)
+        public ActionResult UnMappedList(UnMappedListViewModel model)
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
-            var model = new UnMappedListViewModel();
-            model.List = db.Products.Where(i => i.MasterProductId == 0 && (shopId != 0 ? i.ShopId == shopId : true))
+            model.List = db.Products.Where(i => i.MasterProductId == 0 && i.ShopId != 0 && (model.ShopId != 0 ? i.ShopId == model.ShopId : true))
                            .Join(db.OrderItems, p => p.Id, oi => oi.ProductId, (p, oi) => new { p, oi })
                            .OrderByDescending(i => i.p.DateUpdated)
                            .AsEnumerable().GroupBy(i => i.p.Id)

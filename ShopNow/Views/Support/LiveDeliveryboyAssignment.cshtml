@@ -1,26 +1,31 @@
 ﻿@model ShopNow.ViewModels.DeliveryBoyAssignViewModel
 @{
-    ViewBag.Title = "LiveDeliveryboyAssignment";
+    ViewBag.Title = "Live DeliveryBoy Assignment";
 }
-<title>SNOWCH | Live DeliveryBoy Assignment</title>
+<title>SNOWCH | @ViewBag.Title</title>
 <div class="container-fluid">
-    <div class="row">
-        <div class="col-md-4">
-            <h5 class="mt-1 text-success" style="letter-spacing:1px">LIVE DELIVERYBOY ASSIGNMENT</h5>
+    <form method="get" action="/Support/LiveDeliveryboyAssignment">
+        <div class="row">
+            <div class="col-md-4">
+                <h5 class="mt-1 text-success" style="letter-spacing:1px">LIVE DELIVERYBOY ASSIGNMENT</h5>
+            </div>
+            <div class="col-md-2 col-sm-4 mb-2 data-search">
+            </div>
+            <div class="col-md-3">
+                <select id="ShopId" class="form-control" name="ShopId">
+                    @if (!string.IsNullOrEmpty(Model.ShopName))
+                    {
+                        <option value="@Model.ShopId">@Model.ShopName</option>
+                    }
+                </select>
+                <input type="hidden" name="ShopName" value="@Model.ShopName" />
+            </div>
+            <div class="col-md-3">
+                <input type="submit" class="btn btn-success mr-2" value="Apply Filter" />
+                <a href="~/Support/LiveDeliveryboyAssignment" class="btn btn-secondary">Clear Filter</a>
+            </div>
         </div>
-        <div class="col-md-2 col-sm-4 mb-2 data-search">
-        </div>
-        <div class="col-md-2">
-            <select name="ShopId" id="ShopId" class="form-control"></select>
-            <input type="hidden" name="ShopName" id="ShopName" />
-        </div>
-        <div class="col-md-1">
-            <input type="button" class="form-control btn btn-sm btn-success" name="Filter" id="Filter" value="Filter" />
-        </div>
-        <div class="col-md-1">
-            <input type="button" class="form-control btn btn-sm btn-secondary" name="ClearFilter" id="ClearFilter" value="Clear Filter" />
-        </div>
-    </div>
+    </form>
     <div class="row">
         <div class="col-md-8">
             <div class="card shadow h-100">
@@ -139,6 +144,9 @@
                 });
             }).draw();
 
+            $('select[name="ShopId"] option[value=@Model.ShopId]').prop('selected', true);
+            $('select[name="ShopName"] option[value=@Model.ShopName]').prop('selected', true);
+
             $('#ShopId').select2({
                 placeholder: "Search Shop",
                 ajax: {
@@ -149,14 +157,6 @@
                 }
             }).on('select2:select', function (e) {
                 $('input[name="ShopName"]').val(e.params.data.text);
-            });
-
-            $("#Filter").click(function () {
-                var shopId = $("#ShopId").val();
-                window.location.href = "/Support/LiveDeliveryboyAssignment/?shopId=" + shopId;
-            });
-            $("#ClearFilter").click(function () {
-                window.location.href = "/Support/LiveDeliveryboyAssignment";
             });
         });
     </script>

@@ -339,14 +339,15 @@ namespace ShopNow.Controllers
                     DateEncoded = i.c.DateEncoded,
                     DeliveredTime = i.c.DeliveredTime == null ? i.c.DateUpdated : i.c.DeliveredTime,
                     //Amount = i.c.IsPickupDrop == true ? (i.p.RefundAmount != null && i.p.RefundAmount != 0) ? i.c.NetTotal - (i.p.RefundAmount ?? 0) : i.c.TotalPrice : i.p.Amount - (i.p.RefundAmount ?? 0),
-                    Amount = i.c.IsPickupDrop == true ? (i.p.RefundAmount != null && i.p.RefundAmount != 0) ? i.c.TotalPrice - (i.p.RefundAmount ?? 0) : i.c.TotalPrice : i.p.Amount - (i.p.RefundAmount ?? 0),
+                    Amount = Math.Round(i.c.IsPickupDrop == true ? (i.p.RefundAmount != null && i.p.RefundAmount != 0) ? i.c.TotalPrice - (i.p.RefundAmount ?? 0) : i.c.TotalPrice : i.p.Amount - (i.p.RefundAmount ?? 0)),
                     RefundAmount = i.p.RefundAmount ?? 0,
                     RefundRemark = i.p.RefundRemark ?? "",
                     PaymentMode = i.p.PaymentMode,
                     // OrderPeriod = Math.Round((i.c.DateUpdated - i.c.DateEncoded).TotalMinutes),
                     OrderPeriod = i.c.DeliveredTime != null ? Math.Round((i.c.DeliveredTime.Value - i.c.DateEncoded).TotalMinutes) : Math.Round((i.c.DateUpdated - i.c.DateEncoded).TotalMinutes),
                     ShopAcceptedTime = i.c.ShopAcceptedTime != null ? Math.Round((i.c.ShopAcceptedTime.Value - i.c.DateEncoded).TotalMinutes) : 0,
-                    IsPickupDrop = i.c.IsPickupDrop
+                    IsPickupDrop = i.c.IsPickupDrop,
+                    CustomerId = i.c.CustomerId
                 }).OrderByDescending(i => i.DateEncoded).ToList();
             int counter = 1;
             model.DeliveredLists.ForEach(x => x.No = counter++);
@@ -2202,6 +2203,35 @@ namespace ShopNow.Controllers
                 ShopDeliveryDiscount = order.TotalPrice * (billingCharge.DeliveryDiscountPercentage / 100);
             }
             return Json(ShopDeliveryDiscount, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult MostSoldProductList(MostSoldProductListByShop model)
+        {
+            var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
+            ViewBag.Name = user.Name;
+            model.ListItems = db.Orders.Where(i => i.Status == 6 && (model.FilterShopId != 0 ? i.ShopId == model.FilterShopId : false))
+                .Join(db.OrderItems.Where(i => i.ProductId != 0), o => o.Id, oi => oi.OrderId, (o, oi) => new { o, oi })
+                .GroupBy(i => i.oi.ProductId)
+                .Select(i => new MostSoldProductListByShop.ListItem
+                {
+                    ShopName = i.FirstOrDefault().o.ShopName,
+                    ProductName = i.FirstOrDefault().oi.ProductName,
+                    ProductId = i.FirstOrDefault().oi.ProductId,
+                    OrderCount = i.Count(),
+                    ShopId = i.FirstOrDefault().o.ShopId,
+                    CustomerLikeCount = db.CustomerFavorites.Where(a=>a.ProductId == i.FirstOrDefault().oi.ProductId).Count(),
+                    MarketingLikes = db.Products.FirstOrDefault(a => a.Id == i.FirstOrDefault().oi.ProductId).MarketingLikes,
+                }).OrderByDescending(i=>i.OrderCount).ToList();
+            return View(model);
+        }
+
+        public JsonResult UpdateProductMarketingLikes(long id, int likecount)
+        {
+            var product = db.Products.FirstOrDefault(i => i.Id == id);
+            product.MarketingLikes = likecount;
+            db.Entry(product).State = EntityState.Modified;
+            db.SaveChanges();
+            return Json(true, JsonRequestBehavior.AllowGet);
         }
 
         protected override void Dispose(bool disposing)

@@ -58,7 +58,7 @@
                     <label> <input type="checkbox" id="pickup-check" value="@Model.IsPickupDrop" /> Pickup Drop</label>
                     @Html.Grid(Model.DeliveredLists).Columns(columns =>
                {
-                  //columns.Add(c => c.No).Titled("Sl.No").Filterable(false).SetWidth(1);
+                   //columns.Add(c => c.No).Titled("Sl.No").Filterable(false).SetWidth(1);
                    columns.Add().Encoded(false).Sanitized(false)
                  .RenderValueAs(o => o.IsPickupDrop == true ? "<span>" + o.No + "</span><br/><span class='text-primary font-weight-bold'>Pickup-Drop</span>" : "<span>" + o.No + "</span>").Titled("SI.No").SetWidth(1);
                    columns.Add(c => c.OrderNumber).Titled("OrderNo").Filterable(true).SetWidth(10);
@@ -74,14 +74,40 @@
                    columns.Add().Encoded(false).Sanitized(false)
                   .RenderValueAs(o => ((o.RefundAmount == 0 || o.RefundAmount == null) ? "<a href='#modal-refund' data-id='" + o.Id + "' data-toggle='modal' data-target='#modal-refund' class='btn btn-sm btn-primary btn-block btn-modal-refund mt-2'>Refund</a>" : o.RefundAmount.Value > 0 ? "<span id = 'scroll'>" + o.RefundAmount + "(" + o.RefundRemark + ")" + "</span>" : "N/A")
                     + Html.ActionLink("Details", "Details", new { id = @ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id) }, new { @class = "btn btn-sm btn-secondary btn-block mt-1", @style = "padding: 3px 10px" })
-                    + Html.ActionLink("Cancel", "DeliveredCancel", new { id = o.Id }, new { @class = "btn btn-sm btn-danger btn-block mt-1", @style = "padding: 3px 10px" }).ToHtmlString()).Titled("Action").SetWidth(10);
+                    + Html.ActionLink("Cancel", "#", new { id = o.Id }, new { @class = "btn btn-sm btn-danger btn-block mt-1 btn-modal-cancel", @style = "padding: 3px 10px", @data_toggle = "modal", @data_target = "#modal-add-cancel-remark" , @data_ordernumber = o.OrderNumber, @data_customerid= o.CustomerId}).ToHtmlString()).Titled("Action").SetWidth(10);
                }).WithPaging(10).Sortable(true)
                 </div>
             </div>
         </div>
     </div>
 </div>
-
+<div class="modal fade" id="modal-add-cancel-remark" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <h5>Add Cancel Remarks</h5>
+                <div class="from-group mt-3">
+                    <label class="text-secondary">Status</label>
+                    <select class="form-control" name="CancelStatus" id="CancelStatus" required>
+                        <option value="">Select Cancel Status</option>
+                        <option value="7">Shop Cancelled</option>
+                        <option value="10">Customer Not PickUp</option>
+                    </select>
+                    <input type="hidden" id="OrderNumber" />
+                    <input type="hidden" id="CustomerId" />
+                </div>
+                <div class="form-group mt-3">
+                    <label class="text-secondary">Remarks</label>
+                    <textarea class="form-control" type="text" name="CancelledRemark" id="CancelledRemark" required></textarea>
+                </div>
+                <div class="text-right">
+                    <button id="btn-cancel" type="button" class="btn btn-sm btn-success mr-3">Submit</button>
+                    <button class="btn btn-sm btn-danger" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 <div class="modal fade" id="modal-refund" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-sm">
         <div class="modal-content">
@@ -116,7 +142,7 @@
     <link href="~/Content/select2/select2.custom.css" rel="stylesheet" />
     <!--Select2 End-->
     <script>
-        $(document).ready(function () { 
+        $(document).ready(function () {
             $('#ShopId').select2({
                 placeholder: "Search Shop",
                 ajax: {
@@ -135,6 +161,12 @@
                 $('#modal-refund').modal('show');
             });
 
+            $(".btn-modal-cancel").click(function () {
+                $("#CustomerId").val($(this).data('customerid'));
+                $("#OrderNumber").val($(this).data('ordernumber'));
+                $('#modal-add-cancel-remark').modal('show');
+            });
+
             if ('@Model.IsPickupDrop' == "True")
                 $('#pickup-check').prop('checked', true);
 
@@ -145,6 +177,25 @@
                     $('[name="IsPickupDrop"]').val(false);
                 $('#filter-form').submit();
             });
+
+            $("#btn-cancel").click(function () {
+                var customerId = $('#CustomerId').val();
+                var ordernumber = $('#OrderNumber').val();
+                var status = $('#CancelStatus').val();
+                var remark = $('#CancelledRemark').val();
+                $.getJSON("/Cart/Cancel?OrderNumber=" + ordernumber + "&customerId=" + customerId + "&status=" + status + "&remark=" + remark, function (data) {
+                    if (data.message != null) {
+                        swal({
+                            title: data.message,
+                            text: "",
+                            type: "error"
+                        }, function () {
+                            window.location.reload();
+                        });
+                    }
+                });
+            });
+
         });
     </script>
 }
